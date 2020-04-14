@@ -1,32 +1,19 @@
 name: core-acc
 channels:
-- anaconda
 - conda-forge
-- defaults
+- r
 dependencies:
-- conda-forge::python=3.5.5
-- conda-forge::pandas=0.22.0
+- r::r=3.6.0
+- conda-forge::python=3.7
+- conda-forge::pandas=0.24.2
 - conda-forge::seaborn=0.8.1
-- conda-forge::numpy=1.15.2
-- conda-forge::numexpr=2.6.4
-- conda-forge::scikit-learn=0.19.1
 - conda-forge::scipy=1.1.0
-- conda-forge::hdf5=1.10.1
-- conda-forge::umap-learn
-- conda-forge::plotnine
-- conda-forge::ggplot=0.11.5
-- conda-forge::graphviz=2.38.0
-- conda-forge::python-graphviz=0.8.4
-- conda-forge::ipykernel=4.8.1
-- conda-forge::ipywidgets=6.0.0
-- conda-forge::widgetsnbextension=2.0.0
-- conda-forge::nb_conda_kernels=2.1.0
+- conda-forge::plotnine=0.5.1
+- conda-forge::ipykernel=5.1.1
+- conda-forge::nb_conda_kernels
 - conda-forge::gxx_linux-64
-- conda-forge::rpy2=2.8
+- conda-forge::rpy2=2.9.4
 - conda-forge::libiconv=1.15
-- conda-forge::joblib=0.13.2
+- pip=19.2.1
 - pip:
-  - torch>=0.4.0
   - matplotlib==3.0.0
-  - pillow
-  - requests
