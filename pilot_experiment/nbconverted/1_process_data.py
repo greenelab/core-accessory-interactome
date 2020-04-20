@@ -1,10 +1,12 @@
-#!/usr/bin/env python
+
 # coding: utf-8
 
-# # Generate gene-gene network modules
-# This notebook generate gene-gene network modules for an exploratory analysis.
+# # Process data
+# This notebook processes the expression data that will be used in this pilot analysis. Specifically this notebook performs the following steps:
 # 
-# The objective is____
+# 1. Selects a small subset of expression data and outputs this dataset to file
+# 2. Permutes the subsetted data to use as a control and outputs this dataset to file
+# 3. Generates a mapping between *P. aeruginosa* gene id (PA####) and core, accessory label
 
 # In[1]:
 
@@ -123,77 +125,4 @@ process_data.permute_expression_data(selected_data_file,
 process_data.annotate_genes(selected_data_file,
                             gene_mapping_file,
                             gene_annot_file)
-
-
-# # Network construction and module detection
-# 
-# Networks provide a straightforward representation of interactions between the nodes. A node corresponds to the gene expression profile of a given gene. Nodes are connected if they have a significant pairwise expression profile association across the environmental perturbations (cell- or tissue- samples). It is standard to use the (Pearson) correlation coefficient as a co-expression measure, e.g., the absolute value of Pearson correlation. 
-
-# ## Get parameters for network generation
-# 
-# **Question:** How do we pick a threshold to determine what Pearson correlation score is sufficient to say that 2 nodes are associated?
-# 
-# A 'hard threshold' may lead to loss of information and sensitity.
-# Instead, a 'soft thresholding' is proposed. Soft thresholding weighs each connection of a float [0,1]   
-# 
-# **Reference:**
-# * http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.471.9599&rep=rep1&type=pdf
-
-# In[9]:
-
-
-get_ipython().run_cell_magic('R', '-i selected_data_file', '# Get threshold param for true gene expression data\nsource("functions/network_utils.R")\n\nget_threshold(selected_data_file)')
-
-
-# In[10]:
-
-
-get_ipython().run_cell_magic('R', '-i shuffled_selected_data_file', '# Get threshold param for true gene expression data\nsource("functions/network_utils.R")\n\nget_threshold(shuffled_selected_data_file)')
-
-
-# In[11]:
-
-
-# Prompt user to choose threshold params
-power_param_true = int(input("Treshold for true data:"))
-
-
-# In[12]:
-
-
-# Prompt user to choose threshold params
-power_param_shuffled = int(input("Threshold for permuted data:"))
-
-
-# ## Generate network modules
-
-# In[13]:
-
-
-# Output module files
-gene_modules_file = os.path.join(
-        base_dir,
-        "pilot_experiment",
-        "data",
-        "networks",
-        "selected_modules.tsv")
-
-shuffled_gene_modules_file = os.path.join(
-        base_dir,
-        "pilot_experiment",
-        "data",
-        "networks",
-        "shuffled_selected_modules.tsv")
-
-
-# In[14]:
-
-
-get_ipython().run_cell_magic('R', '-i power_param_true -i selected_data_file -i gene_modules_file', '# Generate network modules using threshold params selected for true expression data\nsource("functions/network_utils.R")\n\ngenerate_network_modules(power_param_true,\n                         selected_data_file,\n                         gene_modules_file)')
-
-
-# In[15]:
-
-
-get_ipython().run_cell_magic('R', '-i power_param_shuffled -i shuffled_selected_data_file -i shuffled_gene_modules_file', '# Generate network modules using threshold params selected for permuted expression data\nsource("functions/network_utils.R")\n\ngenerate_network_modules(power_param_shuffled,\n                         shuffled_selected_data_file,\n                         shuffled_gene_modules_file)')
 
