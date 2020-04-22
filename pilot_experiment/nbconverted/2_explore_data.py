@@ -12,12 +12,6 @@ import os
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-from plotnine import (ggplot,
-                      aes,
-                      geom_boxplot,
-                      geom_col,
-                      labs,
-                      element_text)
 
 
 # In[2]:
@@ -151,15 +145,6 @@ shuffled_all_corr = shuffled_expression.corr(method='pearson')
 
 
 # ## Plot distribution of correlation scores
-
-# In[14]:
-
-
-# Quick visual inspection of correlations
-real_core_corr_df = real_acc_corr.stack().reset_index()
-real_core_corr_df.columns = ['gene 1','gene 2','corr score']
-real_core_corr_df.head()
-
 
 # In[15]:
 
@@ -300,7 +285,7 @@ plt.ylabel('Density')
 # 
 # * Looking at the density plot for the accessory gene correlation scores, the scores are shifted to the right.
 # * Looking at the density plot for accessory and core gene correlation scores, the scores are shifted very slightly to the left possibly indicating an independent or an antagonistic relationship. Need to read more about what is currently known about core and accessory genes and about negative regulation patterns.
-# * Looking at the density plot for the core gene correlation scores, there is a normal distribution of correlation scores which would imply that a minor proportion of genes are **directly** (since using Pearson correlation) positively (i.e. genes in operons) or negatively correlated (example?). Need to read more to determine if this makes sense
+# * Looking at the density plot for the core gene correlation scores, there is a normal distribution of correlation scores which would imply that a minor proportion of genes highly positively correlated (i.e. genes in operons) or negatively correlated (example?), while the majority of genes are not strong correlated. Need to read more to determine if this makes sense
 
 # ## Binarize the correlation matrix to get interactions
 
