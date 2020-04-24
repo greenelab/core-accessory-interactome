@@ -48,14 +48,14 @@ output_file):
 
     """
     # Read data
-    normalized_data = pd.read_table(
+    normalized_data = pd.read_csv(
         input_data_file,
         header=0,
         sep='\t',
         index_col=0).T
 
     # Read metadata
-    metadata = pd.read_table(
+    metadata = pd.read_csv(
         metadata_file,
         header=0,
         sep='\t',
@@ -69,8 +69,8 @@ output_file):
 
     selected_data = normalized_data.loc[selected_sample_ids]
 
-    print(selected_data.shape)
-    print(selected_data.head(10))
+    print('The selected dataset contains {} samples and {} genes'.
+          format(selected_data.shape[0],selected_data.shape[1]))
 
     # Save selected gene expression data
     selected_data.to_csv(output_file, sep='\t', index=True)
@@ -95,7 +95,7 @@ output_file):
         Filename to save permuted expression data
     """
     # Read data
-    selected_data = pd.read_table(
+    selected_data = pd.read_csv(
         input_data_file,
         header=0,
         sep='\t',
@@ -114,8 +114,6 @@ output_file):
     shuffled_selected_data = pd.DataFrame(shuffled_arr,
                                         index=selected_data.index,
                                         columns=selected_data.columns)
-
-    print(shuffled_selected_data.head(10))
 
     # Save permuted gene expression data
     shuffled_selected_data.to_csv(output_file, sep='\t', index=True)
@@ -147,7 +145,7 @@ output_file):
 
     """
     # Read data
-    selected_data = pd.read_table(
+    selected_data = pd.read_csv(
         input_data_file,
         header=0,
         sep='\t',
@@ -159,13 +157,10 @@ output_file):
     gene_mapping = pd.read_csv(
         gene_annotation_file)
 
-    print(gene_mapping.head(10))
-
     # Accessory are genes that don't have a mapping to the PA14 ID
     unmapped_genes = gene_mapping[gene_mapping["PA14_ID"].isna()]
 
     PAO1_only = list(unmapped_genes["PAO1_ID"])
-    PAO1_only
     print("No. of PAO1 only genes: {}".format(len(PAO1_only)))
 
     # Create df with PAO1 gene IDs and label for core/accessory
@@ -173,7 +168,6 @@ output_file):
 
     df = pd.DataFrame(list(zip(all_genes, annot)), 
                 columns =['PAO1_gene_id', 'annotation']) 
-    print(df.head())
 
     # Save labels
     df.to_csv(output_file, sep='\t', index=False)

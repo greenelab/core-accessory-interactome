@@ -4,7 +4,7 @@
 # # Explore data
 # This notebook performs a first pass exploration of the data. In particular, this notebook examines the types of interactions that exist between genes
 
-# In[43]:
+# In[2]:
 
 
 import pandas as pd
@@ -14,7 +14,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 
-# In[2]:
+# In[3]:
 
 
 # Input
@@ -42,7 +42,7 @@ gene_annot_file = os.path.join(
     "selected_gene_annotations.txt")
 
 
-# In[3]:
+# In[11]:
 
 
 # Read data
@@ -281,11 +281,11 @@ plt.ylabel('Density')
 # 
 # **Other observations**
 # * The mean correlation of accessory genes only is 0.2295, which is higher compared to the mean correlation of core genes, 0.01037.
-# * The mean correlation of accessory-core genes is -0.036, which is lower compared to core-only and accessory only groups.
+# * The mean correlation of accessory-core genes is -0.036, which is very slightly lower compared to core-only and accessory only groups.
 # 
-# * Looking at the density plot for the accessory gene correlation scores, the scores are shifted to the right.
-# * Looking at the density plot for accessory and core gene correlation scores, the scores are shifted very slightly to the left possibly indicating an independent or an antagonistic relationship. Need to read more about what is currently known about core and accessory genes and about negative regulation patterns.
-# * Looking at the density plot for the core gene correlation scores, there is a normal distribution of correlation scores which would imply that a minor proportion of genes highly positively correlated (i.e. genes in operons) or negatively correlated (example?), while the majority of genes are not strong correlated. Need to read more to determine if this makes sense
+# * Looking at the density plot for the accessory-accessory gene correlation scores, the scores are shifted to the right.
+# * Looking at the density plot for accessory-core gene correlation scores, the scores are shifted very slightly to the left possibly indicating an antagonistic relationship. Need to read more about what is currently known about core and accessory genes and about negative regulation patterns.
+# * Looking at the density plot for the core-core gene correlation scores, there is a normal distribution of correlation scores which would imply that a minor proportion of genes are highly positively correlated (i.e. genes in operons) or highly negatively correlated (example?), while the majority of genes are not strongly correlated. Need to read more to determine if this makes sense
 
 # ## Binarize the correlation matrix to get interactions
 

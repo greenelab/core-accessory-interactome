@@ -18,11 +18,16 @@ import argparse
 from functions import process_data
 
 
-# In[2]:
+# In[ ]:
 
 
 base_dir = os.path.abspath(os.path.join(os.getcwd(),"../"))
 
+
+# ### About input data
+# Normalized expression data is the *P. aeruginosa* compendium from [Tan et. al.](https://msystems.asm.org/content/1/1/e00025-15). The dataset can be found in the associated [ADAGE github repository](https://github.com/greenelab/adage/blob/master/Data_collection_processing/Pa_compendium_02.22.2014.pcl).
+# 
+# The corresponding metadata was downloaded from the [ADAGE website](https://adage.greenelab.com/#/download).
 
 # In[3]:
 
@@ -55,7 +60,11 @@ gene_mapping_file = os.path.join(
 # In[4]:
 
 
-# Select specific experiment
+# Select specific experiments
+# In this case we selected 6 experiments (3 experiments PAO1 strains and the other 3 experiments contain PA14 strains).
+# We will use only PAO1 and PA14 strains as a first pass because these two strains are the most common and well studied
+# P. aeruginosa strains and therefore we will be able to verify the resulting gene-gene interactions with those found
+# in the literature.
 lst_experiments = ["E-GEOD-8083",
                    "E-GEOD-29789",
                    "E-GEOD-48982",
@@ -92,7 +101,7 @@ gene_annot_file = os.path.join(
 
 # # Select subset of samples
 # 
-# Select experiments that contain either PAO1 or PA14 strains. We will use only PAO1 and PA14 strains as a first pass because these two strains are the most common and well studied *P. aeruginosa* strains, therefore we will be able to verify the resulting gene-gene interactions with those found in the literature.
+# Select subset of experiments to use
 
 # In[6]:
 
