@@ -12,6 +12,7 @@ import os
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+import pickle
 
 np.random.seed(123)
 
@@ -47,6 +48,17 @@ gene_annot_file = os.path.join(
 # In[3]:
 
 
+# Output directory to store gene ids and correlation outputs
+base_intermediate_dir = os.path.join(
+    base_dir,
+    "pilot_experiment",
+    "data",
+    "tmp")
+
+
+# In[4]:
+
+
 # Read data
 real_expression = pd.read_csv(
     real_expression_file,
@@ -69,24 +81,40 @@ gene_annot = pd.read_csv(
 real_expression.head()
 
 
-# In[4]:
+# In[5]:
 
 
 shuffled_expression.head()
 
 
-# In[5]:
+# In[6]:
 
 
 gene_annot.head()
 
 
-# In[6]:
+# In[7]:
 
 
 # Group genes by core and accessory annotation
 core_gene_ids = list(gene_annot[gene_annot['annotation'] == 'core'].index)
 acc_gene_ids = list(gene_annot[gene_annot['annotation'] == 'accessory'].index)
+
+
+# In[8]:
+
+
+# Pickle gene ids
+pickle.dump(core_gene_ids, open(
+    os.path.join(
+        base_intermediate_dir,
+        "core_gene_ids.pickle"),
+    "wb"))
+pickle.dump(acc_gene_ids, open(
+    os.path.join(
+        base_intermediate_dir,
+        "acc_gene_ids.pickle"),
+    "wb"))
 
 
 # # Examine interactions between genes
@@ -95,14 +123,14 @@ acc_gene_ids = list(gene_annot[gene_annot['annotation'] == 'accessory'].index)
 
 # ## Get groups of expression data
 
-# In[7]:
+# In[9]:
 
 
 # Get core-core gene expression
 real_core_expression = real_expression[core_gene_ids]
 
 
-# In[8]:
+# In[10]:
 
 
 # Get accessory-accessory gene expression
@@ -111,44 +139,58 @@ real_acc_expression = real_expression[acc_gene_ids]
 
 # ## Calculate correlation between gene profiles
 
-# In[9]:
+# In[11]:
 
 
 # Get correlation of core-core genes
 real_core_corr = real_core_expression.corr(method='pearson')
 
 
-# In[10]:
+# In[12]:
 
 
 # Get correlation of accessory-accessory genes
 real_acc_corr = real_acc_expression.corr(method='pearson')
 
 
-# In[11]:
+# In[13]:
 
 
 # Get correlation of all genes
 real_all_corr = real_expression.corr(method='pearson')
 
+# Save 
+pickle.dump(real_all_corr, open(
+    os.path.join(
+        base_intermediate_dir,
+        "real_all_corr.pickle"),
+    "wb"))
 
-# In[12]:
+
+# In[14]:
 
 
 # Get correlation of core-accessory genes
 real_core_acc_corr = real_all_corr.loc[core_gene_ids, acc_gene_ids]
 
 
-# In[13]:
+# In[15]:
 
 
 # Get correlation of control dataset
 shuffled_all_corr = shuffled_expression.corr(method='pearson')
 
+# Save
+pickle.dump(shuffled_all_corr, open(
+    os.path.join(
+        base_intermediate_dir,
+        "shuffled_all_corr.pickle"),
+    "wb"))
+
 
 # ## Plot distribution of correlation scores
 
-# In[14]:
+# In[16]:
 
 
 # Flatten and get only upper triangle values from correlation matrix
@@ -166,7 +208,7 @@ print('var ', np.var(real_core_corr_score))
 real_core_corr_df.head()
 
 
-# In[15]:
+# In[17]:
 
 
 # Flatten and get only upper triangle values from correlation matrix
@@ -184,7 +226,7 @@ print('var ', np.var(real_acc_corr_score))
 real_acc_corr_df.head()
 
 
-# In[16]:
+# In[18]:
 
 
 # Flatten and get only upper triangle values from correlation matrix
@@ -202,7 +244,7 @@ print('var ', np.var(real_core_acc_corr_score))
 real_core_acc_corr_df.head()
 
 
-# In[17]:
+# In[19]:
 
 
 # Flatten and get only upper triangle values from correlation matrix
@@ -220,7 +262,7 @@ print('var ', np.var(real_all_corr_score))
 real_all_corr_df.head()
 
 
-# In[18]:
+# In[20]:
 
 
 # Flatten and get only upper triangle values from correlation matrix
@@ -238,7 +280,7 @@ print('var ', np.var(shuffled_all_corr_score))
 shuffled_all_corr_df.head()
 
 
-# In[19]:
+# In[21]:
 
 
 # Create df
@@ -253,7 +295,7 @@ print(corr_scores_df.shape)
 corr_scores_df.head()
 
 
-# In[20]:
+# In[22]:
 
 
 # Plot all correlation scores
@@ -263,7 +305,7 @@ sns.boxplot(data=corr_scores_df,
            palette='Set3').set_title('Distribution of correlation scores per group')
 
 
-# In[21]:
+# In[23]:
 
 
 # Distribution plot for core genes
@@ -291,7 +333,7 @@ plt.ylabel('Density')
 
 # ## Binarize the correlation matrix to get interactions
 
-# In[22]:
+# In[24]:
 
 
 # Binarize correlation score to get possible interactions
@@ -303,7 +345,7 @@ real_all_edges = real_all_corr>threshold
 shuffled_all_edges = shuffled_all_corr>threshold
 
 
-# In[23]:
+# In[25]:
 
 
 real_core_edges_score = real_core_edges.values[np.triu_indices(n=len(real_core_edges), k=1)]
@@ -313,7 +355,7 @@ real_all_edges_score = real_all_edges.values[np.triu_indices(n=len(real_all_edge
 shuffled_all_edges_score = shuffled_all_edges.values[np.triu_indices(n=len(shuffled_all_edges), k=1)]
 
 
-# In[24]:
+# In[26]:
 
 
 num_edges_df = pd.DataFrame(data={'group': ['core', 'accessory', 'core-accessory', 'all', 'shuffled'],
