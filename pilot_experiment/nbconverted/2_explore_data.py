@@ -4,7 +4,7 @@
 # # Explore data
 # This notebook performs a first pass exploration of the data. In particular, this notebook examines the types of interactions that exist between genes
 
-# In[2]:
+# In[1]:
 
 
 import pandas as pd
@@ -13,8 +13,10 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+np.random.seed(123)
 
-# In[3]:
+
+# In[2]:
 
 
 # Input
@@ -42,23 +44,23 @@ gene_annot_file = os.path.join(
     "selected_gene_annotations.txt")
 
 
-# In[11]:
+# In[3]:
 
 
 # Read data
-real_expression = pd.read_table(
+real_expression = pd.read_csv(
     real_expression_file,
     header=0,
     sep='\t',
     index_col=0)
 
-shuffled_expression = pd.read_table(
+shuffled_expression = pd.read_csv(
     shuffled_expression_file,
     header=0,
     sep='\t',
     index_col=0)
 
-gene_annot = pd.read_table(
+gene_annot = pd.read_csv(
     gene_annot_file,
     header=0,
     sep='\t',
@@ -146,7 +148,7 @@ shuffled_all_corr = shuffled_expression.corr(method='pearson')
 
 # ## Plot distribution of correlation scores
 
-# In[15]:
+# In[14]:
 
 
 # Flatten and get only upper triangle values from correlation matrix
@@ -164,7 +166,7 @@ print('var ', np.var(real_core_corr_score))
 real_core_corr_df.head()
 
 
-# In[16]:
+# In[15]:
 
 
 # Flatten and get only upper triangle values from correlation matrix
@@ -182,7 +184,7 @@ print('var ', np.var(real_acc_corr_score))
 real_acc_corr_df.head()
 
 
-# In[17]:
+# In[16]:
 
 
 # Flatten and get only upper triangle values from correlation matrix
@@ -200,7 +202,7 @@ print('var ', np.var(real_core_acc_corr_score))
 real_core_acc_corr_df.head()
 
 
-# In[18]:
+# In[17]:
 
 
 # Flatten and get only upper triangle values from correlation matrix
@@ -218,7 +220,7 @@ print('var ', np.var(real_all_corr_score))
 real_all_corr_df.head()
 
 
-# In[19]:
+# In[18]:
 
 
 # Flatten and get only upper triangle values from correlation matrix
@@ -236,7 +238,7 @@ print('var ', np.var(shuffled_all_corr_score))
 shuffled_all_corr_df.head()
 
 
-# In[20]:
+# In[19]:
 
 
 # Create df
@@ -251,7 +253,7 @@ print(corr_scores_df.shape)
 corr_scores_df.head()
 
 
-# In[21]:
+# In[20]:
 
 
 # Plot all correlation scores
@@ -261,7 +263,7 @@ sns.boxplot(data=corr_scores_df,
            palette='Set3').set_title('Distribution of correlation scores per group')
 
 
-# In[48]:
+# In[21]:
 
 
 # Distribution plot for core genes
@@ -289,7 +291,7 @@ plt.ylabel('Density')
 
 # ## Binarize the correlation matrix to get interactions
 
-# In[23]:
+# In[22]:
 
 
 # Binarize correlation score to get possible interactions
@@ -301,7 +303,7 @@ real_all_edges = real_all_corr>threshold
 shuffled_all_edges = shuffled_all_corr>threshold
 
 
-# In[25]:
+# In[23]:
 
 
 real_core_edges_score = real_core_edges.values[np.triu_indices(n=len(real_core_edges), k=1)]
@@ -311,7 +313,7 @@ real_all_edges_score = real_all_edges.values[np.triu_indices(n=len(real_all_edge
 shuffled_all_edges_score = shuffled_all_edges.values[np.triu_indices(n=len(shuffled_all_edges), k=1)]
 
 
-# In[29]:
+# In[24]:
 
 
 num_edges_df = pd.DataFrame(data={'group': ['core', 'accessory', 'core-accessory', 'all', 'shuffled'],

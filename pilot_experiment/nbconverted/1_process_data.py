@@ -15,10 +15,13 @@ get_ipython().run_line_magic('load_ext', 'rpy2.ipython')
 import pandas as pd
 import os
 import argparse
+import numpy as np
 from functions import process_data
 
+np.random.seed(123)
 
-# In[ ]:
+
+# In[2]:
 
 
 base_dir = os.path.abspath(os.path.join(os.getcwd(),"../"))

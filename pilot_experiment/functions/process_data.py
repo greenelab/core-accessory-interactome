@@ -7,6 +7,7 @@ Scripts to process expression data for pilot experiment
 import pandas as pd
 import os
 import random
+import numpy as np
 
 import warnings
 
@@ -16,6 +17,8 @@ def fxn():
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     fxn()
+    
+np.random.seed(123)
 
 def select_expression_data(input_data_file,
 metadata_file,
@@ -102,7 +105,7 @@ output_file):
         index_col=0)
 
     # For each sample, shuffle gene values (i.e. shuffle values independently per sample) in order to
-    # disrupt any gene structure
+    # disrupt any gene structure       
     shuffled_arr = []
     num_samples = selected_data.shape[0]
 
