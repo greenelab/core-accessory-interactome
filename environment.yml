@@ -1,0 +1,22 @@
+name: core-acc
+channels:
+- conda-forge
+- r
+- bioconda
+dependencies:
+- r::r=3.6.0
+- r::r-flashClust=1.01-2
+- bioconda::r-wgcna=1.69
+- conda-forge::python=3.7
+- conda-forge::pandas=0.24.2
+- conda-forge::seaborn=0.8.1
+- conda-forge::scipy=1.1.0
+- conda-forge::plotnine=0.5.1
+- conda-forge::ipykernel=5.1.1
+- conda-forge::nb_conda_kernels
+- conda-forge::gxx_linux-64
+- conda-forge::rpy2=2.9.4
+- conda-forge::libiconv=1.15
+- pip=19.2.1
+- pip:
+  - matplotlib==3.0.0
