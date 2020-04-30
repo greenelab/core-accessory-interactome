@@ -9,7 +9,7 @@ dependencies:
 - bioconda::r-wgcna=1.69
 - conda-forge::python=3.7
 - conda-forge::pandas=0.24.2
-- conda-forge::seaborn=0.8.1
+- conda-forge::seaborn=0.10
 - conda-forge::scipy=1.1.0
 - conda-forge::plotnine=0.5.1
 - conda-forge::ipykernel=5.1.1
