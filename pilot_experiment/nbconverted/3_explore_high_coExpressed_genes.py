@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # # Explore highly co-expressed genes
-# In the previous [notebook](2_explore_data.ipynb) we observed that using 39 samples with 201 PAO1-specific genes, that the correlation of accessory-accessory genes is higher compared to the correlation of core-core and core-accessory genes.
+# In the previous [notebook](2_explore_corr_of_genes.ipynb) we observed that using 39 samples with 201 PAO1-specific genes, that the correlation of accessory-accessory genes is higher compared to the correlation of core-core and core-accessory genes.
 # 
 # Based on this finding, we want to know: *What can explain this difference in correlation distribution?*
 # 
@@ -382,9 +382,10 @@ print('''- Of those remaining genes, for a given ACCESSORY gene,
 
 
 # **Observations:**
-# * For majority of core genes, their co-expressed genes are not in the same operon. For example if core gene A is co-expressed with genes {X,Y,Z} and A is in operon {A,B,C} there are no intersecting genes. This is the case for most core genes
-# * For majority of accessory genes, their co-expressed genes are not in the same operon. 
+# * For majority of core genes, their co-expressed genes are not in the same operon. For example if core gene A is co-expressed with genes {X,Y,Z} and A is in operon {A,B,C} there are no intersecting genes. 
+# * This is the case for most core and accessory genes. There are few co-expression gene sets that overlap with known operons.
 # * I would've expected more co-expressed genes to overlap with operons but need to read more about *P. aeruginosa* gene-gene interactions to get more of an intuition.
+# * Good to see that as you decrease the threshold there are more non co-operonic gene co-expressed gene sets.
 # * (control) There are 0 non-cooperonic co-expressed genes since there are 0 co-expressed genes
 
 # ### Core gene relationships
@@ -650,7 +651,7 @@ print('''- Of the non-coperonic co-expressed genes, for a given ACCESSORY gene,
 
 # **Observation:**
 # * Core genes tend to be co-expressed with only other core genes
-# * Accessory genes tend to be co-expressed with some percent of core genes and accessory genes
+# * Accessory genes tend to be co-expressed with more core genes than accessory genes  
 # * (control) There are no relationships between core-core, core-accessory, accessory-accessory
 
 # # Manually examine co-expressed and co-operonic genes
