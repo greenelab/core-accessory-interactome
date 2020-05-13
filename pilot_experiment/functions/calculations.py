@@ -115,7 +115,7 @@ coexpression_threshold):
             coexpressed_acc_prop[gene_id] = num_acc_genes/(num_core_genes + num_acc_genes)
 
     # Get operon annotations per gene id
-    name_cooperonic_genes = map_gene_to_operon(operon_annotation_file,
+    name_cooperonic_genes = map_gene_to_cooperonic_genes(operon_annotation_file,
     all_gene_ids)
 
     # Compare co-expressed gene set and co-operonic genes per reference gene id
@@ -206,7 +206,7 @@ coexpression_threshold):
     return core_stats_df, acc_stats_df
             
 
-def map_gene_to_operon(operon_annotation_file,
+def map_gene_to_cooperonic_genes(operon_annotation_file,
 all_gene_ids):
     """
     Returns mapping between gene id and list of co-operonic genes
@@ -236,6 +236,7 @@ all_gene_ids):
         # Search for gene_id in each operon
         operon_search = operon_data.where(operon_data == gene_id).dropna(how='all').dropna(axis=1)
         
+        # Note: this annotation file has a 1:1 mappring between gene and list of co-operonic genes
         if operon_search.empty:
             name_cooperonic_genes[gene_id] = []
         else:

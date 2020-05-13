@@ -55,12 +55,7 @@ shuffled_all_corr_file = os.path.join(
 # Original source of data is from DOOR
 # https://github.com/greenelab/adage/blob/master/Genome_organization/operon_3.txt
 # Operons containing at least 3 genes
-operon_file = os.path.join(
-    base_dir,
-    "pilot_experiment",
-    "data",
-    "annotations",
-    "DOOR_operon_3.txt")
+operon_file = "https://github.com/greenelab/adage/blob/master/Genome_organization/operon_3.txt"
 
 
 # In[3]:
@@ -76,21 +71,16 @@ num_acc_genes = len(acc_gene_ids)
 num_all_genes = num_core_genes + num_acc_genes
 
 
-# # Examine highly co-expressed gene clusters
-# For each core gene we will:
-# 1. Extract the number of genes that are highly co-expressed with it
-# 2. Determine the ratio of co-expressed genes that are core vs accessory
-# 
-# Repeat this for each accessory gene
+# # Extract statistics about co-expression from correlation matrix
 
 # In[4]:
 
 
 # Define threshold for highly co-expressed genes
-coexpression_threshold = 0.75
+coexpression_threshold = 0.9
 
 
-# ### Co-expression patterns in real data
+# ### Co-expression statsitics using real data
 
 # In[5]:
 
@@ -115,7 +105,7 @@ real_core_df.head()
 real_acc_df.head()
 
 
-# ## Co-expression patterns in shuffled data
+# ### Co-expression statistics using shuffled data
 
 # In[8]:
 
@@ -148,14 +138,17 @@ hist, bins_num_coexpressed_real = np.histogram(np.concatenate([real_core_df['num
                                                                real_acc_df['num_coexpressed_genes'].values]))
 
 # Distribution of number of co-expressed genes in real data
+sns.set()
 sns.distplot(real_core_df['num_coexpressed_genes'].tolist(), 
              label='core',
              color='red',
+             kde=False,
              bins=bins_num_coexpressed_real)
 
 sns.distplot(real_acc_df['num_coexpressed_genes'].tolist(), 
              label='accessory',
              color='blue',
+             kde=False,
              bins=bins_num_coexpressed_real)
 
 plt.legend(prop={'size': 12})
@@ -164,7 +157,37 @@ plt.xlabel('Number of co-expressed genes')
 plt.ylabel('Density')
 
 
+# ### Number of nonzero co-expressed genes
+
 # In[11]:
+
+
+## Remove genes with 0 co-expressed genes
+# Get bins using all data
+hist, bins_num_coexpressed_real_nonzero = np.histogram(np.concatenate(
+    [real_core_df[real_core_df['num_coexpressed_genes']>0]['num_coexpressed_genes'].values,
+     real_acc_df[real_acc_df['num_coexpressed_genes']>0]['num_coexpressed_genes'].values]))
+
+# Distribution of number of co-expressed genes in real data
+sns.distplot(real_core_df[real_core_df['num_coexpressed_genes']>0]['num_coexpressed_genes'].tolist(), 
+             label='core',
+             color='red',
+             kde=False,
+             bins=bins_num_coexpressed_real_nonzero)
+
+sns.distplot(real_acc_df[real_acc_df['num_coexpressed_genes']>0]['num_coexpressed_genes'].tolist(), 
+             label='accessory',
+             color='blue',
+             kde=False,
+             bins=bins_num_coexpressed_real_nonzero)
+
+plt.legend(prop={'size': 12})
+plt.title('Number of nonzero co-expressed genes (real data, threshold={})'.format(coexpression_threshold))
+plt.xlabel('Number of co-expressed genes')
+plt.ylabel('Density')
+
+
+# In[12]:
 
 
 # Get bins using all data
@@ -175,11 +198,13 @@ hist, bins_num_coexpressed_shuffled = np.histogram(np.concatenate([shuffled_core
 sns.distplot(shuffled_core_df['num_coexpressed_genes'].tolist(), 
              label='core',
              color='red',
+             kde=False,
              bins=bins_num_coexpressed_shuffled)
 
 sns.distplot(shuffled_acc_df['num_coexpressed_genes'].tolist(), 
              label='accessory', 
              color='blue',
+             kde=False,
              bins=bins_num_coexpressed_shuffled)
 
 plt.legend(prop={'size': 12})
@@ -188,7 +213,7 @@ plt.xlabel('Number of co-expressed genes')
 plt.ylabel('Density')
 
 
-# In[12]:
+# In[13]:
 
 
 # Print statistics about co-expressed genes
@@ -213,9 +238,9 @@ print('- For a given ACCESSORY gene, there is a median of {} co-expressed  genes
 # * As increase threshold (more stringent), there are fewer co-expressed genes, as expected
 # * (control, not shown) All genes (threshold=0.75,0.9) are independent, as expected, since we have destroyed relationships between genes when we shuffled
 
-# ### Percent of co-expressed genes that are not in the same operon
+# ### Percent of co-expressed genes that are NOT in the same operon
 
-# In[13]:
+# In[14]:
 
 
 # Calculate the percent of co-expressed genes that are non co-operonic (real data)
@@ -234,7 +259,7 @@ real_percent_non_cooperonic_coexpressed_core_genes_noNa = real_percent_non_coope
 real_percent_non_cooperonic_coexpressed_acc_genes_noNa = real_percent_non_cooperonic_coexpressed_acc_genes.dropna(inplace=False)
 
 
-# In[14]:
+# In[15]:
 
 
 ## TEST: What does distribution look like before removing NaNs?
@@ -250,10 +275,12 @@ hist, bins_num_percent_non_cooperonic_real = np.histogram(
 sns.distplot(real_percent_non_cooperonic_coexpressed_core_genes.fillna(0),
              label='core',
              color='red',
+             kde=False,
              bins=bins_num_percent_non_cooperonic_real)
 sns.distplot(real_percent_non_cooperonic_coexpressed_acc_genes.fillna(0), 
              label='accessory',
-             color='blue', 
+             color='blue',
+             kde=False, 
              bins=bins_num_percent_non_cooperonic_real)
 
 plt.legend(prop={'size': 12})
@@ -263,7 +290,7 @@ plt.xlabel('Percent of co-expressed non-cooperonic genes')
 plt.ylabel('Density')
 
 
-# In[15]:
+# In[16]:
 
 
 # Get bins using all data
@@ -278,10 +305,12 @@ hist, bins_num_percent_non_cooperonic_real = np.histogram(
 sns.distplot(real_percent_non_cooperonic_coexpressed_core_genes_noNa,
              label='core',
              color='red',
+             kde=False,
              bins=bins_num_percent_non_cooperonic_real)
 sns.distplot(real_percent_non_cooperonic_coexpressed_acc_genes_noNa, 
              label='accessory',
              color='blue', 
+             kde=False,
              bins=bins_num_percent_non_cooperonic_real)
 
 plt.legend(prop={'size': 12})
@@ -291,7 +320,7 @@ plt.xlabel('Percent of co-expressed non-cooperonic genes')
 plt.ylabel('Density')
 
 
-# In[16]:
+# In[17]:
 
 
 # Calculate the percent of co-expressed genes that are non co-operonic (shuffled data)
@@ -312,7 +341,7 @@ shuffled_percent_non_cooperonic_coexpressed_acc_genes_noNa = shuffled_percent_no
     inplace=False)
 
 
-# In[17]:
+# In[18]:
 
 
 # Get bins using all data
@@ -324,10 +353,12 @@ hist, bins_num_percent_non_cooperonic_shuffled = np.histogram(
 sns.distplot(shuffled_percent_non_cooperonic_coexpressed_core_genes_noNa,
              label='core',
              color='red',
+             kde=False,
              bins=bins_num_percent_non_cooperonic_shuffled)
 sns.distplot(shuffled_percent_non_cooperonic_coexpressed_acc_genes_noNa, 
              label='accessory',
              color='blue', 
+             kde=False,
              bins=bins_num_percent_non_cooperonic_shuffled)
 
 plt.legend(prop={'size': 12})
@@ -337,39 +368,39 @@ plt.xlabel('Percent of co-expressed genes that are NOT co-operonic')
 plt.ylabel('Density')
 
 
-# In[18]:
+# In[19]:
 
 
 # Print statistics about non co-operonic co-expressed genes
 print('Using a threshold of {} to define co-expression (real data): \n'.
      format(coexpression_threshold))
 print('- We removed {} ({}%) genes that had 0 co-expressed genes'.
-      format(real_num_core_na, (real_num_core_na/num_core_genes)*100))
+      format(real_num_core_na, round((real_num_core_na/num_core_genes)*100,2)))
 print('''- Of those remaining genes, for a given CORE gene, 
       {}% (median) of the co-expressed genes are NOT in a shared operon'''.
-      format(np.median(real_percent_non_cooperonic_coexpressed_core_genes_noNa)*100))
+      format(round(np.median(real_percent_non_cooperonic_coexpressed_core_genes_noNa)*100,2)))
 
 print('- We removed {} ({}%) genes that had 0 co-expressed genes'.
-      format(real_num_acc_na, (real_num_acc_na/num_acc_genes)*100))
+      format(real_num_acc_na, round(real_num_acc_na/num_acc_genes)*100,2))
 print('''- Of those remaining genes, for a given ACCESSORY gene, 
      {}% (median) of the co-expressed genes are NOT in a shared operon \n'''.
-      format(np.median(real_percent_non_cooperonic_coexpressed_acc_genes_noNa)*100))
+      format(round(np.median(real_percent_non_cooperonic_coexpressed_acc_genes_noNa)*100,2)))
 
 
 # For shuffled data
 print('Using a threshold of {} to define co-expression (shuffled data): \n'.
      format(coexpression_threshold))
 print('- We removed {} ({}%) genes that had 0 co-expressed genes'.
-      format(shuffled_num_core_na, (shuffled_num_core_na/num_core_genes)*100))
+      format(shuffled_num_core_na, round((shuffled_num_core_na/num_core_genes)*100,2)))
 print('''- Of those remaining genes, for a given CORE gene, 
       {}% (median) of the co-expressed genes are NOT in a shared operon'''.
-      format(np.median(shuffled_percent_non_cooperonic_coexpressed_core_genes_noNa)*100))
+      format(round(np.median(shuffled_percent_non_cooperonic_coexpressed_core_genes_noNa)*100,2)))
 
 print('- We removed {} ({}%) genes that had 0 co-expressed genes'.
-      format(shuffled_num_acc_na, (shuffled_num_acc_na/num_acc_genes)*100))
+      format(shuffled_num_acc_na, round((shuffled_num_acc_na/num_acc_genes)*100,2)))
 print('''- Of those remaining genes, for a given ACCESSORY gene, 
      {}% (median) of the co-expressed genes are NOT in a shared operon'''.
-      format(np.median(shuffled_percent_non_cooperonic_coexpressed_acc_genes_noNa)*100))
+      format(round(np.median(shuffled_percent_non_cooperonic_coexpressed_acc_genes_noNa)*100,2)))
 
 
 # **Observations:**
@@ -383,7 +414,7 @@ print('''- Of those remaining genes, for a given ACCESSORY gene,
 # For a given core gene, there exists a set of genes that are co-expressed with it. What percent of those co-expressed genes are core?
 # Similarly, for a given accessory gene, there exists a set of genes that are co-expressed with it. What percent of those co-expressed genes are core? 
 
-# In[19]:
+# In[20]:
 
 
 # We only want to consider those genes with some co-expressed genes
@@ -405,7 +436,7 @@ real_percent_core_with_refcore = real_core_df['percent_non_cooperonic_coexpresse
 real_percent_core_with_refacc = real_acc_df['percent_non_cooperonic_coexpressed_core'].drop(labels=real_exclude_acc_ids)
 
 
-# In[20]:
+# In[21]:
 
 
 ## Test: Distribution without removing 0 expressed and 0 non co-operonic genes
@@ -418,10 +449,12 @@ hist, bins_core_real = np.histogram(np.concatenate([real_core_df['percent_non_co
 sns.distplot(real_core_df['percent_non_cooperonic_coexpressed_core'].tolist(),
              label='core', 
              color='red',
+             kde=False,
              bins=bins_core_real)
 sns.distplot(real_acc_df['percent_non_cooperonic_coexpressed_core'].tolist(),
              label='accessory',
              color='blue',
+             kde=False,
              bins=bins_core_real)
 
 plt.legend(prop={'size': 12})
@@ -431,7 +464,7 @@ plt.xlabel('Percent of co-expressed non-cooperonic genes that are core')
 plt.ylabel('Density')
 
 
-# In[21]:
+# In[22]:
 
 
 # Get bins using all data
@@ -442,10 +475,12 @@ hist, bins_core_real = np.histogram(np.concatenate([real_percent_core_with_refco
 sns.distplot(real_percent_core_with_refcore.tolist(),
              label='core', 
              color='red',
+             kde=False,
              bins=bins_core_real)
 sns.distplot(real_percent_core_with_refacc.tolist(),
              label='accessory',
              color='blue',
+             kde=False,
              bins=bins_core_real)
 
 plt.legend(prop={'size': 12})
@@ -455,7 +490,7 @@ plt.xlabel('Percent of co-expressed non-cooperonic genes that are core')
 plt.ylabel('Density')
 
 
-# In[22]:
+# In[23]:
 
 
 # We only want to consider those genes with some co-expressed genes
@@ -479,7 +514,7 @@ shuffled_percent_core_with_refcore = shuffled_core_df['percent_non_cooperonic_co
 shuffled_percent_core_with_refacc = shuffled_acc_df['percent_non_cooperonic_coexpressed_core'].drop(labels=shuffled_exclude_acc_ids)
 
 
-# In[23]:
+# In[24]:
 
 
 # Get bins using all data
@@ -491,10 +526,12 @@ hist, bins_core_shuffled = np.histogram(
 sns.distplot(shuffled_percent_core_with_refcore.tolist(), 
              label='core', 
              color='red',
+             kde=False,
              bins=bins_core_shuffled)
 sns.distplot(shuffled_percent_core_with_refacc.tolist(),
              label='accessory', 
              color='blue',
+             kde=False,
              bins=bins_core_shuffled)
 
 plt.legend(prop={'size': 12})
@@ -504,43 +541,43 @@ plt.xlabel('Percent of co-expressed non-cooperonic genes that are core')
 plt.ylabel('Density')
 
 
-# In[24]:
+# In[25]:
 
 
 # Print statistics about non co-operonic co-expressed core genes
 print('Using a threshold of {} to define co-expression (real data): \n'.
      format(coexpression_threshold))
 print('- We removed {} ({}%) genes that had 0 co-expressed genes or 0 non-cooperonic genes'.
-      format(len(real_exclude_core_ids), (len(real_exclude_core_ids)/num_core_genes)*100))
+      format(len(real_exclude_core_ids), round((len(real_exclude_core_ids)/num_core_genes)*100,2)))
 print('''- Of the non-coperonic co-expressed genes, for a given CORE gene,
       {}% (median) of co-expressed non co-operonic genes are core genes'''.
-      format(np.median(real_percent_core_with_refcore)*100))
+      format(round(np.median(real_percent_core_with_refcore)*100,2)))
 print('- We removed {} ({}%) genes that had 0 co-expressed genes or 0 non-cooperonic genes'.
-      format(len(real_exclude_acc_ids), (len(real_exclude_acc_ids)/num_acc_genes)*100))
+      format(len(real_exclude_acc_ids), round((len(real_exclude_acc_ids)/num_acc_genes)*100,2)))
 print('''- Of the non-coperonic co-expressed genes, for a given ACCESSORY gene,
       {}% (median) of co-expressed non co-operonic genes are core genes'''.
-      format(np.median(real_percent_core_with_refacc)*100))
+      format(round(np.median(real_percent_core_with_refacc)*100,2)))
 
 # shuffled data
 print('Using a threshold of {} to define co-expression (real data): \n'.
      format(coexpression_threshold))
 print('- We removed {} ({}%) genes that had 0 co-expressed genes or 0 non-cooperonic genes'.
-      format(len(shuffled_exclude_core_ids), (len(shuffled_exclude_core_ids)/num_core_genes)*100))
+      format(len(shuffled_exclude_core_ids), round((len(shuffled_exclude_core_ids)/num_core_genes)*100,2)))
 print('''- Of the non-coperonic co-expressed genes, for a given CORE gene,
       {}% (median) of co-expressed non co-operonic genes are core genes'''.
-      format(np.median(shuffled_percent_core_with_refcore)*100))
+      format(round(np.median(shuffled_percent_core_with_refcore)*100,2)))
 print('- We removed {} ({}%) genes that had 0 co-expressed genes or 0 non-cooperonic genes'.
-      format(len(shuffled_exclude_acc_ids), (len(shuffled_exclude_acc_ids)/num_acc_genes)*100))
+      format(len(shuffled_exclude_acc_ids), round((len(shuffled_exclude_acc_ids)/num_acc_genes)*100,2)))
 print('''- Of the non-coperonic co-expressed genes, for a given ACCESSORY gene,
       {}% (median) of co-expressed non co-operonic genes are core genes'''.
-      format(np.median(shuffled_percent_core_with_refacc)*100))
+      format(round(np.median(shuffled_percent_core_with_refacc)*100,2)))
 
 
 # ### Accessory gene relationships
 # For a given core gene, there exists a set of genes that are co-expressed with it. What percent of those co-expressed genes are accessory?
 # Similarly, for a given accessory gene, there exists a set of genes that are co-expressed with it. What percent of those co-expressed genes are accessory? 
 
-# In[25]:
+# In[26]:
 
 
 # Since we are concerned with "of those co-expressed gene NOT in the same operon", we will remove the above ids
@@ -548,7 +585,7 @@ real_percent_acc_with_refcore = real_core_df['percent_non_cooperonic_coexpressed
 real_percent_acc_with_refacc = real_acc_df['percent_non_cooperonic_coexpressed_acc'].drop(labels=real_exclude_acc_ids)
 
 
-# In[26]:
+# In[27]:
 
 
 # Get bins using all data
@@ -559,11 +596,13 @@ hist, bins_acc_real = np.histogram(np.concatenate([real_percent_acc_with_refcore
 sns.distplot(real_percent_acc_with_refcore.tolist(),
              label='core', 
              color='red', 
+             kde=False,
              bins=bins_acc_real)
 
 sns.distplot(real_percent_acc_with_refacc.tolist(),
              label='accessory',
              color='blue', 
+             kde=False,
              bins=bins_acc_real)
 
 plt.legend(prop={'size': 12})
@@ -573,7 +612,7 @@ plt.xlabel('Percent of co-expressed non-cooperonic genes that are accessory')
 plt.ylabel('Density')
 
 
-# In[27]:
+# In[28]:
 
 
 # Since we are concerned with "of those co-expressed gene NOT in the same operon", we will remove the above ids
@@ -581,7 +620,7 @@ shuffled_percent_acc_with_refcore = shuffled_core_df['percent_non_cooperonic_coe
 shuffled_percent_acc_with_refacc = shuffled_acc_df['percent_non_cooperonic_coexpressed_acc'].drop(labels=shuffled_exclude_acc_ids)
 
 
-# In[28]:
+# In[29]:
 
 
 # Get bins using all data
@@ -593,10 +632,12 @@ hist, bins_acc_shuffled = np.histogram(
 sns.distplot(shuffled_percent_acc_with_refcore.tolist(), 
              label='core', 
              color='red',
+             kde=False,
              bins=bins_acc_shuffled)
 sns.distplot(shuffled_percent_acc_with_refacc.tolist(), 
              label='accessory', 
              color='blue', 
+             kde=False,
              bins=bins_acc_shuffled)
 
 plt.legend(prop={'size': 12})
@@ -606,36 +647,36 @@ plt.xlabel('Percent of co-expressed non-cooperonic genes that are accessory')
 plt.ylabel('Density')
 
 
-# In[29]:
+# In[30]:
 
 
 # Print statistics about non co-operonic co-expressed accessory genes
 print('Using a threshold of {} to define co-expression (real data): \n'.
      format(coexpression_threshold))
 print('- We removed {} ({}%) genes that had 0 co-expressed genes or 0 non-cooperonic genes'.
-      format(len(real_exclude_core_ids), (len(real_exclude_core_ids)/num_core_genes)*100))
+      format(len(real_exclude_core_ids), round((len(real_exclude_core_ids)/num_core_genes)*100,2)))
 print('''- Of the non-coperonic co-expressed genes, for a given CORE gene,
       {}% (median) of co-expressed non co-operonic genes are accessory genes'''.
-      format(np.median(real_percent_acc_with_refcore)*100))
+      format(round(np.median(real_percent_acc_with_refcore)*100,2)))
 print('- We removed {} ({}%) genes that had 0 co-expressed genes or 0 non-cooperonic genes'.
-      format(len(real_exclude_acc_ids), (len(real_exclude_acc_ids)/num_acc_genes)*100))
+      format(len(real_exclude_acc_ids), round((len(real_exclude_acc_ids)/num_acc_genes)*100,2)))
 print('''- Of the non-coperonic co-expressed genes, for a given ACCESSORY gene,
       {}% (median) of co-expressed non co-operonic genes are accessory genes'''.
-      format(np.median(real_percent_acc_with_refacc)*100))
+      format(round(np.median(real_percent_acc_with_refacc)*100,2)))
 
 # shuffled data
 print('Using a threshold of {} to define co-expression (real data): \n'.
      format(coexpression_threshold))
 print('- We removed {} ({}%) genes that had 0 co-expressed genes or 0 non-cooperonic genes'.
-      format(len(shuffled_exclude_core_ids), (len(shuffled_exclude_core_ids)/num_core_genes)*100))
+      format(len(shuffled_exclude_core_ids), round((len(shuffled_exclude_core_ids)/num_core_genes)*100,2)))
 print('''- Of the non-coperonic co-expressed genes, for a given CORE gene,
       {}% (median) of co-expressed non co-operonic genes are accessory genes'''.
-      format(np.median(shuffled_percent_acc_with_refcore)*100))
+      format(round(np.median(shuffled_percent_acc_with_refcore)*100,2)))
 print('- We removed {} ({}%) genes that had 0 co-expressed genes or 0 non-cooperonic genes'.
-      format(len(shuffled_exclude_acc_ids), (len(shuffled_exclude_acc_ids)/num_acc_genes)*100))
+      format(len(shuffled_exclude_acc_ids), round((len(shuffled_exclude_acc_ids)/num_acc_genes)*100,2)))
 print('''- Of the non-coperonic co-expressed genes, for a given ACCESSORY gene,
       {}% (median) of co-expressed non co-operonic genes are accessory genes'''.
-      format(np.median(shuffled_percent_acc_with_refacc)*100))
+      format(round(np.median(shuffled_percent_acc_with_refacc)*100,2)))
 
 
 # **Observation:**
@@ -646,7 +687,7 @@ print('''- Of the non-coperonic co-expressed genes, for a given ACCESSORY gene,
 
 # # Manually examine co-expressed and co-operonic genes
 
-# In[30]:
+# In[31]:
 
 
 # Get genes where the number of co-expressed genes > 0 AND number of non-operonic genes is 0 
@@ -658,7 +699,7 @@ print(real_refcore_cooperonic.shape)
 real_refcore_cooperonic.head(10)
 
 
-# In[31]:
+# In[32]:
 
 
 real_refacc_cooperonic = real_acc_df[
@@ -668,7 +709,7 @@ print(real_refacc_cooperonic.shape)
 real_refacc_cooperonic.head(10)
 
 
-# In[32]:
+# In[33]:
 
 
 # Manually select core reference gene and co-expressed gene set that is 100% co-operonic
@@ -681,7 +722,7 @@ real_all_corr[real_all_corr.loc['PA1216']>coexpression_threshold]['PA1216']
 # Manually selected PA1216. PA1216 is in operon containing PA1216 - PA1221 genes (http://3.209.27.103/feature/show/?id=105200&view=operons)
 # 
 
-# In[33]:
+# In[34]:
 
 
 # Get genes where the number of co-expressed genes > 0 AND number of non-operonic genes > 0 
@@ -693,7 +734,7 @@ print(real_refcore_cooperonic.shape)
 real_refcore_cooperonic.head(10)
 
 
-# In[34]:
+# In[35]:
 
 
 real_refacc_cooperonic = real_acc_df[
@@ -703,7 +744,7 @@ print(real_refacc_cooperonic.shape)
 real_refacc_cooperonic.head(10)
 
 
-# In[35]:
+# In[36]:
 
 
 # what does it say in literature, should they be in operon
