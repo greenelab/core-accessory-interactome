@@ -61,14 +61,9 @@ coexpression_threshold):
     # Apply threshold to identify which genes are co-expressed
     coexpressed = corr_data>threshold
 
-    # Get upper triangle of correlation matrix
-    coexpressed_triu = pd.DataFrame(data=np.triu(coexpressed,1),
-                                            index=coexpressed.index,
-                                            columns=coexpressed.columns)
-
     # Get total number of genes that are co-expressed per gene
     # This will serve as a test case
-    num_coexpressed_genes = coexpressed_triu.sum(axis=1)
+    num_coexpressed_genes = coexpressed.sum(axis=1)
 
     # Given the list of co-expressed genes
     # we want to differentiate between those that are core and those that are accessory
@@ -79,7 +74,7 @@ coexpression_threshold):
     for gene_id in all_gene_ids:
         # Get row of correlation matrix
         # The values in the row corresponds to if there exists a gene is co-expressed with the gene_id
-        coexpressed_gene_values = coexpressed_triu.loc[gene_id]
+        coexpressed_gene_values = coexpressed.loc[gene_id]
         
         # Check that our calculations are consistent
         assert(num_coexpressed_genes[gene_id] == sum(coexpressed_gene_values))
