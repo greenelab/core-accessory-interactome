@@ -133,33 +133,44 @@ shuffled_acc_df.head()
 # In[10]:
 
 
+sns.set()
+
+
+# In[11]:
+
+
 # Get bins using all data
 hist, bins_num_coexpressed_real = np.histogram(np.concatenate([real_core_df['num_coexpressed_genes'].values,
                                                                real_acc_df['num_coexpressed_genes'].values]))
 
 # Distribution of number of co-expressed genes in real data
-sns.set()
+# Set up the matplotlib figure
+fig, axes = plt.subplots(ncols=2, nrows=1)
+
 sns.distplot(real_core_df['num_coexpressed_genes'].tolist(), 
              label='core',
              color='red',
              kde=False,
-             bins=bins_num_coexpressed_real)
+             bins=bins_num_coexpressed_real,
+             ax=axes[0])
 
 sns.distplot(real_acc_df['num_coexpressed_genes'].tolist(), 
              label='accessory',
              color='blue',
              kde=False,
-             bins=bins_num_coexpressed_real)
+             bins=bins_num_coexpressed_real,
+             ax=axes[1])
 
-plt.legend(prop={'size': 12})
-plt.title('Number of co-expressed genes (real data, threshold={})'.format(coexpression_threshold))
-plt.xlabel('Number of co-expressed genes')
-plt.ylabel('Density')
+plt.suptitle('Number of co-expressed genes (real data, threshold={})'.format(coexpression_threshold))
+axes[0].legend(prop={'size': 12})
+axes[1].legend(prop={'size': 12})
+fig.text(0.5, 0.01, 'Number of co-expressed genes', ha='center')
+axes[0].set_ylabel('Counts')
 
 
 # ### Number of nonzero co-expressed genes
 
-# In[11]:
+# In[12]:
 
 
 ## Remove genes with 0 co-expressed genes
@@ -168,52 +179,65 @@ hist, bins_num_coexpressed_real_nonzero = np.histogram(np.concatenate(
     [real_core_df[real_core_df['num_coexpressed_genes']>0]['num_coexpressed_genes'].values,
      real_acc_df[real_acc_df['num_coexpressed_genes']>0]['num_coexpressed_genes'].values]))
 
+# Set up the matplotlib figure
+fig, axes = plt.subplots(ncols=2, nrows=1)
+
 # Distribution of number of co-expressed genes in real data
 sns.distplot(real_core_df[real_core_df['num_coexpressed_genes']>0]['num_coexpressed_genes'].tolist(), 
              label='core',
              color='red',
              kde=False,
-             bins=bins_num_coexpressed_real_nonzero)
+             bins=bins_num_coexpressed_real_nonzero,
+             ax=axes[0])
 
 sns.distplot(real_acc_df[real_acc_df['num_coexpressed_genes']>0]['num_coexpressed_genes'].tolist(), 
              label='accessory',
              color='blue',
              kde=False,
-             bins=bins_num_coexpressed_real_nonzero)
+             bins=bins_num_coexpressed_real_nonzero,
+             ax=axes[1])
 
-plt.legend(prop={'size': 12})
-plt.title('Number of nonzero co-expressed genes (real data, threshold={})'.format(coexpression_threshold))
-plt.xlabel('Number of co-expressed genes')
-plt.ylabel('Density')
+plt.suptitle('Number of nonzero co-expressed genes (real data, threshold={})'.format(coexpression_threshold))
+axes[0].legend(prop={'size': 12})
+axes[1].legend(prop={'size': 12})
+fig.text(0.5, 0.01, 'Number of co-expressed genes', ha='center')
+axes[0].set_ylabel('Counts')
 
 
-# In[12]:
+# In[13]:
 
 
 # Get bins using all data
 hist, bins_num_coexpressed_shuffled = np.histogram(np.concatenate([shuffled_core_df['num_coexpressed_genes'].values,
                                                                    shuffled_acc_df['num_coexpressed_genes'].values]))
 
+# Set up the matplotlib figure
+fig, axes = plt.subplots(ncols=2, nrows=1)
+
 # Distribution of number of co-expressed genes in shuffled data
 sns.distplot(shuffled_core_df['num_coexpressed_genes'].tolist(), 
              label='core',
              color='red',
              kde=False,
-             bins=bins_num_coexpressed_shuffled)
+             bins=bins_num_coexpressed_shuffled,
+             ax=axes[0])
 
 sns.distplot(shuffled_acc_df['num_coexpressed_genes'].tolist(), 
              label='accessory', 
              color='blue',
              kde=False,
-             bins=bins_num_coexpressed_shuffled)
+             bins=bins_num_coexpressed_shuffled,
+             ax=axes[1]
+            )
 
-plt.legend(prop={'size': 12})
-plt.title('Number of co-expressed genes (shuffled data, threshold={})'.format(coexpression_threshold))
-plt.xlabel('Number of co-expressed genes')
-plt.ylabel('Density')
+plt.suptitle('Number of co-expressed genes (shuffled data, threshold={})'.format(coexpression_threshold))
+axes[0].legend(prop={'size': 12})
+axes[1].legend(prop={'size': 12})
+fig.text(0.5, 0.01, 'Number of co-expressed genes', ha='center')
+axes[0].set_ylabel('Counts')
 
 
-# In[13]:
+# In[14]:
 
 
 # Print statistics about co-expressed genes
@@ -236,11 +260,11 @@ print('- For a given ACCESSORY gene, there is a median of {} co-expressed  genes
 # **Observation:**
 # * Many core and accessory genes are not co-expressed with other genes or very few genes, as expected
 # * As increase threshold (more stringent), there are fewer co-expressed genes, as expected
-# * (control, not shown) All genes (threshold=0.75,0.9) are independent, as expected, since we have destroyed relationships between genes when we shuffled
+# * (control, not shown) All genes (threshold=0.75,0.9) are connected to just 1 gene, as expected, since we have destroyed relationships between genes when we shuffled
 
 # ### Percent of co-expressed genes that are NOT in the same operon
 
-# In[14]:
+# In[15]:
 
 
 # Calculate the percent of co-expressed genes that are non co-operonic (real data)
@@ -259,7 +283,7 @@ real_percent_non_cooperonic_coexpressed_core_genes_noNa = real_percent_non_coope
 real_percent_non_cooperonic_coexpressed_acc_genes_noNa = real_percent_non_cooperonic_coexpressed_acc_genes.dropna(inplace=False)
 
 
-# In[15]:
+# In[16]:
 
 
 ## TEST: What does distribution look like before removing NaNs?
@@ -271,26 +295,34 @@ hist, bins_num_percent_non_cooperonic_real = np.histogram(
          real_percent_non_cooperonic_coexpressed_acc_genes.fillna(0)]
     )
 )
+
+# Set up the matplotlib figure
+fig, axes = plt.subplots(ncols=2, nrows=1)
+
 # Distribution of percent of co-expressed genes that are NOT co-operonic in real data
 sns.distplot(real_percent_non_cooperonic_coexpressed_core_genes.fillna(0),
              label='core',
              color='red',
              kde=False,
-             bins=bins_num_percent_non_cooperonic_real)
+             bins=bins_num_percent_non_cooperonic_real,
+             ax=axes[0])
+
 sns.distplot(real_percent_non_cooperonic_coexpressed_acc_genes.fillna(0), 
              label='accessory',
              color='blue',
              kde=False, 
-             bins=bins_num_percent_non_cooperonic_real)
+             bins=bins_num_percent_non_cooperonic_real,
+             ax=axes[1])
 
-plt.legend(prop={'size': 12})
-plt.title('TEST'.
+plt.suptitle('TEST'.
           format(coexpression_threshold))
-plt.xlabel('Percent of co-expressed non-cooperonic genes')
-plt.ylabel('Density')
+axes[0].legend(prop={'size': 12})
+axes[1].legend(prop={'size': 12})
+fig.text(0.5, 0.01, 'Percent of co-expressed non-cooperonic genes', ha='center')
+axes[0].set_ylabel('Count')
 
 
-# In[16]:
+# In[17]:
 
 
 # Get bins using all data
@@ -301,26 +333,34 @@ hist, bins_num_percent_non_cooperonic_real = np.histogram(
     )
 )
 
+# Set up the matplotlib figure
+fig, axes = plt.subplots(ncols=2, nrows=1)
+
 # Distribution of percent of co-expressed genes that are NOT co-operonic in real data
 sns.distplot(real_percent_non_cooperonic_coexpressed_core_genes_noNa,
              label='core',
              color='red',
              kde=False,
-             bins=bins_num_percent_non_cooperonic_real)
+             bins=bins_num_percent_non_cooperonic_real,
+             ax=axes[0])
+
 sns.distplot(real_percent_non_cooperonic_coexpressed_acc_genes_noNa, 
              label='accessory',
              color='blue', 
              kde=False,
-             bins=bins_num_percent_non_cooperonic_real)
+             bins=bins_num_percent_non_cooperonic_real,
+             ax=axes[1]
+            )
 
-plt.legend(prop={'size': 12})
-plt.title('Percent of co-expressed genes that are NOT co-operonic (real data, threshold={})'.
+plt.suptitle('Percent of co-expressed genes that are NOT co-operonic (real data, threshold={})'.
           format(coexpression_threshold))
-plt.xlabel('Percent of co-expressed non-cooperonic genes')
-plt.ylabel('Density')
+axes[0].legend(prop={'size': 12})
+axes[1].legend(prop={'size': 12})
+fig.text(0.5, 0.01, 'Percent of co-expressed non-cooperonic genes', ha='center')
+axes[0].set_ylabel('Count')
 
 
-# In[17]:
+# In[18]:
 
 
 # Calculate the percent of co-expressed genes that are non co-operonic (shuffled data)
@@ -341,7 +381,7 @@ shuffled_percent_non_cooperonic_coexpressed_acc_genes_noNa = shuffled_percent_no
     inplace=False)
 
 
-# In[18]:
+# In[19]:
 
 
 # Get bins using all data
@@ -349,26 +389,33 @@ hist, bins_num_percent_non_cooperonic_shuffled = np.histogram(
     np.concatenate([shuffled_percent_non_cooperonic_coexpressed_core_genes_noNa,
                     shuffled_percent_non_cooperonic_coexpressed_acc_genes_noNa]))
 
+# Set up the matplotlib figure
+fig, axes = plt.subplots(ncols=2, nrows=1)
+
 # Distribution of percent of co-expressed genes that are NOT co-operonic in shuffled data
 sns.distplot(shuffled_percent_non_cooperonic_coexpressed_core_genes_noNa,
              label='core',
              color='red',
              kde=False,
-             bins=bins_num_percent_non_cooperonic_shuffled)
+             bins=bins_num_percent_non_cooperonic_shuffled,
+             ax=axes[0])
+
 sns.distplot(shuffled_percent_non_cooperonic_coexpressed_acc_genes_noNa, 
              label='accessory',
              color='blue', 
              kde=False,
-             bins=bins_num_percent_non_cooperonic_shuffled)
+             bins=bins_num_percent_non_cooperonic_shuffled,
+             ax=axes[1])
 
-plt.legend(prop={'size': 12})
-plt.title('Percent of co-expressed genes that are NOT co-operonic (shuffled data, threshold={})'.
+plt.suptitle('Percent of co-expressed genes that are NOT co-operonic (shuffled data, threshold={})'.
           format(coexpression_threshold))
-plt.xlabel('Percent of co-expressed genes that are NOT co-operonic')
-plt.ylabel('Density')
+axes[0].legend(prop={'size': 12})
+axes[1].legend(prop={'size': 12})
+fig.text(0.5, 0.01, 'Percent of co-expressed non-cooperonic genes', ha='center')
+axes[0].set_ylabel('Count')
 
 
-# In[19]:
+# In[20]:
 
 
 # Print statistics about non co-operonic co-expressed genes
@@ -414,7 +461,7 @@ print('''- Of those remaining genes, for a given ACCESSORY gene,
 # For a given core gene, there exists a set of genes that are co-expressed with it. What percent of those co-expressed genes are core?
 # Similarly, for a given accessory gene, there exists a set of genes that are co-expressed with it. What percent of those co-expressed genes are core? 
 
-# In[20]:
+# In[21]:
 
 
 # We only want to consider those genes with some co-expressed genes
@@ -436,7 +483,7 @@ real_percent_core_with_refcore = real_core_df['percent_non_cooperonic_coexpresse
 real_percent_core_with_refacc = real_acc_df['percent_non_cooperonic_coexpressed_core'].drop(labels=real_exclude_acc_ids)
 
 
-# In[21]:
+# In[22]:
 
 
 ## Test: Distribution without removing 0 expressed and 0 non co-operonic genes
@@ -445,52 +492,66 @@ real_percent_core_with_refacc = real_acc_df['percent_non_cooperonic_coexpressed_
 hist, bins_core_real = np.histogram(np.concatenate([real_core_df['percent_non_cooperonic_coexpressed_core'].values,
                                                     real_acc_df['percent_non_cooperonic_coexpressed_core'].values]))
 
+# Set up the matplotlib figure
+fig, axes = plt.subplots(ncols=2, nrows=1)
+
 # Distribution plot for percent of core co-expressed genes in real data
 sns.distplot(real_core_df['percent_non_cooperonic_coexpressed_core'].tolist(),
              label='core', 
              color='red',
              kde=False,
-             bins=bins_core_real)
+             bins=bins_core_real,
+             ax=axes[0])
+
 sns.distplot(real_acc_df['percent_non_cooperonic_coexpressed_core'].tolist(),
              label='accessory',
              color='blue',
              kde=False,
-             bins=bins_core_real)
+             bins=bins_core_real,
+             ax=axes[1])
 
-plt.legend(prop={'size': 12})
-plt.title('TEST'.
+plt.suptitle('TEST'.
           format(coexpression_threshold))
-plt.xlabel('Percent of co-expressed non-cooperonic genes that are core')
-plt.ylabel('Density')
+axes[0].legend(prop={'size': 12})
+axes[1].legend(prop={'size': 12})
+fig.text(0.5, 0.01, 'Percent of co-expressed non-cooperonic genes that are core', ha='center')
+axes[0].set_ylabel('Count')
 
 
-# In[22]:
+# In[23]:
 
 
 # Get bins using all data
 hist, bins_core_real = np.histogram(np.concatenate([real_percent_core_with_refcore.values,
                                                     real_percent_core_with_refacc.values]))
 
+# Set up the matplotlib figure
+fig, axes = plt.subplots(ncols=2, nrows=1)
+
 # Distribution plot for percent of core co-expressed genes in real data
 sns.distplot(real_percent_core_with_refcore.tolist(),
              label='core', 
              color='red',
              kde=False,
-             bins=bins_core_real)
+             bins=bins_core_real,
+             ax=axes[0])
+
 sns.distplot(real_percent_core_with_refacc.tolist(),
              label='accessory',
              color='blue',
              kde=False,
-             bins=bins_core_real)
+             bins=bins_core_real,
+             ax=axes[1])
 
-plt.legend(prop={'size': 12})
-plt.title('Percent of co-expressed non-cooperonic genes that are core (real data, threshold={})'.
+plt.suptitle('Percent of co-expressed non-cooperonic genes that are core (real data, threshold={})'.
           format(coexpression_threshold))
-plt.xlabel('Percent of co-expressed non-cooperonic genes that are core')
-plt.ylabel('Density')
+axes[0].legend(prop={'size': 12})
+axes[1].legend(prop={'size': 12})
+fig.text(0.5, 0.01, 'Percent of co-expressed non-cooperonic genes that are core', ha='center')
+axes[0].set_ylabel('Count')
 
 
-# In[23]:
+# In[24]:
 
 
 # We only want to consider those genes with some co-expressed genes
@@ -514,7 +575,7 @@ shuffled_percent_core_with_refcore = shuffled_core_df['percent_non_cooperonic_co
 shuffled_percent_core_with_refacc = shuffled_acc_df['percent_non_cooperonic_coexpressed_core'].drop(labels=shuffled_exclude_acc_ids)
 
 
-# In[24]:
+# In[25]:
 
 
 # Get bins using all data
@@ -522,26 +583,33 @@ hist, bins_core_shuffled = np.histogram(
     np.concatenate([shuffled_percent_core_with_refcore.values,
                     shuffled_percent_core_with_refacc.values]))
 
+# Set up the matplotlib figure
+fig, axes = plt.subplots(ncols=2, nrows=1)
+
 # Distribution plot for percent of core co-expressed genes in shuffled data
 sns.distplot(shuffled_percent_core_with_refcore.tolist(), 
              label='core', 
              color='red',
              kde=False,
-             bins=bins_core_shuffled)
+             bins=bins_core_shuffled,
+             ax=axes[0])
+
 sns.distplot(shuffled_percent_core_with_refacc.tolist(),
              label='accessory', 
              color='blue',
              kde=False,
-             bins=bins_core_shuffled)
+             bins=bins_core_shuffled,
+             ax=axes[1])
 
-plt.legend(prop={'size': 12})
-plt.title('Percent of co-expressed non-cooperonic genes that are core (shuffled data, threshold={})'.
+plt.suptitle('Percent of co-expressed non-cooperonic genes that are core (shuffled data, threshold={})'.
           format(coexpression_threshold))
-plt.xlabel('Percent of co-expressed non-cooperonic genes that are core')
-plt.ylabel('Density')
+axes[0].legend(prop={'size': 12})
+axes[1].legend(prop={'size': 12})
+fig.text(0.5, 0.01, 'Percent of co-expressed non-cooperonic genes that are core', ha='center')
+axes[0].set_ylabel('Count')
 
 
-# In[25]:
+# In[26]:
 
 
 # Print statistics about non co-operonic co-expressed core genes
@@ -577,7 +645,7 @@ print('''- Of the non-coperonic co-expressed genes, for a given ACCESSORY gene,
 # For a given core gene, there exists a set of genes that are co-expressed with it. What percent of those co-expressed genes are accessory?
 # Similarly, for a given accessory gene, there exists a set of genes that are co-expressed with it. What percent of those co-expressed genes are accessory? 
 
-# In[26]:
+# In[27]:
 
 
 # Since we are concerned with "of those co-expressed gene NOT in the same operon", we will remove the above ids
@@ -585,34 +653,40 @@ real_percent_acc_with_refcore = real_core_df['percent_non_cooperonic_coexpressed
 real_percent_acc_with_refacc = real_acc_df['percent_non_cooperonic_coexpressed_acc'].drop(labels=real_exclude_acc_ids)
 
 
-# In[27]:
+# In[28]:
 
 
 # Get bins using all data
 hist, bins_acc_real = np.histogram(np.concatenate([real_percent_acc_with_refcore.values,
                                                    real_percent_acc_with_refacc.values]))
 
+# Set up the matplotlib figure
+fig, axes = plt.subplots(ncols=2, nrows=1)
+
 # Distribution plot for percent of accessory co-expressed genes in real data
 sns.distplot(real_percent_acc_with_refcore.tolist(),
              label='core', 
              color='red', 
              kde=False,
-             bins=bins_acc_real)
+             bins=bins_acc_real,
+             ax=axes[0])
 
 sns.distplot(real_percent_acc_with_refacc.tolist(),
              label='accessory',
              color='blue', 
              kde=False,
-             bins=bins_acc_real)
+             bins=bins_acc_real,
+             ax=axes[1])
 
-plt.legend(prop={'size': 12})
-plt.title('Percent of co-expressed non-cooperonic genes that are accessory (real data, threshold={})'.
+plt.suptitle('Percent of co-expressed non-cooperonic genes that are accessory (real data, threshold={})'.
           format(coexpression_threshold))
-plt.xlabel('Percent of co-expressed non-cooperonic genes that are accessory')
-plt.ylabel('Density')
+axes[0].legend(prop={'size': 12})
+axes[1].legend(prop={'size': 12})
+fig.text(0.5, 0.01, 'Percent of co-expressed non-cooperonic genes that are accessory', ha='center')
+axes[0].set_ylabel('Count')
 
 
-# In[28]:
+# In[29]:
 
 
 # Since we are concerned with "of those co-expressed gene NOT in the same operon", we will remove the above ids
@@ -620,7 +694,7 @@ shuffled_percent_acc_with_refcore = shuffled_core_df['percent_non_cooperonic_coe
 shuffled_percent_acc_with_refacc = shuffled_acc_df['percent_non_cooperonic_coexpressed_acc'].drop(labels=shuffled_exclude_acc_ids)
 
 
-# In[29]:
+# In[30]:
 
 
 # Get bins using all data
@@ -628,26 +702,32 @@ hist, bins_acc_shuffled = np.histogram(
     np.concatenate([shuffled_percent_acc_with_refcore.values,
                     shuffled_percent_acc_with_refacc.values]))
 
+# Set up the matplotlib figure
+fig, axes = plt.subplots(ncols=2, nrows=1)
+
 # Distribution plot for percent of accessory co-expressed genes in shuffled data
 sns.distplot(shuffled_percent_acc_with_refcore.tolist(), 
              label='core', 
              color='red',
              kde=False,
-             bins=bins_acc_shuffled)
+             bins=bins_acc_shuffled,
+             ax=axes[0])
 sns.distplot(shuffled_percent_acc_with_refacc.tolist(), 
              label='accessory', 
              color='blue', 
              kde=False,
-             bins=bins_acc_shuffled)
+             bins=bins_acc_shuffled,
+             ax=axes[1])
 
-plt.legend(prop={'size': 12})
-plt.title('Percent of co-expressed non-cooperonic genes that are accessory (shuffled data, threshold={})'.
+plt.suptitle('Percent of co-expressed non-cooperonic genes that are accessory (shuffled data, threshold={})'.
           format(coexpression_threshold))
-plt.xlabel('Percent of co-expressed non-cooperonic genes that are accessory')
-plt.ylabel('Density')
+axes[0].legend(prop={'size': 12})
+axes[1].legend(prop={'size': 12})
+fig.text(0.5, 0.01, 'Percent of co-expressed non-cooperonic genes that are accessory', ha='center')
+axes[0].set_ylabel('Count')
 
 
-# In[30]:
+# In[31]:
 
 
 # Print statistics about non co-operonic co-expressed accessory genes
@@ -687,7 +767,7 @@ print('''- Of the non-coperonic co-expressed genes, for a given ACCESSORY gene,
 
 # # Manually examine co-expressed and co-operonic genes
 
-# In[31]:
+# In[32]:
 
 
 # Get genes where the number of co-expressed genes > 0 AND number of non-operonic genes is 0 
@@ -699,7 +779,7 @@ print(real_refcore_cooperonic.shape)
 real_refcore_cooperonic.head(10)
 
 
-# In[32]:
+# In[33]:
 
 
 real_refacc_cooperonic = real_acc_df[
@@ -709,7 +789,7 @@ print(real_refacc_cooperonic.shape)
 real_refacc_cooperonic.head(10)
 
 
-# In[33]:
+# In[34]:
 
 
 # Manually select core reference gene and co-expressed gene set that is 100% co-operonic
@@ -722,7 +802,7 @@ real_all_corr[real_all_corr.loc['PA1216']>coexpression_threshold]['PA1216']
 # Manually selected PA1216. PA1216 is in operon containing PA1216 - PA1221 genes (http://3.209.27.103/feature/show/?id=105200&view=operons)
 # 
 
-# In[34]:
+# In[35]:
 
 
 # Get genes where the number of co-expressed genes > 0 AND number of non-operonic genes > 0 
@@ -734,7 +814,7 @@ print(real_refcore_cooperonic.shape)
 real_refcore_cooperonic.head(10)
 
 
-# In[35]:
+# In[36]:
 
 
 real_refacc_cooperonic = real_acc_df[
@@ -744,7 +824,7 @@ print(real_refacc_cooperonic.shape)
 real_refacc_cooperonic.head(10)
 
 
-# In[36]:
+# In[37]:
 
 
 # what does it say in literature, should they be in operon
