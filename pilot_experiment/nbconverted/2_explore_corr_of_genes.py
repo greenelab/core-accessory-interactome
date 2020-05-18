@@ -295,7 +295,13 @@ print(corr_scores_df.shape)
 corr_scores_df.head()
 
 
-# In[22]:
+# In[30]:
+
+
+sns.set()
+
+
+# In[31]:
 
 
 # Plot all correlation scores
@@ -305,20 +311,105 @@ sns.boxplot(data=corr_scores_df,
            palette='Set3').set_title('Distribution of correlation scores per group')
 
 
-# In[23]:
+# In[63]:
 
+
+# Get bins using all data
+hist, bins_corr = np.histogram(np.concatenate([real_core_corr_score,
+                                              real_acc_corr_score,
+                                              real_core_acc_corr_score,
+                                              shuffled_all_corr_score]))
 
 # Distribution plot for core genes
-sns.distplot(real_core_corr_score, label='core', color='red')
-sns.distplot(real_acc_corr_score, label='accessory', color='blue')
-sns.distplot(real_core_acc_corr_score, label='core-accessory', color='purple')
-sns.distplot(shuffled_all_corr_score, label='shuffled', color='grey')
+sns.distplot(real_core_corr_score, 
+             label='core', 
+             color='red',
+             bins=bins_corr
+            )
+
+sns.distplot(real_acc_corr_score,
+             label='accessory',
+             color='blue',
+             bins=bins_corr
+            )
+sns.distplot(real_core_acc_corr_score, 
+             label='core-accessory', 
+             color='purple',
+             bins=bins_corr
+            )
+sns.distplot(shuffled_all_corr_score,
+             label='shuffled', 
+             color='grey',
+             bins=bins_corr
+            )
 
 plt.legend(prop={'size': 12})
 plt.title('Density of correlation scores per group')
-plt.ylabel('Density')
+plt.ylabel('Probability Density')
 
 
+# In[60]:
+
+
+# Get bins using all data
+hist, bins_corr = np.histogram(np.concatenate([real_core_corr_score,
+                                              real_acc_corr_score,
+                                              real_core_acc_corr_score,
+                                              shuffled_all_corr_score]))
+
+# Set up the matplotlib figure
+fig, axes = plt.subplots(ncols=2, nrows=2, figsize=(8,8))
+
+# Distribution plot for core genes
+sns.distplot(real_core_corr_score, 
+             label='core', 
+             color='red',
+             bins=bins_corr,
+             kde=False,
+             ax=axes[0,0]
+            )
+
+sns.distplot(real_acc_corr_score,
+             label='accessory',
+             color='blue',
+             bins=bins_corr,
+             kde=False,
+             ax=axes[0,1]
+            )
+sns.distplot(real_core_acc_corr_score, 
+             label='core-accessory', 
+             color='purple',
+             bins=bins_corr,
+             kde=False,
+             ax=axes[1,0]
+            )
+sns.distplot(shuffled_all_corr_score,
+             label='shuffled', 
+             color='grey',
+             bins=bins_corr,
+             kde=False,
+             ax=axes[1,1]
+            )
+
+plt.suptitle('Histogram of correlation scores per group')
+axes[0,0].set_title('Core-Core')
+axes[0,1].set_title('Accessory-Accessory')
+axes[1,0].set_title('Core-Accessory')
+axes[1,1].set_title('Shuffled')
+fig.text(0.5, 0.01, 'Correlation between genes', ha='center', fontsize=12)
+fig.text(0.01, 0.5, 'Count', ha='center', rotation=90, fontsize=12)
+plt.tight_layout(pad=0.4, 
+                 w_pad=0.5,
+                 h_pad=1.0,
+                 rect=[0, 0.03, 1, 0.95])
+
+
+# **Note about visualizations**
+# * Based on the density plot, we observed a shift in the accessory-accessory gene correlation scores. This density plot represents the probability of a random variable falling within a particular range of values (P(0 <= X <= 0.5)). This probability is given by the integral of this variable's PDF over that range -- that is it is given by the area under the density function. So there is a higher likelihood of correlation scores > 0.5 for accessory-accessory genes compared to core-core genes. But the *exact probability* of accessory-accessory genes having a correlation score > 0.5 is not known from just visually inspecting the density plot. To get the exact probability we would need to calculate the integral from 0.5 onward.
+# * While the shift if very clear to see in the density plot, the meaning of the y-axis is not as intuitive, so we also plot histograms for each group of genes. The histogram also shows a shift in the accessory-accessory gene correlation scores and also shows that the number of accessory-accessory interactions is orders of magnitude lower compared to core-core interactions.
+# 
+# https://towardsdatascience.com/histograms-and-density-plots-in-python-f6bda88f5ac0
+# 
 # **Some sanity checks**
 # * Shuffled dataset has very little correlation between genes, as expected since we have disrupted the inherent relationships between genes through our permutation process
 # * Since core genes comprise 97% of the total genes, the mean correlation for all genes is the same as the core gene set
@@ -333,7 +424,7 @@ plt.ylabel('Density')
 
 # ## Binarize the correlation matrix to get interactions
 
-# In[24]:
+# In[ ]:
 
 
 # Binarize correlation score to get possible interactions
@@ -345,7 +436,7 @@ real_all_edges = real_all_corr>threshold
 shuffled_all_edges = shuffled_all_corr>threshold
 
 
-# In[25]:
+# In[ ]:
 
 
 real_core_edges_score = real_core_edges.values[np.triu_indices(n=len(real_core_edges), k=1)]
@@ -355,7 +446,7 @@ real_all_edges_score = real_all_edges.values[np.triu_indices(n=len(real_all_edge
 shuffled_all_edges_score = shuffled_all_edges.values[np.triu_indices(n=len(shuffled_all_edges), k=1)]
 
 
-# In[26]:
+# In[ ]:
 
 
 num_edges_df = pd.DataFrame(data={'group': ['core', 'accessory', 'core-accessory', 'all', 'shuffled'],
