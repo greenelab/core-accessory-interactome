@@ -63,20 +63,40 @@ gene_mapping_file = os.path.join(
 # In[4]:
 
 
+# User define which set of samples to use
+# All - Use all selected experiments
+# PA01 - Use only PAO1 experiments
+# PA14 - Use only PA14 experiments
+which_experiments = 'All'
+
+
+# In[5]:
+
+
 # Select specific experiments
 # In this case we selected 6 experiments (3 experiments PAO1 strains and the other 3 experiments contain PA14 strains).
 # We will use only PAO1 and PA14 strains as a first pass because these two strains are the most common and well studied
 # P. aeruginosa strains and therefore we will be able to verify the resulting gene-gene interactions with those found
 # in the literature.
-lst_experiments = ["E-GEOD-8083",
-                   "E-GEOD-29789",
-                   "E-GEOD-48982",
-                   "E-GEOD-24038",
-                   "E-GEOD-29879",
-                   "E-GEOD-49759"]
+if which_experiments == "All":
+    lst_experiments = ["E-GEOD-8083",
+                       "E-GEOD-29789",
+                       "E-GEOD-48982",
+                       "E-GEOD-24038",
+                       "E-GEOD-29879",
+                       "E-GEOD-49759"]
+elif which_experiments == "PAO1":
+    lst_experiments = ["E-GEOD-8083",
+                       "E-GEOD-29789",
+                       "E-GEOD-48982"
+                      ]
+elif which_experiments == "PA14":
+    lst_experiments = ["E-GEOD-24038",
+                       "E-GEOD-29879",
+                       "E-GEOD-49759"]
 
 
-# In[5]:
+# In[6]:
 
 
 # Output files
@@ -85,14 +105,14 @@ selected_data_file = os.path.join(
         "pilot_experiment",
         "data",
         "input",
-        "selected_normalized_data.tsv")
+        "selected_"+which_experiments+"_normalized_data.tsv")
 
 shuffled_selected_data_file = os.path.join(
         base_dir,
         "pilot_experiment",
         "data",
         "input",
-        "shuffled_selected_normalized_data.tsv")
+        "shuffled_"+which_experiments+"_selected_normalized_data.tsv")
 
 gene_annot_file = os.path.join(
         base_dir,
@@ -106,7 +126,7 @@ gene_annot_file = os.path.join(
 # 
 # Select subset of experiments to use
 
-# In[6]:
+# In[7]:
 
 
 process_data.select_expression_data(normalized_data_file,
@@ -118,7 +138,7 @@ process_data.select_expression_data(normalized_data_file,
 # # Permute selected expression data
 # This permuted version will serve as a baseline for our analysis
 
-# In[7]:
+# In[8]:
 
 
 process_data.permute_expression_data(selected_data_file,
@@ -131,7 +151,7 @@ process_data.permute_expression_data(selected_data_file,
 # 
 # These homologous mappings are based on the [Bactome database](https://bactome.helmholtz-hzi.de/cgi-bin/h-pange.cgi?STAT=1&Gene=PA0135)
 
-# In[8]:
+# In[9]:
 
 
 process_data.annotate_genes(selected_data_file,
