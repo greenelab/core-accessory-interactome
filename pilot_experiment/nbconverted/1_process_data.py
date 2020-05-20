@@ -25,6 +25,7 @@ np.random.seed(123)
 
 
 base_dir = os.path.abspath(os.path.join(os.getcwd(),"../"))
+local_dir = "/home/alexandra/Documents/"
 
 
 # ### About input data
@@ -36,12 +37,12 @@ base_dir = os.path.abspath(os.path.join(os.getcwd(),"../"))
 
 
 # Input files
-normalized_data_file = os.path.join(
-    base_dir,
-    "pilot_experiment",
-    "data",
-   "input",
-    "train_set_normalized.pcl")
+data_file = os.path.join(
+    local_dir,
+    "Data",
+    "Batch_effects",
+    "input",
+    "Pa_compendium_02.22.2014.pcl")
 
 metadata_file = os.path.join(
     base_dir,
@@ -67,7 +68,7 @@ gene_mapping_file = os.path.join(
 # All - Use all selected experiments
 # PA01 - Use only PAO1 experiments
 # PA14 - Use only PA14 experiments
-which_experiments = 'All'
+which_experiments = 'PAO1'
 
 
 # In[5]:
@@ -105,14 +106,14 @@ selected_data_file = os.path.join(
         "pilot_experiment",
         "data",
         "input",
-        "selected_"+which_experiments+"_normalized_data.tsv")
+        "selected_"+which_experiments+"_data.tsv")
 
 shuffled_selected_data_file = os.path.join(
         base_dir,
         "pilot_experiment",
         "data",
         "input",
-        "shuffled_"+which_experiments+"_selected_normalized_data.tsv")
+        "shuffled_"+which_experiments+"_selected_data.tsv")
 
 gene_annot_file = os.path.join(
         base_dir,
@@ -129,7 +130,7 @@ gene_annot_file = os.path.join(
 # In[7]:
 
 
-process_data.select_expression_data(normalized_data_file,
+process_data.select_expression_data(data_file,
                                    metadata_file,
                                    lst_experiments,
                                    selected_data_file)
