@@ -8,7 +8,7 @@
 # 
 # This notebook performs a follow-up analysis. In particular this notebook performs a deeper examination of the correlation structure per group (core-core, core-accessory, accessory-accessory) by looking at the trends of the nearest neighbors (i.e. highly correlated genes) of each gene.
 
-# In[1]:
+# In[74]:
 
 
 import pandas as pd
@@ -23,7 +23,7 @@ from functions import calculations
 np.random.seed(123)
 
 
-# In[2]:
+# In[75]:
 
 
 # Input
@@ -58,7 +58,7 @@ shuffled_all_corr_file = os.path.join(
 operon_file = "https://github.com/greenelab/adage/blob/master/Genome_organization/operon_3.txt"
 
 
-# In[3]:
+# In[76]:
 
 
 # Read in gene ids
@@ -73,7 +73,7 @@ num_all_genes = num_core_genes + num_acc_genes
 
 # # Extract statistics about co-expression from correlation matrix
 
-# In[4]:
+# In[77]:
 
 
 # Define threshold for highly co-expressed genes
@@ -82,7 +82,7 @@ coexpression_threshold = 0.9
 
 # ### Co-expression statsitics using real data
 
-# In[5]:
+# In[78]:
 
 
 # Get co-expression patterns using real expression data
@@ -93,13 +93,13 @@ real_core_df, real_acc_df = calculations.get_coexpression_stats(real_all_corr_fi
                                                                 coexpression_threshold)
 
 
-# In[6]:
+# In[79]:
 
 
 real_core_df.head()
 
 
-# In[7]:
+# In[80]:
 
 
 real_acc_df.head()
@@ -107,7 +107,7 @@ real_acc_df.head()
 
 # ### Co-expression statistics using shuffled data
 
-# In[8]:
+# In[81]:
 
 
 # Get co-expression patterns using shuffled expression data (control)
@@ -120,7 +120,7 @@ shuffled_core_df, shuffled_acc_df = calculations.get_coexpression_stats(shuffled
 shuffled_core_df.head()
 
 
-# In[9]:
+# In[82]:
 
 
 shuffled_acc_df.head()
@@ -128,15 +128,17 @@ shuffled_acc_df.head()
 
 # # Plot trends in co-expression data
 
-# ### Number of co-expressed genes
+# ## 1. Number of co-expressed genes
 
-# In[10]:
+# In[83]:
 
 
 sns.set()
 
 
-# In[11]:
+# ### Number of co-expressed genes
+
+# In[84]:
 
 
 # Get bins using all data
@@ -170,7 +172,7 @@ axes[0].set_ylabel('Counts')
 
 # ### Number of nonzero co-expressed genes
 
-# In[12]:
+# In[85]:
 
 
 ## Remove genes with 0 co-expressed genes
@@ -204,7 +206,7 @@ fig.text(0.5, 0.01, 'Number of co-expressed genes', ha='center')
 axes[0].set_ylabel('Counts')
 
 
-# In[13]:
+# In[86]:
 
 
 # Get bins using all data
@@ -237,7 +239,7 @@ fig.text(0.5, 0.01, 'Number of co-expressed genes', ha='center')
 axes[0].set_ylabel('Counts')
 
 
-# In[14]:
+# In[87]:
 
 
 # Print statistics about co-expressed genes
@@ -257,12 +259,53 @@ print('- For a given ACCESSORY gene, there is a median of {} co-expressed  genes
       format(np.median(shuffled_acc_df['num_coexpressed_genes'])))
 
 
-# **Observation:**
+# **Overall:**
 # * Many core and accessory genes are not co-expressed with other genes or very few genes, as expected
 # * As increase threshold (more stringent), there are fewer co-expressed genes, as expected
 # * (control, not shown) All genes (threshold=0.75,0.9) are connected to just 1 gene, as expected, since we have destroyed relationships between genes when we shuffled
+# * Both core and accessory genes are have the same degree of connectivity
+# 
+# **Observation using All experiments:**
+# * At a threshold of 0.5, core genes have a median of 716 genes they are connect to and accessory genes have a median of 601 genes they are connected to
+# * At a threshold of 0.75 core genes have a median of 53 genes they are connect to and accessory genes have a median of 74 genes they are connected to
+# * At a threshold of 0.9, core and accessory genes have a median of 1 gene that they are connected to 
+# 
+# **Observation using only PAO1 experiments:**
+# * At a threshold of 0.5, core genes have a median of 1331 genes they are connect to and accessory genes have a median of 1341 genes they are connected to. So there are more connections using only PAO1 genes, which we would expect since the accessory genes are PAO1-specific.
+# * At a threshold of 0.75 core genes have a median of 554 genes they are connect to and accessory genes have a median of 576 genes they are connected to
+# * At a threshold of 0.9, core genes have a median of 21 gene that they are connected to and accessory genes have a median of 57 genes they are connected to 
+# 
+# **Observation using only PA14 experiments:**
+# * At a threshold of 0.5, core genes have a median of 1133 genes they are connect to and accessory genes have a median of 1065 genes they are connected to. So there are more connections using only PAO1 genes, which we would expect since the accessory genes are PAO1-specific.
+# * At a threshold of 0.75 core genes have a median of 153 genes they are connect to and accessory genes have a median of 132 genes they are connected to
+# * At a threshold of 0.9, core genes have a median of 2 gene that they are connected to and accessory genes have a median of 3 genes they are connected to 
 
-# ### Percent of co-expressed genes that are NOT in the same operon
+# ### Compare co-expressed vs not co-expressed genes
+# What is the difference between genes that are co-expressed vs those that are not?
+
+# In[15]:
+
+
+# Get genes that are co-expressed with other genes
+coexpressed_core_genes = list(real_core_df[real_core_df['num_coexpressed_genes']>0].index)
+coexpressed_acc_genes = list(real_acc_df[real_acc_df['num_coexpressed_genes']>0].index)
+
+
+# In[16]:
+
+
+len(coexpressed_core_genes)
+
+
+# In[17]:
+
+
+len(coexpressed_acc_genes)
+
+
+# At a strict threshold of 0.9, all genes are co-expressed with **at least** one other gene. So there are no independent genes.
+
+# ## 2. Percent of co-expressed genes that are NOT in the same operon
 
 # In[15]:
 
