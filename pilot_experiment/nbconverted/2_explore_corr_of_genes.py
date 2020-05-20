@@ -21,7 +21,7 @@ np.random.seed(123)
 
 
 # User - which experiments to use
-which_experiments = "PA14"
+which_experiments = "PAO1"
 
 
 # In[3]:
@@ -35,14 +35,14 @@ real_expression_file = os.path.join(
     "pilot_experiment",
     "data",
     "input",
-    "selected_"+which_experiments+"_normalized_data.tsv")
+    "selected_"+which_experiments+"_data.tsv")
 
 shuffled_expression_file = os.path.join(
     base_dir,
     "pilot_experiment",
     "data",
     "input",
-    "shuffled_"+which_experiments+"_selected_normalized_data.tsv")
+    "shuffled_"+which_experiments+"_selected_data.tsv")
 
 gene_annot_file = os.path.join(
     base_dir,
