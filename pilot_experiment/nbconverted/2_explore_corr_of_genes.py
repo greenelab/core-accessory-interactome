@@ -21,7 +21,7 @@ np.random.seed(123)
 
 
 # User - which experiments to use
-which_experiments = "PAO1"
+which_experiments = "All"
 
 
 # In[3]:
@@ -425,7 +425,7 @@ plt.tight_layout(pad=0.4,
 
 # ## Examine expression of genes per group
 # **Question**
-# Is the reason for this shift because the accessory genes are absent = expression values for those accessory genes are all very low with little variance?
+# Is the reason for this shift because the accessory genes are absent? In other words, is the expression values for ALL accessory genes very low in across samples and so that is why they are all very correlated?
 
 # In[27]:
 
@@ -509,3 +509,7 @@ plt.tight_layout(pad=0.4,
                  h_pad=1.0,
                  rect=[0, 0.03, 1, 0.95])
 
+
+# **Take away**:
+# * If high corr(acc, acc) was due to gene absence, then I would’ve expected the average expression of accessory genes to be tightly spread near 0. But instead we see that average gene expression of accessory genes is similar to the core gene expression, even using only PA14 strains
+# * What can explain this? 
