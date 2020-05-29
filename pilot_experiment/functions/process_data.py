@@ -51,7 +51,7 @@ output_file):
 
     """
     # Read data
-    normalized_data = pd.read_csv(
+    data = pd.read_csv(
         input_data_file,
         header=0,
         sep='\t',
@@ -70,7 +70,7 @@ output_file):
     selected_mapping = map_experiment_sample.loc[lst_experiments]
     selected_sample_ids = list(selected_mapping['ml_data_source'].values)
 
-    selected_data = normalized_data.loc[selected_sample_ids]
+    selected_data = data.loc[selected_sample_ids]
 
     print('The selected dataset contains {} samples and {} genes'.
           format(selected_data.shape[0],selected_data.shape[1]))
