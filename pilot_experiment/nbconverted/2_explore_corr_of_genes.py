@@ -13,6 +13,7 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pickle
+import scipy as sc
 
 np.random.seed(123)
 
@@ -311,7 +312,7 @@ sns.set()
 sns.boxplot(data=corr_scores_df,
            x='group',
            y='corr_score',
-           palette='Set3').set_title('Distribution of correlation scores per group')
+           palette='Set3').set_title('Distribution of correlation scores per group ({} data)'.format(which_experiments))
 
 
 # In[25]:
@@ -349,8 +350,10 @@ sns.distplot(shuffled_all_corr_score,
             )
 
 plt.legend(prop={'size': 12})
-plt.title('Probability density of correlation scores per group')
-plt.ylabel('Probability Density')
+plt.title('Probability density of correlation scores per group ({} data)'.format(which_experiments), 
+          fontsize=16)
+plt.ylabel('Probability Density', fontsize=14)
+plt.xlabel('Correlation score', fontsize=14)
 
 
 # In[26]:
@@ -396,13 +399,14 @@ sns.distplot(shuffled_all_corr_score,
              ax=axes[1,1]
             )
 
-plt.suptitle('Histogram of correlation scores per group')
+plt.suptitle('Histogram of correlation scores per group ({} data)'.format(which_experiments),
+            fontsize=16)
 axes[0,0].set_title('Core-Core')
 axes[0,1].set_title('Accessory-Accessory')
 axes[1,0].set_title('Core-Accessory')
 axes[1,1].set_title('Shuffled')
-fig.text(0.5, 0.01, 'Correlation between genes', ha='center', fontsize=12)
-fig.text(0.01, 0.5, 'Count', ha='center', rotation=90, fontsize=12)
+fig.text(0.5, 0.01, 'Correlation between genes', ha='center', fontsize=14)
+fig.text(0.01, 0.5, 'Count', ha='center', rotation=90, fontsize=14)
 plt.tight_layout(pad=0.4, 
                  w_pad=0.5,
                  h_pad=1.0,
@@ -466,9 +470,10 @@ sns.distplot(mean_real_acc_expression,
             )
 
 plt.legend(prop={'size': 12})
-plt.title('Probability density of mean gene expression')
-plt.ylabel('Probability Density')
-plt.xlabel('Mean gene expression')
+plt.title('Probability density of mean gene expression ({} data)'.format(which_experiments),
+         fontsize=16)
+plt.ylabel('Probability Density', fontsize=14)
+plt.xlabel('Mean gene expression', fontsize=14)
 
 
 # In[30]:
@@ -499,11 +504,12 @@ sns.distplot(mean_real_acc_expression,
              ax=axes[1]
             )
 
-plt.suptitle('Histogram of gene expression per group')
+plt.suptitle('Histogram of gene expression per group ({} data)'.format(which_experiments),
+            fontsize=16)
 axes[0].set_title('Core-Core')
 axes[1].set_title('Accessory-Accessory')
-fig.text(0.5, 0.01, 'Gene expression', ha='center', fontsize=12)
-fig.text(0.01, 0.5, 'Count', ha='center', rotation=90, fontsize=12)
+fig.text(0.5, 0.01, 'Gene expression', ha='center', fontsize=14)
+fig.text(0.01, 0.5, 'Count', ha='center', rotation=90, fontsize=14)
 plt.tight_layout(pad=0.4, 
                  w_pad=0.5,
                  h_pad=1.0,
