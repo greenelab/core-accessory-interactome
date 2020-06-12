@@ -2,6 +2,8 @@
 # coding: utf-8
 
 # # Explore composition of correlated genes
+# 
+# This notebook explores deeper into the genes that are found based on their correlation score.
 
 # In[1]:
 
@@ -60,10 +62,6 @@ acc_gene_ids_file = os.path.join(
     base_intermediate_dir,
     "acc_gene_ids.pickle")
 
-real_corr_pao1_file = os.path.join(
-    base_intermediate_dir,
-    "real_corr_PAO1.pickle")
-
 
 # In[3]:
 
@@ -115,6 +113,16 @@ real_acc_expression_pa14 = real_expression_pa14[acc_gene_ids]
 
 
 # ## Evolution of PAO1 and PA14
+# 
+# Whole-genome phylogenetic analysis found two major groups (PAO1, PA14) using the core genome
+# The PA14 and PAO1 clonal complexes have diverged evolutionary based on SNPs that were present in most isolates of one group and absent in all isolates of the other
+# 
+# References:
+# * https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6690169/
+# * https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7197496/
+# * https://www.pnas.org/content/pnas/105/8/3100.full.pdf
+# 
+# **Question:** Since PA14 and PAO1 have diverged, what accessory genes from PAO1 are shared with PA14 strains as they evolve and adapt?
 
 # In[7]:
 
@@ -205,12 +213,21 @@ venn2([set(highly_acc_genes_pao1), set(highly_acc_genes_pa14)],
 plt.show()
 
 
+# **Observations:**
+# * 199 accessory genes that are highly connected with other accessory genes in both PAO1 and PA14 background
+# * 2 accessory genes that are highly connected with other accessory genes in only PA14 strains background -- niche genes?
+# * Highly correlated accessory genes are conserved across strains
+
 # ## Accessory relationships with core or other accessory genes
+# 
+# [Jiao et. al.](https://pubmed.ncbi.nlm.nih.gov/29795552), who found that more conserved genes (like flexible genes) in S. fredii (Sinorhizobium fredii) were more strongly connected in the co-expression network. This intuition is that as Pseudomonas adapts, newly acquired accessory genes will be integrated into the existing/core regulatory network of the recipient strain. In other words we would expect flexible and core genes to be co-expressed compared to unique and core genes
+# 
+# **Question:** Are accessory genes more highly correlated with core genes vs accessory genes? Are the genes that are highly correlated with accessory genes strain-specific?
 
 # In[15]:
 
 
-real_corr_pao1 = pickle.load(open(real_corr_pao1_file, "rb"))
+real_corr_pao1 = real_expression_pao1.corr(method='pearson')
 
 
 # In[16]:
@@ -354,6 +371,12 @@ gene_name_mapping_dict = gene_name_mapping.T.to_dict('index')
 gene_name_mapping_dict = gene_name_mapping_dict['Name']
 
 
+# This table contains the following columns:
+# 1. All accessory genes that are highly correlated with either a core or accessory gene
+# 2. What gene that accessory gene is correlated with
+# 3. What the correlation score is
+# 4. If the relationship is accessory-core or accessory-accessory
+
 # In[28]:
 
 
@@ -408,7 +431,7 @@ plt.show()
 
 # **Observation:** Given the set of all accessory genes that are highly correlated with other accessory genes (correlation score > 0.5), all except 2 accessory genes are highly correlated in PAO1 samples and PA14 samples. There are two accessory gene that are only highly correlated in PA14 strains.
 # 
-# *Note:* For this analysis we are ignorning which gene pair has a high score and focused on if the gene is highly correlated to any accessory gene.
+# *Note:* For this analysis we are ignorning which gene pair has a high score and focused on if the gene is highly correlated to any accessory gene. This is why we have generated the dataframe to tell us more about who is connected to who.
 
 # ## Examine expression of genes per group
 # **Question**
