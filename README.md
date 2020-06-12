@@ -26,5 +26,5 @@ To build and activate this environment run:
 # conda version 4.6.12
 conda env create -f environment.yml
 
-conda activate core-acc
+conda activate core_acc
 ```
