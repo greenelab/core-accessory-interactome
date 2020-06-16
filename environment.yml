@@ -1,4 +1,4 @@
-name: core-acc
+name: core_acc
 channels:
 - conda-forge
 - r
@@ -20,3 +20,4 @@ dependencies:
 - pip=19.2.1
 - pip:
   - matplotlib==3.0.0
+  - matplotlib-venn
