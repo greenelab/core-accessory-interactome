@@ -17,6 +17,9 @@ from matplotlib_venn import venn2
 import pickle
 import scipy as sc
 
+import warnings
+warnings.filterwarnings(action='ignore')
+
 np.random.seed(123)
 
 
@@ -220,7 +223,10 @@ plt.show()
 
 # ## Accessory relationships with core or other accessory genes
 # 
-# [Jiao et. al.](https://pubmed.ncbi.nlm.nih.gov/29795552), who found that more conserved genes (like flexible genes) in S. fredii (Sinorhizobium fredii) were more strongly connected in the co-expression network. This intuition is that as Pseudomonas adapts, newly acquired accessory genes will be integrated into the existing/core regulatory network of the recipient strain. In other words we would expect flexible and core genes to be co-expressed compared to unique and core genes
+# **Definition:** 
+# Accessory genes can be strain-specific, so they are unique genes or they can be partially conserved, so shared with some strains but not all, call these flexible genes
+# 
+# [Jiao et. al.](https://pubmed.ncbi.nlm.nih.gov/29795552), who found that more conserved genes (like flexible genes) in S. fredii (Sinorhizobium fredii) were more strongly connected in the co-expression network. This intuition is that as Pseudomonas adapts, newly acquired accessory genes will be integrated into the existing/core regulatory network of the recipient strain. In other words we would expect flexible and core genes to be co-expressed compared to unique and core genes. 
 # 
 # **Question:** Are accessory genes more highly correlated with core genes vs accessory genes? Are the genes that are highly correlated with accessory genes strain-specific?
 
@@ -345,7 +351,7 @@ gene_name_file = os.path.join(
     "annotations",
     "Pseudomonas_aeruginosa_PAO1_107.csv")
 
-gene_name_mapping = pd.read_table(
+gene_name_mapping = pd.read_csv(
     gene_name_file,
     header=0,
     sep=',',
