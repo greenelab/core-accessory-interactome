@@ -216,10 +216,17 @@ venn2([set(highly_acc_genes_pao1), set(highly_acc_genes_pa14)],
 plt.show()
 
 
+# Recall our definition of core and accessory genes. **core gene** = genes that are homologous between PAO1 and PA14; **accessory gene** in this case are PAO1-specific genes (since the array we are using is using the PAO1 reference genome).
+# 
 # **Observations:**
 # * 199 accessory genes that are highly connected with other accessory genes in both PAO1 and PA14 background
 # * 2 accessory genes that are highly connected with other accessory genes in only PA14 strains background -- niche genes?
 # * Highly correlated accessory genes are conserved across strains
+# 
+# What are these "accessory genes in both PAO1 and PA14"? 
+# * Say gene X is an accessory gene, meaning gene X is PAO1-specific and not present in PA14. There can still be some cross hybridization with the array such that we can detect some level of expression for gene X in PA14 samples.  
+# * Then, say accessory gene X is highly correlated with accessory gene Y using PAO1 only samples. Accessory gene X is also highly correlated with some other accessory gene Z using PA14 samples. So gene X is higher correlated in both PAO1 and PA14
+# * So it’s not that gene X is actually present in both strains PAO1 and PA14, it’s just that gene X is present in the array so there will be some expression because of cross-hybridization that can lead gene X being highly correlated with other genes.
 
 # ## Accessory relationships with core or other accessory genes
 # 
