@@ -28,3 +28,7 @@ conda env create -f environment.yml
 
 conda activate core_acc
 ```
+Also need to pip install modules from this repository:
+```bash
+pip install .
+```
