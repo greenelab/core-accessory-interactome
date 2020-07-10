@@ -3,7 +3,7 @@
 
 # # Download and process SRA data
 
-# In[50]:
+# In[1]:
 
 
 get_ipython().run_line_magic('load_ext', 'autoreload')
@@ -16,7 +16,7 @@ import numpy as np
 import umap
 import seaborn as sns
 import matplotlib.pyplot as plt
-from core_acc_modules import utils
+from core_acc_modules import utils, paths
 from plotnine import (ggplot,
                       labs,  
                       geom_point,
@@ -48,11 +48,11 @@ if not os.path.exists("sratoolkit.current-centos_linux64.tar.gz"):
 
 
 # Extract tar.gz file 
-if not os.path.exists("sratoolkit.current-centos_linux64.tar.gz"):
+if os.path.exists("sratoolkit.current-centos_linux64.tar.gz"):
     get_ipython().system(' tar -xzf sratoolkit.current-centos_linux64.tar.gz')
 
 # add binaries to path using export path or editing ~/.bashrc file
-get_ipython().system(' export PATH=$PATH:/home/alexandra/Documents/Data/Core_accessory/sratoolkit.2.10.7-centos_linux64/bin')
+get_ipython().system(' export PATH=$PATH:sratoolkit.2.10.7-centos_linux64/bin')
 
 # Now SRA binaries added to path and ready to use
 
@@ -81,7 +81,13 @@ get_ipython().system(' prefetch --option-file data/metadata/sra_acc.txt ')
 # In[5]:
 
 
-get_ipython().system(' fastq-dump ~/ncbi/public/sra/* --split-files --outdir ~/ncbi/public/fastq/')
+get_ipython().system('mkdir $paths.FASTQ_DIR')
+
+
+# In[6]:
+
+
+get_ipython().system('fastq-dump $paths.SRA_DIR/* --split-files --outdir $paths.FASTQ_DIR/')
 
 
 # ### Obtain a transcriptome and build an index
@@ -110,18 +116,18 @@ get_ipython().system(' fastq-dump ~/ncbi/public/sra/* --split-files --outdir ~/n
 # 2. Computing the maximum mappable prefix (MMP) of the query beginning with this k-mer
 # 3. Determining the next informative position (NIP) by performing a longest common prefix (LCP) query on two specifically chosen suffixes in the SA
 
-# In[6]:
-
-
-# Get PAO1 index
-get_ipython().system(' salmon index -t ~/Documents/Data/Core_accessory/Pseudomonas_aeruginosa_PAO1_107.ffn.gz -i ~/Documents/Data/Core_accessory/pao1_index')
-
-
 # In[7]:
 
 
+# Get PAO1 index
+get_ipython().system(' salmon index -t $paths.PAO1_REF -i $paths.PAO1_INDEX')
+
+
+# In[8]:
+
+
 # Get PA14 index
-get_ipython().system(' salmon index -t ~/Documents/Data/Core_accessory/Pseudomonas_aeruginosa_UCBPP-PA14_109.ffn.gz -i ~/Documents/Data/Core_accessory/pa14_index')
+get_ipython().system(' salmon index -t $paths.PA14_REF -i $paths.PA14_INDEX')
 
 
 # ### Quantify gene expression
@@ -141,29 +147,29 @@ get_ipython().system(' salmon index -t ~/Documents/Data/Core_accessory/Pseudomon
 
 # #### Get quants using PAO1 reference
 
-# In[8]:
+# In[15]:
 
 
-get_ipython().run_cell_magic('bash', '', 'mkdir ~/ncbi/public/quants_pao1/\n\nfor FILE_PATH in ~/ncbi/public/fastq/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i ~/Documents/Data/Core_accessory/pao1_index -l A \\\n            -1 ${base_name}/${sample_name}_1.fastq \\\n            -2 ${base_name}/${sample_name}_2.fastq \\\n            -p 8 --validateMappings -o ~/ncbi/public/quants_pao1/${sample_name}_quant\ndone')
+get_ipython().run_cell_magic('bash', '-s $paths.PAO1_QUANT $paths.FASTQ_DIR $paths.PAO1_INDEX', 'mkdir $1\n\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 -l A \\\n            -1 ${base_name}/${sample_name}_1.fastq \\\n            -2 ${base_name}/${sample_name}_2.fastq \\\n            -p 8 --validateMappings -o $1/${sample_name}_quant\ndone')
 
 
 # #### Get quants using PA14 reference
 
-# In[9]:
+# In[16]:
 
 
-get_ipython().run_cell_magic('bash', '', 'mkdir ~/ncbi/public/quants_pa14/\n\nfor FILE_PATH in ~/ncbi/public/fastq/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i ~/Documents/Data/Core_accessory/pa14_index -l A \\\n            -1 ${base_name}/${sample_name}_1.fastq \\\n            -2 ${base_name}/${sample_name}_2.fastq \\\n            -p 8 --validateMappings -o ~/ncbi/public/quants_pa14/${sample_name}_quant\ndone')
+get_ipython().run_cell_magic('bash', '-s $paths.PA14_QUANT $paths.FASTQ_DIR $paths.PA14_INDEX', 'mkdir $1\n\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 -l A \\\n            -1 ${base_name}/${sample_name}_1.fastq \\\n            -2 ${base_name}/${sample_name}_2.fastq \\\n            -p 8 --validateMappings -o $1/${sample_name}_quant\ndone')
 
 
 # ### Consolidate sample quantification to gene expression dataframe
 
-# In[10]:
+# In[19]:
 
 
 # PAO1
 # Read through all sample subdirectories in quant/
 # Within each sample subdirectory, get quant.sf file
-data_dir = Path("/home/alexandra/ncbi/public/quants_pao1/")
+data_dir = paths.PAO1_QUANT
 
 expression_pao1_df = pd.DataFrame(
     pd.read_csv(file, sep="\t", index_col=0)["TPM"].
@@ -173,11 +179,11 @@ expression_pao1_df = pd.DataFrame(
 expression_pao1_df.head()
 
 
-# In[11]:
+# In[20]:
 
 
 # PA14
-data_dir = Path("/home/alexandra/ncbi/public/quants_pa14/")
+data_dir = paths.PA14_QUANT
 
 expression_pa14_df = pd.DataFrame(
     pd.read_csv(file, sep="\t", index_col=0)["TPM"].
@@ -187,12 +193,12 @@ expression_pa14_df = pd.DataFrame(
 expression_pa14_df.head()
 
 
-# In[12]:
+# In[22]:
 
 
 # Map gene ids to gene names
-pa14_fasta_file = '/home/alexandra/Documents/Data/Core_accessory/Pseudomonas_aeruginosa_UCBPP-PA14_109.ffn.gz'
-pao1_fasta_file = '/home/alexandra/Documents/Data/Core_accessory/Pseudomonas_aeruginosa_PAO1_107.ffn.gz'
+pa14_fasta_file = paths.PA14_REF
+pao1_fasta_file = paths.PAO1_REF
 
 seq_id_to_gene_id_pao1 = utils.dict_gene_num_to_ids(pao1_fasta_file)
 seq_id_to_gene_id_pa14 = utils.dict_gene_num_to_ids(pa14_fasta_file)
@@ -202,9 +208,9 @@ expression_pa14_df.rename(mapper=seq_id_to_gene_id_pa14, axis="columns", inplace
 
 
 # ### Quick validation
-# Is the expression of PAO1-specific genes 0 in PA14 samples? And vice versa
+# Here we want to validate that we've processed the samples correctly using Salmon.
 
-# In[13]:
+# In[23]:
 
 
 # Load in gene annotation file
@@ -216,7 +222,7 @@ gene_annot_file = os.path.join(
 core_genes, acc_genes = utils.get_core_acc_genes(gene_annot_file)
 
 
-# In[14]:
+# In[24]:
 
 
 # Load in sample annotation file
@@ -228,7 +234,7 @@ sample_annot_file = os.path.join(
 pao1_ids, pa14_ids = utils.get_sample_grps(sample_annot_file)
 
 
-# In[58]:
+# In[25]:
 
 
 # Examine PA14 samples in PAO1-specific genes (PAO1 reference)
@@ -237,7 +243,7 @@ pa14_samples_pao1_genes_pao1_ref_mean = pa14_samples_pao1_genes_pao1_ref.mean()
 pa14_samples_pao1_genes_pao1_ref_mean.isna().any()
 
 
-# In[60]:
+# In[26]:
 
 
 # Examine PA14 samples in core genes
@@ -247,7 +253,7 @@ pa14_samples_core_genes_pao1_ref_mean.isna().any()
 pa14_samples_core_genes_pao1_ref_mean[pa14_samples_core_genes_pao1_ref_mean.isna()]
 
 
-# In[70]:
+# In[27]:
 
 
 # Plot
@@ -275,7 +281,7 @@ sns.distplot(pa14_samples_core_genes_pao1_ref_mean.values,
 fig.xlim=(0,10)
 plt.suptitle('Histogram of mean gene expression per group (PAO1 reference)',
             fontsize=16)
-fig.text(0.5, 0.01, 'Gene expression', ha='center', fontsize=14)
+fig.text(0.5, 0.01, 'Mean gene expression', ha='center', fontsize=14)
 fig.text(0.01, 0.5, 'Count', ha='center', rotation=90, fontsize=14)
 plt.tight_layout(pad=0.4, 
                  w_pad=0.5,
@@ -283,9 +289,14 @@ plt.tight_layout(pad=0.4,
                  rect=[0, 0.03, 1, 0.95])
 
 
+# **Takeaway**:
+# The plot above is taking all PA14 samples and looking at the distribution of mean gene expression(across samples) in two cases: (blue) mean gene expression for PAO1-specific genes (i.e. genes absent in PA14 strains) and (red) mean gene expression for core genes (i.e. genes shared by both PAO1 and PA14 strains). 
+# 
+# If we processed the data correctly, we'd expect that gnes that are PAO1-specific (ie. those PAO1 genes that do not have a PA14 homolog) have 0 mainly expression in PA14 samples. We do see this - blue has many genes that have 0 mean gene expression while the red does not. 
+
 # #### Visualize clustering of gene expression
 
-# In[17]:
+# In[28]:
 
 
 # Embed expression data into low dimensional space
@@ -303,7 +314,7 @@ pao1_encoded_df.loc[pa14_ids,'genotype'] = 'PA14'
 pao1_encoded_df.head()
 
 
-# In[18]:
+# In[29]:
 
 
 # Embed expression data into low dimensional space
@@ -321,7 +332,7 @@ pa14_encoded_df.loc[pa14_ids,'genotype'] = 'PA14'
 pa14_encoded_df.head()
 
 
-# In[19]:
+# In[30]:
 
 
 # Plot PAO1
@@ -346,7 +357,7 @@ fig += guides(colour=guide_legend(override_aes={'alpha': 1}))
 print(fig)
 
 
-# In[20]:
+# In[31]:
 
 
 # Plot PA14
@@ -370,3 +381,6 @@ fig += guides(colour=guide_legend(override_aes={'alpha': 1}))
 
 print(fig)
 
+
+# **Takeaway:**
+# This plot is showing the clustering of samples using both the PAO1 reference transcriptome and the PA14 reference transcriptome. The plot shows that the samples clustering by genotype, as expected.
