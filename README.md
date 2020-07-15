@@ -17,14 +17,30 @@
 *Expected Outcome:* We expect to have define the co-expression between core and the accessory genome.   
 Knowing this information will allow us to integrate data to be able to identify possibly novel interactions instead of analyzing data in buckets. Futhermore, we can start to ask questions about the regulation pattern between core and accessory, which can further help to inform mechanisms related to *P. aeruginosa* adaptation.
 
-## Computational Environment
+## To run
+If you want to run notebooks from core-accessory-interactome, you need to follow these steps to create a conda environment and download the necessary data.
 
-All processing and analysis scripts were performed using the conda environment specified in `environment.yml`.
-To build and activate this environment run:
-
+1. In the terminal execute the following steps to setup the conda environment:
 ```bash
 # conda version 4.6.12
 conda env create -f environment.yml
-
 conda activate core_acc
+pip install -e .
 ```
+
+2. Update paths in `core_acc_modules/paths.py`
+
+3. Download reference transcriptomes from Pseudomonas.com and store in appropriate path defined in `core_acc_modules/paths.py`
+
+4. In the terminal launch jupyter notebook within your environment:
+```bash
+jupyter notebook
+```
+
+5. Navigate to `sra_experiment/` 
+
+6. Update path and filename for sra toolkit download in `1_download_process_data.ipynb` if neededand 
+
+7. Run notebooks in order
+
+**WARNING: This section is a work in progress and will be updated as the project develops**
