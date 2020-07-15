@@ -9,14 +9,65 @@ import gzip
 from Bio import SeqIO
 
 
-def get_core_acc_genes(gene_annot_file):
-    gene_annot = pd.read_csv(gene_annot_file, header=0, sep="\t", index_col=0)
+def get_pao1_pa14_gene_map(gene_annotation_file, reference_genotype):
+    """
+    Returns file mapping PAO1 gene ids to PA14 ids and label which genes are core
 
-    # Group genes by core and accessory annotation
-    core_gene_ids = list(gene_annot[gene_annot["annotation"] == "core"].index)
-    acc_gene_ids = list(gene_annot[gene_annot["annotation"] == "accessory"].index)
+     Arguments
+    ----------
+    gene_annotation_file: str
+        File containing mapping between PAO1 and PA14 gene ids downloaded from
+        BACTOME annotation tool: https://pseudomonas-annotator.shinyapps.io/pa_annotator/
 
-    return core_gene_ids, acc_gene_ids
+        Columns: PAO1_ID,Name,Product.Name,PA14_ID
+
+    reference_genotype: str
+        Either 'pao1' or 'pa14'
+
+    output_file: str
+        Filename to save gene mapping
+
+    """
+
+    # Read gene annotation
+    gene_mapping = pd.read_csv(gene_annotation_file, sep=",", header=0)
+
+    # Accessory are genes that don't have a mapping to the PA14 ID
+    if reference_genotype.lower() == "pao1":
+        unmapped_genes = gene_mapping[gene_mapping["PA14_ID"].isna()]
+        acc_genes = list(unmapped_genes["PAO1_ID"])
+
+        # Create df with PAO1 gene IDs and label for core/accessory
+        annot = [
+            "core" for gene_id in gene_mapping["PAO1_ID"] if (gene_id not in acc_genes)
+        ]
+    elif reference_genotype.lower() == "pa14":
+        unmapped_genes = gene_mapping[gene_mapping["PAO1_ID"].isna()]
+        acc_genes = list(unmapped_genes["PA14_ID"])
+
+        # Create df with PAO1 gene IDs and label for core/accessory
+        annot = [
+            "core" for gene_id in gene_mapping["PA14_ID"] if (gene_id not in acc_genes)
+        ]
+
+    df = pd.DataFrame(
+        list(zip(gene_mapping["PAO1_ID"], gene_mapping["PA14_ID"], annot)),
+        columns=["PAO1_gene_id", "PA14_gene_id", "annotation"],
+    )
+
+    # Set index based on the reference genotype
+    if reference_genotype.lower() == "pao1":
+        df.set_index("PAO1_gene_id", inplace=True)
+    elif reference_genotype.lower() == "pa14":
+        df.set_index("PA14_gene_id", inplace=True)
+
+    return df
+
+
+def get_core_genes(gene_mapping_df):
+    core_gene_ids = list(gene_mapping_df[gene_mapping_df["annotation"] == "core"].index)
+
+    return core_gene_ids
 
 
 def get_sample_grps(sample_annot_file):
@@ -47,3 +98,40 @@ def dict_gene_num_to_ids(fasta_file):
             seq_id_to_gene_id[seq_id] = tagged_item
 
     return seq_id_to_gene_id
+
+
+def permute_expression_data(input_data):
+    """
+    Returns permuted version of input expression data to be used as a baseline
+    for downstream analysis
+
+    Arguments
+    ----------
+    input_data: df
+        File containing normalized gene expression data
+
+        ------------------------------| PA0001 | PA0002 |...
+        05_PA14000-4-2_5-10-07_S2.CEL | 0.8533 | 0.7252 |...
+        54375-4-05.CEL                | 0.7789 | 0.7678 |...
+        ...                           | ...    | ...    |...
+
+    Returns
+    -------
+        Permuted expression data
+    """
+
+    # For each sample, shuffle gene values (i.e. shuffle values independently per sample) in order to
+    # disrupt any gene structure
+    shuffled_arr = []
+    num_samples = input_data.shape[0]
+
+    for i in range(num_samples):
+        row = list(input_data.values[i])
+        shuffled_row = random.sample(row, len(row))
+        shuffled_arr.append(shuffled_row)
+
+    shuffled_data = pd.DataFrame(
+        shuffled_arr, index=input_data.index, columns=input_data.columns
+    )
+
+    return shuffled_data
