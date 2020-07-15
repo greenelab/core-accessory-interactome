@@ -37,6 +37,10 @@ pip install -e .
 jupyter notebook
 ```
 
-5. Navigate to `sra_experiment/` and run notebooks
+5. Navigate to `sra_experiment/` 
+
+6. Update path and filename for sra toolkit download in `1_download_process_data.ipynb` if neededand 
+
+7. Run notebooks in order
 
 **WARNING: This section is a work in progress and will be updated as the project develops**

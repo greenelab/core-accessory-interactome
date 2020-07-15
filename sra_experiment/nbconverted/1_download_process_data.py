@@ -3,7 +3,7 @@
 
 # # Download and process SRA data
 
-# In[1]:
+# In[8]:
 
 
 get_ipython().run_line_magic('load_ext', 'autoreload')
@@ -33,10 +33,12 @@ from plotnine import (ggplot,
                       element_line,
                       coords)
 
+np.random.seed(123)
+
 
 # ### Setup SRA toolkit
 
-# In[2]:
+# In[10]:
 
 
 # Download latest version of compiled binaries of NCBI SRA toolkit 
@@ -292,7 +294,7 @@ plt.tight_layout(pad=0.4,
 # **Takeaway**:
 # The plot above is taking all PA14 samples and looking at the distribution of mean gene expression(across samples) in two cases: (blue) mean gene expression for PAO1-specific genes (i.e. genes absent in PA14 strains) and (red) mean gene expression for core genes (i.e. genes shared by both PAO1 and PA14 strains). 
 # 
-# If we processed the data correctly, we'd expect that gnes that are PAO1-specific (ie. those PAO1 genes that do not have a PA14 homolog) have 0 mainly expression in PA14 samples. We do see this - blue has many genes that have 0 mean gene expression while the red does not. 
+# If we processed the data correctly, we'd expect that the mean expression of PAO1-specific genes (shown in blue) (ie. those PAO1 genes that do not have a PA14 homolog) have 0 expression in PA14 samples. We see that most PAO1-specific genes do have 0 expression. In comparison the mean expression of the core genes are mainly nonzero. 
 
 # #### Visualize clustering of gene expression
 
