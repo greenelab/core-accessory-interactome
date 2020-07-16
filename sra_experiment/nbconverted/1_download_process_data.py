@@ -149,7 +149,7 @@ get_ipython().system(' salmon index -t $paths.PA14_REF -i $paths.PA14_INDEX')
 
 # #### Get quants using PAO1 reference
 
-# In[9]:
+# In[ ]:
 
 
 get_ipython().run_cell_magic('bash', '-s $paths.PAO1_QUANT $paths.FASTQ_DIR $paths.PAO1_INDEX', 'mkdir $1\n\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 -l A \\\n            -1 ${base_name}/${sample_name}_1.fastq \\\n            -2 ${base_name}/${sample_name}_2.fastq \\\n            -p 8 --validateMappings -o $1/${sample_name}_quant\ndone')
@@ -157,7 +157,7 @@ get_ipython().run_cell_magic('bash', '-s $paths.PAO1_QUANT $paths.FASTQ_DIR $pat
 
 # #### Get quants using PA14 reference
 
-# In[10]:
+# In[ ]:
 
 
 get_ipython().run_cell_magic('bash', '-s $paths.PA14_QUANT $paths.FASTQ_DIR $paths.PA14_INDEX', 'mkdir $1\n\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 -l A \\\n            -1 ${base_name}/${sample_name}_1.fastq \\\n            -2 ${base_name}/${sample_name}_2.fastq \\\n            -p 8 --validateMappings -o $1/${sample_name}_quant\ndone')
@@ -165,7 +165,7 @@ get_ipython().run_cell_magic('bash', '-s $paths.PA14_QUANT $paths.FASTQ_DIR $pat
 
 # ### Consolidate sample quantification to gene expression dataframe
 
-# In[21]:
+# In[2]:
 
 
 # PAO1
@@ -181,7 +181,7 @@ expression_pao1_df = pd.DataFrame(
 expression_pao1_df.head()
 
 
-# In[22]:
+# In[3]:
 
 
 # PA14
@@ -195,7 +195,7 @@ expression_pa14_df = pd.DataFrame(
 expression_pa14_df.head()
 
 
-# In[23]:
+# In[4]:
 
 
 # Map gene ids to gene names
@@ -209,7 +209,7 @@ expression_pao1_df.rename(mapper=seq_id_to_gene_id_pao1, axis="columns", inplace
 expression_pa14_df.rename(mapper=seq_id_to_gene_id_pa14, axis="columns", inplace=True)
 
 
-# In[24]:
+# In[5]:
 
 
 # Save gene expression data
@@ -220,7 +220,7 @@ expression_pa14_df.to_csv(paths.PA14_GE, sep='\t')
 # ### Quick validation
 # Here we want to validate that we've processed the samples correctly using Salmon.
 
-# In[26]:
+# In[6]:
 
 
 # Get PAO1 core and accessory genes
@@ -232,7 +232,13 @@ print(len(core_genes))
 print(len(acc_genes))
 
 
-# In[27]:
+# In[7]:
+
+
+assert("PA0053" in acc_genes)
+
+
+# In[8]:
 
 
 # Load in sample annotation file
@@ -240,7 +246,7 @@ sample_annot_file = paths.SAMPLE_ANNOT
 pao1_ids, pa14_ids = utils.get_sample_grps(sample_annot_file)
 
 
-# In[28]:
+# In[9]:
 
 
 # Examine PA14 samples in PAO1-specific genes (PAO1 reference)
@@ -249,7 +255,7 @@ pa14_samples_pao1_genes_pao1_ref_mean = pa14_samples_pao1_genes_pao1_ref.mean()
 pa14_samples_pao1_genes_pao1_ref_mean.isna().any()
 
 
-# In[29]:
+# In[10]:
 
 
 # Examine PA14 samples in core genes
@@ -259,7 +265,7 @@ pa14_samples_core_genes_pao1_ref_mean.isna().any()
 pa14_samples_core_genes_pao1_ref_mean[pa14_samples_core_genes_pao1_ref_mean.isna()]
 
 
-# In[36]:
+# In[11]:
 
 
 # Plot
@@ -303,7 +309,7 @@ plt.tight_layout(pad=0.4,
 
 # #### Visualize clustering of gene expression
 
-# In[31]:
+# In[12]:
 
 
 # Embed expression data into low dimensional space
@@ -321,7 +327,7 @@ pao1_encoded_df.loc[pa14_ids,'genotype'] = 'PA14'
 pao1_encoded_df.head()
 
 
-# In[32]:
+# In[13]:
 
 
 # Embed expression data into low dimensional space
@@ -339,7 +345,7 @@ pa14_encoded_df.loc[pa14_ids,'genotype'] = 'PA14'
 pa14_encoded_df.head()
 
 
-# In[33]:
+# In[14]:
 
 
 # Plot PAO1
@@ -364,7 +370,7 @@ fig += guides(colour=guide_legend(override_aes={'alpha': 1}))
 print(fig)
 
 
-# In[34]:
+# In[15]:
 
 
 # Plot PA14

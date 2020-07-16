@@ -5,8 +5,11 @@ Date Created: 17 April 2020
 Scripts to process expression data for pilot experiment
 """
 import pandas as pd
+import random
 import gzip
 from Bio import SeqIO
+
+random.seed(123)
 
 
 def get_pao1_pa14_gene_map(gene_annotation_file, reference_genotype):
@@ -37,31 +40,23 @@ def get_pao1_pa14_gene_map(gene_annotation_file, reference_genotype):
         unmapped_genes = gene_mapping[gene_mapping["PA14_ID"].isna()]
         acc_genes = list(unmapped_genes["PAO1_ID"])
 
-        # Create df with PAO1 gene IDs and label for core/accessory
-        annot = [
-            "core" for gene_id in gene_mapping["PAO1_ID"] if (gene_id not in acc_genes)
-        ]
+        # Add label for core genes
+        gene_mapping.loc[
+            ~gene_mapping["PAO1_ID"].isin(acc_genes), "annotation"
+        ] = "core"
+        gene_mapping.set_index("PAO1_ID", inplace=True)
+
     elif reference_genotype.lower() == "pa14":
         unmapped_genes = gene_mapping[gene_mapping["PAO1_ID"].isna()]
         acc_genes = list(unmapped_genes["PA14_ID"])
 
-        # Create df with PAO1 gene IDs and label for core/accessory
-        annot = [
-            "core" for gene_id in gene_mapping["PA14_ID"] if (gene_id not in acc_genes)
-        ]
+        # Add label for core genes
+        gene_mapping.loc[
+            ~gene_mapping["PA14_ID"].isin(acc_genes), "annotation"
+        ] = "core"
+        gene_mapping.set_index("PA14_ID", inplace=True)
 
-    df = pd.DataFrame(
-        list(zip(gene_mapping["PAO1_ID"], gene_mapping["PA14_ID"], annot)),
-        columns=["PAO1_gene_id", "PA14_gene_id", "annotation"],
-    )
-
-    # Set index based on the reference genotype
-    if reference_genotype.lower() == "pao1":
-        df.set_index("PAO1_gene_id", inplace=True)
-    elif reference_genotype.lower() == "pa14":
-        df.set_index("PA14_gene_id", inplace=True)
-
-    return df
+    return gene_mapping
 
 
 def get_core_genes(gene_mapping_df):

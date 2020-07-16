@@ -35,6 +35,14 @@ PAO1_GE = REF_DIR / "gene_expression_pao1_ref.tsv"
 PA14_GE = REF_DIR / "gene_expression_pa14_ref.tsv"
 
 # Location of core genes to be reviewed
-SHARED_CORE = REF_DIR / "shared_core_genes.tsv"
-PAO1_CORE = REF_DIR / "pao1_core_genes.tsv"
-PA14_CORE = REF_DIR / "pa14_core_genes.tsv"
+SHARED_CORE_PAO1_REF = REF_DIR / "shared_core_genes_pao1_ref.tsv"
+PAO1_CORE_PAO1_REF = REF_DIR / "pao1_core_genes_pao1_ref.tsv"
+PA14_CORE_PAO1_REF = REF_DIR / "pa14_core_genes_pao1_ref.tsv"
+
+SHARED_CORE_PA14_REF = REF_DIR / "shared_core_genes_pa14_ref.tsv"
+PAO1_CORE_PA14_REF = REF_DIR / "pao1_core_genes_pa14_ref.tsv"
+PA14_CORE_PA14_REF = REF_DIR / "pa14_core_genes_pa14_ref.tsv"
+
+# Location of accessory genes to be reviewed
+PAO1_SAMPLE_PA14_REF = REF_DIR / "pao1_samples_pa14_ref.tsv"
+PA14_SAMPLE_PAO1_REF = REF_DIR / "pa14_samples_pao1_ref.tsv"
