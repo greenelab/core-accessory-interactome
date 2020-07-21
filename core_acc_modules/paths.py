@@ -46,3 +46,4 @@ PA14_CORE_PA14_REF = REF_DIR / "pa14_core_genes_pa14_ref.tsv"
 # Location of accessory genes to be reviewed
 PAO1_SAMPLE_PA14_REF = REF_DIR / "pao1_samples_pa14_ref.tsv"
 PA14_SAMPLE_PAO1_REF = REF_DIR / "pa14_samples_pao1_ref.tsv"
+HIGH_PA14_SAMPLE_PA14_REF = REF_DIR / "high_corr_pa14_samples_pa14_ref.tsv"

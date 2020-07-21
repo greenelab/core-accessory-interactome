@@ -102,6 +102,7 @@ print(f"Number of PA14-specific genes: {len(pa14_acc)}")
 # In[10]:
 
 
+# Check that `get_pao1_pa14_gene_map` function is working as expected
 assert("PA14_00410" not in core_pa14_genes and "PA14_00410" in pa14_acc)
 
 
@@ -169,6 +170,12 @@ print(f'Total PAO1 core genes : {len(pao1_unique_core_genes)+len(shared_core_gen
 print(f'Number of PA14 unique core genes : {len(pa14_unique_core_genes)}')
 print(f'Total PA14 core genes : {len(pa14_unique_core_genes)+len(shared_core_genes)}')
 
+
+# **Takeaway:**
+# * PAO1 core and PA14 core mostly overlap but not completely. 
+# * 5355 genes overlap when compare PAO1 core genes map to PA14 ids vs PA14 core
+# * 5351 genes overlap when compare PA14 core genes map to PAO1 ids vs PA14 core
+# * Not sure why this is the case. Need to discuss with collaborators to see if they have any insight.
 
 # ## Group samples by genotype
 
@@ -244,7 +251,17 @@ pa14_samples_pa14_ref_core = gene_expression_ref_pa14.loc[pa14_ids,core_pa14_gen
 pa14_samples_pa14_ref_acc = gene_expression_ref_pa14.loc[pa14_ids,pa14_acc].mean()
 
 
-# In[37]:
+# In[19]:
+
+
+# Check if any core genes have 0 expression in PAO1 samples using PAO1 reference (or PA14 samples in PA14 reference)
+# We would expect core genes to have nonzero expression in these cases
+# This might call for an adjustment to how we are processing the data using Salmon quant
+print(any(pao1_samples_pao1_ref_core < 0))
+print(any(pa14_samples_pa14_ref_core < 0))
+
+
+# In[20]:
 
 
 # Save nonzero accessory genes in cross comparison
@@ -255,7 +272,7 @@ pd.DataFrame(pao1_samples_pa14_ref_acc[pao1_samples_pa14_ref_acc>0]).to_csv(path
 pd.DataFrame(pa14_samples_pao1_ref_acc[pa14_samples_pao1_ref_acc>0]).to_csv(paths.PA14_SAMPLE_PAO1_REF, sep="\t")
 
 
-# In[20]:
+# In[21]:
 
 
 # Plot
@@ -286,7 +303,7 @@ fig.text(0.5, 0.01, 'Mean gene expression', ha='center', fontsize=14)
 fig.text(0.01, 0.5, 'Count', ha='center', rotation=90, fontsize=14)
 
 
-# In[21]:
+# In[22]:
 
 
 # Set up the matplotlib figure
@@ -314,7 +331,7 @@ fig.text(0.5, 0.01, 'Mean gene expression', ha='center', fontsize=14)
 fig.text(0.01, 0.5, 'Count', ha='center', rotation=90, fontsize=14)
 
 
-# In[22]:
+# In[23]:
 
 
 # Set up the matplotlib figure
@@ -342,7 +359,7 @@ fig.text(0.5, 0.01, 'Mean gene expression', ha='center', fontsize=14)
 fig.text(0.01, 0.5, 'Count', ha='center', rotation=90, fontsize=14)
 
 
-# In[23]:
+# In[24]:
 
 
 # Set up the matplotlib figure
@@ -372,7 +389,9 @@ fig.text(0.01, 0.5, 'Count', ha='center', rotation=90, fontsize=14)
 
 # **Takeaway:**
 # * PAO1-specific genes have mainly 0 mean gene expression in PA14 samples, as expected. A similar trend is seen in PA14-specific genes in PAO1 samples.
-# * Many accessory genes are 0 expressed in cases where the samples and reference match (i.e. PA14 samples in PA14 reference)
+# * There are a small number of PAO1-specific genes that have nonzero expression in PA14 samples. What are these nonzero accessory genes? Genes with some low level homology? Something else to be discussed with collaborators.
+# 
+# * In general, many accessory genes are 0 expressed in cases where the samples and reference match (i.e. PA14 samples in PA14 reference or PAO1 samples in PAO1 reference)
 
 # ## Correlation analysis
 # PAO1 samples using PAO1 reference:
@@ -397,7 +416,7 @@ fig.text(0.01, 0.5, 'Count', ha='center', rotation=90, fontsize=14)
 # * **corr**(PA14 core, PA14 accessory)
 # * **corr**(PA14 accessory, PA14 accessory)
 
-# In[24]:
+# In[25]:
 
 
 # Get correlation of core-core genes
@@ -416,7 +435,7 @@ pao1_samples_pa14_core_corr = pao1_samples_pa14_core_corr.values[
     np.triu_indices(n=len(pao1_samples_pa14_core_corr), k=1)]
 
 
-# In[25]:
+# In[26]:
 
 
 # Get correlation of accessory-accessory genes
@@ -435,7 +454,7 @@ pao1_samples_pa14_acc_corr = pao1_samples_pa14_acc_corr.values[
     np.triu_indices(n=len(pao1_samples_pa14_acc_corr), k=1)]
 
 
-# In[26]:
+# In[27]:
 
 
 # Get correlation of core-accessory genes
@@ -457,7 +476,7 @@ pao1_samples_pa14_core_acc_corr = pao1_samples_pa14_all_corr.loc[core_pa14_genes
 pao1_samples_pa14_core_acc_corr = pao1_samples_pa14_core_acc_corr.values.flatten().tolist()
 
 
-# In[27]:
+# In[28]:
 
 
 # Get correlation of control dataset
@@ -478,7 +497,7 @@ shuffled_pao1_ref_pa14_corr = shuffled_pao1_ref_pa14_corr.values[
     np.triu_indices(n=len(shuffled_pao1_ref_pa14_corr), k=1)]
 
 
-# In[28]:
+# In[29]:
 
 
 sns.set_style("white")
@@ -493,7 +512,7 @@ plt.title('Density of correlation scores per group for PAO1 samples (PAO1 refere
 plt.ylabel('Density')
 
 
-# In[29]:
+# In[30]:
 
 
 sns.distplot(pa14_core_corr, label='core', color='red', hist_kws={"linewidth": 0})
@@ -506,7 +525,7 @@ plt.title('Density of correlation scores per group for PA14 samples (PA14 refere
 plt.ylabel('Density')
 
 
-# In[30]:
+# In[31]:
 
 
 sns.distplot(pa14_samples_pao1_core_corr, label='core', color='red', hist_kws={"linewidth": 0})
@@ -519,7 +538,7 @@ plt.title('Density of correlation scores per group for PA14 samples (PAO1 refere
 plt.ylabel('Density')
 
 
-# In[31]:
+# In[32]:
 
 
 sns.distplot(pao1_samples_pa14_core_corr, label='core', color='red', hist_kws={"linewidth": 0})
@@ -533,3 +552,27 @@ plt.ylabel('Density')
 
 
 # **Takeaway:**
+# * For PAO1 samples using PAO1 reference there does not seem to be a significant skewing the correlation between core-core, core-accessory or accessory-accessory
+# * For PA14 samples using PA14 reference there is a very slight bump in the accessory-accessory genes. We can try to look into what these genes are. But why was this trend not found in PAO1 samples using PAO1 reference?
+# * For PAO1 samples using PA14 reference and PA14 samples using PAO1 reference, there is the same slight bump. In general, we'd expect most accessory genes to be 0 expressed, is this the reason for the bump? 
+
+# ### What are the accessory genes that high correlation using PA14 samples in PA14 reference?
+
+# In[33]:
+
+
+pa14_acc_corr = data_acc_pa14_samples_pa14_ref.corr(method='pearson')
+
+# Reshape correlation data
+pa14_acc_corr = pa14_acc_corr.where(np.triu(np.ones(pa14_acc_corr.shape), k=1).astype(np.bool))
+pa14_acc_corr_df = pa14_acc_corr.stack().reset_index()
+pa14_acc_corr_df.columns = ['in gene','out gene','corr score']
+
+# Select those genes in the "bump"
+selected_pa14_genes = pa14_acc_corr_df[pa14_acc_corr_df['corr score']>0.75]
+print(selected_pa14_genes.shape)
+selected_pa14_genes.head()
+
+# Save genes to review with collaborators
+selected_pa14_genes.to_csv(paths.HIGH_PA14_SAMPLE_PA14_REF, sep="\t")
+
