@@ -39,7 +39,7 @@ jupyter notebook
 
 5. Navigate to `sra_experiment/` 
 
-6. Update path and filename for sra toolkit download in `1_download_process_data.ipynb` if neededand 
+6. Update path and filename for sra toolkit download in `1_download_process_data.ipynb` if needed 
 
 7. Run notebooks in order
 
