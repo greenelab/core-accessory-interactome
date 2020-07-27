@@ -9,8 +9,6 @@ import random
 import gzip
 from Bio import SeqIO
 
-random.seed(123)
-
 
 def get_pao1_pa14_gene_map(gene_annotation_file, reference_genotype):
     """
@@ -29,44 +27,32 @@ def get_pao1_pa14_gene_map(gene_annotation_file, reference_genotype):
         Either 'pao1' or 'pa14'
 
     """
+    # Check that genotype is set correctly
+    assert reference_genotype.lower() in [
+        "pao1",
+        "pa14",
+    ], "Reference genotype string needs to be either pao1 or pa14"
 
     # Read gene annotation
     gene_mapping = pd.read_csv(gene_annotation_file, sep=",", header=0)
 
-    # Accessory are genes that don't have a mapping to the PA14 ID
-    if reference_genotype.lower() == "pao1":
-        unmapped_genes = gene_mapping[gene_mapping["PA14_ID"].isna()]
-        acc_genes = list(unmapped_genes["PAO1_ID"])
+    reference_id = "PAO1_ID" if reference_genotype.lower() == "pao1" else "PA14_ID"
+    non_reference_id = "PA14_ID" if reference_genotype.lower() == "pao1" else "PAO1_ID"
 
-        # Add label for core genes
-        gene_mapping.loc[
-            ~gene_mapping["PAO1_ID"].isin(acc_genes), "annotation"
-        ] = "core"
+    # Accessory are genes that don't have a homologous gene
+    unmapped_genes = gene_mapping[gene_mapping[non_reference_id].isna()]
+    acc_genes = list(unmapped_genes[reference_id])
 
-        # Add column with number of genes mapped in case user
-        # would like to only consider genes with 1-1 mapping
-        gene_mapping["num_mapped_genes"] = (
-            gene_mapping["PA14_ID"].str.split(", ").str.len()
-        )
+    # Add label for core genes
+    gene_mapping.loc[~gene_mapping[reference_id].isin(acc_genes), "annotation"] = "core"
 
-        gene_mapping.set_index("PAO1_ID", inplace=True)
+    # Add column with number of genes mapped in case user
+    # would like to only consider genes with 1-1 mapping
+    gene_mapping["num_mapped_genes"] = (
+        gene_mapping[non_reference_id].str.split(", ").str.len()
+    )
 
-    elif reference_genotype.lower() == "pa14":
-        unmapped_genes = gene_mapping[gene_mapping["PAO1_ID"].isna()]
-        acc_genes = list(unmapped_genes["PA14_ID"])
-
-        # Add label for core genes
-        gene_mapping.loc[
-            ~gene_mapping["PA14_ID"].isin(acc_genes), "annotation"
-        ] = "core"
-
-        # Add column with number of genes mapped in case user
-        # would like to only consider genes with 1-1 mapping
-        gene_mapping["num_mapped_genes"] = (
-            gene_mapping["PAO1_ID"].str.split(", ").str.len()
-        )
-
-        gene_mapping.set_index("PA14_ID", inplace=True)
+    gene_mapping.set_index(reference_id, inplace=True)
 
     return gene_mapping
 
@@ -195,7 +181,10 @@ def dict_gene_num_to_ids(fasta_file):
 def permute_expression_data(input_data):
     """
     Returns permuted version of input expression data to be used as a baseline
-    for downstream analysis
+    for downstream analysis.
+
+    For each sample in `input_data`, shuffle gene values (i.e. shuffle values independently per sample)
+    in order to disrupt any gene structure (i.e. underlying relationship between genes).
 
     Arguments
     ----------
@@ -212,8 +201,6 @@ def permute_expression_data(input_data):
         Permuted expression data
     """
 
-    # For each sample, shuffle gene values (i.e. shuffle values independently per sample) in order to
-    # disrupt any gene structure
     shuffled_arr = []
     num_samples = input_data.shape[0]
 
