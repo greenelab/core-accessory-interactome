@@ -3,7 +3,7 @@
 
 # # Download and process SRA data
 
-# In[8]:
+# In[1]:
 
 
 get_ipython().run_line_magic('load_ext', 'autoreload')
@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 import pandas as pd
 import numpy as np
+from sklearn.decomposition import PCA
 import umap
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -38,7 +39,7 @@ np.random.seed(123)
 
 # ### Setup SRA toolkit
 
-# In[10]:
+# In[2]:
 
 
 # Download latest version of compiled binaries of NCBI SRA toolkit 
@@ -149,7 +150,7 @@ get_ipython().system(' salmon index -t $paths.PA14_REF -i $paths.PA14_INDEX')
 
 # #### Get quants using PAO1 reference
 
-# In[15]:
+# In[9]:
 
 
 get_ipython().run_cell_magic('bash', '-s $paths.PAO1_QUANT $paths.FASTQ_DIR $paths.PAO1_INDEX', 'mkdir $1\n\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 -l A \\\n            -1 ${base_name}/${sample_name}_1.fastq \\\n            -2 ${base_name}/${sample_name}_2.fastq \\\n            -p 8 --validateMappings -o $1/${sample_name}_quant\ndone')
@@ -157,7 +158,7 @@ get_ipython().run_cell_magic('bash', '-s $paths.PAO1_QUANT $paths.FASTQ_DIR $pat
 
 # #### Get quants using PA14 reference
 
-# In[16]:
+# In[10]:
 
 
 get_ipython().run_cell_magic('bash', '-s $paths.PA14_QUANT $paths.FASTQ_DIR $paths.PA14_INDEX', 'mkdir $1\n\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 -l A \\\n            -1 ${base_name}/${sample_name}_1.fastq \\\n            -2 ${base_name}/${sample_name}_2.fastq \\\n            -p 8 --validateMappings -o $1/${sample_name}_quant\ndone')
@@ -165,7 +166,7 @@ get_ipython().run_cell_magic('bash', '-s $paths.PA14_QUANT $paths.FASTQ_DIR $pat
 
 # ### Consolidate sample quantification to gene expression dataframe
 
-# In[19]:
+# In[11]:
 
 
 # PAO1
@@ -181,7 +182,7 @@ expression_pao1_df = pd.DataFrame(
 expression_pao1_df.head()
 
 
-# In[20]:
+# In[12]:
 
 
 # PA14
@@ -195,7 +196,7 @@ expression_pa14_df = pd.DataFrame(
 expression_pa14_df.head()
 
 
-# In[22]:
+# In[13]:
 
 
 # Map gene ids to gene names
@@ -209,34 +210,44 @@ expression_pao1_df.rename(mapper=seq_id_to_gene_id_pao1, axis="columns", inplace
 expression_pa14_df.rename(mapper=seq_id_to_gene_id_pa14, axis="columns", inplace=True)
 
 
+# In[14]:
+
+
+# Save gene expression data
+expression_pao1_df.to_csv(paths.PAO1_GE, sep='\t')
+expression_pa14_df.to_csv(paths.PA14_GE, sep='\t')
+
+
 # ### Quick validation
 # Here we want to validate that we've processed the samples correctly using Salmon.
 
-# In[23]:
+# In[15]:
 
 
-# Load in gene annotation file
-gene_annot_file = os.path.join(
-        "data",
-        "metadata",
-        "selected_gene_annotations.txt")
+# Get PAO1 core and accessory genes
+gene_mapping = utils.get_pao1_pa14_gene_map(paths.GENE_PAO1_ANNOT, 'pao1')
+core_genes = utils.get_core_genes(gene_mapping)
+acc_genes = list(set(expression_pao1_df.columns) - set(core_genes))
 
-core_genes, acc_genes = utils.get_core_acc_genes(gene_annot_file)
+print(len(core_genes))
+print(len(acc_genes))
 
 
-# In[24]:
+# In[16]:
+
+
+assert("PA0053" in acc_genes)
+
+
+# In[17]:
 
 
 # Load in sample annotation file
-sample_annot_file = os.path.join(
-        "data",
-        "metadata",
-        "sample_groups.txt")
-
+sample_annot_file = paths.SAMPLE_ANNOT
 pao1_ids, pa14_ids = utils.get_sample_grps(sample_annot_file)
 
 
-# In[25]:
+# In[18]:
 
 
 # Examine PA14 samples in PAO1-specific genes (PAO1 reference)
@@ -245,7 +256,7 @@ pa14_samples_pao1_genes_pao1_ref_mean = pa14_samples_pao1_genes_pao1_ref.mean()
 pa14_samples_pao1_genes_pao1_ref_mean.isna().any()
 
 
-# In[26]:
+# In[19]:
 
 
 # Examine PA14 samples in core genes
@@ -255,7 +266,7 @@ pa14_samples_core_genes_pao1_ref_mean.isna().any()
 pa14_samples_core_genes_pao1_ref_mean[pa14_samples_core_genes_pao1_ref_mean.isna()]
 
 
-# In[27]:
+# In[20]:
 
 
 # Plot
@@ -265,23 +276,24 @@ sns.set()
 fig, axes = plt.subplots(ncols=2, nrows=1, figsize=(6,6))
 
 # Distribution plot for core genes
-sns.distplot(pa14_samples_pao1_genes_pao1_ref_mean.values, 
-             label='PA14 samples PAO1 specific genes', 
-             color='blue',
-             #bins=bins_expression,
-             kde=False,
-             ax=axes[0]
-            )
-
 sns.distplot(pa14_samples_core_genes_pao1_ref_mean.values,
              label='PA14 samples core genes',
              color='red',
              #bins=bins_expression,
              kde=False,
+             ax=axes[0]
+            )
+
+sns.distplot(pa14_samples_pao1_genes_pao1_ref_mean.values, 
+             label='PA14 samples PAO1 specific genes', 
+             color='blue',
+             #bins=bins_expression,
+             kde=False,
              ax=axes[1]
             )
+
 fig.xlim=(0,10)
-plt.suptitle('Histogram of mean gene expression per group (PAO1 reference)',
+plt.suptitle('Histogram of mean gene expression of PA14 samples (PAO1 reference)',
             fontsize=16)
 fig.text(0.5, 0.01, 'Mean gene expression', ha='center', fontsize=14)
 fig.text(0.01, 0.5, 'Count', ha='center', rotation=90, fontsize=14)
@@ -298,7 +310,93 @@ plt.tight_layout(pad=0.4,
 
 # #### Visualize clustering of gene expression
 
-# In[28]:
+# In[21]:
+
+
+# Embed expression data into low dimensional space
+pca = PCA(n_components=2)
+model = pca.fit(expression_pao1_df)
+pao1_encoded = model.transform(expression_pao1_df)
+
+pao1_encoded_df = pd.DataFrame(data=pao1_encoded,
+                               index=expression_pao1_df.index,
+                               columns=['1','2'])
+
+# Add label
+pao1_encoded_df['genotype'] = 'PAO1'
+pao1_encoded_df.loc[pa14_ids,'genotype'] = 'PA14'
+
+pao1_encoded_df.head()
+
+
+# In[22]:
+
+
+model = pca.fit(expression_pa14_df)
+pa14_encoded = model.transform(expression_pa14_df)
+
+pa14_encoded_df = pd.DataFrame(data=pa14_encoded,
+                               index=expression_pa14_df.index,
+                               columns=['1','2'])
+
+# Add label
+pa14_encoded_df['genotype'] = 'PAO1'
+pa14_encoded_df.loc[pa14_ids,'genotype'] = 'PA14'
+
+pa14_encoded_df.head()
+
+
+# In[23]:
+
+
+# Plot PAO1
+fig = ggplot(pao1_encoded_df, aes(x='1', y='2'))
+fig += geom_point(aes(color='genotype'), alpha=0.5)
+fig += labs(x ='PC 1',
+            y = 'PC 2',
+            title = 'RNA-seq expression using PAO1 reference')
+fig += theme_bw()
+fig += theme(
+    legend_title_align = "center",
+    plot_background=element_rect(fill='white'),
+    legend_key=element_rect(fill='white', colour='white'), 
+    legend_title=element_text(family='sans-serif', size=15),
+    legend_text=element_text(family='sans-serif', size=12),
+    plot_title=element_text(family='sans-serif', size=15),
+    axis_text=element_text(family='sans-serif', size=12),
+    axis_title=element_text(family='sans-serif', size=15)
+    )
+fig += guides(colour=guide_legend(override_aes={'alpha': 1}))
+
+print(fig)
+
+
+# In[24]:
+
+
+# Plot PA14
+fig = ggplot(pa14_encoded_df, aes(x='1', y='2'))
+fig += geom_point(aes(color='genotype'), alpha=0.5)
+fig += labs(x ='PC 1',
+            y = 'PC 2',
+            title = 'RNA-seq expression using PA14 reference')
+fig += theme_bw()
+fig += theme(
+    legend_title_align = "center",
+    plot_background=element_rect(fill='white'),
+    legend_key=element_rect(fill='white', colour='white'), 
+    legend_title=element_text(family='sans-serif', size=15),
+    legend_text=element_text(family='sans-serif', size=12),
+    plot_title=element_text(family='sans-serif', size=15),
+    axis_text=element_text(family='sans-serif', size=12),
+    axis_title=element_text(family='sans-serif', size=15)
+    )
+fig += guides(colour=guide_legend(override_aes={'alpha': 1}))
+
+print(fig)
+
+
+# In[25]:
 
 
 # Embed expression data into low dimensional space
@@ -316,7 +414,7 @@ pao1_encoded_df.loc[pa14_ids,'genotype'] = 'PA14'
 pao1_encoded_df.head()
 
 
-# In[29]:
+# In[26]:
 
 
 # Embed expression data into low dimensional space
@@ -334,7 +432,7 @@ pa14_encoded_df.loc[pa14_ids,'genotype'] = 'PA14'
 pa14_encoded_df.head()
 
 
-# In[30]:
+# In[27]:
 
 
 # Plot PAO1
@@ -359,7 +457,7 @@ fig += guides(colour=guide_legend(override_aes={'alpha': 1}))
 print(fig)
 
 
-# In[31]:
+# In[28]:
 
 
 # Plot PA14
