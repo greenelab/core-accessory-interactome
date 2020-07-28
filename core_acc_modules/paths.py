@@ -34,6 +34,10 @@ PA14_QUANT = NCBI_DIR / "quants_pa14"
 PAO1_GE = REF_DIR / "gene_expression_pao1_ref.tsv"
 PA14_GE = REF_DIR / "gene_expression_pa14_ref.tsv"
 
+# Location of gene expression matrix to use for DE analysis
+PAO1_GE_DE = REF_DIR / "gene_expression_DE_input.tsv"
+DE_STATS = REF_DIR / "DE_stats.tsv"
+
 # Location of core genes to be reviewed
 SHARED_CORE_PAO1_REF = REF_DIR / "shared_core_genes_pao1_ref.tsv"
 PAO1_CORE_PAO1_REF = REF_DIR / "pao1_core_genes_pao1_ref.tsv"
