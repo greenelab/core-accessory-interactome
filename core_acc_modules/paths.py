@@ -38,6 +38,9 @@ PA14_GE = REF_DIR / "gene_expression_pa14_ref.tsv"
 PAO1_GE_DE = REF_DIR / "gene_expression_DE_input.tsv"
 DE_STATS = REF_DIR / "DE_stats.tsv"
 
+# Location of gene id to gene name mapping
+GENE_ID2NAME = METADATA_DIR / "Pseudomonas_aeruginosa_PAO1_107.csv"
+
 # Location of core genes to be reviewed
 SHARED_CORE_PAO1_REF = REF_DIR / "shared_core_genes_pao1_ref.tsv"
 PAO1_CORE_PAO1_REF = REF_DIR / "pao1_core_genes_pao1_ref.tsv"
