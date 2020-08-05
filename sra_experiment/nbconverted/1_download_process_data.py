@@ -70,7 +70,7 @@ get_ipython().system(' export PATH=$PATH:sratoolkit.2.10.7-centos_linux64/bin')
 
 
 # Download sra data files
-get_ipython().system(' prefetch --option-file data/metadata/sra_acc.txt ')
+get_ipython().system(' prefetch --option-file $paths.SRA_ACC ')
 
 
 # ### Get FASTQ files associated with SRA downloads
