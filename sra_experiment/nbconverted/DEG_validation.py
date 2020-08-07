@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # # Differential expression validation
-# This notebook performs a differential expression (DE) analysis comparing PAO1 samples vs PA14 samples. We can compare our results with those published in the literature as an additional step to validate that our RNA-seq processing are reasonable.
+# This notebook performs a differential expression (DE) analysis comparing PAO1 samples vs PA14 samples. We can compare our results with those published in the literature as an additional step to validate that our RNA-seq processing pipeline is reasonable.
 
 # In[1]:
 
@@ -21,7 +21,7 @@ pandas2ri.activate()
 
 
 # ### Download data for validation
-# Data from [Sana et. al](https://jb.asm.org/content/201/21/e00362-19) found ~ 2K DEGs between 2 strains where QS genes were DEGs.
+# Data from [Sana et. al](https://jb.asm.org/content/201/21/e00362-19) found ~ 2K DEGs between 2 strains where Quorum Sensing (QS) genes were DEGs. QS or cell-to-cell signaling controls expression of genes involved in virulence and biofilm formation. QS systems make use of a transcriptional activator protein that acts in concert with a small signaling molecule to stimulate expression of target genes.
 
 # In[2]:
 
@@ -33,13 +33,13 @@ get_ipython().system(' prefetch --option-file $paths.SRA_ACC_TEST')
 # In[3]:
 
 
-get_ipython().run_cell_magic('bash', '', 'mkdir $paths.FASTQ_TEST_DIR\nfastq-dump $paths.SRA_DIR/SRR8486287.sra --outdir $paths.FASTQ_TEST_DIR/\nfastq-dump $paths.SRA_DIR/SRR8486288.sra --outdir $paths.FASTQ_TEST_DIR/\nfastq-dump $paths.SRA_DIR/SRR8486289.sra --outdir $paths.FASTQ_TEST_DIR/\nfastq-dump $paths.SRA_DIR/SRR8486290.sra --outdir $paths.FASTQ_TEST_DIR/')
+get_ipython().run_cell_magic('bash', '-s $paths.FASTQ_TEST_DIR $paths.SRA_DIR $paths.FASTQ_TEST_DIR/', 'mkdir -p $1\nfastq-dump $2/SRR8486287.sra --outdir $3\nfastq-dump $2/SRR8486288.sra --outdir $3\nfastq-dump $2/SRR8486289.sra --outdir $3\nfastq-dump $2/SRR8486290.sra --outdir $3')
 
 
 # In[4]:
 
 
-get_ipython().run_cell_magic('bash', '-s $paths.PAO1_QUANT_TEST $paths.FASTQ_TEST_DIR $paths.PAO1_INDEX', 'mkdir $1\n\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 -l A \\\n            -r ${base_name}/${sample_name} \\\n            -p 8 --validateMappings -o $1/${sample_name}_quant\ndone')
+get_ipython().run_cell_magic('bash', '-s $paths.PAO1_QUANT_TEST $paths.FASTQ_TEST_DIR $paths.PAO1_INDEX', 'mkdir -p $1\n\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 -l A \\\n            -r ${base_name}/${sample_name} \\\n            -p 8 --validateMappings -o $1/${sample_name}_quant\ndone')
 
 
 # In[5]:
@@ -51,9 +51,10 @@ get_ipython().run_cell_magic('bash', '-s $paths.PAO1_QUANT_TEST $paths.FASTQ_TES
 data_dir = paths.PAO1_QUANT_TEST
 
 expression_data = pd.DataFrame(
-    pd.read_csv(file, sep="\t", index_col=0)["NumReads"].
-    rename(file.parent.name.split("_")[0]) 
-    for file in data_dir.rglob("*/quant.sf"))    
+        pd.read_csv(file, sep="\t", index_col=0)["NumReads"].
+        rename(file.parent.name.split("_")[0])
+    for file in data_dir.rglob("*/quant.sf")
+)    
 
 # Map gene ids to gene names
 pao1_fasta_file = paths.PAO1_REF
@@ -68,6 +69,8 @@ expression_data.head()
 # In[6]:
 
 
+# Format sample ids
+# There was probably a way to get around doing this step in bash but to get a quick validation I have done this
 new_index = [name.split(".")[0] for name in list(expression_data.index)]
 expression_data.index = new_index
 expression_data.head()
@@ -103,7 +106,10 @@ expression_data.head()
 
 
 # Convert values to integers for DE analysis
-# Not sure why the "Numreads" values are floats
+# Salmon returns estimate read counts.
+# Usually scientists would use Salmon to get estimated transcript abundances
+# and then use tximport to aggregate the transcript abundances to gene abundances
+# TO DO: Need to look into tximport and DESeq processing to make sure this rounding step is ok
 expression_data = expression_data.astype(int)
 
 
@@ -198,7 +204,8 @@ plt.plot([0,140000],[0,140000])
 
 
 # Rough calculation of the number of genes that differ
-# This is roughly what we would expect to get from the DE analysis
+# Here we are counting the genes with an expression difference between PAO1 and PA14 
+# that is more than one standard deviation away from the overall mean of expression differences across genes
 
 std_x_eq_y = np.std(abs(pao1_v_pa14_df['pao1_mean']-pao1_v_pa14_df['pa14_mean']))
 gene_differences = pao1_v_pa14_df[abs(pao1_v_pa14_df['pao1_mean']-pao1_v_pa14_df['pa14_mean']) > std_x_eq_y]
@@ -222,7 +229,7 @@ get_ipython().run_cell_magic('R', '', '# Select 59\n# Run one time\n#if (!requir
 # In[20]:
 
 
-get_ipython().run_cell_magic('R', '', '# Load the DESeq2 library\nlibrary("DESeq2")')
+get_ipython().run_cell_magic('R', '', '# Load the DESeq2 library\nsuppressPackageStartupMessages(library("DESeq2"))')
 
 
 # In[21]:

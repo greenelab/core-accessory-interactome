@@ -231,11 +231,9 @@ def check_sample_ordering(expression_file, metadata_file):
 
     if metadata_sample_ids == expression_sample_ids:
         print("sample ids are ordered correctly")
-        return
     else:
         # Convert gene expression ordering to be the same as
         # metadata sample ordering
         print("sample ids don't match, going to re-order gene expression samples")
         expression_data = expression_data.loc[metadata_sample_ids]
         expression_data.to_csv(expression_file, sep="\t")
-        return
