@@ -41,5 +41,5 @@ get_DE_stats_DESeq <- function(metadata_file,
 
   deseq_results_df <-  as.data.frame(deseq_results)
 
-  write.table(deseq_results_df, file = out_file, row.names = T, sep = "\t", quote = F)
+  write.table(deseq_results_df, file=out_file, row.names=T, sep="\t", quote=F)
                               }
