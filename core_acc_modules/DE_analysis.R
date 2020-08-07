@@ -3,7 +3,7 @@
 
 get_DE_stats_DESeq <- function(metadata_file,
                                expression_file,
-						                   out_file) {
+						       out_file) {
 
   # This function performs DE analysis using DESeq.
   # Expression data in expression_file are grouped based on metadata_file
@@ -12,9 +12,6 @@ get_DE_stats_DESeq <- function(metadata_file,
   # ---------
   # metadata_file: str
   #   File containing mapping between sample id and group
-  #
-  # experiment_id: str
-  #   Experiment id used to label saved output filee
   #
   # expression_file: str
   #   File containing gene expression data
