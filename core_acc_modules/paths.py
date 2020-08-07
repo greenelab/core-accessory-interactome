@@ -5,7 +5,10 @@ from pathlib import Path
 PROJECT_DIR = Path(__file__).parents[1]
 ANALYSIS_DIR = PROJECT_DIR / "sra_experiment"
 METADATA_DIR = ANALYSIS_DIR / "data" / "metadata"
+SRA_ACC = METADATA_DIR / "sra_acc.txt"
 SAMPLE_ANNOT = METADATA_DIR / "sample_groups.txt"
+SRA_ACC_TEST = METADATA_DIR / "sra_acc_validation.txt"
+SAMPLE_ANNOT_TEST = METADATA_DIR / "sample_groups_validation.txt"
 GENE_PAO1_ANNOT = METADATA_DIR / "PAO1_ID_2_PA14_ID_PAO1ref.csv"
 GENE_PA14_ANNOT = METADATA_DIR / "PA14_ID_2_PAO1_ID_PA14ref.csv"
 
@@ -16,6 +19,7 @@ LOCAL_DIR = Path.home()
 NCBI_DIR = LOCAL_DIR / "ncbi" / "public"
 SRA_DIR = NCBI_DIR / "sra"
 FASTQ_DIR = NCBI_DIR / "fastq"
+FASTQ_TEST_DIR = NCBI_DIR / "fastq_test"
 
 # Location where transcriptome references downloaded from Pseudomonas.com are stored
 REF_DIR = LOCAL_DIR / "Documents" / "Data" / "Core_accessory"
@@ -29,10 +33,18 @@ PA14_INDEX = REF_DIR / "pa14_index"
 # Location where quantification results are stored from `salmon quant`
 PAO1_QUANT = NCBI_DIR / "quants_pao1"
 PA14_QUANT = NCBI_DIR / "quants_pa14"
+PAO1_QUANT_TEST = NCBI_DIR / "quants_pao1_test"
 
 # Location of gene expression matrix to use for correlation analysis
 PAO1_GE = REF_DIR / "gene_expression_pao1_ref.tsv"
 PA14_GE = REF_DIR / "gene_expression_pa14_ref.tsv"
+
+# Location of gene expression matrix to use for DE analysis
+PAO1_GE_DE = REF_DIR / "gene_expression_DE_input.tsv"
+DE_STATS = REF_DIR / "DE_stats.tsv"
+
+# Location of gene id to gene name mapping
+GENE_ID2NAME = METADATA_DIR / "Pseudomonas_aeruginosa_PAO1_107.csv"
 
 # Location of core genes to be reviewed
 SHARED_CORE_PAO1_REF = REF_DIR / "shared_core_genes_pao1_ref.tsv"
