@@ -1,0 +1,30 @@
+"""Path definitions"""
+from pathlib import Path
+
+# Path to this repository
+PROJECT_DIR = Path(__file__).parents[1]
+ANALYSIS_DIR = PROJECT_DIR / "test_phage_reference"
+
+# Path to local directory where data files will be stored
+LOCAL_DIR = Path.home()
+
+# Location where transcriptome references downloaded from Pseudomonas.com are stored
+REF_DIR = LOCAL_DIR / "Documents" / "Data" / "Core_accessory"
+RAW_PHAGE_REF = REF_DIR / "phage_sequences.fasta"
+PHAGE_REF = REF_DIR / "phage_sequences_processed.fasta"
+PAO1_REF = REF_DIR / "Pseudomonas_aeruginosa_PAO1_107.ffn.gz"
+
+# Location where mapping indices generated from `salmon index` are stored
+PHAGE_INDEX = REF_DIR / "phage_index"
+PAO1_INDEX = REF_DIR / "pao1_index_test"
+
+# Location where RNA-seq data is stored
+NCBI_DIR = LOCAL_DIR / "ncbi" / "public"
+SRA_DIR = NCBI_DIR / "sra"
+FASTQ_DIR = NCBI_DIR / "fastq"
+
+# Location where quantification results are stored from `salmon quant`
+PHAGE_QUANT = NCBI_DIR / "quants_phage"
+
+# Location of gene expression matrix to use for correlation analysis
+PHAGE_GE = REF_DIR / "gene_expression_phage_ref.tsv"
