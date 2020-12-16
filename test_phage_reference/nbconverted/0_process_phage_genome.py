@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+
 # coding: utf-8
 
 # # Process phage reference genome
@@ -13,7 +13,7 @@
 
 
 from Bio import SeqIO
-from core_acc_modules import paths_phage
+from core_acc_modules import paths
 
 
 # In[2]:
@@ -22,7 +22,7 @@ from core_acc_modules import paths_phage
 # Select only those entries with keyword, "pseudomonas"
 cleaned_records = []
 keyword = "pseudomonas"
-for record in SeqIO.parse(paths_phage.RAW_PHAGE_REF, "fasta"):
+for record in SeqIO.parse(paths.RAW_PHAGE_REF, "fasta"):
     print("%s %s %i" % (record.id, record.description.lower(), len(record)))
     if keyword in record.description.lower():
         cleaned_records.append(record)
@@ -32,5 +32,5 @@ for record in SeqIO.parse(paths_phage.RAW_PHAGE_REF, "fasta"):
 
 
 # Write cleaned fasta records to file
-SeqIO.write(cleaned_records, paths_phage.PHAGE_REF, "fasta")
+SeqIO.write(cleaned_records, paths.PHAGE_REF, "fasta")
 

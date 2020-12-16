@@ -13,25 +13,22 @@ LOCAL_DIR = Path.home()
 # Location where RNA-seq data is stored
 NCBI_DIR = LOCAL_DIR / "ncbi" / "public"
 SRA_DIR = NCBI_DIR / "sra"
-FASTQ_DIR = NCBI_DIR / "fastq"
+FASTQ_DIR = NCBI_DIR / "fastq_phage"
 
 # Location where transcriptome references downloaded from Pseudomonas.com are stored
 REF_DIR = LOCAL_DIR / "Documents" / "Data" / "Core_accessory"
 RAW_PHAGE_REF = REF_DIR / "phage_sequences.fasta"
-PHAGE_REF = REF_DIR / "phage_sequences_processed.fasta"
 PAO1_REF = REF_DIR / "Pseudomonas_aeruginosa_PAO1_107.ffn.gz"
+PHAGE_REF = REF_DIR / "phage_sequences_processed.fasta"
 
 # Location where mapping indices generated from `salmon index` are stored
+PAO1_INDEX = REF_DIR / "pao1_index"
 PHAGE_INDEX = REF_DIR / "phage_index"
-PAO1_INDEX = REF_DIR / "pao1_index_test"
-
-# Location where RNA-seq data is stored
-NCBI_DIR = LOCAL_DIR / "ncbi" / "public"
-SRA_DIR = NCBI_DIR / "sra"
-FASTQ_DIR = NCBI_DIR / "fastq"
 
 # Location where quantification results are stored from `salmon quant`
+PAO1_QUANT = NCBI_DIR / "quants_pao1"
 PHAGE_QUANT = NCBI_DIR / "quants_phage"
 
 # Location of gene expression matrix to use for correlation analysis
+PAO1_GE = REF_DIR / "gene_expression_pao1_ref.tsv"
 PHAGE_GE = REF_DIR / "gene_expression_phage_ref.tsv"

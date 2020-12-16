@@ -1,27 +1,21 @@
-#!/usr/bin/env python
+
 # coding: utf-8
 
 # # Aign and quantify samples
 # 
-# This notebook aligns test samples against the phage reference genome
-# 
-# *Positive test cases:*
-# * ???
-# 
-# *Negative test cases:*
-# * E. Coli sample
-# * Pseudomonas sample containing only core genes
+# This notebook aligns test samples against the phage and PAO1 reference genomes. Our goal is to test our phage reference genome alignment before we port it to the Discovery (Dartmouth computing cluster). We want to check that we are getting more expression of phage genes in a phage sample compared to a non-pseudomonas samples.
 
-# In[1]:
+# In[17]:
 
 
 get_ipython().run_line_magic('load_ext', 'autoreload')
 get_ipython().run_line_magic('autoreload', '2')
 
 import os
+import shutil
 import pandas as pd
 import numpy as np
-from core_acc_modules import paths_phage
+from core_acc_modules import paths
 
 np.random.seed(123)
 
@@ -50,12 +44,20 @@ np.random.seed(123)
 
 
 # ### Download SRA data
+# 
+# Note: Need to delete `sra` folder between runs otherwise `fastq-dump` will be called on all files in `sra` folder which can include more than your sra accessions.
 
 # In[4]:
 
 
-"""# Download sra data files
-! prefetch --option-file $paths.SRA_ACC """
+#shutil.rmtree(paths.SRA_DIR)
+
+
+# In[5]:
+
+
+# Download sra data files
+#! prefetch --option-file $paths.SRA_ACC
 
 
 # ### Get FASTQ files associated with SRA downloads
@@ -66,16 +68,25 @@ np.random.seed(123)
 # 
 # The fastq files gives the sequence of a read at a given location. Our goal is to map these reads to a reference genome so that we can quantify the number of reads that are at a given location, to determine the level of expression.
 
-# In[5]:
-
-
-#!mkdir $paths.FASTQ_DIR
-
-
 # In[6]:
 
 
+if not os.path.exists(paths.FASTQ_DIR):
+    os.makedirs(paths.FASTQ_DIR)
+
+
+# In[7]:
+
+
 #!fastq-dump $paths.SRA_DIR/* --split-files --outdir $paths.FASTQ_DIR/
+
+
+# In[8]:
+
+
+# Copied from https://github.com/hoganlab-dartmouth/sraProcessingPipeline/blob/5974e040c85724a8d385e53153b7707ae7c9c255/DiscoveryScripts/quantifier.py#L83
+
+#!fastq-dump $paths_phage.SRA_DIR/* --skip-technical --readids --split-3 --clip --outdir $paths_phage.FASTQ_DIR/
 
 
 # ### Obtain a transcriptome and build an index
@@ -100,16 +111,18 @@ np.random.seed(123)
 # 2. Computing the maximum mappable prefix (MMP) of the query beginning with this k-mer
 # 3. Determining the next informative position (NIP) by performing a longest common prefix (LCP) query on two specifically chosen suffixes in the SA
 
-# In[7]:
+# In[9]:
 
 
-#! salmon index -t $paths_phage.PAO1_REF -i $paths_phage.PAO1_INDEX
+# Get PAO1 index
+get_ipython().system(' salmon index -t $paths.PAO1_REF -i $paths.PAO1_INDEX')
 
 
-# In[8]:
+# In[10]:
 
 
-get_ipython().system(' salmon index -t $paths_phage.PHAGE_REF -i $paths_phage.PHAGE_INDEX')
+# Get phage index
+get_ipython().system(' salmon index -t $paths.PHAGE_REF -i $paths.PHAGE_INDEX')
 
 
 # ### Quantify gene expression
@@ -127,23 +140,59 @@ get_ipython().system(' salmon index -t $paths_phage.PHAGE_REF -i $paths_phage.PH
 # 
 # **For each sample we have read counts per gene (where the genes are based on the reference gene file provided above).** 
 
+# #### Get quants using PAO1 reference
+
+# In[ ]:
+
+
+if not os.path.exists(paths.PAO1_QUANT):
+    os.makedirs(paths.PAO1_QUANT)
+
+
+# In[13]:
+
+
+get_ipython().run_cell_magic('bash', '-s $paths.PAO1_QUANT $paths.FASTQ_DIR $paths.PAO1_INDEX', '\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 -l A \\\n            -1 ${base_name}/${sample_name}_1.fastq \\\n            -2 ${base_name}/${sample_name}_2.fastq \\\n            -p 8 --validateMappings -o $1/${sample_name}_quant\ndone')
+
+
 # #### Get quants using phage reference
 
-# In[9]:
+# In[ ]:
 
 
-get_ipython().run_cell_magic('bash', '-s $paths_phage.PHAGE_QUANT $paths_phage.FASTQ_DIR $paths_phage.PHAGE_INDEX', 'mkdir $1\n\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 -l A \\\n            -1 ${base_name}/${sample_name}_1.fastq \\\n            -2 ${base_name}/${sample_name}_2.fastq \\\n            -p 8 --validateMappings -o $1/${sample_name}_quant\ndone')
+if not os.path.exists(paths.PHAGE_QUANT):
+    os.makedirs(paths.PHAGE_QUANT)
+
+
+# In[12]:
+
+
+get_ipython().run_cell_magic('bash', '-s $paths.PHAGE_QUANT $paths.FASTQ_DIR $paths.PHAGE_INDEX', '\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 -l A \\\n            -1 ${base_name}/${sample_name}_1.fastq \\\n            -2 ${base_name}/${sample_name}_2.fastq \\\n            -p 8 --validateMappings -o $1/${sample_name}_quant\ndone')
 
 
 # ### Consolidate sample quantification to gene expression dataframe
 
-# In[10]:
+# In[14]:
 
 
-# PAO1
 # Read through all sample subdirectories in quant/
 # Within each sample subdirectory, get quant.sf file
-data_dir = paths_phage.PHAGE_QUANT
+data_dir = paths.PAO1_QUANT
+
+expression_pao1_df = pd.DataFrame(
+    pd.read_csv(file, sep="\t", index_col=0)["TPM"].
+    rename(file.parent.name.split("_")[0]) 
+    for file in data_dir.rglob("*/quant.sf"))    
+
+expression_pao1_df.head()
+
+
+# In[15]:
+
+
+# Read through all sample subdirectories in quant/
+# Within each sample subdirectory, get quant.sf file
+data_dir = paths.PHAGE_QUANT
 
 expression_phage_df = pd.DataFrame(
     pd.read_csv(file, sep="\t", index_col=0)["TPM"].
@@ -153,9 +202,10 @@ expression_phage_df = pd.DataFrame(
 expression_phage_df.head()
 
 
-# In[11]:
+# In[19]:
 
 
 # Save gene expression data
-expression_phage_df.to_csv(paths_phage.PHAGE_GE, sep='\t')
+expression_pao1_df.to_csv(paths.PAO1_GE, sep='\t')
+expression_phage_df.to_csv(paths.PHAGE_GE, sep='\t')
 
