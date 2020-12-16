@@ -13,7 +13,6 @@
 
 
 from Bio import SeqIO
-from pathlib import Path
 from core_acc_modules import paths_phage
 
 

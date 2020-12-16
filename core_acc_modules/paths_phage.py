@@ -4,9 +4,16 @@ from pathlib import Path
 # Path to this repository
 PROJECT_DIR = Path(__file__).parents[1]
 ANALYSIS_DIR = PROJECT_DIR / "test_phage_reference"
+METADATA_DIR = ANALYSIS_DIR / "data" / "metadata"
+SRA_ACC = METADATA_DIR / "sra_acc.txt"
 
 # Path to local directory where data files will be stored
 LOCAL_DIR = Path.home()
+
+# Location where RNA-seq data is stored
+NCBI_DIR = LOCAL_DIR / "ncbi" / "public"
+SRA_DIR = NCBI_DIR / "sra"
+FASTQ_DIR = NCBI_DIR / "fastq"
 
 # Location where transcriptome references downloaded from Pseudomonas.com are stored
 REF_DIR = LOCAL_DIR / "Documents" / "Data" / "Core_accessory"

@@ -8,8 +8,7 @@
 
 import seaborn as sns
 import pandas as pd
-from pathlib import Path
-from core_acc_modules import utils, paths_phage
+from core_acc_modules import paths_phage
 
 
 # In[2]:

@@ -19,10 +19,9 @@ get_ipython().run_line_magic('load_ext', 'autoreload')
 get_ipython().run_line_magic('autoreload', '2')
 
 import os
-from pathlib import Path
 import pandas as pd
 import numpy as np
-from core_acc_modules import utils, paths_phage
+from core_acc_modules import paths_phage
 
 np.random.seed(123)
 
@@ -107,7 +106,7 @@ np.random.seed(123)
 #! salmon index -t $paths_phage.PAO1_REF -i $paths_phage.PAO1_INDEX
 
 
-# In[ ]:
+# In[8]:
 
 
 get_ipython().system(' salmon index -t $paths_phage.PHAGE_REF -i $paths_phage.PHAGE_INDEX')
@@ -130,7 +129,7 @@ get_ipython().system(' salmon index -t $paths_phage.PHAGE_REF -i $paths_phage.PH
 
 # #### Get quants using phage reference
 
-# In[ ]:
+# In[9]:
 
 
 get_ipython().run_cell_magic('bash', '-s $paths_phage.PHAGE_QUANT $paths_phage.FASTQ_DIR $paths_phage.PHAGE_INDEX', 'mkdir $1\n\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 -l A \\\n            -1 ${base_name}/${sample_name}_1.fastq \\\n            -2 ${base_name}/${sample_name}_2.fastq \\\n            -p 8 --validateMappings -o $1/${sample_name}_quant\ndone')
@@ -138,7 +137,7 @@ get_ipython().run_cell_magic('bash', '-s $paths_phage.PHAGE_QUANT $paths_phage.F
 
 # ### Consolidate sample quantification to gene expression dataframe
 
-# In[ ]:
+# In[10]:
 
 
 # PAO1
@@ -154,7 +153,7 @@ expression_phage_df = pd.DataFrame(
 expression_phage_df.head()
 
 
-# In[ ]:
+# In[11]:
 
 
 # Save gene expression data
