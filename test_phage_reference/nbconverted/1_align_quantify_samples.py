@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# # Aign and quantify samples
+# # Align and quantify samples
 # 
 # This notebook aligns test samples against the phage and PAO1 reference genomes. Our goal is to test our phage reference genome alignment before we port it to the Discovery (Dartmouth computing cluster). We want to check that we are getting more expression of phage genes in a phage sample compared to a non-pseudomonas samples.
 
@@ -20,29 +20,6 @@ from core_acc_modules import paths
 np.random.seed(123)
 
 
-# ### Setup SRA toolkit -- only needs to be run once
-
-# In[2]:
-
-
-# Download latest version of compiled binaries of NCBI SRA toolkit 
-#if not os.path.exists("sratoolkit.current-centos_linux64.tar.gz"):
-#    ! wget "ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/current/sratoolkit.current-centos_linux64.tar.gz"
-
-
-# In[3]:
-
-
-# Extract tar.gz file 
-#if os.path.exists("sratoolkit.current-centos_linux64.tar.gz"):
-#    ! tar -xzf sratoolkit.current-centos_linux64.tar.gz
-
-# add binaries to path using export path or editing ~/.bashrc file
-#! export PATH=$PATH:sratoolkit.2.10.7-centos_linux64/bin
-
-# Now SRA binaries added to path and ready to use
-
-
 # ### Download SRA data
 # 
 # Note: Need to delete `sra` folder between runs otherwise `fastq-dump` will be called on all files in `sra` folder which can include more than your sra accessions.
@@ -50,14 +27,14 @@ np.random.seed(123)
 # In[4]:
 
 
-#shutil.rmtree(paths.SRA_DIR)
+shutil.rmtree(paths.SRA_DIR)
 
 
 # In[5]:
 
 
 # Download sra data files
-#! prefetch --option-file $paths.SRA_ACC
+get_ipython().system(' prefetch --option-file $paths.SRA_ACC')
 
 
 # ### Get FASTQ files associated with SRA downloads
@@ -78,7 +55,7 @@ if not os.path.exists(paths.FASTQ_DIR):
 # In[7]:
 
 
-#!fastq-dump $paths.SRA_DIR/* --split-files --outdir $paths.FASTQ_DIR/
+get_ipython().system('fastq-dump $paths.SRA_DIR/* --split-files --outdir $paths.FASTQ_DIR/')
 
 
 # In[8]:
@@ -87,42 +64,6 @@ if not os.path.exists(paths.FASTQ_DIR):
 # Copied from https://github.com/hoganlab-dartmouth/sraProcessingPipeline/blob/5974e040c85724a8d385e53153b7707ae7c9c255/DiscoveryScripts/quantifier.py#L83
 
 #!fastq-dump $paths_phage.SRA_DIR/* --skip-technical --readids --split-3 --clip --outdir $paths_phage.FASTQ_DIR/
-
-
-# ### Obtain a transcriptome and build an index
-# 
-# Here we are using [Salmon](https://combine-lab.github.io/salmon/)
-# 
-# **Input:**
-# * Target transcriptome
-# * This transcriptome is given to Salmon in the form of a (possibly compressed) multi-FASTA file, with each entry providing the sequence of a transcript
-# * We downloaded the phage GENOMES from NCBI GenBank
-# 
-# **Note:** For prokaryotes, transcripts and genes have a more 1-1 mapping so we're using genes for our reference transcriptome and so we don't need to use tximport to map transcript quants to genes. 
-# 
-# **Output:**
-# * The index is a structure that salmon uses to quasi-map RNA-seq reads during quantification
-# * [Quasi-map](https://academic.oup.com/bioinformatics/article/32/12/i192/2288985) is a way to map sequenced fragments (single or paired-end reads) to a target transcriptome. Quasi-mapping produces what we refer to as fragment mapping information. In particular, it provides, for each query (fragment), the reference sequences (transcripts), strand and position from which the query may have likely originated. In many cases, this mapping information is sufficient for downstream analysis like quantification.
-# 
-# *Algorithm:*
-# 
-# For a query read r through repeated application of: 
-# 1. Determining the next hash table k-mer that starts past the current query position
-# 2. Computing the maximum mappable prefix (MMP) of the query beginning with this k-mer
-# 3. Determining the next informative position (NIP) by performing a longest common prefix (LCP) query on two specifically chosen suffixes in the SA
-
-# In[9]:
-
-
-# Get PAO1 index
-get_ipython().system(' salmon index -t $paths.PAO1_REF -i $paths.PAO1_INDEX')
-
-
-# In[10]:
-
-
-# Get phage index
-get_ipython().system(' salmon index -t $paths.PHAGE_REF -i $paths.PHAGE_INDEX')
 
 
 # ### Quantify gene expression
