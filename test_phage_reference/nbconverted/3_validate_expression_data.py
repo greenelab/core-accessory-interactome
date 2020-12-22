@@ -15,77 +15,133 @@ from core_acc_modules import paths
 
 
 # Load expression data
-expression_phage_df = pd.read_csv(paths.PHAGE_GE, sep='\t', index_col=0, header=0)
+
 expression_pao1_df = pd.read_csv(paths.PAO1_GE, sep='\t', index_col=0, header=0)
+expression_pa14_df = pd.read_csv(paths.PA14_GE, sep='\t', index_col=0, header=0)
+expression_phage_df = pd.read_csv(paths.PHAGE_GE, sep='\t', index_col=0, header=0)
 
 
-# In[21]:
+# In[3]:
 
 
 expression_phage_df
 
 
-# In[22]:
+# In[4]:
 
 
 expression_pao1_df.head()
 
 
-# ## Negative case
+# In[5]:
 
-# In[16]:
+
+expression_pa14_df.head()
+
+
+# ## Negative case
+# 
+# Check that *E. Coli* sample (SRR13234437) poorly aligns with all reference genomes
+
+# In[6]:
 
 
 # Check there is no expression in E. Coli sample using phage reference
-sns.distplot(expression_phage_df.loc["SRR12922100"], kde=False)
+sns.distplot(expression_phage_df.loc["SRR13234437"], kde=False)
 
 
-# In[17]:
+# In[7]:
 
 
 # Check there is no expression in E. Coli sample using PAO1 reference
-sns.distplot(expression_pao1_df.loc["SRR12922100"], kde=False)
-
-
-# ## Positive case
-
-# In[14]:
-
-
-# Check there is expression in PAO1 sample using PAO1 reference(MT118305.1)
-sns.distplot(expression_pao1_df.loc["SRR11809598"], kde=False)
+sns.distplot(expression_pao1_df.loc["SRR13234437"], kde=False)
 
 
 # In[8]:
 
 
-# Check there is expression in Epa41 phage sample using phage genome (Epa41 MT118305.1)
-expression_phage_df.loc[["SRR13196071", "SRR13196068"], "MT118305.1"]
+# Check there is no expression in E. Coli sample using PA14 reference
+sns.distplot(expression_pa14_df.loc["SRR13234437"], kde=False)
+
+
+# ## Positive case: PAO1
+# 
+# * Check that PAO1 sample (SRR13160334) aligns well to PAO1 and phage reference. 
+# * Check that PAO1 sample has expression at LUZ19 (NC_010326.1 in phage genome) and Pf1 genes (PA0717-PA0726 PAO1 genome)
+# * PA0717-PA0726 = PGD104183, PGD104185, PGD104187, PGD104189, PGD104191, PGD104193, PGD104195, PGD104197, PGD104199, PGD104201
+
+# In[9]:
+
+
+# Check there is expression in PAO1 sample using PAO1 reference
+sns.distplot(expression_pao1_df.loc["SRR13160334"], kde=False)
 
 
 # In[10]:
 
 
-expression_phage_df.loc[["SRR13196071", "SRR13196068"]]
+# Check there is expression in PAO1 sample using PAO1 reference genes: PA0717-PA0726
+pao1_pf1s = [
+    "PGD104183",
+    "PGD104185",
+    "PGD104187",
+    "PGD104189",
+    "PGD104191",
+    "PGD104193", 
+    "PGD104195", 
+    "PGD104197",
+    "PGD104199", 
+    "PGD104201"
+    ]
+expression_pao1_df.loc["SRR13160334", pao1_pf1s]
 
 
 # In[18]:
 
 
-sns.distplot(expression_pao1_df.loc["SRR13196071"])
+# Check there is expression in PAO1 sample using phage reference
+sns.distplot(expression_phage_df.loc["SRR13160334"], kde=True)
 
 
-# In[19]:
+# In[12]:
 
 
-sns.distplot(expression_pao1_df.loc["SRR13196068"])
+# Check there is expression in PAO1 sample using phage reference gene: NC_010326.1
+expression_phage_df.loc["SRR13160334", "NC_010326.1"]
 
 
-# In[9]:
+# ## Positive case: PA14
+# 
+# * Check that PA14 sample (ERR3642743) aligns well to PA14 and phage references. 
+# * Check that PA14 sample has expression at Pf5 (PA14_49010, PA14_49020 in PA14 genome) and Pf1 genes (AY324828.1, NC_001331.1, MG250485.1 in phage genome)
+# * PA14_49010, PA14_49020 = PGD1658748, PGD1658750
+
+# In[13]:
 
 
-# Check there is expression in Epa14 phage sample using phage genome (Epa14 NC_050144.1)
-expression_phage_df.loc[["SRR13196071", "SRR13196068"],"NC_050144.1"]
+# Check there is expression in PA14 sample using PA14 reference
+sns.distplot(expression_pa14_df.loc["ERR3642743"], kde=False)
+
+
+# In[15]:
+
+
+# Check there is expression in PA14 sample using PA14 reference genes: PA14_49010, PA14_49020
+expression_pa14_df.loc["ERR3642743", ["PGD1658748", "PGD1658750"]]
+
+
+# In[16]:
+
+
+# Check there is expression in PA14 sample using phage reference
+sns.distplot(expression_phage_df.loc["ERR3642743"], kde=False)
+
+
+# In[17]:
+
+
+# Check there is expression in PA14 sample using phage reference genes: 
+expression_phage_df.loc["ERR3642743", ["AY324828.1", "NC_001331.1", "MG250485.1"]]
 
 
 # **Initial Takeaways:**
