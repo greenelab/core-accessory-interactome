@@ -47,6 +47,10 @@ expression_pa14_df.head()
 
 
 # Check there is no expression in E. Coli sample using phage reference
+print("Total number of genes:", len(expression_phage_df.loc["SRR13234437"]))
+print("Percent of 0 expressed genes:",
+      (expression_phage_df.loc["SRR13234437"] == 0).sum()/len(expression_phage_df.loc["SRR13234437"]))
+print(expression_phage_df.loc["SRR13234437"].max())
 sns.distplot(expression_phage_df.loc["SRR13234437"], kde=False)
 
 
@@ -54,13 +58,21 @@ sns.distplot(expression_phage_df.loc["SRR13234437"], kde=False)
 
 
 # Check there is no expression in E. Coli sample using PAO1 reference
+print("Total number of genes:", len(expression_pao1_df.loc["SRR13234437"]))
+print("Percent of 0 expressed genes:", 
+      (expression_pao1_df.loc["SRR13234437"] == 0).sum()/len(expression_pao1_df.loc["SRR13234437"]))
+print(expression_pao1_df.loc["SRR13234437"].max())
 sns.distplot(expression_pao1_df.loc["SRR13234437"], kde=False)
 
 
-# In[8]:
+# In[ ]:
 
 
 # Check there is no expression in E. Coli sample using PA14 reference
+print("Total number of genes:", len(expression_pa14_df.loc["SRR13234437"]))
+print("Percent of 0 expressed genes:", 
+      (expression_pa14_df.loc["SRR13234437"] == 0).sum()/len(expression_pa14_df.loc["SRR13234437"]))
+print(expression_pa14_df.loc["SRR13234437"].max())
 sns.distplot(expression_pa14_df.loc["SRR13234437"], kde=False)
 
 
@@ -70,17 +82,21 @@ sns.distplot(expression_pa14_df.loc["SRR13234437"], kde=False)
 # * Check that PAO1 sample has expression at LUZ19 (NC_010326.1 in phage genome) and Pf1 genes (PA0717-PA0726 PAO1 genome)
 # * PA0717-PA0726 = PGD104183, PGD104185, PGD104187, PGD104189, PGD104191, PGD104193, PGD104195, PGD104197, PGD104199, PGD104201
 
-# In[9]:
-
-
-# Check there is expression in PAO1 sample using PAO1 reference
-sns.distplot(expression_pao1_df.loc["SRR13160334"], kde=False)
-
-
 # In[10]:
 
 
-# Check there is expression in PAO1 sample using PAO1 reference genes: PA0717-PA0726
+# Check there is expression in PAO1 sample using PAO1 reference
+print("Total number of genes:", len(expression_pao1_df.loc["SRR13160334"]))
+print("Percent of 0 expressed genes:", 
+      (expression_pao1_df.loc["SRR13160334"] > 0).sum()/len(expression_pao1_df.loc["SRR13160334"]))
+print(expression_pao1_df.loc["SRR13160334"].max())
+sns.distplot(expression_pao1_df.loc["SRR13160334"])
+
+
+# In[13]:
+
+
+"""# Check there is expression in PAO1 sample using PAO1 reference genes: PA0717-PA0726
 pao1_pf1s = [
     "PGD104183",
     "PGD104185",
@@ -93,14 +109,18 @@ pao1_pf1s = [
     "PGD104199", 
     "PGD104201"
     ]
-expression_pao1_df.loc["SRR13160334", pao1_pf1s]
+expression_pao1_df.loc["SRR13160334", pao1_pf1s]"""
 
 
-# In[18]:
+# In[11]:
 
 
-# Check there is expression in PAO1 sample using phage reference
-sns.distplot(expression_phage_df.loc["SRR13160334"], kde=True)
+"""# Check there is expression in PAO1 sample using phage reference
+print("Total number of genes:", len(expression_phage_df.loc["SRR13160334"]))
+print("Percent of 0 expressed genes:", 
+      (expression_phage_df.loc["SRR13160334"] > 0).sum()/len(expression_phage_df.loc["SRR13160334"]))
+print(expression_phage_df.loc["SRR13160334"].max())
+sns.distplot(expression_phage_df.loc["SRR13160334"], kde=True)"""
 
 
 # In[12]:
@@ -116,10 +136,14 @@ expression_phage_df.loc["SRR13160334", "NC_010326.1"]
 # * Check that PA14 sample has expression at Pf5 (PA14_49010, PA14_49020 in PA14 genome) and Pf1 genes (AY324828.1, NC_001331.1, MG250485.1 in phage genome)
 # * PA14_49010, PA14_49020 = PGD1658748, PGD1658750
 
-# In[13]:
+# In[14]:
 
 
 # Check there is expression in PA14 sample using PA14 reference
+print("Total number of genes:", len(expression_pa14_df.loc["ERR3642743"]))
+print("Percent of 0 expressed genes:", 
+      (expression_pa14_df.loc["ERR3642743"] > 0).sum()/len(expression_pa14_df.loc["ERR3642743"]))
+print(expression_pa14_df.loc["ERR3642743"].max())
 sns.distplot(expression_pa14_df.loc["ERR3642743"], kde=False)
 
 
@@ -130,18 +154,18 @@ sns.distplot(expression_pa14_df.loc["ERR3642743"], kde=False)
 expression_pa14_df.loc["ERR3642743", ["PGD1658748", "PGD1658750"]]
 
 
-# In[16]:
+# In[ ]:
 
 
 # Check there is expression in PA14 sample using phage reference
-sns.distplot(expression_phage_df.loc["ERR3642743"], kde=False)
+#sns.distplot(expression_phage_df.loc["ERR3642743"], kde=False)
 
 
-# In[17]:
+# In[ ]:
 
 
 # Check there is expression in PA14 sample using phage reference genes: 
-expression_phage_df.loc["ERR3642743", ["AY324828.1", "NC_001331.1", "MG250485.1"]]
+#expression_phage_df.loc["ERR3642743", ["AY324828.1", "NC_001331.1", "MG250485.1"]]
 
 
 # **Initial Takeaways:**
