@@ -23,7 +23,7 @@
 # 2. Computing the maximum mappable prefix (MMP) of the query beginning with this k-mer
 # 3. Determining the next informative position (NIP) by performing a longest common prefix (LCP) query on two specifically chosen suffixes in the SA
 
-# In[ ]:
+# In[1]:
 
 
 get_ipython().run_line_magic('load_ext', 'autoreload')
@@ -32,14 +32,21 @@ get_ipython().run_line_magic('autoreload', '2')
 from core_acc_modules import paths
 
 
-# In[ ]:
+# In[2]:
 
 
 # Get PAO1 index
 get_ipython().system(' salmon index -t $paths.PAO1_REF -i $paths.PAO1_INDEX')
 
 
-# In[ ]:
+# In[3]:
+
+
+# Get PA14 index
+get_ipython().system(' salmon index -t $paths.PA14_REF -i $paths.PA14_INDEX')
+
+
+# In[4]:
 
 
 # Get phage index

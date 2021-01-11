@@ -5,7 +5,7 @@
 # 
 # This notebook aligns test samples against the phage and PAO1 reference genomes. Our goal is to test our phage reference genome alignment before we port it to the Discovery (Dartmouth computing cluster). We want to check that we are getting more expression of phage genes in a phage sample compared to a non-pseudomonas samples.
 
-# In[17]:
+# In[1]:
 
 
 get_ipython().run_line_magic('load_ext', 'autoreload')
@@ -24,13 +24,13 @@ np.random.seed(123)
 # 
 # Note: Need to delete `sra` folder between runs otherwise `fastq-dump` will be called on all files in `sra` folder which can include more than your sra accessions.
 
-# In[4]:
+# In[2]:
 
 
 shutil.rmtree(paths.SRA_DIR)
 
 
-# In[5]:
+# In[3]:
 
 
 # Download sra data files
@@ -45,20 +45,20 @@ get_ipython().system(' prefetch --option-file $paths.SRA_ACC')
 # 
 # The fastq files gives the sequence of a read at a given location. Our goal is to map these reads to a reference genome so that we can quantify the number of reads that are at a given location, to determine the level of expression.
 
-# In[6]:
+# In[4]:
 
 
 if not os.path.exists(paths.FASTQ_DIR):
     os.makedirs(paths.FASTQ_DIR)
 
 
-# In[7]:
+# In[5]:
 
 
 get_ipython().system('fastq-dump $paths.SRA_DIR/* --split-files --outdir $paths.FASTQ_DIR/')
 
 
-# In[8]:
+# In[6]:
 
 
 # Copied from https://github.com/hoganlab-dartmouth/sraProcessingPipeline/blob/5974e040c85724a8d385e53153b7707ae7c9c255/DiscoveryScripts/quantifier.py#L83
@@ -83,22 +83,37 @@ get_ipython().system('fastq-dump $paths.SRA_DIR/* --split-files --outdir $paths.
 
 # #### Get quants using PAO1 reference
 
-# In[ ]:
+# In[7]:
 
 
 if not os.path.exists(paths.PAO1_QUANT):
     os.makedirs(paths.PAO1_QUANT)
 
 
-# In[13]:
+# In[8]:
 
 
 get_ipython().run_cell_magic('bash', '-s $paths.PAO1_QUANT $paths.FASTQ_DIR $paths.PAO1_INDEX', '\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 -l A \\\n            -1 ${base_name}/${sample_name}_1.fastq \\\n            -2 ${base_name}/${sample_name}_2.fastq \\\n            -p 8 --validateMappings -o $1/${sample_name}_quant\ndone')
 
 
+# #### Get quants using PA14 reference
+
+# In[9]:
+
+
+if not os.path.exists(paths.PA14_QUANT):
+    os.makedirs(paths.PA14_QUANT)
+
+
+# In[10]:
+
+
+get_ipython().run_cell_magic('bash', '-s $paths.PA14_QUANT $paths.FASTQ_DIR $paths.PA14_INDEX', '\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 -l A \\\n            -1 ${base_name}/${sample_name}_1.fastq \\\n            -2 ${base_name}/${sample_name}_2.fastq \\\n            -p 8 --validateMappings -o $1/${sample_name}_quant\ndone')
+
+
 # #### Get quants using phage reference
 
-# In[ ]:
+# In[11]:
 
 
 if not os.path.exists(paths.PHAGE_QUANT):
@@ -113,7 +128,7 @@ get_ipython().run_cell_magic('bash', '-s $paths.PHAGE_QUANT $paths.FASTQ_DIR $pa
 
 # ### Consolidate sample quantification to gene expression dataframe
 
-# In[14]:
+# In[13]:
 
 
 # Read through all sample subdirectories in quant/
@@ -126,6 +141,21 @@ expression_pao1_df = pd.DataFrame(
     for file in data_dir.rglob("*/quant.sf"))    
 
 expression_pao1_df.head()
+
+
+# In[14]:
+
+
+# Read through all sample subdirectories in quant/
+# Within each sample subdirectory, get quant.sf file
+data_dir = paths.PA14_QUANT
+
+expression_pa14_df = pd.DataFrame(
+    pd.read_csv(file, sep="\t", index_col=0)["TPM"].
+    rename(file.parent.name.split("_")[0]) 
+    for file in data_dir.rglob("*/quant.sf"))    
+
+expression_pa14_df.head()
 
 
 # In[15]:
@@ -143,10 +173,11 @@ expression_phage_df = pd.DataFrame(
 expression_phage_df.head()
 
 
-# In[19]:
+# In[17]:
 
 
 # Save gene expression data
 expression_pao1_df.to_csv(paths.PAO1_GE, sep='\t')
+expression_pa14_df.to_csv(paths.PA14_GE, sep='\t')
 expression_phage_df.to_csv(paths.PHAGE_GE, sep='\t')
 
