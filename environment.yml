@@ -8,8 +8,9 @@ dependencies:
 - r::r-flashClust=1.01-2
 - bioconda::r-wgcna=1.69
 - bioconda::bioconductor-deseq2
-- bioconda::salmon
+- bioconda::salmon=0.11.2
 - conda-forge::python=3.7
+- conda-forge::notebook
 - conda-forge::pandas=0.24.2
 - conda-forge::seaborn=0.10
 - conda-forge::scipy=1.1.0
