@@ -1,9 +1,50 @@
-
+#!/usr/bin/env python
 # coding: utf-8
 
 # # Align and quantify samples
 # 
-# This notebook aligns test samples against the phage and PAO1 reference genomes. Our goal is to test our phage reference genome alignment before we port it to the Discovery (Dartmouth computing cluster). We want to check that we are getting more expression of phage genes in a phage sample compared to a non-pseudomonas samples.
+# The second step is to align our samples against our built index and quantify reads. This notebook aligns a pilot set of samples against the PAO1, PA14 and and PAO1 reference genomes. 
+# 
+# **Input:**
+# * Index of reference transcriptome
+# * FASTQ of experimental samples
+# 
+# **Output:**
+# * For each query (fragment), the reference sequences (transcripts), strand and position from which the query may have likely originated. In many cases, this mapping information is sufficient for downstream analysis like transcript quantification
+# * Each sample will have a quantification file (called quant.sf). The TSV file will contain the name (Name) of each transcript, its length (Length), effective length (EffectiveLength), and its abundance in terms of Transcripts Per Million (TPM) and estimated number of reads (NumReads) originating from this transcript.
+#   * The first two columns are self-explanatory, the name of the transcript and the length of the transcript in base pairs (bp).
+#   * The effective length represents the various factors that effect the length of transcript (i.e degradation, technical limitations of the sequencing platform)
+#   * Salmon outputs ‘pseudocounts’ which predict the relative abundance of different isoforms in the form of three possible metrics (KPKM, RPKM, and TPM). TPM (transcripts per million) is a commonly used normalization method as described in [1] and is computed based on the effective length of the transcript.
+#   * Estimated number of reads (an estimate of the number of reads drawn from this transcript given the transcript’s relative abundance and length)
+# 
+# **Algorithm:**
+# * Given the index and a set of sequenced reads, the quant command quasi-maps the reads and uses the resulting mapping information to estimate transcript abundances.
+# * Quasi-map is a way to map sequenced fragments (single or paired-end reads) to a target transcriptome. Quasi-mapping produces what we refer to as fragment mapping information. In particular, it provides, for each query (fragment), the reference sequences (transcripts), strand and position from which the query may have likely originated. In many cases, this mapping information is sufficient for downstream analysis like quantification.
+# 
+# Basic steps:
+# 1. Scan read until k-mer appears in the hash table
+# 2. Look up all SA intervals (reference suffixes) containing that k-mer
+# 3. Maximum mappable prefix (MMP) finds the longest read sequence that exactly matches the reference suffix 
+# 4. Determine the next informative position (NIP) by a k-mer skipping approach
+# 5. Repeat until the end of the read
+# 6. Reports all MMPs that read intersected with
+# 
+# https://hbctraining.github.io/Intro-to-rnaseq-hpc-O2/lessons/08_salmon.html
+# 
+# **Command:**
+# 
+# Command and parameters:
+# 
+# `> ./bin/salmon quant -i transcripts_index -l <LIBTYPE> -1 reads1.fq -2 reads2.fq --validateMappings -o transcripts_quant`
+# 
+# * libtype = Determines how the reads should be interpreted including the relative orientation of paired ends (inward, outward, matching) and strandedness (stranded=specify if read1 comes from forward or reverse strand, unstranded). Currently using “A” which lets Salmon automatically decide
+#   * https://salmon.readthedocs.io/en/latest/salmon.html
+#   * (pg 38) https://buildmedia.readthedocs.org/media/pdf/salmon/stable/salmon.pdf
+# * What does strand bias in output mean? Strand_bias is such that a value of 0.5 means there is no bias (i.e. half of the fragments start with read 1 on the forward strand and half start with read 1 on the reverse complement strand). 
+#   * Based on lib_format_counts.json file, the bias is very close to 0.5, just above
+#   * https://hbctraining.github.io/Intro-to-rnaseq-hpc-O2/lessons/08_salmon.html
+# 
+# 
 
 # In[1]:
 
@@ -44,68 +85,57 @@ get_ipython().system(' prefetch --option-file $paths.SRA_ACC')
 # Here is a nice blog to explain how to read fastq files: https://thesequencingcenter.com/knowledge-base/fastq-files/
 # 
 # The fastq files gives the sequence of a read at a given location. Our goal is to map these reads to a reference genome so that we can quantify the number of reads that are at a given location, to determine the level of expression.
+# 
+# **Note:**
+# Before using `fasterq-dump` you need to configure it: https://github.com/ncbi/sra-tools/wiki/03.-Quick-Toolkit-Configuration
 
 # In[4]:
 
 
-if not os.path.exists(paths.FASTQ_DIR):
-    os.makedirs(paths.FASTQ_DIR)
+os.makedirs(paths.FASTQ_DIR, exist_ok=True)
 
 
 # In[5]:
 
 
-get_ipython().system('fastq-dump $paths.SRA_DIR/* --split-files --outdir $paths.FASTQ_DIR/')
-
-
-# In[6]:
-
-
-# Copied from https://github.com/hoganlab-dartmouth/sraProcessingPipeline/blob/5974e040c85724a8d385e53153b7707ae7c9c255/DiscoveryScripts/quantifier.py#L83
-
-#!fastq-dump $paths_phage.SRA_DIR/* --skip-technical --readids --split-3 --clip --outdir $paths_phage.FASTQ_DIR/
+get_ipython().run_cell_magic('bash', '-s $paths.SRA_DIR', 'for f in $1/*;\ndo\n    fasterq-dump $f -O $paths.FASTQ_DIR/ -f\ndone')
 
 
 # ### Quantify gene expression
 # Now that we have our index built and all of our data downloaded, we’re ready to quantify our samples
 # 
-# **Input:**
-# * Index of reference transcriptome
-# * FASTQ of experimental samples
-# 
-# **Output:**
-# 
-# After the salmon commands finish running, you should have a directory named quants, which will have a sub-directory for each sample. These sub-directories contain the quantification results of salmon, as well as a lot of other information salmon records about the sample and the run. 
-# 
-# The main output file (called `quant.sf`). Inside the quantification file for sample DRR016125 in quants/DRR016125/quant.sf, you’ll see a TSV format file listing the name (`Name`) of each transcript, its length (`Length`), effective length (`EffectiveLength`), and its abundance in terms of Transcripts Per Million (`TPM`) and estimated number of reads (`NumReads`) originating from this transcript.
-# 
 # **For each sample we have read counts per gene (where the genes are based on the reference gene file provided above).** 
+# 
+# Note about TPM calculation:
+# * For sample A, transcript X will have read count
+# * Reads per kilobase (RPK) = read count/length of the transcript
+# * Per million scaling factor = sum(read count/length across all samples for that transcript)/1M
+# * TPM = RPK/per million scaling factor
+# * TPM will depend on the scaling factor. If the number of mapped reads is very low then scale factor will be very low and so any trancript that mapped will be increased to create outliers since we’re dividing by a small scale factor
 
 # #### Get quants using PAO1 reference
 
-# In[7]:
+# In[ ]:
 
 
-if not os.path.exists(paths.PAO1_QUANT):
-    os.makedirs(paths.PAO1_QUANT)
+os.makedirs(paths.PAO1_QUANT, exist_ok=True)
 
 
-# In[8]:
+# In[ ]:
 
 
-get_ipython().run_cell_magic('bash', '-s $paths.PAO1_QUANT $paths.FASTQ_DIR $paths.PAO1_INDEX', '\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 -l A \\\n            -1 ${base_name}/${sample_name}_1.fastq \\\n            -2 ${base_name}/${sample_name}_2.fastq \\\n            -p 8 --validateMappings -o $1/${sample_name}_quant\ndone')
+get_ipython().run_cell_magic('bash', '-s $paths.PAO1_QUANT $paths.FASTQ_DIR $paths.PAO1_INDEX', '\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 \\\n             -l A \\\n             -r ${base_name}/${sample_name}/* \\\n             -o $1/${sample_name}_quant\ndone')
 
 
 # #### Get quants using PA14 reference
 
-# In[9]:
+# In[ ]:
 
 
-if not os.path.exists(paths.PA14_QUANT):
-    os.makedirs(paths.PA14_QUANT)
+os.makedirs(paths.PA14_QUANT, exist_ok=True)
 
 
-# In[10]:
+# In[ ]:
 
 
 get_ipython().run_cell_magic('bash', '-s $paths.PA14_QUANT $paths.FASTQ_DIR $paths.PA14_INDEX', '\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 -l A \\\n            -1 ${base_name}/${sample_name}_1.fastq \\\n            -2 ${base_name}/${sample_name}_2.fastq \\\n            -p 8 --validateMappings -o $1/${sample_name}_quant\ndone')
@@ -113,14 +143,13 @@ get_ipython().run_cell_magic('bash', '-s $paths.PA14_QUANT $paths.FASTQ_DIR $pat
 
 # #### Get quants using phage reference
 
-# In[11]:
+# In[ ]:
 
 
-if not os.path.exists(paths.PHAGE_QUANT):
-    os.makedirs(paths.PHAGE_QUANT)
+os.makedirs(paths.PHAGE_QUANT, exist_ok=True)
 
 
-# In[12]:
+# In[ ]:
 
 
 get_ipython().run_cell_magic('bash', '-s $paths.PHAGE_QUANT $paths.FASTQ_DIR $paths.PHAGE_INDEX', '\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 -l A \\\n            -1 ${base_name}/${sample_name}_1.fastq \\\n            -2 ${base_name}/${sample_name}_2.fastq \\\n            -p 8 --validateMappings -o $1/${sample_name}_quant\ndone')
@@ -128,7 +157,7 @@ get_ipython().run_cell_magic('bash', '-s $paths.PHAGE_QUANT $paths.FASTQ_DIR $pa
 
 # ### Consolidate sample quantification to gene expression dataframe
 
-# In[13]:
+# In[ ]:
 
 
 # Read through all sample subdirectories in quant/
@@ -143,7 +172,7 @@ expression_pao1_df = pd.DataFrame(
 expression_pao1_df.head()
 
 
-# In[14]:
+# In[ ]:
 
 
 # Read through all sample subdirectories in quant/
@@ -158,7 +187,7 @@ expression_pa14_df = pd.DataFrame(
 expression_pa14_df.head()
 
 
-# In[15]:
+# In[ ]:
 
 
 # Read through all sample subdirectories in quant/
@@ -173,7 +202,7 @@ expression_phage_df = pd.DataFrame(
 expression_phage_df.head()
 
 
-# In[17]:
+# In[ ]:
 
 
 # Save gene expression data

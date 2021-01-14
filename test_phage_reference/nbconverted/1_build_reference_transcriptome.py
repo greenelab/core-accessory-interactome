@@ -1,27 +1,35 @@
-
+#!/usr/bin/env python
 # coding: utf-8
 
 # # Build reference transcriptome
 # 
-# Here we are using [Salmon](https://combine-lab.github.io/salmon/)
+# The first step to using Salmon to get gene expression data is to build a reference transcriptome to align our sample reads against.
 # 
-# **Input:**
-# * Target transcriptome
-# * This transcriptome is given to Salmon in the form of a (possibly compressed) multi-FASTA file, with each entry providing the sequence of a transcript
-# * We downloaded the phage GENOMES from NCBI GenBank
+# **Goal:** To create an index to evaluate sequences for all possible unique sequences of length k in the target transcriptome
 # 
-# **Note:** For prokaryotes, transcripts and genes have a more 1-1 mapping so we're using genes for our reference transcriptome and so we don't need to use tximport to map transcript quants to genes. 
+# **Input:** 
+# 
+# Target transcriptome. This transcriptome is given in the form of a multi-FASTA file, with each entry providing the sequence of a transcript. For prokaryotes, transcripts and genes have a more 1-1 mapping so we're using genes for our reference transcriptome and so we don't need to use tximport to map transcript quants to genes.
+# 
+# *What is the relationship between a gene vs transcript?* A gene is a bounded region of a chromosome within which transcription occurs. The gene (DNA sequence) is transcribed into RNA transcript. In bacteria, these RNA transcripts act as mRNA that can be translated into protein. In eukaryotes, the transcript RNA is pre-mRNA and must undergo additional processing (post-transcriptional modifications) before it can be translated. This processing includes addition of a protective cap and tail, splicing to remove introns. So genes can have multiple mRNA (which can encode different proteins) through the process of alternative splicing, where fragments of the pre-mRNA are assembled in different ways.
 # 
 # **Output:**
-# * The index is a structure that salmon uses to quasi-map RNA-seq reads during quantification
-# * [Quasi-map](https://academic.oup.com/bioinformatics/article/32/12/i192/2288985) is a way to map sequenced fragments (single or paired-end reads) to a target transcriptome. Quasi-mapping produces what we refer to as fragment mapping information. In particular, it provides, for each query (fragment), the reference sequences (transcripts), strand and position from which the query may have likely originated. In many cases, this mapping information is sufficient for downstream analysis like quantification.
 # 
-# *Algorithm:*
+# Quasi-index over the reference transcriptome, which is a structure that salmon uses to quasi-map RNA-seq reads during quantification. The index is a signature for each transcript in the reference transcriptome
 # 
-# For a query read r through repeated application of: 
-# 1. Determining the next hash table k-mer that starts past the current query position
-# 2. Computing the maximum mappable prefix (MMP) of the query beginning with this k-mer
-# 3. Determining the next informative position (NIP) by performing a longest common prefix (LCP) query on two specifically chosen suffixes in the SA
+# The index contains:
+# * Suffix array (SA) of the reference transcriptome. There is a suffix array per transcript in the reference, containing a sorted array of all the suffixes of each transcript
+# * A hash table mapping each k-mer occurring in the reference transcriptome to its location in SA
+# * https://hbctraining.github.io/Intro-to-rnaseq-hpc-O2/lessons/08_salmon.html
+# 
+# **Command:**
+# 
+# `> ./bin/salmon index -t transcripts.fa -i transcripts_index --decoys decoys.txt -k 31`
+# * k = minimum acceptable length for valid matches. So a smaller k might improve sensitivity. They found that k=31 works well for reads of 75bp or longer. 
+# * decoys = Set of target transcript ids that will not appear in the quantification. This decoy transcriptome is meant to mitigate potential spurious mapping of reads that actually arise from some unannotated genomic locus that is sequence-similar to an annotated transcriptome.
+# 
+# 
+# **Note:** Here we are using [Salmon](https://combine-lab.github.io/salmon/) version 0.11.2 to be consistent with the version running on Dartmouth's computing cluster (Discovery), which is where the data will be processed. 
 
 # In[1]:
 
@@ -52,3 +60,7 @@ get_ipython().system(' salmon index -t $paths.PA14_REF -i $paths.PA14_INDEX')
 # Get phage index
 get_ipython().system(' salmon index -t $paths.PHAGE_REF -i $paths.PHAGE_INDEX')
 
+
+# **Thoughts based on output:**
+# * How does this handle full genomes for phages? Each entry will be much longer in length than Salmon expects so a warning message is output: `Entry with header [NC_028999.1] was longer than 200000 nucleotides.  This is probably a chromosome instead of a transcript.` Is Salmon including these entries?
+# * When building the index I'm getting that PAO1 34 duplicates are removed, PA14 37 duplicates are removed, Phage  391 duplicates removed. Are these duplicates expected?
