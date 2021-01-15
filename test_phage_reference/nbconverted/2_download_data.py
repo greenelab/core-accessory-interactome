@@ -62,5 +62,5 @@ os.makedirs(paths.FASTQ_DIR, exist_ok=True)
 # In[5]:
 
 
-get_ipython().run_cell_magic('bash', '-s $paths.SRA_DIR', 'for f in $1/*;\ndo\n    fasterq-dump $f -O $paths.FASTQ_DIR/ -f\ndone')
+get_ipython().run_cell_magic('bash', '-s $paths.SRA_DIR $paths.FASTQ_DIR', 'for FILE_PATH in $1/*;\n\ndo\n    # get file name\n    sample_name=`basename ${FILE_PATH}`\n\n    # remove extension from file name\n    sample_name="${sample_name%.*}"\n    \n    echo "Getting fastq for $FILE_PATH"\n    fasterq-dump $FILE_PATH -O $2/${sample_name} -f\ndone')
 

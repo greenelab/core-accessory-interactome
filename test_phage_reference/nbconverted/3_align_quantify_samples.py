@@ -74,88 +74,50 @@ np.random.seed(123)
 # * TPM will depend on the scaling factor. If the number of mapped reads is very low then scale factor will be very low and so any trancript that mapped will be increased to create outliers since we’re dividing by a small scale factor
 # 
 # **How are paired-end vs single-end read samples treated?**
-# * How are we reading the fastq files to be quantified? Are we reading in all files if multipler are provided?
+# * The multiple files are treated as a single library, meaning?? In this case we are not specifying 
+# 
+# How are we reading the fastq files to be quantified? Are we reading in all files if multipler are provided?
 
 # #### Get quants using PAO1 reference
 
-# In[ ]:
+# In[2]:
 
 
 os.makedirs(paths.PAO1_QUANT, exist_ok=True)
 
 
-# In[ ]:
+# In[3]:
 
 
-get_ipython().run_cell_magic('bash', '-s $paths.PAO1_QUANT $paths.FASTQ_DIR $paths.PAO1_INDEX', '\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 \\\n             -l A \\\n             -r ${base_name}/${sample_name}/* \\\n             -o $1/${sample_name}_quant\ndone')
+get_ipython().run_cell_magic('bash', '-s $paths.PAO1_QUANT $paths.FASTQ_DIR $paths.PAO1_INDEX', '\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${base_name}/${sample_name}/*"\n\nsalmon quant -i $3 \\\n             -l A \\\n             -r ${base_name}/${sample_name}/* \\\n             -o $1/${sample_name}_quant\ndone')
 
 
 # #### Get quants using PA14 reference
 
-# In[ ]:
+# In[4]:
 
 
 os.makedirs(paths.PA14_QUANT, exist_ok=True)
 
 
-# In[ ]:
+# In[5]:
 
 
-"""%%bash -s $paths.PA14_QUANT $paths.FASTQ_DIR $paths.PA14_INDEX
-
-for FILE_PATH in $2/*;
-do
-
-# get file name
-sample_name=`basename ${FILE_PATH}`
-
-# remove extension from file name
-sample_name="${sample_name%_*}"
-
-# get base path
-base_name=${FILE_PATH%/*}
-
-echo "Processing sample ${sample_name}"
-
-salmon quant -i $3 -l A \
-            -1 ${base_name}/${sample_name}_1.fastq \
-            -2 ${base_name}/${sample_name}_2.fastq \
-            -p 8 --validateMappings -o $1/${sample_name}_quant
-done"""
+get_ipython().run_cell_magic('bash', '-s $paths.PA14_QUANT $paths.FASTQ_DIR $paths.PA14_INDEX', '\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${base_name}/${sample_name}/*"\n\nsalmon quant -i $3 \\\n             -l A \\\n             -r ${base_name}/${sample_name}/* \\\n             -o $1/${sample_name}_quant\ndone')
 
 
 # #### Get quants using phage reference
 
-# In[ ]:
+# In[6]:
 
 
 os.makedirs(paths.PHAGE_QUANT, exist_ok=True)
 
 
-# In[ ]:
+# In[7]:
 
 
-"""%%bash -s $paths.PHAGE_QUANT $paths.FASTQ_DIR $paths.PHAGE_INDEX
-
-for FILE_PATH in $2/*;
-do
-
-# get file name
-sample_name=`basename ${FILE_PATH}`
-
-# remove extension from file name
-sample_name="${sample_name%_*}"
-
-# get base path
-base_name=${FILE_PATH%/*}
-
-echo "Processing sample ${sample_name}"
-
-salmon quant -i $3 -l A \
-            -1 ${base_name}/${sample_name}_1.fastq \
-            -2 ${base_name}/${sample_name}_2.fastq \
-            -p 8 --validateMappings -o $1/${sample_name}_quant
-done"""
+get_ipython().run_cell_magic('bash', '-s $paths.PHAGE_QUANT $paths.FASTQ_DIR $paths.PHAGE_INDEX', '\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${base_name}/${sample_name}/*"\n\nsalmon quant -i $3 \\\n             -l A \\\n             -r ${base_name}/${sample_name}/* \\\n             -o $1/${sample_name}_quant\ndone')
 
 
 # ### Consolidate sample quantification to gene expression dataframe
