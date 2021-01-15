@@ -7,6 +7,7 @@ dependencies:
 - r::r=3.6.0
 - r::r-flashClust=1.01-2
 - bioconda::r-wgcna=1.69
+- bioconda::sra-tools=2.10.9
 - bioconda::bioconductor-deseq2
 - bioconda::salmon=0.11.2
 - conda-forge::python=3.7
