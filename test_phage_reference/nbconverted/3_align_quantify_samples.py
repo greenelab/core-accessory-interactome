@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+
 # coding: utf-8
 
 # # Align and quantify samples
@@ -61,46 +61,6 @@ from core_acc_modules import paths
 np.random.seed(123)
 
 
-# ### Download SRA data
-# 
-# Note: Need to delete `sra` folder between runs otherwise `fastq-dump` will be called on all files in `sra` folder which can include more than your sra accessions.
-
-# In[2]:
-
-
-shutil.rmtree(paths.SRA_DIR)
-
-
-# In[3]:
-
-
-# Download sra data files
-get_ipython().system(' prefetch --option-file $paths.SRA_ACC')
-
-
-# ### Get FASTQ files associated with SRA downloads
-# 
-# The fastq files store the RNA-seq results, including: sequencing and quality scores for each base call.
-# 
-# Here is a nice blog to explain how to read fastq files: https://thesequencingcenter.com/knowledge-base/fastq-files/
-# 
-# The fastq files gives the sequence of a read at a given location. Our goal is to map these reads to a reference genome so that we can quantify the number of reads that are at a given location, to determine the level of expression.
-# 
-# **Note:**
-# Before using `fasterq-dump` you need to configure it: https://github.com/ncbi/sra-tools/wiki/03.-Quick-Toolkit-Configuration
-
-# In[4]:
-
-
-os.makedirs(paths.FASTQ_DIR, exist_ok=True)
-
-
-# In[5]:
-
-
-get_ipython().run_cell_magic('bash', '-s $paths.SRA_DIR', 'for f in $1/*;\ndo\n    fasterq-dump $f -O $paths.FASTQ_DIR/ -f\ndone')
-
-
 # ### Quantify gene expression
 # Now that we have our index built and all of our data downloaded, we’re ready to quantify our samples
 # 
@@ -112,6 +72,9 @@ get_ipython().run_cell_magic('bash', '-s $paths.SRA_DIR', 'for f in $1/*;\ndo\n 
 # * Per million scaling factor = sum(read count/length across all samples for that transcript)/1M
 # * TPM = RPK/per million scaling factor
 # * TPM will depend on the scaling factor. If the number of mapped reads is very low then scale factor will be very low and so any trancript that mapped will be increased to create outliers since we’re dividing by a small scale factor
+# 
+# **How are paired-end vs single-end read samples treated?**
+# * How are we reading the fastq files to be quantified? Are we reading in all files if multipler are provided?
 
 # #### Get quants using PAO1 reference
 
@@ -138,7 +101,27 @@ os.makedirs(paths.PA14_QUANT, exist_ok=True)
 # In[ ]:
 
 
-get_ipython().run_cell_magic('bash', '-s $paths.PA14_QUANT $paths.FASTQ_DIR $paths.PA14_INDEX', '\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 -l A \\\n            -1 ${base_name}/${sample_name}_1.fastq \\\n            -2 ${base_name}/${sample_name}_2.fastq \\\n            -p 8 --validateMappings -o $1/${sample_name}_quant\ndone')
+"""%%bash -s $paths.PA14_QUANT $paths.FASTQ_DIR $paths.PA14_INDEX
+
+for FILE_PATH in $2/*;
+do
+
+# get file name
+sample_name=`basename ${FILE_PATH}`
+
+# remove extension from file name
+sample_name="${sample_name%_*}"
+
+# get base path
+base_name=${FILE_PATH%/*}
+
+echo "Processing sample ${sample_name}"
+
+salmon quant -i $3 -l A \
+            -1 ${base_name}/${sample_name}_1.fastq \
+            -2 ${base_name}/${sample_name}_2.fastq \
+            -p 8 --validateMappings -o $1/${sample_name}_quant
+done"""
 
 
 # #### Get quants using phage reference
@@ -152,7 +135,27 @@ os.makedirs(paths.PHAGE_QUANT, exist_ok=True)
 # In[ ]:
 
 
-get_ipython().run_cell_magic('bash', '-s $paths.PHAGE_QUANT $paths.FASTQ_DIR $paths.PHAGE_INDEX', '\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${sample_name}"\n\nsalmon quant -i $3 -l A \\\n            -1 ${base_name}/${sample_name}_1.fastq \\\n            -2 ${base_name}/${sample_name}_2.fastq \\\n            -p 8 --validateMappings -o $1/${sample_name}_quant\ndone')
+"""%%bash -s $paths.PHAGE_QUANT $paths.FASTQ_DIR $paths.PHAGE_INDEX
+
+for FILE_PATH in $2/*;
+do
+
+# get file name
+sample_name=`basename ${FILE_PATH}`
+
+# remove extension from file name
+sample_name="${sample_name%_*}"
+
+# get base path
+base_name=${FILE_PATH%/*}
+
+echo "Processing sample ${sample_name}"
+
+salmon quant -i $3 -l A \
+            -1 ${base_name}/${sample_name}_1.fastq \
+            -2 ${base_name}/${sample_name}_2.fastq \
+            -p 8 --validateMappings -o $1/${sample_name}_quant
+done"""
 
 
 # ### Consolidate sample quantification to gene expression dataframe
