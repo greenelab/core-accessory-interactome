@@ -5,7 +5,7 @@
 # 
 # This notebook is downloading data from SRA and then using the module, `fasterq-dump`, from the SRA toolkit to get the fastq files associated with the downloaded SRA files.
 # 
-# Note: Need to delete `sra` folder between runs otherwise `fastq-dump` will be called on all files in `sra` folder which can include more than your sra accessions.
+# Note: Need to delete `sra` folder between runs; otherwise, `fastq-dump` will be called on all files in `sra` folder which can include more than your sra accessions.
 
 # In[1]:
 
