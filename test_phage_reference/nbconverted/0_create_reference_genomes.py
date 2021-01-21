@@ -14,45 +14,29 @@ from Bio import SeqIO
 from core_acc_modules import paths
 
 
-# ## Clean phage sequence download --> Necessary?
-# 
+# ## Download phage genomes
 # Phage genomes were downloaded from NCBI GenBank using search keywords: [phage] AND [pseudomonas].
 # 
 # This search returned 1,950 samples (as of 15 December 2020)
-# 
-# By manual inspection, this download includes phages for other bacteria such as Samonella and E. Coli. We will remove those FASTA entries and save the cleaned version.
-
-# In[2]:
-
-
-# Select only those entries with keyword, "pseudomonas"
-cleaned_records = []
-keyword = "pseudomonas"
-for record in SeqIO.parse(paths.RAW_PHAGE_REF, "fasta"):
-    print("%s %s %i" % (record.id, record.description.lower(), len(record)))
-    if keyword in record.description.lower():
-        cleaned_records.append(record)
-
-
-# In[3]:
-
-
-# Write cleaned fasta records to file
-#SeqIO.write(cleaned_records, paths.PHAGE_REF, "fasta")
-
 
 # ## Combine phage + PAO1/PA14 genomes 
 # 
 # We want to create a fasta file with PAO1 + phage gene sequences and a file with PA14 + phage gene sequences. To do this we need to make sure we are only adding unique phage genome sequences to the PAO1 or PA14 reference sequences. We will do this using BLAST. For all phage genome sequences, we will BLAST against PAO1 or PA14 sequences
 # 
-# <--- Description of BLAST algorithm used here --->
+# **BLAST (basic local alignment search tool)** which performs comparisons between pairs of sequences, searching for regions of local similarity. 
+# 
+# 1. An initial search is done for a word of length "W" (W-mer) in the query sequence. 
+# 2. Word hits are then extended in either direction in an attempt to generate a maximal segment pair (MSP)
+# 3. The MSP score is computed based on the number of mismatches/matches, gaps
+# 
+# https://www.ncbi.nlm.nih.gov/books/NBK62051/
 
 # ### Process PAO1 and PA14 sequence files
 # 
 # 1. Make sure that file is .fasta
 # 2. Remove any duplicate sequence ids
 
-# In[4]:
+# In[2]:
 
 
 # Remove duplicate PAO1 reference sequences
@@ -68,7 +52,7 @@ for record in SeqIO.parse(paths.PAO1_REF, "fasta"):
 SeqIO.write(pao1_noduplicates_ref, paths.PAO1_REF, "fasta")
 
 
-# In[5]:
+# In[3]:
 
 
 # Remove duplicate PAO1 reference sequences
@@ -88,16 +72,22 @@ SeqIO.write(pa14_noduplicates_ref, paths.PA14_REF, "fasta")
 # 
 # <-- What are these blast error messages --->
 
-# In[6]:
+# In[4]:
 
 
 os.makedirs(paths.BLAST_DIR, exist_ok=True)
 
 
-# In[7]:
+# In[5]:
 
 
 get_ipython().run_cell_magic('bash', '-s $paths.PAO1_REF $paths.PAO1_DB_DIR', '\nmakeblastdb -in $1 -dbtype nucl -parse_seqids -out $2')
+
+
+# In[6]:
+
+
+get_ipython().run_cell_magic('bash', '-s $paths.PA14_REF $paths.PA14_DB_DIR', '\nmakeblastdb -in $1 -dbtype nucl -parse_seqids -out $2')
 
 
 # ### BLAST phage sequences against PAO1/PA14 DB
@@ -118,29 +108,32 @@ get_ipython().run_cell_magic('bash', '-s $paths.PAO1_REF $paths.PAO1_DB_DIR', '\
 # | send | end of alignment in subject |
 # | evalue | expect value |
 # | bitscore | bit score|
+# 
+# E-value: expected number of chance alignments; the smaller the E-value, the better the match.
 
-# In[8]:
+# In[7]:
 
 
 get_ipython().run_cell_magic('bash', '-s $paths.PHAGE_REF $paths.PAO1_BLAST_RESULT $paths.PAO1_DB_DIR', 'blastn -query $1 -out $2 -db $3 -outfmt 6 ')
 
 
-# In[ ]:
+# In[8]:
 
 
-# SAME FOR PA14
+get_ipython().run_cell_magic('bash', '-s $paths.PHAGE_REF $paths.PA14_BLAST_RESULT $paths.PA14_DB_DIR', 'blastn -query $1 -out $2 -db $3 -outfmt 6 ')
 
 
 # In[9]:
 
 
 pao1_blast_result = pd.read_csv(paths.PAO1_BLAST_RESULT, sep="\t", header=None)
-# SAME FOR PA14
+pa14_blast_result = pd.read_csv(paths.PA14_BLAST_RESULT, sep="\t", header=None)
 
 
 # In[10]:
 
 
+# Add column names described above
 col_names = [
     "qseqid",
     "sseqid",
@@ -156,22 +149,34 @@ col_names = [
     "bitscore"
     
 ]
+
+
+# In[11]:
+
+
+# BLAST results for PAO1
 pao1_blast_result.columns = col_names
 print(pao1_blast_result.shape)
+print(pao1_blast_result["evalue"].max())
 pao1_blast_result.head()
 
-# SAME FOR PA14
+
+# In[12]:
+
+
+# BLAST results for PA14
+pa14_blast_result.columns = col_names
+print(pa14_blast_result.shape)
+print(pa14_blast_result["evalue"].max())
+pa14_blast_result.head()
 
 
 # ## Add non-duplicate phage sequences only
-# ASSERTION FAILED
+# The smaller the E-value, the better the match. So we want to add phage sequences with high E-value (i.e. evalue > 0.05) or phage sequences that are not on this table at all, because there was no hit found.
 # 
-# THINK THIS IS BECAUSE THOSE SEQUENCES DID NOT MAP AT ALL
-# #assert(pao1_blast_result.shape[0] == len(pao1_noduplicates_ref))
-# 
-# The smaller the E-value, the better the match. So we want to add phage sequences with high E-value.
+# In this case, there were no sequences with high evalues so we are treating all the sequences in the above table as duplicates
 
-# In[11]:
+# In[13]:
 
 
 duplicate_phage_seqs = pao1_blast_result["qseqid"]
@@ -190,16 +195,29 @@ for record in SeqIO.parse(paths.PHAGE_REF, "fasta"):
 print(len(pao1_phage_ref_seqs))
 
 
-# In[ ]:
+# In[14]:
 
 
-# SAME FOR PA14
+duplicate_phage_seqs = pao1_blast_result["qseqid"]
+
+pa14_phage_ref_seqs = []
+
+# Add all PAO1 reference sequences
+for record in SeqIO.parse(paths.PA14_REF, "fasta"):
+    pa14_phage_ref_seqs.append(record)
+
+# Only add non-redundant phage sequences
+for record in SeqIO.parse(paths.PHAGE_REF, "fasta"):
+    if record.id not in duplicate_phage_seqs:
+        pa14_phage_ref_seqs.append(record)
+
+print(len(pa14_phage_ref_seqs))
 
 
-# In[12]:
+# In[15]:
 
 
 # Write cleaned fasta records to file
 SeqIO.write(pao1_phage_ref_seqs, paths.PAO1_PHAGE_REF, "fasta")
-# SAME FOR PA14
+SeqIO.write(pa14_phage_ref_seqs, paths.PA14_PHAGE_REF, "fasta")
 
