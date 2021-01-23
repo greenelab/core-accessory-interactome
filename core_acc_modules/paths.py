@@ -33,9 +33,8 @@ PAO1_PHAGE_REF = REF_DIR / "Pseudomonas_aeruginosa_PAO1_107_phage.fasta"
 PA14_PHAGE_REF = REF_DIR / "Pseudomonas_aeruginosa_UCBPP-PA14_109_phage.fasta"
 
 # Location where mapping indices generated from `salmon index` are stored
-PAO1_INDEX = REF_DIR / "pao1_index"
-PA14_INDEX = REF_DIR / "pa14_index"
-PHAGE_INDEX = REF_DIR / "phage_index"
+PAO1_PHAGE_INDEX = REF_DIR / "pao1_phage_index"
+PA14_PHAGE_INDEX = REF_DIR / "pa14_phage_index"
 
 # Location where quantification results are stored from `salmon quant`
 PAO1_QUANT = NCBI_DIR / "quants_pao1"

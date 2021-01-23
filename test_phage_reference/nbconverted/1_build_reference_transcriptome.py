@@ -44,21 +44,14 @@ from core_acc_modules import paths
 
 
 # Get PAO1 index
-get_ipython().system(' salmon index -t $paths.PAO1_REF -i $paths.PAO1_INDEX')
+get_ipython().system(' salmon index -t $paths.PAO1_PHAGE_REF -i $paths.PAO1_PHAGE_INDEX')
 
 
 # In[3]:
 
 
 # Get PA14 index
-get_ipython().system(' salmon index -t $paths.PA14_REF -i $paths.PA14_INDEX')
-
-
-# In[4]:
-
-
-# Get phage index
-get_ipython().system(' salmon index -t $paths.PHAGE_REF -i $paths.PHAGE_INDEX')
+get_ipython().system(' salmon index -t $paths.PA14_PHAGE_REF -i $paths.PA14_PHAGE_INDEX')
 
 
 # **Thoughts based on output:**

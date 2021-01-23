@@ -10,6 +10,7 @@
 
 import os
 import pandas as pd
+import numpy as np
 from Bio import SeqIO
 from core_acc_modules import paths
 
@@ -70,7 +71,17 @@ SeqIO.write(pa14_noduplicates_ref, paths.PA14_REF, "fasta")
 
 # ### Create BLAST DB
 # 
-# <-- What are these blast error messages --->
+# Note: Got the following error message:
+# 
+# ```
+# Error: (803.7) [makeblastdb] Blast-def-line-set.E.title
+# Bad char [0xC2] in string at byte 52
+# cds chromosome:3013928-3015481(+) name=fhpR ;locus_tag=PA2665;replicon_accession=NC_002516.2;product=Transcriptional activator of P. aeruginosa flavohemoglobin, FhpR
+# ```
+# 
+# The error seems to be associated with non-acii characters present. https://github.com/tseemann/abricate/issues/77
+# 
+# **Fix:** Manually changed `name=fhpR ;` to `name=fhpR;`
 
 # In[4]:
 
@@ -179,7 +190,7 @@ pa14_blast_result.head()
 # In[13]:
 
 
-duplicate_phage_seqs = pao1_blast_result["qseqid"]
+duplicate_pao1_phage_seq_ids = np.unique(pao1_blast_result["qseqid"].values)
 
 pao1_phage_ref_seqs = []
 
@@ -187,18 +198,28 @@ pao1_phage_ref_seqs = []
 for record in SeqIO.parse(paths.PAO1_REF, "fasta"):
     pao1_phage_ref_seqs.append(record)
 
+num_pao1_seqs = len(pao1_phage_ref_seqs)
+print(num_pao1_seqs)
+
 # Only add non-redundant phage sequences
+num_phage_seqs = 0
 for record in SeqIO.parse(paths.PHAGE_REF, "fasta"):
-    if record.id not in duplicate_phage_seqs:
+    num_phage_seqs += 1
+    if record.id not in duplicate_pao1_phage_seq_ids:
         pao1_phage_ref_seqs.append(record)
 
+print(num_phage_seqs)
+print(len(duplicate_pao1_phage_seq_ids))
 print(len(pao1_phage_ref_seqs))
+
+# Check length
+assert len(pao1_phage_ref_seqs) == (num_pao1_seqs + num_phage_seqs - len(duplicate_pao1_phage_seq_ids))
 
 
 # In[14]:
 
 
-duplicate_phage_seqs = pao1_blast_result["qseqid"]
+duplicate_pa14_phage_seq_ids = np.unique(pa14_blast_result["qseqid"].values)
 
 pa14_phage_ref_seqs = []
 
@@ -206,12 +227,20 @@ pa14_phage_ref_seqs = []
 for record in SeqIO.parse(paths.PA14_REF, "fasta"):
     pa14_phage_ref_seqs.append(record)
 
+num_pa14_seqs = len(pa14_phage_ref_seqs)
+print(num_pa14_seqs)
+
 # Only add non-redundant phage sequences
 for record in SeqIO.parse(paths.PHAGE_REF, "fasta"):
-    if record.id not in duplicate_phage_seqs:
+    if record.id not in duplicate_pa14_phage_seq_ids:
         pa14_phage_ref_seqs.append(record)
 
+print(num_phage_seqs)
+print(len(duplicate_pa14_phage_seq_ids))
 print(len(pa14_phage_ref_seqs))
+
+# Check length
+assert len(pa14_phage_ref_seqs) == (num_pa14_seqs + num_phage_seqs - len(duplicate_pa14_phage_seq_ids))
 
 
 # In[15]:
