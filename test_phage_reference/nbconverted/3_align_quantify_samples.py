@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python
 # coding: utf-8
 
 # # Align and quantify samples
@@ -78,100 +78,70 @@ np.random.seed(123)
 # 
 # How are we reading the fastq files to be quantified? Are we reading in all files if multipler are provided?
 
-# #### Get quants using PAO1 reference
+# #### Get quants using PAO1 and phage reference
 
 # In[2]:
 
 
-os.makedirs(paths.PAO1_QUANT, exist_ok=True)
+os.makedirs(paths.PAO1_PHAGE_QUANT, exist_ok=True)
 
 
 # In[3]:
 
 
-get_ipython().run_cell_magic('bash', '-s $paths.PAO1_QUANT $paths.FASTQ_DIR $paths.PAO1_INDEX', '\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${base_name}/${sample_name}/*"\n\nsalmon quant -i $3 \\\n             -l A \\\n             -r ${base_name}/${sample_name}/* \\\n             -o $1/${sample_name}_quant\ndone')
+get_ipython().run_cell_magic('bash', '-s $paths.PAO1_PHAGE_QUANT $paths.FASTQ_DIR $paths.PAO1_PHAGE_INDEX', '\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${base_name}/${sample_name}/*"\n\nsalmon quant -i $3 \\\n             -l A \\\n             -r ${base_name}/${sample_name}/* \\\n             -o $1/${sample_name}_quant\ndone')
 
 
-# #### Get quants using PA14 reference
+# #### Get quants using PA14 and phage reference
 
 # In[4]:
 
 
-os.makedirs(paths.PA14_QUANT, exist_ok=True)
+os.makedirs(paths.PA14_PHAGE_QUANT, exist_ok=True)
 
 
 # In[5]:
 
 
-get_ipython().run_cell_magic('bash', '-s $paths.PA14_QUANT $paths.FASTQ_DIR $paths.PA14_INDEX', '\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${base_name}/${sample_name}/*"\n\nsalmon quant -i $3 \\\n             -l A \\\n             -r ${base_name}/${sample_name}/* \\\n             -o $1/${sample_name}_quant\ndone')
+get_ipython().run_cell_magic('bash', '-s $paths.PA14_PHAGE_QUANT $paths.FASTQ_DIR $paths.PA14_PHAGE_INDEX', '\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${base_name}/${sample_name}/*"\n\nsalmon quant -i $3 \\\n             -l A \\\n             -r ${base_name}/${sample_name}/* \\\n             -o $1/${sample_name}_quant\ndone')
 
 
-# #### Get quants using phage reference
+# ### Consolidate sample quantification to gene expression dataframe
 
 # In[6]:
 
 
-os.makedirs(paths.PHAGE_QUANT, exist_ok=True)
+# Read through all sample subdirectories in quant/
+# Within each sample subdirectory, get quant.sf file
+data_dir = paths.PAO1_PHAGE_QUANT
+
+expression_pao1_phage_df = pd.DataFrame(
+    pd.read_csv(file, sep="\t", index_col=0)["TPM"].
+    rename(file.parent.name.split("_")[0]) 
+    for file in data_dir.rglob("*/quant.sf"))    
+
+expression_pao1_phage_df.head()
 
 
 # In[7]:
 
 
-get_ipython().run_cell_magic('bash', '-s $paths.PHAGE_QUANT $paths.FASTQ_DIR $paths.PHAGE_INDEX', '\nfor FILE_PATH in $2/*;\ndo\n\n# get file name\nsample_name=`basename ${FILE_PATH}`\n\n# remove extension from file name\nsample_name="${sample_name%_*}"\n\n# get base path\nbase_name=${FILE_PATH%/*}\n\necho "Processing sample ${base_name}/${sample_name}/*"\n\nsalmon quant -i $3 \\\n             -l A \\\n             -r ${base_name}/${sample_name}/* \\\n             -o $1/${sample_name}_quant\ndone')
-
-
-# ### Consolidate sample quantification to gene expression dataframe
-
-# In[ ]:
-
-
 # Read through all sample subdirectories in quant/
 # Within each sample subdirectory, get quant.sf file
-data_dir = paths.PAO1_QUANT
+data_dir = paths.PA14_PHAGE_QUANT
 
-expression_pao1_df = pd.DataFrame(
+expression_pa14_phage_df = pd.DataFrame(
     pd.read_csv(file, sep="\t", index_col=0)["TPM"].
     rename(file.parent.name.split("_")[0]) 
     for file in data_dir.rglob("*/quant.sf"))    
 
-expression_pao1_df.head()
+expression_pa14_phage_df.head()
 
 
-# In[ ]:
-
-
-# Read through all sample subdirectories in quant/
-# Within each sample subdirectory, get quant.sf file
-data_dir = paths.PA14_QUANT
-
-expression_pa14_df = pd.DataFrame(
-    pd.read_csv(file, sep="\t", index_col=0)["TPM"].
-    rename(file.parent.name.split("_")[0]) 
-    for file in data_dir.rglob("*/quant.sf"))    
-
-expression_pa14_df.head()
-
-
-# In[ ]:
-
-
-# Read through all sample subdirectories in quant/
-# Within each sample subdirectory, get quant.sf file
-data_dir = paths.PHAGE_QUANT
-
-expression_phage_df = pd.DataFrame(
-    pd.read_csv(file, sep="\t", index_col=0)["TPM"].
-    rename(file.parent.name.split("_")[0]) 
-    for file in data_dir.rglob("*/quant.sf"))    
-
-expression_phage_df.head()
-
-
-# In[ ]:
+# In[8]:
 
 
 # Save gene expression data
-expression_pao1_df.to_csv(paths.PAO1_GE, sep='\t')
-expression_pa14_df.to_csv(paths.PA14_GE, sep='\t')
-expression_phage_df.to_csv(paths.PHAGE_GE, sep='\t')
+expression_pao1_phage_df.to_csv(paths.PAO1_PHAGE_GE, sep='\t')
+expression_pa14_phage_df.to_csv(paths.PA14_PHAGE_GE, sep='\t')
 
