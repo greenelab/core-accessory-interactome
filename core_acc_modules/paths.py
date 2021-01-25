@@ -15,7 +15,7 @@ NCBI_DIR = LOCAL_DIR / "ncbi" / "public"
 SRA_DIR = NCBI_DIR / "sra"
 FASTQ_DIR = NCBI_DIR / "fastq_phage"
 
-# Location where raw transcriptome references downloaded from Pseudomonas.com are stored
+# Location where raw transcriptome references downloaded from Pseudomonas.com andn NCBI are stored
 REF_DIR = LOCAL_DIR / "Documents" / "Data" / "Core_accessory"
 PAO1_REF = REF_DIR / "Pseudomonas_aeruginosa_PAO1_107.fasta"
 PA14_REF = REF_DIR / "Pseudomonas_aeruginosa_UCBPP-PA14_109.fasta"
@@ -37,11 +37,9 @@ PAO1_PHAGE_INDEX = REF_DIR / "pao1_phage_index"
 PA14_PHAGE_INDEX = REF_DIR / "pa14_phage_index"
 
 # Location where quantification results are stored from `salmon quant`
-PAO1_QUANT = NCBI_DIR / "quants_pao1"
-PA14_QUANT = NCBI_DIR / "quants_pa14"
-PHAGE_QUANT = NCBI_DIR / "quants_phage"
+PAO1_PHAGE_QUANT = NCBI_DIR / "quants_pao1_phage"
+PA14_PHAGE_QUANT = NCBI_DIR / "quants_pa14_phage"
 
 # Location of gene expression matrix to use for correlation analysis
-PAO1_GE = REF_DIR / "gene_expression_pao1_ref.tsv"
-PA14_GE = REF_DIR / "gene_expression_pa14_ref.tsv"
-PHAGE_GE = REF_DIR / "gene_expression_phage_ref.tsv"
+PAO1_PHAGE_GE = REF_DIR / "gene_expression_pao1_phage_ref.tsv"
+PA14_PHAGE_GE = REF_DIR / "gene_expression_pa14_phage_ref.tsv"
