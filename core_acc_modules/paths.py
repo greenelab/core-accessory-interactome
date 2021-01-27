@@ -5,7 +5,7 @@ from pathlib import Path
 PROJECT_DIR = Path(__file__).parents[1]
 ANALYSIS_DIR = PROJECT_DIR / "test_phage_reference"
 METADATA_DIR = ANALYSIS_DIR / "data" / "metadata"
-SRA_ACC = METADATA_DIR / "sra_acc.txt"
+SRA_ACC = METADATA_DIR / "pao1_sra_acc.txt"
 
 # Path to local directory where data files will be stored
 LOCAL_DIR = Path.home()
