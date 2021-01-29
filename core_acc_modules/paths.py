@@ -15,18 +15,23 @@ NCBI_DIR = LOCAL_DIR / "ncbi" / "public"
 SRA_DIR = NCBI_DIR / "sra"
 FASTQ_DIR = NCBI_DIR / "fastq_phage"
 
-# Location where raw transcriptome references downloaded from Pseudomonas.com andn NCBI are stored
+# Location where raw transcriptome references downloaded from Pseudomonas.com and NCBI are stored
 REF_DIR = LOCAL_DIR / "Documents" / "Data" / "Core_accessory"
 PAO1_REF = REF_DIR / "Pseudomonas_aeruginosa_PAO1_107.fasta"
 PA14_REF = REF_DIR / "Pseudomonas_aeruginosa_UCBPP-PA14_109.fasta"
 PHAGE_REF = REF_DIR / "phage_sequences.fasta"
+PILA_QUERY = REF_DIR / "pilA_pa14.fasta"
 
 # Location of BLAST DB
 BLAST_DIR = REF_DIR / "blast" / "db"
 PAO1_DB_DIR = BLAST_DIR / "PAO1_DB"
 PA14_DB_DIR = BLAST_DIR / "PA14_DB"
+PAO1_PHAGE_DB_DIR = BLAST_DIR / "PAO1_PHAGE_DB"
+PA14_PHAGE_DB_DIR = BLAST_DIR / "PA14_PHAGE_DB"
 PAO1_BLAST_RESULT = BLAST_DIR / "pao1_blast_output.tsv"
 PA14_BLAST_RESULT = BLAST_DIR / "pa14_blast_output.tsv"
+PAO1_PILA_BLAST_RESULT = BLAST_DIR / "pao1_pilA_blast_output.tsv"
+PA14_PILA_BLAST_RESULT = BLAST_DIR / "pa14_pilA_blast_output.tsv"
 
 # Location processed references
 PAO1_PHAGE_REF = REF_DIR / "Pseudomonas_aeruginosa_PAO1_107_phage.fasta"

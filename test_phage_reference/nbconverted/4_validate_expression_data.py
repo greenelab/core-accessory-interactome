@@ -150,12 +150,6 @@ print(nonzero_genes_EColi_pao1_phage_ref[nonzero_genes_EColi_pao1_phage_ref == n
 print(nonzero_genes_EColi_pa14_phage_ref[nonzero_genes_EColi_pa14_phage_ref == nonzero_genes_EColi_pa14_phage_ref.max()])
 
 
-# **Takeaway:**
-# 
-# * Most genes were found to have 0 expression, as expected
-# * Looks like the outlier gene encodes tRNAs
-# the elongation Tu which appears to be conserved across prokaryotes: https://pubmed.ncbi.nlm.nih.gov/6985898/
-
 # ## Positive case: PAO1
 # 
 # Given a PAO1 sample (SRR13160334), we want to check that: 
@@ -211,12 +205,6 @@ expression_pao1_phage_df.loc["SRR13160334", "NC_010326.1"]
 # Look at outlier genes
 nonzero_genes_pao1_sample_pao1_phage_ref[nonzero_genes_pao1_sample_pao1_phage_ref > threshold]
 
-
-# **Takeaway:**
-# 
-# * Most genes in PAO1 sample are nonzero, including phage gene that the sample is known to contain -- as expected
-# * 98% of the genes with nonzero expression have an expression level that is < 1000 TPM. Is this expected?
-# * Genes exceeding 1000 threshold are rRNAs
 
 # ## Positive case: PA14
 # 
@@ -282,8 +270,18 @@ nonzero_genes_pa14_sample_pa14_phage_ref[nonzero_genes_pa14_sample_pa14_phage_re
 
 # **Takeaways:**
 # 
-# * Most genes in PA14 sample are nonzero, including phage gene that the sample is known to contain -- as expected
-# * 97% of the genes with nonzero expression have an expression level that is < 1000 TPM. Is this expected?
-# * Genes exceeding 1000 threshold are rRNAs, tRNAs
+# As expected,
+# * 92%, 96% of genes in E. Coli samples had 0 expression using PAO1+phage reference and PA14+phage reference respectively
+# * 78% of genes in PAO1 sample had positive expression using PAO1+phage reference, including phage gene it was known to contain
+# * 83% of genes in PA14 sample had positive expression using PA14+phage reference, including phage gene it was known to contain
+# * Of the genes that had nonzero expression, most (97-98%) were < 1000 TPM nonzero genes were found. Genes exceeding this threshold are rRNAs, tRNAs
 # 
-# * Is this distribution shape, with a long right tail, expected?
+# On the other hand we found some unexpected mapping_rates.
+# * Some rates are nearly equal when mapping a PAO1 sample using the PAO1 reference versus PA14 reference
+# * Overall many mappings are close to around 50% which seems low
+# * No clear trend relating processing methods to the samples that had unexpected mapping patterns
+# 
+# (Slide 10): https://docs.google.com/presentation/d/1QqyNcvyLF83bdxgqyGFV2fLSfSs2yP-9eg8fQeSN5mU/edit?usp=sharing
+# 
+# TO DO:
+# * BLAST sequences that should differ between PAO1 and PA14 against PAO1 and PA14 references to make sure that the PA14 reference actually contains PA14 sequences.
