@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python
 # coding: utf-8
 
 # # Build reference transcriptome
@@ -44,23 +44,17 @@ from core_acc_modules import paths
 
 
 # Get PAO1 index
-get_ipython().system(' salmon index -t $paths.PAO1_REF -i $paths.PAO1_INDEX')
+get_ipython().system(' salmon index -t $paths.PAO1_PHAGE_REF -i $paths.PAO1_PHAGE_INDEX')
 
 
 # In[3]:
 
 
 # Get PA14 index
-get_ipython().system(' salmon index -t $paths.PA14_REF -i $paths.PA14_INDEX')
-
-
-# In[4]:
-
-
-# Get phage index
-get_ipython().system(' salmon index -t $paths.PHAGE_REF -i $paths.PHAGE_INDEX')
+get_ipython().system(' salmon index -t $paths.PA14_PHAGE_REF -i $paths.PA14_PHAGE_INDEX')
 
 
 # **Thoughts based on output:**
-# * How does this handle full genomes for phages? Each entry will be much longer in length than Salmon expects so a warning message is output: `Entry with header [NC_028999.1] was longer than 200000 nucleotides.  This is probably a chromosome instead of a transcript.` Is Salmon including these entries?
-# * When building the index I'm getting that PAO1 34 duplicates are removed, PA14 37 duplicates are removed, Phage  391 duplicates removed. Are these duplicates expected?
+# * Since phage entries are genomes instead of genes we are getting a warning message from Salmon: `Entry with header [NC_028999.1] was longer than 200000 nucleotides.  This is probably a chromosome instead of a transcript.` Is Salmon including these entries?
+# 
+# * When building the index I'm getting that PAO1+phage 510 duplicates are removed, PA14+phage 490 duplicates are removed. Previously when we had separate indexes for PAO1, PA14 and phage we got: PAO1 34 duplicates are removed, PA14 37 duplicates are removed, Phage 391 duplicates removed. So the duplicates seem to be mainly an issue with the phage sequences. I'm not sure if these duplicates are expected?

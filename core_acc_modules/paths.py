@@ -5,7 +5,7 @@ from pathlib import Path
 PROJECT_DIR = Path(__file__).parents[1]
 ANALYSIS_DIR = PROJECT_DIR / "test_phage_reference"
 METADATA_DIR = ANALYSIS_DIR / "data" / "metadata"
-SRA_ACC = METADATA_DIR / "sra_acc.txt"
+SRA_ACC = METADATA_DIR / "pao1_sra_acc.txt"
 
 # Path to local directory where data files will be stored
 LOCAL_DIR = Path.home()
@@ -15,24 +15,36 @@ NCBI_DIR = LOCAL_DIR / "ncbi" / "public"
 SRA_DIR = NCBI_DIR / "sra"
 FASTQ_DIR = NCBI_DIR / "fastq_phage"
 
-# Location where transcriptome references downloaded from Pseudomonas.com are stored
+# Location where raw transcriptome references downloaded from Pseudomonas.com and NCBI are stored
 REF_DIR = LOCAL_DIR / "Documents" / "Data" / "Core_accessory"
-RAW_PHAGE_REF = REF_DIR / "phage_sequences.fasta"
-PAO1_REF = REF_DIR / "Pseudomonas_aeruginosa_PAO1_107.ffn.gz"
-PA14_REF = REF_DIR / "Pseudomonas_aeruginosa_UCBPP-PA14_109.ffn.gz"
-PHAGE_REF = REF_DIR / "phage_sequences_processed.fasta"
+PAO1_REF = REF_DIR / "Pseudomonas_aeruginosa_PAO1_107.fasta"
+PA14_REF = REF_DIR / "Pseudomonas_aeruginosa_UCBPP-PA14_109.fasta"
+PHAGE_REF = REF_DIR / "phage_sequences.fasta"
+PILA_QUERY = REF_DIR / "pilA_pa14.fasta"
+
+# Location of BLAST DB
+BLAST_DIR = REF_DIR / "blast" / "db"
+PAO1_DB_DIR = BLAST_DIR / "PAO1_DB"
+PA14_DB_DIR = BLAST_DIR / "PA14_DB"
+PAO1_PHAGE_DB_DIR = BLAST_DIR / "PAO1_PHAGE_DB"
+PA14_PHAGE_DB_DIR = BLAST_DIR / "PA14_PHAGE_DB"
+PAO1_BLAST_RESULT = BLAST_DIR / "pao1_blast_output.tsv"
+PA14_BLAST_RESULT = BLAST_DIR / "pa14_blast_output.tsv"
+PAO1_PILA_BLAST_RESULT = BLAST_DIR / "pao1_pilA_blast_output.tsv"
+PA14_PILA_BLAST_RESULT = BLAST_DIR / "pa14_pilA_blast_output.tsv"
+
+# Location processed references
+PAO1_PHAGE_REF = REF_DIR / "Pseudomonas_aeruginosa_PAO1_107_phage.fasta"
+PA14_PHAGE_REF = REF_DIR / "Pseudomonas_aeruginosa_UCBPP-PA14_109_phage.fasta"
 
 # Location where mapping indices generated from `salmon index` are stored
-PAO1_INDEX = REF_DIR / "pao1_index"
-PA14_INDEX = REF_DIR / "pa14_index"
-PHAGE_INDEX = REF_DIR / "phage_index"
+PAO1_PHAGE_INDEX = REF_DIR / "pao1_phage_index"
+PA14_PHAGE_INDEX = REF_DIR / "pa14_phage_index"
 
 # Location where quantification results are stored from `salmon quant`
-PAO1_QUANT = NCBI_DIR / "quants_pao1"
-PA14_QUANT = NCBI_DIR / "quants_pa14"
-PHAGE_QUANT = NCBI_DIR / "quants_phage"
+PAO1_PHAGE_QUANT = NCBI_DIR / "quants_pao1_phage"
+PA14_PHAGE_QUANT = NCBI_DIR / "quants_pa14_phage"
 
 # Location of gene expression matrix to use for correlation analysis
-PAO1_GE = REF_DIR / "gene_expression_pao1_ref.tsv"
-PA14_GE = REF_DIR / "gene_expression_pa14_ref.tsv"
-PHAGE_GE = REF_DIR / "gene_expression_phage_ref.tsv"
+PAO1_PHAGE_GE = REF_DIR / "gene_expression_pao1_phage_ref.tsv"
+PA14_PHAGE_GE = REF_DIR / "gene_expression_pa14_phage_ref.tsv"
