@@ -28,3 +28,7 @@ DE_STATS_OUTPUT = DE_STATS_DIR / "DE_stats_PRJNA283002.tsv"
 # Location where raw transcriptome references downloaded from Pseudomonas.com and NCBI are stored
 REF_DIR = LOCAL_DIR / "Documents" / "Data" / "Core_accessory"
 PAO1_REF = REF_DIR / "Pseudomonas_aeruginosa_PAO1_107.ffn.gz"
+
+# Location for gene annotations from bactome, used to define core vs accessory genes
+GENE_PAO1_ANNOT = LOCAL_DATA_DIR / "PAO1_ID_2_PA14_ID_PAO1ref.csv"
+GENE_PA14_ANNOT = LOCAL_DATA_DIR / "PA14_ID_2_PAO1_ID_PA14ref.csv"
