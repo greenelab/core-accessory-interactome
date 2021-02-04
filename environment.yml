@@ -1,12 +1,13 @@
-name: core_acc
+name: core_acc_env
 channels:
 - conda-forge
 - r
 - bioconda
 dependencies:
 - r::r=3.6.0
-- r::r-stringi
+- r::r-flashClust=1.01-2
 - bioconda::blast
+- bioconda::r-wgcna=1.69
 - bioconda::sra-tools=2.10.9
 - bioconda::bioconductor-deseq2
 - bioconda::salmon=0.11.2
