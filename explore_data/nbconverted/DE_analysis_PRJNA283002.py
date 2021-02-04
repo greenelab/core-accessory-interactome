@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python
 # coding: utf-8
 
 # # Differential expression analysis
@@ -114,7 +114,7 @@ print(selected_DE_stats.shape)
 selected_DE_stats
 
 
-# In[16]:
+# In[11]:
 
 
 published_DEGs = [
@@ -136,7 +136,7 @@ published_DEGs = [
 ]
 
 
-# In[17]:
+# In[12]:
 
 
 selected_DE_stats.loc[published_DEGs]

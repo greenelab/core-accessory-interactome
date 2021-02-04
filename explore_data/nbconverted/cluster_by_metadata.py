@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python
 # coding: utf-8
 
 # # Clustering by metadata
@@ -38,8 +38,8 @@ pa14_metadata = pd.read_csv(paths_corr.PA14_METADATA, index_col=0, header=0)
 
 
 # Select meatadata variable to color by
-#metadata_variable = 'genotype'
-metadata_variable = 'processing'
+metadata_variable = 'genotype'
+#metadata_variable = 'processing'
 
 
 # In[5]:
@@ -110,7 +110,7 @@ elif metadata_variable == "processing":
 pa14_encoded_df.head()
 
 
-# In[9]:
+# In[11]:
 
 
 # Plot PAO1
@@ -135,7 +135,13 @@ fig += pn.guides(colour=pn.guide_legend(override_aes={'alpha': 1}))
 print(fig)
 
 
-# In[10]:
+# In[12]:
+
+
+fig.draw()
+
+
+# In[13]:
 
 
 # Plot PA14
@@ -162,7 +168,7 @@ print(fig)
 
 # ## Plot in UMAP
 
-# In[11]:
+# In[14]:
 
 
 # Embed expression data into low dimensional space
@@ -187,7 +193,7 @@ elif metadata_variable == "processing":
 pao1_encoded_df.head()
 
 
-# In[12]:
+# In[15]:
 
 
 # Embed expression data into low dimensional space
@@ -212,7 +218,7 @@ elif metadata_variable == "processing":
 pa14_encoded_df.head()
 
 
-# In[13]:
+# In[16]:
 
 
 # Plot PAO1
@@ -237,7 +243,7 @@ fig += pn.guides(colour=pn.guide_legend(override_aes={'alpha': 1}))
 print(fig)
 
 
-# In[14]:
+# In[17]:
 
 
 # Plot PA14
@@ -267,3 +273,5 @@ print(fig)
 # * Looks like there is a pretty clear separation between PAO1 and PA14 strains using PAO1 reference. Looks like library selection could explain some of the variance found in using the PA14 reference. 
 # 
 # * We will need to determine if this is something we will need to correct in our analysis or if these sources of variance will become noise with a larger dataset (i.e. the compendium that Georgia processed)
+# 
+# * Using raw TPM values the clustering looked like there is predominately clustering based on the biology that we care about (PAO1 vs PA14) but there is still some variance contributed by platform. For now I think TPM normalization appears sufficient for our purposes as pilot, but this may need to be revisited in the future
