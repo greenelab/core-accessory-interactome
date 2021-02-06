@@ -1,4 +1,4 @@
-name: core_acc
+name: core_acc_env
 channels:
 - conda-forge
 - r
@@ -16,6 +16,7 @@ dependencies:
 - conda-forge::pandas=0.24.2
 - conda-forge::seaborn=0.10
 - conda-forge::scipy=1.1.0
+- conda-forge::numpy=1.19.5
 - conda-forge::plotnine=0.5.1
 - conda-forge::scikit-learn
 - conda-forge::umap-learn
