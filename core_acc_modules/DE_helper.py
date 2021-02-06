@@ -2,11 +2,13 @@
 Author: Alexandra Lee
 Date Created: 18 December 2020
 
+Source code from 
+https://github.com/greenelab/generic-expression-patterns/blob/master/generic_expression_patterns_modules/DE_analysis.R
+
 This script includes functions to prepare the data to run
 DE analysis
 """
-import os
-import csv
+
 import pandas as pd
 
 

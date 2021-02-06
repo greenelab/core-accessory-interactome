@@ -4,8 +4,6 @@
 # # Clustering by metadata
 # 
 # This notebook examines how the data clusters by metadata. We would expect that the data cluster by strain type (PAO1 and PA14).
-# 
-# Other metadata?
 
 # In[1]:
 
@@ -110,7 +108,7 @@ elif metadata_variable == "processing":
 pa14_encoded_df.head()
 
 
-# In[11]:
+# In[9]:
 
 
 # Plot PAO1
@@ -135,13 +133,7 @@ fig += pn.guides(colour=pn.guide_legend(override_aes={'alpha': 1}))
 print(fig)
 
 
-# In[12]:
-
-
-fig.draw()
-
-
-# In[13]:
+# In[11]:
 
 
 # Plot PA14
@@ -168,7 +160,7 @@ print(fig)
 
 # ## Plot in UMAP
 
-# In[14]:
+# In[12]:
 
 
 # Embed expression data into low dimensional space
@@ -193,7 +185,7 @@ elif metadata_variable == "processing":
 pao1_encoded_df.head()
 
 
-# In[15]:
+# In[13]:
 
 
 # Embed expression data into low dimensional space
@@ -218,7 +210,7 @@ elif metadata_variable == "processing":
 pa14_encoded_df.head()
 
 
-# In[16]:
+# In[14]:
 
 
 # Plot PAO1
@@ -243,7 +235,7 @@ fig += pn.guides(colour=pn.guide_legend(override_aes={'alpha': 1}))
 print(fig)
 
 
-# In[17]:
+# In[15]:
 
 
 # Plot PA14

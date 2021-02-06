@@ -142,4 +142,17 @@ published_DEGs = [
 selected_DE_stats.loc[published_DEGs]
 
 
+# In[13]:
+
+
+input_DESeq_data = pd.read_csv(processed_expression_filename, sep="\t", index_col=0, header=0)
+
+input_DESeq_data[published_DEGs]
+
+
 # The differential expression results can be found in [Figure 1](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4524035/) of the paper. Spot checking it looks like the genes have consistent direction of logFC.
+# 
+# Note:
+# * NaN's occur if the samples are all 0. Need to check why PA3847 is NaN. Setting filtering to False doesn't get rid of NaNs
+# 
+# https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#why-are-some-p-values-set-to-na
