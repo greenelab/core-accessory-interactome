@@ -6,18 +6,27 @@
 
 **University of Pennsylvania**
 
+_Background_:
 
-*Motivation:*  In general, it has been suggested that *P aeruginosa* adaptive traits, like virulence, depends on both core and accessory genes. As an example, one study by [Vasquez-Rifo et. al](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1890-1) found that accessory genes are statistically associated with virulence. Another study by  [Tan et. al](https://www.pnas.org/content/pnas/96/2/715.full.pdf) found that mutant gacA genes were less virulence to *C. elegans* compared to WT, suggesting a role of the global gacA regulator in virulence. Overall, adaptive traits, like virulence, appear to be multifactorial. 
+Pseudomonas aeruginosa (or _P. aeruginosa_) is a gram negative bacteria. _P. aeruginosa_ is the most common gram-negative pathogen causing nosocomial (NO SO comial) pneumonia in the United States, and it is frequently implicated in other hospital-acquired infections like urinary tract and bloodstream infections ([ National Nosocomial Infections Surveillance System](https://academic.oup.com/cid/article/41/6/848/2022258)). In additional to its prevalence, _P. aeruginosa_ is able to develop resistance to antibiotics, which is the standard of care for these infections. Overall the predilection for _P. aeruginosa_ to cause infections in immunocompromised individuals, its extreme versatility (cause infection across different tissues) and antibiotic resistance makes _P. aeruginosa_ a major health concern.
+
+Over the years, there have been are many studies trying to understand the genetic mechanisms that drive _P. aeruginosa_ infections. Some of these studies revealed that the Pa genome was comprised of two components: core genome and an accessory genome. Core genes are those genes that are present in all strains
+While accessory genes are those that are present in at least one strain. The current paradigm is that the core genes encode essential functions shared by all strains while accessory genes encode niche-based adaptations
+
+In general, genomic analyses of pseudomonas usually separate between core genes and accessory genes. However, in general, there is evidence that both core and accessory gene expression can contribute to phenotypes. One example is Pa virulence ([Lee et. al. 2014](https://pubmed.ncbi.nlm.nih.gov/25249263/), [Fink-Barbancon et. al. 1997](https://pubmed.ncbi.nlm.nih.gov/9302017/))
+
+_Central question_: How is the expression of these gene groups coordinated to drive phenotypes of interest?
+
+To answer this central question we first need to examine the relationship between genes and function, as an intermediate step before we get to phenotype. So for this project we will focus on first answering the question: **How are functions carried out in the context of core and accessory genes?**
+
+_Hypothesis_: A common subset of core genes that will copt with accessory genes across strains
+
+_Expected Outcome_: The composition of network modules in the context of core, accessory
+
+_Significance_: If we know the composition of modules this can inform how we study functions. For example, we can build models to combine different gene groups and use these models to study phenotypes, which may reveal novel combinations of genes
 
 
-*Objective:* Given that adaptive traits, like virulence, appear to be the result of multiple genes and that both core and accessory genes contribute to these traits, we want to know what the relationship is between these two sets of genes, which is currently unclear.
-
-*Hypothesis:* Flexible genes have analogous expression with core genes than unique genes. In other words we would expect flexible and core genes to be co-expressed compared to unique and core genes. The intuition for this hypothesis was suggested by [Jiao et. al](https://www.ncbi.nlm.nih.gov/pubmed/29795552),  who found that more conserved genes are more highly connected in the co-expression network in *S. fredii* bacteria
-
-*Expected Outcome:* We expect to have define the co-expression between core and the accessory genome.   
-Knowing this information will allow us to integrate data to be able to identify possibly novel interactions instead of analyzing data in buckets. Futhermore, we can start to ask questions about the regulation pattern between core and accessory, which can further help to inform mechanisms related to *P. aeruginosa* adaptation.
-
-## To run
+## Usage
 If you want to run notebooks from core-accessory-interactome, you need to follow these steps to create a conda environment and download the necessary data.
 
 1. In the terminal execute the following steps to setup the conda environment:
@@ -36,11 +45,5 @@ pip install -e .
 ```bash
 jupyter notebook
 ```
-
-5. Navigate to `sra_experiment/` 
-
-6. Update path and filename for sra toolkit download in `1_download_process_data.ipynb` if needed 
-
-7. Run notebooks in order
 
 **WARNING: This section is a work in progress and will be updated as the project develops**
