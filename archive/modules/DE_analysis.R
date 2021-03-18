@@ -38,10 +38,10 @@ get_DE_stats_DESeq <- function(metadata_filename,
 
   # Note parameter settings:
   # `independentFilter=False`: We have turned off the automatic filtering, which
-  # filter filter out those tests from the procedure that have no, or little 
+  # filter filter out those tests from the procedure that have no, or little
   # chance of showing significant evidence, without even looking at their test statistic.
-  # Typically, this results in increased detection power at the same experiment-wide 
-  # type I error, as measured in terms of the false discovery rate. 
+  # Typically, this results in increased detection power at the same experiment-wide
+  # type I error, as measured in terms of the false discovery rate.
   # cooksCutoff=True (default): Cook's distance as a diagnostic to tell if a single sample
   # has a count which has a disproportionate impact on the log fold change and p-values.
   # These genes are flagged with an NA in the pvalue and padj columns

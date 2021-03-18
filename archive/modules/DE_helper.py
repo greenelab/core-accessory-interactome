@@ -2,7 +2,7 @@
 Author: Alexandra Lee
 Date Created: 18 December 2020
 
-Source code from 
+Source code from
 https://github.com/greenelab/generic-expression-patterns/blob/master/generic_expression_patterns_modules/DE_analysis.R
 
 This script includes functions to prepare the data to run
@@ -53,8 +53,8 @@ def process_samples_for_DESeq(
         If None then no genes will be removed.
     process_metadata_filename (optional): str
         File containing assignment for which samples to drop.
-        If None then all samples will be used. 
-    
+        If None then all samples will be used.
+
     """
 
     # Read data
@@ -103,7 +103,7 @@ def process_samples_for_DESeq(
         assert expression.index.equals(metadata_sample_ids)
 
     # Save
-    if out_expression_filename != None:
+    if out_expression_filename is not None:
         expression.to_csv(out_expression_filename, sep="\t")
     else:
         expression.to_csv(expression_filename, sep="\t")
