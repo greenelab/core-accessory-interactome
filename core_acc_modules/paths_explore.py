@@ -10,8 +10,8 @@ LOCAL_DIR = Path.home()
 LOCAL_DATA_DIR = LOCAL_DIR / "Documents" / "Data" / "Core_accessory" / "compendia_download"
 
 # Location of gene expression matrix stored locally due to size
-PAO1_GE = LOCAL_DATA_DIR / "rnaseq_compendium_cleaned.csv"
-PA14_GE = LOCAL_DATA_DIR / "TPM_pa14_cdna_k15.csv"
+PAO1_GE = LOCAL_DATA_DIR / "TPM_PAO1_cdna_k15_cleaned.csv"
+PA14_GE = LOCAL_DATA_DIR / "TPM_PA14_cdna_k15_cleaned.csv"
 
 # Location of metadata mapping sample to strain name
 SAMPLE_TO_STRAIN = LOCAL_DATA_DIR / "Run_Table_Strain_Bool_GD.csv"

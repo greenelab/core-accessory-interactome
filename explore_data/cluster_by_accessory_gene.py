@@ -21,6 +21,7 @@
 import os
 import pandas as pd
 import plotnine as pn
+import seaborn as sns
 import umap
 from sklearn.decomposition import PCA
 from core_acc_modules import paths_explore, utils
@@ -33,8 +34,9 @@ from core_acc_modules import paths_explore, utils
 # 1. _P. aeruginosa_ transcriptome data was downloaded from SRA (~4K samples)
 # 2. Aligned and quantified samples using Salmon against PAO1 and PA14 references
 # 3. Quantified results were validated by performing a differential expression analysis and comparing the DEGs against the original publication.
-# 4. Samples were removed if the average expression was below <--Ask Georgia after Monday-->
-#
+# 4. Samples were removed if:
+#     * Less than 1000 genes with 0 counts
+#     * median count <10
 # _Note:_
 # * Not sure yet where this data will permanently be stored but there are plans to share it. Currently this is being housed locally to run this analysis
 
@@ -51,9 +53,11 @@ sample_to_strain_filename = paths_explore.SAMPLE_TO_STRAIN
 # Matrices will be sample x gene after taking the transpose
 pao1_expression = pd.read_csv(pao1_expression_filename, index_col=0, header=0).T
 
-pa14_expression = pd.read_csv(
-    pa14_expression_filename, index_col=0, header=0, usecols=lambda c: c != "Unnamed: 0"
-).T
+pa14_expression = pd.read_csv(pa14_expression_filename, index_col=0, header=0).T
+
+# Drop row with gene ensembl ids
+pao1_expression.drop(["X"], inplace=True)
+pa14_expression.drop(["X"], inplace=True)
 # -
 
 print(pao1_expression.shape)
@@ -72,7 +76,7 @@ sample_to_strain_table_full.head()
 # +
 # Format expression data indices so that values can be mapped to `sample_to_strain_table`
 pao1_index_processed = pao1_expression.index.str.split(".").str[0]
-pa14_index_processed = pa14_expression.index.str.split("/").str[0]
+pa14_index_processed = pa14_expression.index.str.split(".").str[0]
 
 pao1_expression.index = pao1_index_processed
 pa14_expression.index = pa14_index_processed
@@ -460,6 +464,7 @@ print("\n\n")
 threshold = 50
 pao1_sample_ids = pao1_pa14_acc_expression_label["Strain type_pao1"] == "PAO1"
 pao1_acc_expression_label = pao1_pa14_acc_expression_label.loc[pao1_sample_ids]
+pao1_core_expression_label = pao1_pa14_core_expression_label.loc[pao1_sample_ids]
 
 print("----- Matching sample and reference statistics -------")
 pao1_acc_expression_low = pao1_acc_expression_label[
@@ -474,9 +479,16 @@ pao1_acc_expression_low = pao1_acc_expression_label[
 print(
     f"Proportion of PAO1 samples with median PAO1-only expression < {threshold}: {pao1_acc_expression_low.shape[0]/num_pao1_samples}"
 )
+pao1_core_expression_low = pao1_core_expression_label[
+    pao1_core_expression_label["median core expression_pao1"] < threshold
+]
+print(
+    f"Proportion of PAO1 samples with median core expression < {threshold}: {pao1_core_expression_low.shape[0]/num_pao1_samples}"
+)
 
 pa14_sample_ids = pao1_pa14_acc_expression_label["Strain type_pao1"] == "PA14"
 pa14_acc_expression_label = pao1_pa14_acc_expression_label.loc[pa14_sample_ids]
+pa14_core_expression_label = pao1_pa14_core_expression_label.loc[pa14_sample_ids]
 
 pa14_acc_expression_low = pa14_acc_expression_label[
     pa14_acc_expression_label["median acc expression_pa14"] == 0
@@ -489,6 +501,12 @@ pa14_acc_expression_low = pa14_acc_expression_label[
 ]
 print(
     f"Proportion of PA14 samples with median PA14-only expression < {threshold}: {pa14_acc_expression_low.shape[0]/num_pa14_samples}"
+)
+pa14_core_expression_low = pa14_core_expression_label[
+    pa14_core_expression_label["median core expression_pa14"] < threshold
+]
+print(
+    f"Proportion of PA14 samples with median core expression < {threshold}: {pa14_core_expression_low.shape[0]/num_pa14_samples}"
 )
 print("\n\n")
 
@@ -507,9 +525,45 @@ print(
 )
 # -
 
+# Examine distribution of expression of individual core genes
+# some genes that are considered "housekeeping" genes that you
+# might expect to be pretty consistently expressed at decently high levels:
+# PA1805 (ppiD), PA0576 (rpoD), PA4368 (rpsL), PA3622 (rpoS), PA3617 (recA)
+sns.distplot(pao1_pa14_core_expression_label["PA0485"])
+print(pao1_pa14_core_expression_label["PA0485"].median())
+sns.distplot(pao1_pa14_core_expression_label["PA0576"])
+print(pao1_pa14_core_expression_label["PA0576"].median())
+
+# Examine distribution of expression of individual accessory genes
+sns.distplot(pao1_pa14_acc_expression_label["PA1383"])
+print(pao1_pa14_acc_expression_label["PA1383"].median())
+sns.distplot(pao1_pa14_acc_expression_label["PA0205"])
+print(pao1_pa14_acc_expression_label["PA0205"].median())
+
+# **Takeaway:**
+# * Most samples have below 50 TPM, which is expected for accessory genes given the strong skewing toward 0
+# * As expected, PA14 samples tend to have 0 expression of PAO1-only genes. And similarly for PAO1 samples
+
 # ### Examine samples on the diagonal
 # * Curious about the samples that have expression of both PAO1 and PA14 specific genes. Mostly clinical isolates, but some PAO1 and PA14 samples.
 # * Our binning will likely remove these samples, so we just want to make sure we know who they are before we do
+
+# Get samples with high expression of both PAO1 and PA14 specific genes
+pao1_pa14_acc_expression_label[
+    (pao1_pa14_acc_expression_label["median acc expression_pao1"] > 30)
+    & (pao1_pa14_acc_expression_label["median acc expression_pa14"] > 30)
+]
+
+# About selected samples:
+# * All samples are from [Thoming et. al. publication](https://pubmed.ncbi.nlm.nih.gov/31934344/), where clinical isolates were grown in planktonic and biofilm conditions
+#
+# Not much I could find about these samples other than they are clinical isolates that seem to have acquired accessory genes from both PAO1 and PA14, which is interesting!
+
+# Get PAO1 samples with high expression of PA14 specific genes
+pao1_acc_expression_label[pao1_acc_expression_label["median acc expression_pa14"] > 10]
+
+# Get PA14 samples with high expression of PAO1 specific genes
+pa14_acc_expression_label[pa14_acc_expression_label["median acc expression_pao1"] > 10]
 
 # ### Other observations
 # * PA14 seem to have more clinical isolates
