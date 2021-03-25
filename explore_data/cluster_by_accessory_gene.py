@@ -37,6 +37,7 @@ from core_acc_modules import paths_explore, utils
 # 4. Samples were removed if:
 #     * Less than 1000 genes with 0 counts
 #     * median count <10
+#
 # _Note:_
 # * Not sure yet where this data will permanently be stored but there are plans to share it. Currently this is being housed locally to run this analysis
 
@@ -278,7 +279,7 @@ pa14_encoded_df["Strain_type"] = pa14_expression_label["Strain type"]
 # +
 # Plot PAO1
 fig = pn.ggplot(pao1_encoded_df, pn.aes(x="1", y="2"))
-fig += pn.geom_point(pn.aes(color="Strain_type"), alpha=0.5)
+fig += pn.geom_point(pn.aes(color="Strain_type"), alpha=0.3)
 fig += pn.labs(x="PC 1", y="PC 2", title="RNA-seq expression using PAO1 reference")
 fig += pn.theme_bw()
 fig += pn.theme(
@@ -298,7 +299,7 @@ print(fig)
 # +
 # Plot PAO1
 fig = pn.ggplot(pa14_encoded_df, pn.aes(x="1", y="2"))
-fig += pn.geom_point(pn.aes(color="Strain_type"), alpha=0.5)
+fig += pn.geom_point(pn.aes(color="Strain_type"), alpha=0.3)
 fig += pn.labs(x="PC 1", y="PC 2", title="RNA-seq expression using PA14 reference")
 fig += pn.theme_bw()
 fig += pn.theme(
@@ -540,6 +541,21 @@ print(pao1_pa14_acc_expression_label["PA1383"].median())
 sns.distplot(pao1_pa14_acc_expression_label["PA0205"])
 print(pao1_pa14_acc_expression_label["PA0205"].median())
 
+# Log files
+pao1_logs_filename = paths_explore.PAO1_LOGS
+pa14_logs_filename = paths_explore.PA14_LOGS
+
+pao1_logs = pd.read_csv(pao1_logs_filename, index_col=0, header=0)
+pa14_logs = pd.read_csv(pa14_logs_filename, index_col=0, header=0)
+
+pao1_logs.head()
+
+sns.distplot(pao1_logs["mapping_rate"])
+sns.distplot(pa14_logs["mapping_rate"])
+
+sns.distplot(pao1_logs["reads_mapped"])
+sns.distplot(pa14_logs["reads_mapped"])
+
 # **Takeaway:**
 # * Most samples have below 50 TPM, which is expected for accessory genes given the strong skewing toward 0
 # * As expected, PA14 samples tend to have 0 expression of PAO1-only genes. And similarly for PAO1 samples
@@ -565,7 +581,29 @@ pao1_acc_expression_label[pao1_acc_expression_label["median acc expression_pa14"
 # Get PA14 samples with high expression of PAO1 specific genes
 pa14_acc_expression_label[pa14_acc_expression_label["median acc expression_pao1"] > 10]
 
-# ### Other observations
-# * PA14 seem to have more clinical isolates
-# * PAK and PAO1 closer, is that expected?
-# * Why is range of PA14 and PAO1 different?
+# ### Summary
+# **About core gene expression**
+# * Based on expression profiles of core genes in PAO1 vs PA14 samples, there doesn't look to be a clear clustering amongst PAO1 and PA14 samples. Is this expected?
+#
+# **About accessory gene expression**
+# * PAO1 annotated samples have higher median expression of PAO1-only genes compared to PA14-only genes. And vice versa
+#     * ~97% of PA14 samples have 0 median expression of PAO1-only genes
+#     * ~97% of PAO1 samples have 0 median expression of PA14-only genes
+#
+# This is a nice positive control. This result also shows that we can anticipate a very clear binning of our samples into PAO1 and PA14 if we use mapping rates.
+#
+# **About expression levels**
+# * Overall, most samples have median expression (both core and accessory) < 50 TPM, not sure what the expected range is but this seems low.
+# * PAO1 higher median accessory expression than PA14, maybe PAO1 reference had higher mapping rates. They have similar distributions of total reads mapped and mapping rate. Are there other reasons to explain this?
+#
+# **About samples with along the diagonal**
+# * All samples are from Thoming et. al. publication, where clinical isolates were grown in planktonic and biofilm conditions. At this point I’m not sure what to say about these clinical isolates, but something that would be interesting to look into in the future.
+#
+# * PAO1 samples with high expression (>10 TPM) of PA14 specific genes
+#     * Sample names look like they might be switched: https://www.ncbi.nlm.nih.gov/sra?linkname=bioproject_sra_all&from_uid=517074
+# * PA14 samples with high expression (>10 TPM) of PAO1 specific genes
+#     * PA14 grown in blood: https://www.ncbi.nlm.nih.gov/sra/?term=SRX4326016
+#     * Some are mislabeled after checking publication: https://www.ncbi.nlm.nih.gov/sra/?term=SRX5099522, https://www.ncbi.nlm.nih.gov/sra/?term=SRX5099523, https://www.ncbi.nlm.nih.gov/sra/?term=SRX5099524
+#     * PA14 following treatment with antimicrobial manuka honey: https://www.ncbi.nlm.nih.gov/sra/?term=SRX7423386, https://www.ncbi.nlm.nih.gov/sra/?term=SRX7423388
+#
+# Based on this quick spot check, it does look like most cases where PAO1 samples with high PA14 gene expression or PA14 samples with high PAO1 expression appear to be due to mis-labelings. This supports our plans to auto-label samples based on mapping rates instead.
