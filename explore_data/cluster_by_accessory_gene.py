@@ -19,9 +19,12 @@
 # This notebook is visualizing the expression of accessory genes in the PAO1 and PA14 compendia
 
 import os
+import numpy as np
 import pandas as pd
 import plotnine as pn
 import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import MinMaxScaler
 import umap
 from sklearn.decomposition import PCA
 from core_acc_modules import paths_explore, utils
@@ -111,12 +114,12 @@ sample_to_strain_table.head()
 
 # What are the NA strains?
 print(sample_to_strain_table.shape)
+sample_to_strain_table["Strain type"].value_counts()
+
+# Most of these strains don't have strain annotation available
 na_sample_ids = list(
     sample_to_strain_table[sample_to_strain_table["Strain type"] == "NA"].index
 )
-print(len(na_sample_ids))
-
-# Most of these strains don't have strain annotation available
 sample_to_strain_table_full.loc[na_sample_ids, "Strain"].isnull().sum()
 
 # +
@@ -264,6 +267,12 @@ pao1_encoded_df = pd.DataFrame(
 # Add back label
 pao1_encoded_df["Strain_type"] = pao1_expression_label["Strain type"]
 
+# Only include PAO1 and PA14 strains
+pao1_encoded_df = pao1_encoded_df[
+    (pao1_encoded_df["Strain_type"] == "PAO1")
+    | (pao1_encoded_df["Strain_type"] == "PA14")
+]
+
 # +
 model_pa14 = pca.fit(pa14_expression_numeric)
 # model_pa14 = umap.UMAP(random_state=123).fit(pa14_expression_numeric)
@@ -275,6 +284,12 @@ pa14_encoded_df = pd.DataFrame(
 
 # Add back label
 pa14_encoded_df["Strain_type"] = pa14_expression_label["Strain type"]
+
+# Only include PAO1 and PA14 strains
+pa14_encoded_df = pa14_encoded_df[
+    (pa14_encoded_df["Strain_type"] == "PAO1")
+    | (pa14_encoded_df["Strain_type"] == "PA14")
+]
 
 # +
 # Plot PAO1
@@ -297,7 +312,7 @@ fig += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
 print(fig)
 
 # +
-# Plot PAO1
+# Plot PA14
 fig = pn.ggplot(pa14_encoded_df, pn.aes(x="1", y="2"))
 fig += pn.geom_point(pn.aes(color="Strain_type"), alpha=0.3)
 fig += pn.labs(x="PC 1", y="PC 2", title="RNA-seq expression using PA14 reference")
@@ -315,6 +330,117 @@ fig += pn.theme(
 fig += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
 
 print(fig)
+# -
+
+# #### Try normalizing the data
+
+# +
+# 0-1 normalize per gene
+scaler = MinMaxScaler()
+
+# Fitting
+normalized_pao1_expression_numeric = scaler.fit_transform(pao1_expression_numeric)
+normalized_pao1_expression_numeric_df = pd.DataFrame(
+    normalized_pao1_expression_numeric,
+    columns=pao1_expression_numeric.columns,
+    index=pao1_expression_numeric.index,
+)
+
+normalized_pa14_expression_numeric = scaler.fit_transform(pa14_expression_numeric)
+normalized_pa14_expression_numeric_df = pd.DataFrame(
+    normalized_pa14_expression_numeric,
+    columns=pa14_expression_numeric.columns,
+    index=pa14_expression_numeric.index,
+)
+
+# +
+# model_pao1 = pca.fit(normalized_pao1_expression_numeric_df)
+model_pao1 = umap.UMAP(random_state=123).fit(normalized_pao1_expression_numeric_df)
+
+normalized_pao1_encoded = model_pao1.transform(normalized_pao1_expression_numeric_df)
+
+normalized_pao1_encoded_df = pd.DataFrame(
+    data=normalized_pao1_encoded,
+    index=normalized_pao1_expression_numeric_df.index,
+    columns=["1", "2"],
+)
+
+# Add back label
+normalized_pao1_encoded_df["Strain_type"] = pao1_expression_label["Strain type"]
+
+# Only include PAO1 and PA14 strains
+normalized_pao1_encoded_df = normalized_pao1_encoded_df[
+    (normalized_pao1_encoded_df["Strain_type"] == "PAO1")
+    | (normalized_pao1_encoded_df["Strain_type"] == "PA14")
+]
+
+# +
+# model_pa14 = pca.fit(normalized_pa14_expression_numeric_df)
+model_pa14 = umap.UMAP(random_state=123).fit(normalized_pa14_expression_numeric_df)
+
+normalized_pa14_encoded = model_pa14.transform(normalized_pa14_expression_numeric_df)
+
+normalized_pa14_encoded_df = pd.DataFrame(
+    data=normalized_pa14_encoded,
+    index=normalized_pa14_expression_numeric_df.index,
+    columns=["1", "2"],
+)
+
+# Add back label
+normalized_pa14_encoded_df["Strain_type"] = pa14_expression_label["Strain type"]
+
+# Only include PAO1 and PA14 strains
+normalized_pa14_encoded_df = normalized_pa14_encoded_df[
+    (normalized_pa14_encoded_df["Strain_type"] == "PAO1")
+    | (normalized_pa14_encoded_df["Strain_type"] == "PA14")
+]
+
+# +
+# Plot PAO1
+fig = pn.ggplot(normalized_pao1_encoded_df, pn.aes(x="1", y="2"))
+fig += pn.geom_point(pn.aes(color="Strain_type"), alpha=0.3)
+fig += pn.labs(
+    x="UMAP 1", y="UMAP 2", title="Normalized RNA-seq expression using PAO1 reference"
+)
+fig += pn.theme_bw()
+fig += pn.theme(
+    legend_title_align="center",
+    plot_background=pn.element_rect(fill="white"),
+    legend_key=pn.element_rect(fill="white", colour="white"),
+    legend_title=pn.element_text(family="sans-serif", size=15),
+    legend_text=pn.element_text(family="sans-serif", size=12),
+    plot_title=pn.element_text(family="sans-serif", size=15),
+    axis_text=pn.element_text(family="sans-serif", size=12),
+    axis_title=pn.element_text(family="sans-serif", size=15),
+)
+fig += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
+
+print(fig)
+
+# +
+# Plot PA14
+fig = pn.ggplot(normalized_pa14_encoded_df, pn.aes(x="1", y="2"))
+fig += pn.geom_point(pn.aes(color="Strain_type"), alpha=0.3)
+fig += pn.labs(
+    x="UMAP 1", y="UMAP 2", title="Normalized RNA-seq expression using PA14 reference"
+)
+fig += pn.theme_bw()
+fig += pn.theme(
+    legend_title_align="center",
+    plot_background=pn.element_rect(fill="white"),
+    legend_key=pn.element_rect(fill="white", colour="white"),
+    legend_title=pn.element_text(family="sans-serif", size=15),
+    legend_text=pn.element_text(family="sans-serif", size=12),
+    plot_title=pn.element_text(family="sans-serif", size=15),
+    axis_text=pn.element_text(family="sans-serif", size=12),
+    axis_title=pn.element_text(family="sans-serif", size=15),
+)
+fig += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
+
+print(fig)
+# -
+
+# #### Plot median core expression
 
 # +
 # Plot
@@ -462,18 +588,54 @@ print(f"Number of PA14 samples if {num_pa14_samples}")
 print("\n\n")
 
 # Of those samples, how many have o or low expression?
-threshold = 50
 pao1_sample_ids = pao1_pa14_acc_expression_label["Strain type_pao1"] == "PAO1"
 pao1_acc_expression_label = pao1_pa14_acc_expression_label.loc[pao1_sample_ids]
 pao1_core_expression_label = pao1_pa14_core_expression_label.loc[pao1_sample_ids]
 
-print("----- Matching sample and reference statistics -------")
+pa14_sample_ids = pao1_pa14_acc_expression_label["Strain type_pao1"] == "PA14"
+pa14_acc_expression_label = pao1_pa14_acc_expression_label.loc[pa14_sample_ids]
+pa14_core_expression_label = pao1_pa14_core_expression_label.loc[pa14_sample_ids]
+
+
+# Create a confusion matrix-like visualization
 pao1_acc_expression_low = pao1_acc_expression_label[
     pao1_acc_expression_label["median acc expression_pao1"] == 0
 ]
-print(
-    f"Proportion of PAO1 samples with 0 median PAO1-only expression: {pao1_acc_expression_low.shape[0]/num_pao1_samples}"
+pao1_sample_pao1_acc = pao1_acc_expression_low.shape[0] / num_pao1_samples
+
+pa14_acc_expression_low = pa14_acc_expression_label[
+    pa14_acc_expression_label["median acc expression_pa14"] == 0
+]
+pa14_sample_pa14_acc = pa14_acc_expression_low.shape[0] / num_pa14_samples
+
+pa14_acc_expression_low = pa14_acc_expression_label[
+    pa14_acc_expression_label["median acc expression_pao1"] == 0
+]
+pa14_sample_pao1_acc = pa14_acc_expression_low.shape[0] / num_pa14_samples
+
+pao1_acc_expression_low = pao1_acc_expression_label[
+    pao1_acc_expression_label["median acc expression_pa14"] == 0
+]
+pao1_sample_pa14_acc = pao1_acc_expression_low.shape[0] / num_pao1_samples
+
+cf_matrix = np.array(
+    [
+        [pao1_sample_pao1_acc, pa14_sample_pao1_acc],
+        [pao1_sample_pa14_acc, pa14_sample_pa14_acc],
+    ]
 )
+
+sns.heatmap(
+    cf_matrix,
+    annot=True,
+    xticklabels=["PAO1 samples", "PA14 samples"],
+    yticklabels=["PAO1-only genes", "PA14-only genes"],
+)
+
+# +
+# Print other statistics
+threshold = 50
+print("----- Matching sample and reference statistics -------")
 pao1_acc_expression_low = pao1_acc_expression_label[
     pao1_acc_expression_label["median acc expression_pao1"] < threshold
 ]
@@ -487,16 +649,6 @@ print(
     f"Proportion of PAO1 samples with median core expression < {threshold}: {pao1_core_expression_low.shape[0]/num_pao1_samples}"
 )
 
-pa14_sample_ids = pao1_pa14_acc_expression_label["Strain type_pao1"] == "PA14"
-pa14_acc_expression_label = pao1_pa14_acc_expression_label.loc[pa14_sample_ids]
-pa14_core_expression_label = pao1_pa14_core_expression_label.loc[pa14_sample_ids]
-
-pa14_acc_expression_low = pa14_acc_expression_label[
-    pa14_acc_expression_label["median acc expression_pa14"] == 0
-]
-print(
-    f"Proportion of PA14 samples with 0 median PA14-only expression: {pa14_acc_expression_low.shape[0]/num_pa14_samples}"
-)
 pa14_acc_expression_low = pa14_acc_expression_label[
     pa14_acc_expression_label["median acc expression_pa14"] < threshold
 ]
@@ -509,22 +661,19 @@ pa14_core_expression_low = pa14_core_expression_label[
 print(
     f"Proportion of PA14 samples with median core expression < {threshold}: {pa14_core_expression_low.shape[0]/num_pa14_samples}"
 )
-print("\n\n")
-
-print("----- mis-matching sample and reference statistics -------")
-pa14_acc_expression_low = pa14_acc_expression_label[
-    pa14_acc_expression_label["median acc expression_pao1"] == 0
-]
-print(
-    f"Proportion of PA14 samples with 0 median PAO1-only expression: {pa14_acc_expression_low.shape[0]/num_pa14_samples}"
-)
-pao1_acc_expression_low = pao1_acc_expression_label[
-    pao1_acc_expression_label["median acc expression_pa14"] == 0
-]
-print(
-    f"Proportion of PAO1 samples with 0 median PA14-only expression: {pao1_acc_expression_low.shape[0]/num_pao1_samples}"
-)
 # -
+
+sns.distplot(pao1_acc_expression_label["median acc expression_pao1"])
+plt.title("distribution of median(PAO1-only genes)")
+
+sns.distplot(pao1_core_expression_label["median core expression_pao1"])
+plt.title("distribution of median(core PAO1 genes)")
+
+sns.distplot(pa14_acc_expression_label["median acc expression_pa14"])
+plt.title("distribution of median(PA14-only genes)")
+
+sns.distplot(pa14_core_expression_label["median core expression_pa14"])
+plt.title("distribution of median(core PA14 genes)")
 
 # Examine distribution of expression of individual core genes
 # some genes that are considered "housekeeping" genes that you
