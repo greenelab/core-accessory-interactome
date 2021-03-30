@@ -27,7 +27,7 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 import umap
 from sklearn.decomposition import PCA
-from core_acc_modules import paths_explore, utils
+from core_acc_modules import paths, utils
 
 # ## Load data
 #
@@ -46,11 +46,11 @@ from core_acc_modules import paths_explore, utils
 
 # +
 # Expression data files
-pao1_expression_filename = paths_explore.PAO1_GE
-pa14_expression_filename = paths_explore.PA14_GE
+pao1_expression_filename = paths.PAO1_GE
+pa14_expression_filename = paths.PA14_GE
 
 # File containing table to map sample id to strain name
-sample_to_strain_filename = paths_explore.SAMPLE_TO_STRAIN
+sample_to_strain_filename = paths.SAMPLE_TO_STRAIN
 
 # +
 # Load expression data
@@ -132,11 +132,11 @@ pao1_expression.head()
 # ## Get core and accessory genes
 
 # Get mapping between PAO1 and PA14 genes using PAO1 reference
-gene_annot_file = paths_explore.GENE_PAO1_ANNOT
+gene_annot_file = paths.GENE_PAO1_ANNOT
 gene_mapping_pao1 = utils.get_pao1_pa14_gene_map(gene_annot_file, "pao1")
 
 # Get mapping between PAO1 and PA14 genes using PA14 reference
-gene_annot_file = paths_explore.GENE_PA14_ANNOT
+gene_annot_file = paths.GENE_PA14_ANNOT
 gene_mapping_pa14 = utils.get_pao1_pa14_gene_map(gene_annot_file, "pa14")
 
 # Get core genes: genes that have a homolog between PAO1 and PA14
@@ -691,8 +691,8 @@ sns.distplot(pao1_pa14_acc_expression_label["PA0205"])
 print(pao1_pa14_acc_expression_label["PA0205"].median())
 
 # Log files
-pao1_logs_filename = paths_explore.PAO1_LOGS
-pa14_logs_filename = paths_explore.PA14_LOGS
+pao1_logs_filename = paths.PAO1_LOGS
+pa14_logs_filename = paths.PA14_LOGS
 
 pao1_logs = pd.read_csv(pao1_logs_filename, index_col=0, header=0)
 pa14_logs = pd.read_csv(pa14_logs_filename, index_col=0, header=0)
