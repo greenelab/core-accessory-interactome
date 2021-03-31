@@ -13,7 +13,7 @@
 #     name: conda-env-core_acc_env-py
 # ---
 
-# # Visualize new compendia
+# # Visualize new compendia <-- rename valdiate
 
 import os
 import pandas as pd
@@ -97,6 +97,9 @@ pao1_pa14_acc_expression_label = pao1_acc_expression.merge(
 )
 
 pao1_pa14_acc_expression_label.head()
+# -
+
+# ## ACCESSORY
 
 # +
 # Plot

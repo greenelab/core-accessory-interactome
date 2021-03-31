@@ -15,12 +15,25 @@
 
 # # Create PAO1 and PA14 compendia
 #
-# This notebook is using the thresholds from the previous notebook to bin samples into PAO1 or PA14 compendia.
+# This notebook is using the thresholds from the [previous notebook](0_decide_thresholds.ipynb) to bin samples into PAO1 or PA14 compendia.
+#
+# A sample will be PAO1 if:
+# 1. PAO1 mapping rate >= 30%
+# 2. PAO1-PA14 mapping rate > 0%
+#
+# A sample will be PA14 if:
+# 1. PA14 mapping rate >= 30%
+# 2. PA14-PAO1 mapping rate > 0%
 
 import os
 import pandas as pd
 import seaborn as sns
 from core_acc_modules import paths
+
+# Params
+mapping_threshold = 30
+mapping_threshold_pa14 = 10
+diff_mapping_threshold = 0
 
 # ## Load data
 
@@ -95,6 +108,8 @@ pao1_logs.head()
 
 pao1_expression.head()
 
+# ## TO DO: check why duplicates are appearing
+
 # +
 # Aggregate boolean labels into a single strain label
 aggregated_label = []
@@ -113,6 +128,9 @@ for exp_id in list(sample_to_strain_table_full.index):
 sample_to_strain_table_full["Strain type"] = aggregated_label
 
 sample_to_strain_table = sample_to_strain_table_full["Strain type"].to_frame()
+sample_to_strain_table = sample_to_strain_table.loc[
+    sample_to_strain_table.index.drop_duplicates()
+]
 
 sample_to_strain_table.head()
 # -
@@ -122,11 +140,17 @@ sample_to_strain_table.head()
 # * Bin samples based on threshold from previous notebook
 # * Check if there are any samples that have a high mapping to both PAO1 and PA14 (i.e. ambiguous mapping)
 
-threshold = 25
+# Add column calculating the difference in mapping rates
+pao1_logs["diff_mapping_rate"] = pao1_logs["mapping_rate"] - pa14_logs["mapping_rate"]
+pa14_logs["diff_mapping_rate"] = pa14_logs["mapping_rate"] - pao1_logs["mapping_rate"]
 
 # +
-high_pao1_mapping_ids = list(pao1_logs.query("mapping_rate>=@threshold").index)
-high_pa14_mapping_ids = list(pa14_logs.query("mapping_rate>=@threshold").index)
+high_pao1_mapping_ids = list(
+    pao1_logs.query("mapping_rate>=@mapping_threshold&diff_mapping_rate>0").index
+)
+high_pa14_mapping_ids = list(
+    pa14_logs.query("mapping_rate>=@mapping_threshold&diff_mapping_rate>0").index
+)
 
 print(len(high_pao1_mapping_ids))
 print(len(high_pa14_mapping_ids))
@@ -140,13 +164,9 @@ high_pao1_pa14_mapping_ids = list(
 print(len(high_pao1_pa14_mapping_ids))
 # -
 
-# Looks like there are many ids with high mapping rates for both PAO1 and PA14, lets look at what their mapping rates are and their SRA annotations. We suspect that these are mainly clinical and NA isolates as we saw in [exploratory analysis](https://github.com/greenelab/core-accessory-interactome/blob/master/explore_data/cluster_by_accessory_gene.ipynb)
-
-pao1_logs.loc[high_pao1_pa14_mapping_ids].head(10)
-
-pa14_logs.loc[high_pao1_pa14_mapping_ids].head(10)
-
-sample_to_strain_table.loc[high_pao1_pa14_mapping_ids]["Strain type"].value_counts()
+# **Some observations:**
+# * Looks like there are not any samples that map to both PAO1 and PA14 using our criteria
+# * The number of PA14 samples is much lower compared to PAO1. Does this mean that the mapping rates of PA14 samples mapped to PA14 reference lower?
 
 # ## Create compendia
 #
@@ -154,15 +174,26 @@ sample_to_strain_table.loc[high_pao1_pa14_mapping_ids]["Strain type"].value_coun
 
 # +
 # Get expression data
-pao1_expression_binned = pao1_expression.loc[high_pao1_mapping_ids]
-pa14_expression_binned = pa14_expression.loc[high_pa14_mapping_ids]
+# Note: reindexing needed here instead of .loc since samples from expression data
+# were filtered out for low counts, but these samples still exist in log files
+pao1_expression_binned = pao1_expression.reindex(high_pao1_mapping_ids)
+pa14_expression_binned = pa14_expression.reindex(high_pa14_mapping_ids)
+
+# Missing samples are dropped
+pao1_expression_binned = pao1_expression_binned.dropna()
+pa14_expression_binned = pa14_expression_binned.dropna()
 
 # Drop ambiguously mapped samples
-# pao1_expression_binned = pao1_expression_binned.drop(high_pao1_pa14_mapping_ids)
-# pa14_expression_binned = pa14_expression_binned.drop(high_pao1_pa14_mapping_ids)
+pao1_expression_binned = pao1_expression_binned.drop(high_pao1_pa14_mapping_ids)
+pa14_expression_binned = pa14_expression_binned.drop(high_pao1_pa14_mapping_ids)
 # -
 
+print(pao1_expression_binned.shape)
+print(pa14_expression_binned.shape)
+
 # Label samples with SRA annotations
+# pao1_expression_label = pao1_expression_binned.join(
+#    sample_to_strain_table, how='left')
 pao1_expression_label = pao1_expression_binned.merge(
     sample_to_strain_table, left_index=True, right_index=True
 )
@@ -172,10 +203,21 @@ pa14_expression_label = pa14_expression_binned.merge(
 print(pao1_expression_label.shape)
 pao1_expression_label.head()
 
-pao1_expression_label["Strain type"].value_counts()
+# +
+# pao1_expression_label[pao1_expression_label.index.duplicated(keep=False)]
+
+# +
+# sample_to_strain_table[sample_to_strain_table.index.duplicated(keep=False)]
+# -
 
 print(pa14_expression_label.shape)
 pa14_expression_label.head()
+
+# ## Quick comparison
+#
+# Quick check comparing our binned labels compared with SRA annotations
+
+pao1_expression_label["Strain type"].value_counts()
 
 pa14_expression_label["Strain type"].value_counts()
 
