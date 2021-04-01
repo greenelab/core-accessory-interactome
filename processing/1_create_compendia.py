@@ -25,6 +25,8 @@
 # 1. PA14 mapping rate >= 30%
 # 2. PA14-PAO1 mapping rate > 0%
 
+# %load_ext autoreload
+# %autoreload 2
 import os
 import pandas as pd
 import seaborn as sns
@@ -32,8 +34,9 @@ from core_acc_modules import paths
 
 # Params
 mapping_threshold = 30
-mapping_threshold_pa14 = 10
-diff_mapping_threshold = 0
+diff_mapping_threshold = 2
+diff_mapping_threshold_min = 0
+diff_mapping_threshold_max = 2
 
 # ## Load data
 
@@ -108,29 +111,43 @@ pao1_logs.head()
 
 pao1_expression.head()
 
-# ## TO DO: check why duplicates are appearing
+# Save pre-binned expression data
+pao1_expression.to_csv(paths.PAO1_PREBIN_COMPENDIUM, sep="\t")
+pa14_expression.to_csv(paths.PA14_PREBIN_COMPENDIUM, sep="\t")
+
+# +
+# Since experiments have multiple runs there are duplicated experiment ids in the index
+# We will need to remove these so that the count calculations are accurate
+sample_to_strain_table_full_processed = sample_to_strain_table_full[
+    ~sample_to_strain_table_full.index.duplicated(keep="first")
+]
+
+assert (
+    len(sample_to_strain_table_full.index.unique())
+    == sample_to_strain_table_full_processed.shape[0]
+)
 
 # +
 # Aggregate boolean labels into a single strain label
 aggregated_label = []
-for exp_id in list(sample_to_strain_table_full.index):
-    if sample_to_strain_table_full.loc[exp_id, "PAO1"].all() == True:
+for exp_id in list(sample_to_strain_table_full_processed.index):
+    if sample_to_strain_table_full_processed.loc[exp_id, "PAO1"].all() == True:
         aggregated_label.append("PAO1")
-    elif sample_to_strain_table_full.loc[exp_id, "PA14"].all() == True:
+    elif sample_to_strain_table_full_processed.loc[exp_id, "PA14"].all() == True:
         aggregated_label.append("PA14")
-    elif sample_to_strain_table_full.loc[exp_id, "PAK"].all() == True:
+    elif sample_to_strain_table_full_processed.loc[exp_id, "PAK"].all() == True:
         aggregated_label.append("PAK")
-    elif sample_to_strain_table_full.loc[exp_id, "ClinicalIsolate"].all() == True:
+    elif (
+        sample_to_strain_table_full_processed.loc[exp_id, "ClinicalIsolate"].all()
+        == True
+    ):
         aggregated_label.append("Clinical Isolate")
     else:
         aggregated_label.append("NA")
 
-sample_to_strain_table_full["Strain type"] = aggregated_label
+sample_to_strain_table_full_processed["Strain type"] = aggregated_label
 
-sample_to_strain_table = sample_to_strain_table_full["Strain type"].to_frame()
-sample_to_strain_table = sample_to_strain_table.loc[
-    sample_to_strain_table.index.drop_duplicates()
-]
+sample_to_strain_table = sample_to_strain_table_full_processed["Strain type"].to_frame()
 
 sample_to_strain_table.head()
 # -
@@ -146,11 +163,22 @@ pa14_logs["diff_mapping_rate"] = pa14_logs["mapping_rate"] - pao1_logs["mapping_
 
 # +
 high_pao1_mapping_ids = list(
-    pao1_logs.query("mapping_rate>=@mapping_threshold&diff_mapping_rate>0").index
+    pao1_logs.query(
+        "mapping_rate>=@mapping_threshold&diff_mapping_rate>@diff_mapping_threshold"
+    ).index
 )
 high_pa14_mapping_ids = list(
-    pa14_logs.query("mapping_rate>=@mapping_threshold&diff_mapping_rate>0").index
+    pa14_logs.query(
+        "mapping_rate>=@mapping_threshold&diff_mapping_rate>@diff_mapping_threshold"
+    ).index
 )
+
+"""high_pao1_mapping_ids = list(
+    pao1_logs.query("mapping_rate>=@mapping_threshold&diff_mapping_rate>@diff_mapping_threshold_min&diff_mapping_rate<@diff_mapping_threshold_max").index
+)
+high_pa14_mapping_ids = list(
+    pa14_logs.query("mapping_rate>=@mapping_threshold&diff_mapping_rate>@diff_mapping_threshold_min&diff_mapping_rate<@diff_mapping_threshold_max").index
+)"""
 
 print(len(high_pao1_mapping_ids))
 print(len(high_pa14_mapping_ids))
@@ -203,13 +231,6 @@ pa14_expression_label = pa14_expression_binned.merge(
 print(pao1_expression_label.shape)
 pao1_expression_label.head()
 
-# +
-# pao1_expression_label[pao1_expression_label.index.duplicated(keep=False)]
-
-# +
-# sample_to_strain_table[sample_to_strain_table.index.duplicated(keep=False)]
-# -
-
 print(pa14_expression_label.shape)
 pa14_expression_label.head()
 
@@ -223,12 +244,12 @@ pa14_expression_label["Strain type"].value_counts()
 
 # +
 # Save compendia with label
-pao1_expression_label.to_csv(paths.PAO1_COMPENDIUM_LABEL)
-pa14_expression_label.to_csv(paths.PA14_COMPENDIUM_LABEL)
+pao1_expression_label.to_csv(paths.PAO1_COMPENDIUM_LABEL, sep="\t")
+pa14_expression_label.to_csv(paths.PA14_COMPENDIUM_LABEL, sep="\t")
 
 # Save compendia without label
-pao1_expression_binned.to_csv(paths.PAO1_COMPENDIUM)
-pa14_expression_binned.to_csv(paths.PA14_COMPENDIUM)
+pao1_expression_binned.to_csv(paths.PAO1_COMPENDIUM, sep="\t")
+pa14_expression_binned.to_csv(paths.PA14_COMPENDIUM, sep="\t")
 
 # Save metadata table
-sample_to_strain_table.to_csv(paths.SAMPLE_TO_STRAIN_PROCESSED)
+sample_to_strain_table.to_csv(paths.SAMPLE_TO_STRAIN_PROCESSED, sep="\t")

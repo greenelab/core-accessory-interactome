@@ -25,6 +25,10 @@ GENE_PA14_ANNOT = LOCAL_DATA_DIR / "PA14_ID_2_PAO1_ID_PA14ref.csv"
 PAO1_LOGS = LOCAL_DATA_DIR / "logs_pao1_cdna_k15.csv"
 PA14_LOGS = LOCAL_DATA_DIR / "logs_pa14_cdna_k15.csv"
 
+# Location for pre-binned compendia files
+PAO1_PREBIN_COMPENDIUM = LOCAL_DATA_DIR / "pao1_prebin_compendia.tsv"
+PA14_PREBIN_COMPENDIUM = LOCAL_DATA_DIR / "pa14_prebin_compendia.tsv"
+
 # Location for processed compendia files
 PAO1_COMPENDIUM_LABEL = LOCAL_DATA_DIR / "pao1_compendia_labeled.tsv"
 PA14_COMPENDIUM_LABEL = LOCAL_DATA_DIR / "pa14_compendia_labeled.tsv"
