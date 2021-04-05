@@ -20,6 +20,8 @@
 import os
 import pandas as pd
 import plotnine as pn
+import seaborn as sns
+from textwrap import fill
 from sklearn.preprocessing import MinMaxScaler
 import umap
 import matplotlib.pyplot as plt
@@ -198,6 +200,118 @@ print(fig2)
 # Each point is a sample.
 #
 # If we binned our samples accurately then for samples within our binned PAO1 compendium, we expect that samples will align along the PAO1-only axis. Similarly, for samples within our binned PA14 compendium, we expect that samples will align along the PA14-axis.
+
+# ## Check
+#
+# What is the mapping rate for those mis-classified samples (i.e. those samples that are binned as PAO1 but have high PA14 accessory expression)?
+
+# +
+# Get misclassified samples
+pao1_mislabeled_sample_ids = list(
+    pao1_pa14_acc_pao1_compendium_label[
+        pao1_pa14_acc_pao1_compendium_label["median acc expression_pa14"] > 0
+    ].index
+)
+
+pa14_mislabeled_sample_ids = list(
+    pao1_pa14_acc_pa14_compendium_label[
+        pao1_pa14_acc_pa14_compendium_label["median acc expression_pao1"] > 0
+    ].index
+)
+
+# +
+# Log files
+pao1_logs_filename = paths.PAO1_LOGS
+pa14_logs_filename = paths.PA14_LOGS
+
+# Load log files
+pao1_logs = pd.read_csv(pao1_logs_filename, index_col=0, header=0)
+pa14_logs = pd.read_csv(pa14_logs_filename, index_col=0, header=0)
+
+# +
+# Format log indices so that values can be mapped to expression data
+pao1_index_processed = pao1_logs.index.str.split("/").str[-1]
+pa14_index_processed = pa14_logs.index.str.split("/").str[-1]
+
+print(f"No. of samples processed using PAO1 reference: {pao1_logs.shape[0]}")
+print(f"No. of samples processed using PA14 reference: {pa14_logs.shape[0]}")
+pao1_logs.index = pao1_index_processed
+pa14_logs.index = pa14_index_processed
+
+# +
+# Plot distribution of mapping rates to PAO1 and PA14
+
+# Set up the matplotlib figure
+fig, axes = plt.subplots(ncols=2, nrows=1, figsize=(8, 4))
+
+# Distribution plot for core genes
+sns.distplot(
+    pao1_logs.loc[pao1_mislabeled_sample_ids, "mapping_rate"],
+    label="PAO1 mapping rate of misclassified samples",
+    color="red",
+    kde=False,
+    ax=axes[0],
+)
+
+sns.distplot(
+    pa14_logs.loc[pao1_mislabeled_sample_ids, "mapping_rate"],
+    label="PA14 mapping rate of misclassified samples",
+    color="blue",
+    kde=False,
+    ax=axes[1],
+)
+
+plt.suptitle(
+    fill("Distribution of mapping rates of misclassified PAO1 samples", width=40),
+    x=0.5,
+    y=1.2,
+    fontsize=16,
+)
+axes[0].set_title(fill("PAO1 mapping rate", width=20))
+axes[1].set_title(fill("PA14 mapping rate", width=20))
+axes[0].set_xlabel("")
+axes[1].set_xlabel("")
+fig.text(0.5, 0.01, "Mapping rate", ha="center", fontsize=14)
+fig.text(0.01, 0.5, "Count", ha="center", rotation=90, fontsize=14)
+
+# +
+# Plot distribution of mapping rates to PAO1 and PA14
+
+# Set up the matplotlib figure
+fig, axes = plt.subplots(ncols=2, nrows=1, figsize=(8, 4))
+
+# Distribution plot for core genes
+sns.distplot(
+    pao1_logs.loc[pa14_mislabeled_sample_ids, "mapping_rate"],
+    label="PAO1 mapping rate of misclassified samples",
+    color="red",
+    kde=False,
+    ax=axes[0],
+)
+
+sns.distplot(
+    pa14_logs.loc[pa14_mislabeled_sample_ids, "mapping_rate"],
+    label="PA14 mapping rate of misclassified samples",
+    color="blue",
+    kde=False,
+    ax=axes[1],
+)
+
+plt.suptitle(
+    fill("Distribution of mapping rates of misclassified PA14 samples", width=40),
+    x=0.5,
+    y=1.2,
+    fontsize=16,
+)
+axes[0].set_title(fill("PAO1 mapping rate", width=20))
+axes[1].set_title(fill("PA14 mapping rate", width=20))
+axes[0].set_xlabel("")
+axes[1].set_xlabel("")
+fig.text(0.5, 0.01, "Mapping rate", ha="center", fontsize=14)
+fig.text(0.01, 0.5, "Count", ha="center", rotation=90, fontsize=14)
+# -
+
+# Looks like the misclassified samples have fairly high mapping rates to PAO1 and PA14 references. They are not just around the threshold set.
 
 # ## Core plots
 
@@ -467,3 +581,86 @@ print(fig6)
 # -
 
 # Samples appear to cluster together. Would have expected more separation between PAO1 and PA14 using core gene expression.
+
+# ## Check
+#
+# We would have expected most of the variance in the expression data to be due to difference in strain type. Instead we see that most samples cluster together despite different strain types. Let's look at the metadata associated with these samples.
+
+# +
+# File containing table to map sample id to strain name
+sample_to_strain_filename = paths.SAMPLE_TO_STRAIN
+
+# Load metadata
+# Set index to experiment id, which is what we will use to map to expression data
+sample_to_strain_table_full = pd.read_csv(sample_to_strain_filename, index_col=2)
+# -
+
+# Since experiments have multiple runs there are duplicated experiment ids in the index
+# We will need to remove these so that the count calculations are accurate
+sample_to_strain_table_full_processed = sample_to_strain_table_full[
+    ~sample_to_strain_table_full.index.duplicated(keep="first")
+]
+
+# +
+# Add study id as a label
+pao1_compendium_ids = list(normalized_pao1_core_encoded_df.index)
+pa14_compendium_ids = list(normalized_pa14_core_encoded_df.index)
+
+normalized_pao1_core_encoded_df["study id"] = list(
+    sample_to_strain_table_full_processed.loc[pao1_compendium_ids, "SRA_study"].values
+)
+normalized_pa14_core_encoded_df["study id"] = list(
+    sample_to_strain_table_full_processed.loc[pa14_compendium_ids, "SRA_study"].values
+)
+# -
+
+normalized_pao1_core_encoded_df.head()
+
+normalized_pa14_core_encoded_df.head()
+
+# +
+# Plot core gene expression in PA14 reference
+fig7 = pn.ggplot(normalized_pao1_core_encoded_df, pn.aes(x="1", y="2"))
+fig7 += pn.geom_point(pn.aes(color="study id"), alpha=0.3)
+fig7 += pn.labs(
+    x="UMAP 1", y="UMAP 2", title="Normalized RNA-seq expression using PA14 reference"
+)
+fig7 += pn.theme_bw()
+fig7 += pn.theme(
+    legend_title_align="center",
+    plot_background=pn.element_rect(fill="white"),
+    legend_key=pn.element_rect(fill="white", colour="white"),
+    legend_title=pn.element_text(family="sans-serif", size=15),
+    legend_text=pn.element_text(family="sans-serif", size=12),
+    plot_title=pn.element_text(family="sans-serif", size=15),
+    axis_text=pn.element_text(family="sans-serif", size=12),
+    axis_title=pn.element_text(family="sans-serif", size=15),
+)
+fig7 += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
+
+print(fig7)
+
+# +
+# Plot core gene expression in PA14 reference
+fig8 = pn.ggplot(normalized_pa14_core_encoded_df, pn.aes(x="1", y="2"))
+fig8 += pn.geom_point(pn.aes(color="study id"), alpha=0.3)
+fig8 += pn.labs(
+    x="UMAP 1", y="UMAP 2", title="Normalized RNA-seq expression using PA14 reference"
+)
+fig8 += pn.theme_bw()
+fig8 += pn.theme(
+    legend_title_align="center",
+    plot_background=pn.element_rect(fill="white"),
+    legend_key=pn.element_rect(fill="white", colour="white"),
+    legend_title=pn.element_text(family="sans-serif", size=15),
+    legend_text=pn.element_text(family="sans-serif", size=12),
+    plot_title=pn.element_text(family="sans-serif", size=15),
+    axis_text=pn.element_text(family="sans-serif", size=12),
+    axis_title=pn.element_text(family="sans-serif", size=15),
+)
+fig8 += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
+
+print(fig8)
+# -
+
+# There are a lot of study ids so its a little hard to see what is happening, but overall it looks like there is clsutering based on study id. I'm still not clear on why there is not more of a separation in the expression data for strain type, but perhaps this will become more clear later.

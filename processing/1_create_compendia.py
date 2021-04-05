@@ -21,6 +21,8 @@
 # 1. PAO1 mapping rate >= 30%
 # 2. PAO1-PA14 mapping rate > 0%
 #
+# Note: if the difference in mapping rate is 0 then the same maps equally well to a PAO1 and PA14 reference. Here we looking for samples that preferentially map to PAO1.
+#
 # A sample will be PA14 if:
 # 1. PA14 mapping rate >= 30%
 # 2. PA14-PAO1 mapping rate > 0%
@@ -30,6 +32,8 @@
 import os
 import pandas as pd
 import seaborn as sns
+from textwrap import fill
+import matplotlib.pyplot as plt
 from core_acc_modules import paths
 
 # Params
@@ -241,6 +245,61 @@ pa14_expression_label.head()
 pao1_expression_label["Strain type"].value_counts()
 
 pa14_expression_label["Strain type"].value_counts()
+
+# ## Checks
+#
+# We noticed that the number of PA14 binned samples is much lower compared to the number of PAO1 samples. Let's look at the distribution of mapping rates for SRA annotated PAO1 and PA14 samples
+
+# +
+# Get SRA annotated sample ids
+sra_pao1_sample_ids = list(
+    sample_to_strain_table[sample_to_strain_table["Strain type"] == "PAO1"].index
+)
+sra_pa14_sample_ids = list(
+    sample_to_strain_table[sample_to_strain_table["Strain type"] == "PA14"].index
+)
+
+print(len(sra_pao1_sample_ids))
+print(len(sra_pa14_sample_ids))
+
+# +
+# Plot distribution of mapping rates to PAO1 and PA14
+
+# Set up the matplotlib figure
+fig, axes = plt.subplots(ncols=2, nrows=1, figsize=(8, 4))
+
+# Distribution plot for core genes
+sns.distplot(
+    pao1_logs.loc[sra_pao1_sample_ids, "mapping_rate"],
+    label="PAO1 (SRA annotated) mapping rate",
+    color="red",
+    kde=False,
+    ax=axes[0],
+)
+
+sns.distplot(
+    pa14_logs.loc[sra_pa14_sample_ids, "mapping_rate"],
+    label="PA14 (SRA annotated) mapping rate",
+    color="blue",
+    kde=False,
+    ax=axes[1],
+)
+
+plt.suptitle(
+    fill("Distribution of mapping rates (SRA annotated)", width=40),
+    x=0.5,
+    y=1,
+    fontsize=16,
+)
+axes[0].set_title(fill("PAO1 mapping rate", width=20))
+axes[1].set_title(fill("PA14 mapping rate", width=20))
+axes[0].set_xlabel("")
+axes[1].set_xlabel("")
+fig.text(0.5, 0.01, "Mapping rate", ha="center", fontsize=14)
+fig.text(0.01, 0.5, "Count", ha="center", rotation=90, fontsize=14)
+# -
+
+# Looks like there are fewer PA14 samples with high PA14 mapping, which explains why we see such a reduced number of PA14 binned samples. We may need to used different thresholds for PAO1 and PA14.
 
 # +
 # Save compendia with label
