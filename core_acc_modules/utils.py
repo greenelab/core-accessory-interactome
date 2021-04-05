@@ -10,7 +10,7 @@ import gzip
 from Bio import SeqIO
 
 
-def get_pao1_pa14_gene_map(gene_annotation_file, reference_genotype):
+def get_pao1_pa14_gene_map(gene_annotation_filename, reference_genotype):
     """
     Returns file mapping PAO1 gene ids to PA14 ids and label which genes are core and
     the number of genes that are mapped
@@ -34,7 +34,7 @@ def get_pao1_pa14_gene_map(gene_annotation_file, reference_genotype):
     ], "Reference genotype string needs to be either pao1 or pa14"
 
     # Read gene annotation
-    gene_mapping = pd.read_csv(gene_annotation_file, sep=",", header=0)
+    gene_mapping = pd.read_csv(gene_annotation_filename, sep=",", header=0)
 
     reference_id = "PAO1_ID" if reference_genotype.lower() == "pao1" else "PA14_ID"
     non_reference_id = "PA14_ID" if reference_genotype.lower() == "pao1" else "PAO1_ID"
@@ -127,6 +127,70 @@ def get_core_genes(pao1_ref_mapping_df, pa14_ref_mapping_df, is_mapping_1_1):
     return pao1_core_genes, pa14_core_genes
 
 
+def get_my_core_acc_genes(pao1_annotation_filename, pa14_annotation_filename, my_expression_pao1_df, my_expression_pa14_df):
+    """
+    Returns lists of core and accessory genes in your dataset
+    using both PAO1 and PA14 reference genotypes
+
+    pao1_annotation_file: str
+        File containing mapping between PAO1 and PA14 gene ids downloaded from
+        BACTOME annotation tool: https://pseudomonas-annotator.shinyapps.io/pa_annotator/
+
+        Columns: PAO1_ID,Name,Product.Name,PA14_ID
+
+    pa14_annotation_file: str
+        File containing mapping between PA14 and PAO1 gene ids downloaded from
+        BACTOME annotation tool: https://pseudomonas-annotator.shinyapps.io/pa_annotator/
+
+        Columns: PA14_ID,Name,Product.Name,PAO1_ID
+
+    my_expression_pao1_df: dataframe
+        Gene expression dataframe aligned using PAO1 reference
+
+    my_expression_pa14_df: dataframe
+        Gene expression dataframe aligned using PA14 reference
+    """
+    # Get mapping between PAO1 and PA14 genes using PAO1 and PA14 references
+    gene_mapping_pao1 = get_pao1_pa14_gene_map(pao1_annotation_filename, "pao1")
+    gene_mapping_pa14 = get_pao1_pa14_gene_map(pa14_annotation_filename, "pa14")
+
+    # Get core genes: genes that have a homolog between PAO1 and PA14
+    core_pao1_genes, core_pa14_genes = get_core_genes(
+        gene_mapping_pao1,
+        gene_mapping_pa14,
+        False
+    )
+
+    print(f"Number of PAO1 core genes: {len(core_pao1_genes)}")
+    print(f"Number of PA14 core genes: {len(core_pa14_genes)}")
+
+    # Select only core genes that are included in my dataset
+    pao1_ref_genes = my_expression_pao1_df.columns
+    my_core_pao1_genes = list(set(core_pao1_genes).intersection(pao1_ref_genes))
+
+    print(f"Number of PAO1 core genes in my dataset: {len(my_core_pao1_genes)}")
+
+    # Select only core genes that are included in my dataset
+    pa14_ref_genes = my_expression_pa14_df.columns
+    my_core_pa14_genes = list(set(core_pa14_genes).intersection(pa14_ref_genes))
+
+    print(f"Number of PA14 core genes in my dataset: {len(my_core_pa14_genes)}")
+
+    # Get PAO1-specific genes
+    pao1_acc = list(set(pao1_ref_genes) - set(my_core_pao1_genes))
+    print(f"Number of PAO1-specific genes: {len(pao1_acc)}")
+
+    # Get PA14-specific genes
+    pa14_acc = list(set(pa14_ref_genes) - set(my_core_pa14_genes))
+    print(f"Number of PA14-specific genes: {len(pa14_acc)}")
+
+    return {"core_pao1": my_core_pao1_genes,
+            "core_pa14": my_core_pa14_genes,
+            "acc_pao1": pao1_acc,
+            "acc_pa14": pa14_acc
+            }
+
+
 def get_sample_grps(sample_annot_file):
     """
     Returns list of sample ids that are PAO1 and PA14 samples based on
@@ -157,7 +221,7 @@ def dict_gene_num_to_ids(fasta_file):
     Arguments
     ----------
     fasta_file: str
-        Reference transcriptome file 
+        Reference transcriptome file
     """
 
     seq_id_to_gene_id = {}
