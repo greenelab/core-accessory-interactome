@@ -139,14 +139,14 @@ pao1_pa14_acc_pa14_compendium_label = pa14_acc_pa14_compendium.merge(
 pao1_pa14_acc_pa14_compendium_label.head()
 # -
 
+"Strain type_pao1" in pao1_pa14_acc_pa14_compendium_label.columns
+
 # ## Accessory plots
 
 # +
 # Plot accessory gene expression in PAO1 compendium
 fig1 = pn.ggplot(
-    pao1_pa14_acc_pao1_compendium_label[
-        pao1_pa14_acc_pao1_compendium_label["Strain type_pao1"] != "PAO1"
-    ],
+    pao1_pa14_acc_pao1_compendium_label,
     pn.aes(x="median acc expression_pao1", y="median acc expression_pa14"),
 )
 fig1 += pn.geom_point(pn.aes(color="Strain type_pao1"), alpha=0.2)
@@ -202,11 +202,50 @@ print(fig2)
 # Each point is a sample.
 #
 # If we binned our samples accurately then for samples within our binned PAO1 compendium, we expect that samples will align along the PAO1-only axis. Similarly, for samples within our binned PA14 compendium, we expect that samples will align along the PA14-axis.
+
+# ## Check
 #
-# **What should we do about other strain types included? What effect will they have given their expression profiles are similar to those that are PAO1?**
-# * We can remove clinical isolates by increasing the PA14 threshold since most look like they're clustered at the bottom
-# * Similarly for non-PAO1 strains in PAO1 compendium.
-# * How high of a threshold would you want to use here?
+# What is the distribution of median accessory gene expression look like for PAO1 binned but non-PAO1 SRA labeled samples compared to PAO1 binned and PAO1 SRA labeled samples? Looks like the non-PAO1 labeled samples may be clustered at the bottom of the distribution. Similarly for PA14 binned samples.
+#
+# Should we filter out samples with low median PAO1 accessory gene expression? There was already filtering for low expression counts in the Salmon processing step to ensure that we are getting "real" expression.
+#
+# Based on the distribution, I increased the threshold used to bin samples.
+#
+# See visualization results using a threshold of median accessory expression > 0: [PR#20](https://github.com/greenelab/core-accessory-interactome/pull/20)
+#
+# New visualization results using a threshold of median accessory expression > 10 can be seen below. Looks like the distribution is more similar
+
+# +
+# Get PAO1 samples that are labeled PAO1 and non-PAO1
+pao1_binned_pao1_sra = pao1_pa14_acc_pao1_compendium_label.loc[
+    pao1_pa14_acc_pao1_compendium_label["Strain type_pao1"] == "PAO1",
+    "median acc expression_pao1",
+]
+
+pao1_binned_non_pao1_sra = pao1_pa14_acc_pao1_compendium_label.loc[
+    pao1_pa14_acc_pao1_compendium_label["Strain type_pao1"] != "PAO1",
+    "median acc expression_pao1",
+]
+# -
+
+sns.distplot(pao1_binned_pao1_sra, color="grey")
+sns.distplot(pao1_binned_non_pao1_sra, color="blue")
+
+# +
+# Get PAO1 samples that are labeled PAO1 and non-PAO1
+pa14_binned_pa14_sra = pao1_pa14_acc_pa14_compendium_label.loc[
+    pao1_pa14_acc_pa14_compendium_label["Strain type_pa14"] == "PA14",
+    "median acc expression_pa14",
+]
+
+pa14_binned_non_pa14_sra = pao1_pa14_acc_pa14_compendium_label.loc[
+    pao1_pa14_acc_pa14_compendium_label["Strain type_pa14"] != "PA14",
+    "median acc expression_pa14",
+]
+# -
+
+sns.distplot(pa14_binned_pa14_sra, color="grey")
+sns.distplot(pa14_binned_non_pa14_sra, color="blue")
 
 # ## Core plots
 

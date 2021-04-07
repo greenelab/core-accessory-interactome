@@ -127,14 +127,14 @@ pao1_pa14_acc_expression.head()
 # Find PAO1 samples
 pao1_binned_ids = list(
     pao1_pa14_acc_expression.query(
-        "median_acc_expression_pao1>0 & median_acc_expression_pa14==0"
+        "median_acc_expression_pao1>10 & median_acc_expression_pa14==0"
     ).index
 )
 
 # Find PA14 samples
 pa14_binned_ids = list(
     pao1_pa14_acc_expression.query(
-        "median_acc_expression_pao1==0 & median_acc_expression_pa14>0"
+        "median_acc_expression_pao1==0 & median_acc_expression_pa14>10"
     ).index
 )
 
@@ -225,6 +225,10 @@ pa14_expression_label.head()
 assert pao1_expression_binned.shape[0] == pao1_expression_label.shape[0]
 assert pa14_expression_binned.shape[0] == pa14_expression_label.shape[0]
 
+sample_to_strain_table["Strain type"].value_counts()
+
+# Looks like our binned compendium sizes is fairly close in number to what SRA annotates
+
 # ## Quick comparison
 #
 # Quick check comparing our binned labels compared with SRA annotations
@@ -235,6 +239,33 @@ pao1_expression_label["Strain type"].value_counts()
 # * Clinical ones can be removed by increasing threshold
 
 pa14_expression_label["Strain type"].value_counts()
+
+# ## Check
+#
+# Manually look up the samples we binned as PAO1 but SRA labeled as PA14. Are these cases of samples being mislabeled?
+
+pao1_expression_label[pao1_expression_label["Strain type"] == "PA14"]
+
+# Note: These are the 7 PA14 labeled samples using threshold of 0
+#
+# Most samples appear to be mislabeled:
+# * SRX5099522: https://www.ncbi.nlm.nih.gov/sra/?term=SRX5099522
+# * SRX5099523: https://www.ncbi.nlm.nih.gov/sra/?term=SRX5099523
+# * SRX5099524: https://www.ncbi.nlm.nih.gov/sra/?term=SRX5099524
+# * SRX5290921: https://www.ncbi.nlm.nih.gov/sra/?term=SRX5290921
+# * SRX5290922: https://www.ncbi.nlm.nih.gov/sra/?term=SRX5290922
+#
+# Two samples appear to be PA14 samples treated with antimicrobial manuka honey.
+# * SRX7423386: https://www.ncbi.nlm.nih.gov/sra/?term=SRX7423386
+# * SRX7423388: https://www.ncbi.nlm.nih.gov/sra/?term=SRX7423388
+
+pa14_label_pao1_binned_ids = list(
+    pao1_expression_label[pao1_expression_label["Strain type"] == "PA14"].index
+)
+pao1_pa14_acc_expression.loc[
+    pa14_label_pao1_binned_ids,
+    ["median_acc_expression_pao1", "median_acc_expression_pa14"],
+]
 
 # +
 # Save compendia with SRA label
