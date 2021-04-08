@@ -54,12 +54,6 @@ pa14_expression_prebin = pd.read_csv(
 sra_annotation = pd.read_csv(sra_annotation_filename, sep="\t", index_col=0, header=0)
 # -
 
-# Output filenames
-pao1_tpm_filename = "TPM_median_acc_expression_pao1_compendium_10threshold.svg"
-pa14_tpm_filename = "TPM_median_acc_expression_pa14_compendium_10threshold.svg"
-pao1_dist_filename = "dist_median_acc_expression_pao1_compendium_10threshold.svg"
-pa14_dist_filename = "dist_median_acc_expression_pa14_compendium_10threshold.svg"
-
 # ## Get core and accessory annotations
 
 # +
@@ -145,8 +139,6 @@ pao1_pa14_acc_pa14_compendium_label = pa14_acc_pa14_compendium.merge(
 pao1_pa14_acc_pa14_compendium_label.head()
 # -
 
-"Strain type_pao1" in pao1_pa14_acc_pa14_compendium_label.columns
-
 # ## Accessory plots
 
 # +
@@ -155,7 +147,7 @@ fig1 = pn.ggplot(
     pao1_pa14_acc_pao1_compendium_label,
     pn.aes(x="median acc expression_pao1", y="median acc expression_pa14"),
 )
-fig1 += pn.geom_point(pn.aes(color="Strain type_pao1"), alpha=0.2)
+fig1 += pn.geom_point(pn.aes(color="Strain type_pao1"), alpha=0.4)
 fig1 += pn.labs(
     x="median expression of PAO1-only genes (TPM)",
     y="median expression of PA14-only genes (TPM)",
@@ -175,8 +167,6 @@ fig1 += pn.theme(
 fig1 += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
 
 print(fig1)
-
-fig1.save(filename=pao1_tpm_filename, format="svg", dpi=300)
 
 # +
 # Plot accessory gene expression in PA14 compendium
@@ -204,8 +194,6 @@ fig2 += pn.theme(
 fig2 += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
 
 print(fig2)
-
-fig1.save(filename=pa14_tpm_filename, format="svg", dpi=300)
 # -
 
 # These plots are showing the median expression of PAO1 genes (PAO1 accessory genes) on the x-axis and the median expression of PA14-only genes (PA14 accessory genes) on the y-axis.
@@ -215,52 +203,115 @@ fig1.save(filename=pa14_tpm_filename, format="svg", dpi=300)
 
 # ## Check
 #
-# What is the distribution of median accessory gene expression look like for PAO1 binned but non-PAO1 SRA labeled samples compared to PAO1 binned and PAO1 SRA labeled samples? Looks like the non-PAO1 labeled samples may be clustered at the bottom of the distribution. Similarly for PA14 binned samples.
-#
-# Should we filter out samples with low median PAO1 accessory gene expression? There was already filtering for low expression counts in the Salmon processing step to ensure that we are getting "real" expression.
-#
-# Based on the distribution, I increased the threshold used to bin samples.
-#
-# See visualization results using a threshold of median accessory expression > 0: [PR#20](https://github.com/greenelab/core-accessory-interactome/pull/20)
-#
-# New visualization results using a threshold of median accessory expression > 10 can be seen below. Looks like the distribution is more similar
+# What is the mapping rate for those mis-classified samples (i.e. those samples that are binned as PAO1 but have high PA14 accessory expression)?
 
 # +
-# Get PAO1 samples that are labeled PAO1 and non-PAO1
-pao1_binned_pao1_sra = pao1_pa14_acc_pao1_compendium_label.loc[
-    pao1_pa14_acc_pao1_compendium_label["Strain type_pao1"] == "PAO1",
-    "median acc expression_pao1",
-]
+# Get misclassified samples
+pao1_mislabeled_sample_ids = list(
+    pao1_pa14_acc_pao1_compendium_label[
+        pao1_pa14_acc_pao1_compendium_label["median acc expression_pa14"] > 0
+    ].index
+)
 
-pao1_binned_non_pao1_sra = pao1_pa14_acc_pao1_compendium_label.loc[
-    pao1_pa14_acc_pao1_compendium_label["Strain type_pao1"] != "PAO1",
-    "median acc expression_pao1",
-]
-
-# +
-f = sns.distplot(pao1_binned_pao1_sra, color="grey")
-f = sns.distplot(pao1_binned_non_pao1_sra, color="blue")
-
-f.figure.savefig(pao1_dist_filename, format="svg", dpi=300)
+pa14_mislabeled_sample_ids = list(
+    pao1_pa14_acc_pa14_compendium_label[
+        pao1_pa14_acc_pa14_compendium_label["median acc expression_pao1"] > 0
+    ].index
+)
 
 # +
-# Get PAO1 samples that are labeled PAO1 and non-PAO1
-pa14_binned_pa14_sra = pao1_pa14_acc_pa14_compendium_label.loc[
-    pao1_pa14_acc_pa14_compendium_label["Strain type_pa14"] == "PA14",
-    "median acc expression_pa14",
-]
+# Log files
+pao1_logs_filename = paths.PAO1_LOGS
+pa14_logs_filename = paths.PA14_LOGS
 
-pa14_binned_non_pa14_sra = pao1_pa14_acc_pa14_compendium_label.loc[
-    pao1_pa14_acc_pa14_compendium_label["Strain type_pa14"] != "PA14",
-    "median acc expression_pa14",
-]
+# Load log files
+pao1_logs = pd.read_csv(pao1_logs_filename, index_col=0, header=0)
+pa14_logs = pd.read_csv(pa14_logs_filename, index_col=0, header=0)
 
 # +
-g = sns.distplot(pa14_binned_pa14_sra, color="grey")
-g = sns.distplot(pa14_binned_non_pa14_sra, color="blue")
+# Format log indices so that values can be mapped to expression data
+pao1_index_processed = pao1_logs.index.str.split("/").str[-1]
+pa14_index_processed = pa14_logs.index.str.split("/").str[-1]
 
-g.figure.savefig(pa14_dist_filename, format="svg", dpi=300)
+print(f"No. of samples processed using PAO1 reference: {pao1_logs.shape[0]}")
+print(f"No. of samples processed using PA14 reference: {pa14_logs.shape[0]}")
+pao1_logs.index = pao1_index_processed
+pa14_logs.index = pa14_index_processed
+
+# +
+# Plot distribution of mapping rates to PAO1 and PA14
+
+# Set up the matplotlib figure
+fig, axes = plt.subplots(ncols=2, nrows=1, figsize=(8, 4))
+
+# Distribution plot for core genes
+sns.distplot(
+    pao1_logs.loc[pao1_mislabeled_sample_ids, "mapping_rate"],
+    label="PAO1 mapping rate of misclassified samples",
+    color="red",
+    kde=False,
+    ax=axes[0],
+)
+
+sns.distplot(
+    pa14_logs.loc[pao1_mislabeled_sample_ids, "mapping_rate"],
+    label="PA14 mapping rate of misclassified samples",
+    color="blue",
+    kde=False,
+    ax=axes[1],
+)
+
+plt.suptitle(
+    fill("Distribution of mapping rates of misclassified PAO1 samples", width=40),
+    x=0.5,
+    y=1.2,
+    fontsize=16,
+)
+axes[0].set_title(fill("PAO1 mapping rate", width=20))
+axes[1].set_title(fill("PA14 mapping rate", width=20))
+axes[0].set_xlabel("")
+axes[1].set_xlabel("")
+fig.text(0.5, 0.01, "Mapping rate", ha="center", fontsize=14)
+fig.text(0.01, 0.5, "Count", ha="center", rotation=90, fontsize=14)
+
+# +
+# Plot distribution of mapping rates to PAO1 and PA14
+
+# Set up the matplotlib figure
+fig, axes = plt.subplots(ncols=2, nrows=1, figsize=(8, 4))
+
+# Distribution plot for core genes
+sns.distplot(
+    pao1_logs.loc[pa14_mislabeled_sample_ids, "mapping_rate"],
+    label="PAO1 mapping rate of misclassified samples",
+    color="red",
+    kde=False,
+    ax=axes[0],
+)
+
+sns.distplot(
+    pa14_logs.loc[pa14_mislabeled_sample_ids, "mapping_rate"],
+    label="PA14 mapping rate of misclassified samples",
+    color="blue",
+    kde=False,
+    ax=axes[1],
+)
+
+plt.suptitle(
+    fill("Distribution of mapping rates of misclassified PA14 samples", width=40),
+    x=0.5,
+    y=1.2,
+    fontsize=16,
+)
+axes[0].set_title(fill("PAO1 mapping rate", width=20))
+axes[1].set_title(fill("PA14 mapping rate", width=20))
+axes[0].set_xlabel("")
+axes[1].set_xlabel("")
+fig.text(0.5, 0.01, "Mapping rate", ha="center", fontsize=14)
+fig.text(0.01, 0.5, "Count", ha="center", rotation=90, fontsize=14)
 # -
+
+# Looks like the misclassified samples have fairly high mapping rates to PAO1 and PA14 references. They are not just around the threshold set.
 
 # ## Core plots
 
@@ -529,9 +580,7 @@ fig6 += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
 print(fig6)
 # -
 
-# * Samples appear to cluster together. Would have expected more separation between PAO1 and PA14 using core gene expression.
-#
-# * We also notice that the non-PAO1 and non-PA14 strains fall within the distribution of PAO1 and PA14, so we feel ok retaining them in our analysis (i.e. they shouldn't be outliers when we compare core and accessory gene expression profiles).
+# Samples appear to cluster together. Would have expected more separation between PAO1 and PA14 using core gene expression.
 
 # ## Check
 #

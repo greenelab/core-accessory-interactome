@@ -534,6 +534,8 @@ fig3 += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
 
 print(fig3)
 
+fig3.save("TPM_accessory_genes_all_samples.svg", format="svg", dpi=300)
+
 # +
 # Plot log-scaled
 fig4 = pn.ggplot(

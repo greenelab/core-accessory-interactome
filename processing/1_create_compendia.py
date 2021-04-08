@@ -15,17 +15,10 @@
 
 # # Create PAO1 and PA14 compendia
 #
-# This notebook is using the thresholds from the [previous notebook](0_decide_thresholds.ipynb) to bin samples into PAO1 or PA14 compendia.
+# This notebook is using the observation from the [exploratory notebook](../explore_data/cluster_by_accessory_gene.ipynb) to bin samples into PAO1 or PA14 compendia.
 #
-# A sample will be PAO1 if:
-# 1. PAO1 mapping rate >= 30%
-# 2. PAO1-PA14 mapping rate > 0%
-#
-# Note: if the difference in mapping rate is 0 then the same maps equally well to a PAO1 and PA14 reference. Here we looking for samples that preferentially map to PAO1.
-#
-# A sample will be PA14 if:
-# 1. PA14 mapping rate >= 30%
-# 2. PA14-PAO1 mapping rate > 0%
+# A sample is considered PAO1 if the median gene expression of PA14 accessory genes is 0 and PAO1 accessory genes in > 0.
+# Similarlty, a sample is considered PA14 if the median gene expression of PA14 accessory genes is > 0 and PAO1 accessory genes in 0.
 
 # %load_ext autoreload
 # %autoreload 2
@@ -34,21 +27,11 @@ import pandas as pd
 import seaborn as sns
 from textwrap import fill
 import matplotlib.pyplot as plt
-from core_acc_modules import paths
-
-# Params
-mapping_threshold = 30
-diff_mapping_threshold = 2
-diff_mapping_threshold_min = 0
-diff_mapping_threshold_max = 2
+from core_acc_modules import paths, utils
 
 # ## Load data
 
 # +
-# Log files
-pao1_logs_filename = paths.PAO1_LOGS
-pa14_logs_filename = paths.PA14_LOGS
-
 # Expression data files
 pao1_expression_filename = paths.PAO1_GE
 pa14_expression_filename = paths.PA14_GE
@@ -57,10 +40,6 @@ pa14_expression_filename = paths.PA14_GE
 sample_to_strain_filename = paths.SAMPLE_TO_STRAIN
 
 # +
-# Load log files
-pao1_logs = pd.read_csv(pao1_logs_filename, index_col=0, header=0)
-pa14_logs = pd.read_csv(pa14_logs_filename, index_col=0, header=0)
-
 # Load expression data
 # Matrices will be sample x gene after taking the transpose
 pao1_expression = pd.read_csv(pao1_expression_filename, index_col=0, header=0).T
@@ -70,31 +49,29 @@ pa14_expression = pd.read_csv(pa14_expression_filename, index_col=0, header=0).T
 # Drop row with gene ensembl ids
 pao1_expression.drop(["X"], inplace=True)
 pa14_expression.drop(["X"], inplace=True)
+# -
 
 # Load metadata
 # Set index to experiment id, which is what we will use to map to expression data
 sample_to_strain_table_full = pd.read_csv(sample_to_strain_filename, index_col=2)
-# -
 
-sample_to_strain_table_full.head()
-
-pao1_logs.head()
-
-pao1_expression.head()
-
-# ## Format data
-#
-# Format index to only include experiment id. This will be used to map to expression data and labels
+# ## Get core and accessory annotations
 
 # +
-# Format log indices so that values can be mapped to expression data
-pao1_index_processed = pao1_logs.index.str.split("/").str[-1]
-pa14_index_processed = pa14_logs.index.str.split("/").str[-1]
+pao1_annot_filename = paths.GENE_PAO1_ANNOT
+pa14_annot_filename = paths.GENE_PA14_ANNOT
 
-print(f"No. of samples processed using PAO1 reference: {pao1_logs.shape[0]}")
-print(f"No. of samples processed using PA14 reference: {pa14_logs.shape[0]}")
-pao1_logs.index = pao1_index_processed
-pa14_logs.index = pa14_index_processed
+core_acc_dict = utils.get_my_core_acc_genes(
+    pao1_annot_filename, pa14_annot_filename, pao1_expression, pa14_expression
+)
+# -
+
+pao1_acc = core_acc_dict["acc_pao1"]
+pa14_acc = core_acc_dict["acc_pa14"]
+
+# ## Format expression data
+#
+# Format index to only include experiment id. This will be used to map to expression data and SRA labels later
 
 # +
 # Format expression data indices so that values can be mapped to `sample_to_strain_table`
@@ -111,13 +88,64 @@ pao1_expression.index = pao1_index_processed
 pa14_expression.index = pa14_index_processed
 # -
 
-pao1_logs.head()
-
 pao1_expression.head()
+
+pa14_expression.head()
 
 # Save pre-binned expression data
 pao1_expression.to_csv(paths.PAO1_PREBIN_COMPENDIUM, sep="\t")
 pa14_expression.to_csv(paths.PA14_PREBIN_COMPENDIUM, sep="\t")
+
+# ## Bin samples as PAO1 or PA14
+
+# +
+# Create accessory df
+# accessory gene ids | median accessory expression | strain label
+
+# PAO1
+pao1_acc_expression = pao1_expression[pao1_acc]
+pao1_acc_expression["median_acc_expression"] = pao1_acc_expression.median(axis=1)
+
+# PA14
+pa14_acc_expression = pa14_expression[pa14_acc]
+pa14_acc_expression["median_acc_expression"] = pa14_acc_expression.median(axis=1)
+
+pao1_acc_expression.head()
+
+# +
+# Merge PAO1 and PA14 accessory dataframes
+pao1_pa14_acc_expression = pao1_acc_expression.merge(
+    pa14_acc_expression,
+    left_index=True,
+    right_index=True,
+    suffixes=["_pao1", "_pa14"],
+)
+
+pao1_pa14_acc_expression.head()
+# -
+
+# Find PAO1 samples
+pao1_binned_ids = list(
+    pao1_pa14_acc_expression.query(
+        "median_acc_expression_pao1>10 & median_acc_expression_pa14==0"
+    ).index
+)
+
+# Find PA14 samples
+pa14_binned_ids = list(
+    pao1_pa14_acc_expression.query(
+        "median_acc_expression_pao1==0 & median_acc_expression_pa14>10"
+    ).index
+)
+
+# +
+# Check that there are no samples that are binned as both PAO1 and PA14
+shared_pao1_pa14_binned_ids = list(set(pao1_binned_ids).intersection(pa14_binned_ids))
+
+assert len(shared_pao1_pa14_binned_ids) == 0
+# -
+
+# ## Format SRA annotations
 
 # +
 # Since experiments have multiple runs there are duplicated experiment ids in the index
@@ -156,72 +184,18 @@ sample_to_strain_table = sample_to_strain_table_full_processed["Strain type"].to
 sample_to_strain_table.head()
 # -
 
-# ## Bin samples as PAO1 or PA14
-#
-# * Bin samples based on threshold from previous notebook
-# * Check if there are any samples that have a high mapping to both PAO1 and PA14 (i.e. ambiguous mapping)
-
-# Add column calculating the difference in mapping rates
-pao1_logs["diff_mapping_rate"] = pao1_logs["mapping_rate"] - pa14_logs["mapping_rate"]
-pa14_logs["diff_mapping_rate"] = pa14_logs["mapping_rate"] - pao1_logs["mapping_rate"]
-
-# +
-high_pao1_mapping_ids = list(
-    pao1_logs.query(
-        "mapping_rate>=@mapping_threshold&diff_mapping_rate>@diff_mapping_threshold"
-    ).index
-)
-high_pa14_mapping_ids = list(
-    pa14_logs.query(
-        "mapping_rate>=@mapping_threshold&diff_mapping_rate>@diff_mapping_threshold"
-    ).index
-)
-
-"""high_pao1_mapping_ids = list(
-    pao1_logs.query("mapping_rate>=@mapping_threshold&diff_mapping_rate>@diff_mapping_threshold_min&diff_mapping_rate<@diff_mapping_threshold_max").index
-)
-high_pa14_mapping_ids = list(
-    pa14_logs.query("mapping_rate>=@mapping_threshold&diff_mapping_rate>@diff_mapping_threshold_min&diff_mapping_rate<@diff_mapping_threshold_max").index
-)"""
-
-print(len(high_pao1_mapping_ids))
-print(len(high_pa14_mapping_ids))
-
-# +
-# Check if any ids have high mapping rate for both PAO1 and PA14
-high_pao1_pa14_mapping_ids = list(
-    set(high_pao1_mapping_ids).intersection(high_pa14_mapping_ids)
-)
-
-print(len(high_pao1_pa14_mapping_ids))
-# -
-
-# **Some observations:**
-# * Looks like there are not any samples that map to both PAO1 and PA14 using our criteria
-# * The number of PA14 samples is much lower compared to PAO1. Does this mean that the mapping rates of PA14 samples mapped to PA14 reference lower?
-
 # ## Create compendia
 #
 # Create PAO1 and PA14 compendia
 
-# +
 # Get expression data
 # Note: reindexing needed here instead of .loc since samples from expression data
 # were filtered out for low counts, but these samples still exist in log files
-pao1_expression_binned = pao1_expression.reindex(high_pao1_mapping_ids)
-pa14_expression_binned = pa14_expression.reindex(high_pa14_mapping_ids)
+pao1_expression_binned = pao1_expression.loc[pao1_binned_ids]
+pa14_expression_binned = pa14_expression.loc[pa14_binned_ids]
 
-# Missing samples are dropped
-pao1_expression_binned = pao1_expression_binned.dropna()
-pa14_expression_binned = pa14_expression_binned.dropna()
-
-# Drop ambiguously mapped samples
-pao1_expression_binned = pao1_expression_binned.drop(high_pao1_pa14_mapping_ids)
-pa14_expression_binned = pa14_expression_binned.drop(high_pao1_pa14_mapping_ids)
-# -
-
-print(pao1_expression_binned.shape)
-print(pa14_expression_binned.shape)
+assert len(pao1_binned_ids) == pao1_expression_binned.shape[0]
+assert len(pa14_binned_ids) == pa14_expression_binned.shape[0]
 
 # Label samples with SRA annotations
 # pao1_expression_label = pao1_expression_binned.join(
@@ -238,77 +212,59 @@ pao1_expression_label.head()
 print(pa14_expression_label.shape)
 pa14_expression_label.head()
 
+assert pao1_expression_binned.shape[0] == pao1_expression_label.shape[0]
+assert pa14_expression_binned.shape[0] == pa14_expression_label.shape[0]
+
+sample_to_strain_table["Strain type"].value_counts()
+
+# Looks like our binned compendium sizes is fairly close in number to what SRA annotates
+
 # ## Quick comparison
 #
 # Quick check comparing our binned labels compared with SRA annotations
 
 pao1_expression_label["Strain type"].value_counts()
 
+# **Manually check that these PA14 are mislabeled**
+# * Clinical ones can be removed by increasing threshold
+
 pa14_expression_label["Strain type"].value_counts()
 
-# ## Checks
+# ## Check
 #
-# We noticed that the number of PA14 binned samples is much lower compared to the number of PAO1 samples. Let's look at the distribution of mapping rates for SRA annotated PAO1 and PA14 samples
+# Manually look up the samples we binned as PAO1 but SRA labeled as PA14. Are these cases of samples being mislabeled?
+
+pao1_expression_label[pao1_expression_label["Strain type"] == "PA14"]
+
+# Note: These are the 7 PA14 labeled samples using threshold of 0
+#
+# Most samples appear to be mislabeled:
+# * SRX5099522: https://www.ncbi.nlm.nih.gov/sra/?term=SRX5099522
+# * SRX5099523: https://www.ncbi.nlm.nih.gov/sra/?term=SRX5099523
+# * SRX5099524: https://www.ncbi.nlm.nih.gov/sra/?term=SRX5099524
+# * SRX5290921: https://www.ncbi.nlm.nih.gov/sra/?term=SRX5290921
+# * SRX5290922: https://www.ncbi.nlm.nih.gov/sra/?term=SRX5290922
+#
+# Two samples appear to be PA14 samples treated with antimicrobial manuka honey.
+# * SRX7423386: https://www.ncbi.nlm.nih.gov/sra/?term=SRX7423386
+# * SRX7423388: https://www.ncbi.nlm.nih.gov/sra/?term=SRX7423388
+
+pa14_label_pao1_binned_ids = list(
+    pao1_expression_label[pao1_expression_label["Strain type"] == "PA14"].index
+)
+pao1_pa14_acc_expression.loc[
+    pa14_label_pao1_binned_ids,
+    ["median_acc_expression_pao1", "median_acc_expression_pa14"],
+]
 
 # +
-# Get SRA annotated sample ids
-sra_pao1_sample_ids = list(
-    sample_to_strain_table[sample_to_strain_table["Strain type"] == "PAO1"].index
-)
-sra_pa14_sample_ids = list(
-    sample_to_strain_table[sample_to_strain_table["Strain type"] == "PA14"].index
-)
-
-print(len(sra_pao1_sample_ids))
-print(len(sra_pa14_sample_ids))
-
-# +
-# Plot distribution of mapping rates to PAO1 and PA14
-
-# Set up the matplotlib figure
-fig, axes = plt.subplots(ncols=2, nrows=1, figsize=(8, 4))
-
-# Distribution plot for core genes
-sns.distplot(
-    pao1_logs.loc[sra_pao1_sample_ids, "mapping_rate"],
-    label="PAO1 (SRA annotated) mapping rate",
-    color="red",
-    kde=False,
-    ax=axes[0],
-)
-
-sns.distplot(
-    pa14_logs.loc[sra_pa14_sample_ids, "mapping_rate"],
-    label="PA14 (SRA annotated) mapping rate",
-    color="blue",
-    kde=False,
-    ax=axes[1],
-)
-
-plt.suptitle(
-    fill("Distribution of mapping rates (SRA annotated)", width=40),
-    x=0.5,
-    y=1,
-    fontsize=16,
-)
-axes[0].set_title(fill("PAO1 mapping rate", width=20))
-axes[1].set_title(fill("PA14 mapping rate", width=20))
-axes[0].set_xlabel("")
-axes[1].set_xlabel("")
-fig.text(0.5, 0.01, "Mapping rate", ha="center", fontsize=14)
-fig.text(0.01, 0.5, "Count", ha="center", rotation=90, fontsize=14)
-# -
-
-# Looks like there are fewer PA14 samples with high PA14 mapping, which explains why we see such a reduced number of PA14 binned samples. We may need to used different thresholds for PAO1 and PA14.
-
-# +
-# Save compendia with label
+# Save compendia with SRA label
 pao1_expression_label.to_csv(paths.PAO1_COMPENDIUM_LABEL, sep="\t")
 pa14_expression_label.to_csv(paths.PA14_COMPENDIUM_LABEL, sep="\t")
 
-# Save compendia without label
+# Save compendia without SRA label
 pao1_expression_binned.to_csv(paths.PAO1_COMPENDIUM, sep="\t")
 pa14_expression_binned.to_csv(paths.PA14_COMPENDIUM, sep="\t")
 
-# Save metadata table
+# Save processed metadata table
 sample_to_strain_table.to_csv(paths.SAMPLE_TO_STRAIN_PROCESSED, sep="\t")
