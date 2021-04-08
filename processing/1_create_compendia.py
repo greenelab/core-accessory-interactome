@@ -188,21 +188,11 @@ sample_to_strain_table.head()
 #
 # Create PAO1 and PA14 compendia
 
-# +
 # Get expression data
 # Note: reindexing needed here instead of .loc since samples from expression data
 # were filtered out for low counts, but these samples still exist in log files
 pao1_expression_binned = pao1_expression.loc[pao1_binned_ids]
 pa14_expression_binned = pa14_expression.loc[pa14_binned_ids]
-
-"""# Missing samples are dropped
-pao1_expression_binned = pao1_expression_binned.dropna()
-pa14_expression_binned = pa14_expression_binned.dropna()
-
-# Drop ambiguously mapped samples
-pao1_expression_binned = pao1_expression_binned.drop(high_pao1_pa14_mapping_ids)
-pa14_expression_binned = pa14_expression_binned.drop(high_pao1_pa14_mapping_ids)"""
-# -
 
 assert len(pao1_binned_ids) == pao1_expression_binned.shape[0]
 assert len(pa14_binned_ids) == pa14_expression_binned.shape[0]

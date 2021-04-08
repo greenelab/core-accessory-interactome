@@ -54,6 +54,12 @@ pa14_expression_prebin = pd.read_csv(
 sra_annotation = pd.read_csv(sra_annotation_filename, sep="\t", index_col=0, header=0)
 # -
 
+# Output filenames
+pao1_tpm_filename = "TPM_median_acc_expression_pao1_compendium_10threshold.svg"
+pa14_tpm_filename = "TPM_median_acc_expression_pa14_compendium_10threshold.svg"
+pao1_dist_filename = "dist_median_acc_expression_pao1_compendium_10threshold.svg"
+pa14_dist_filename = "dist_median_acc_expression_pa14_compendium_10threshold.svg"
+
 # ## Get core and accessory annotations
 
 # +
@@ -170,6 +176,8 @@ fig1 += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
 
 print(fig1)
 
+fig1.save(filename=pao1_tpm_filename, format="svg", dpi=300)
+
 # +
 # Plot accessory gene expression in PA14 compendium
 fig2 = pn.ggplot(
@@ -196,6 +204,8 @@ fig2 += pn.theme(
 fig2 += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
 
 print(fig2)
+
+fig1.save(filename=pa14_tpm_filename, format="svg", dpi=300)
 # -
 
 # These plots are showing the median expression of PAO1 genes (PAO1 accessory genes) on the x-axis and the median expression of PA14-only genes (PA14 accessory genes) on the y-axis.
@@ -226,10 +236,12 @@ pao1_binned_non_pao1_sra = pao1_pa14_acc_pao1_compendium_label.loc[
     pao1_pa14_acc_pao1_compendium_label["Strain type_pao1"] != "PAO1",
     "median acc expression_pao1",
 ]
-# -
 
-sns.distplot(pao1_binned_pao1_sra, color="grey")
-sns.distplot(pao1_binned_non_pao1_sra, color="blue")
+# +
+f = sns.distplot(pao1_binned_pao1_sra, color="grey")
+f = sns.distplot(pao1_binned_non_pao1_sra, color="blue")
+
+f.figure.savefig(pao1_dist_filename, format="svg", dpi=300)
 
 # +
 # Get PAO1 samples that are labeled PAO1 and non-PAO1
@@ -242,10 +254,13 @@ pa14_binned_non_pa14_sra = pao1_pa14_acc_pa14_compendium_label.loc[
     pao1_pa14_acc_pa14_compendium_label["Strain type_pa14"] != "PA14",
     "median acc expression_pa14",
 ]
-# -
 
-sns.distplot(pa14_binned_pa14_sra, color="grey")
-sns.distplot(pa14_binned_non_pa14_sra, color="blue")
+# +
+g = sns.distplot(pa14_binned_pa14_sra, color="grey")
+g = sns.distplot(pa14_binned_non_pa14_sra, color="blue")
+
+g.figure.savefig(pa14_dist_filename, format="svg", dpi=300)
+# -
 
 # ## Core plots
 
@@ -514,7 +529,9 @@ fig6 += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
 print(fig6)
 # -
 
-# Samples appear to cluster together. Would have expected more separation between PAO1 and PA14 using core gene expression.
+# * Samples appear to cluster together. Would have expected more separation between PAO1 and PA14 using core gene expression.
+#
+# * We also notice that the non-PAO1 and non-PA14 strains fall within the distribution of PAO1 and PA14, so we feel ok retaining them in our analysis (i.e. they shouldn't be outliers when we compare core and accessory gene expression profiles).
 
 # ## Check
 #
