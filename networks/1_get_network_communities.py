@@ -50,50 +50,62 @@ print(pa14_compendium.shape)
 pa14_compendium.head()
 
 # ## Make adjacency matrix
-#
-# * Start with similarity matrix, S = [s_ij] = |cor(i,j)| \in [0,1] which represents the concordance between gene expression profiles for gene i and j.
-# * The adjacency matrix, A = [a_ij]  encodes the strength of the connection between gene i and j.
-# * For 'hard thresholding' a_ij = 1 if s_ij >= threshold, else 0.
-# * For 'soft thresholding' a_ij = |s_ij|^\beta . --
-#     * Beta is chosen based on 2 criteria.
-#     * 1) To get a network follows a scale free topology
-#     * Scale-free topology is defined by a network where the probability that a node is connected with k other node (the degree distribution p(k) of a network) decays as a power law p(k) ~ k^(-x)
-#     * This is what the “Weighted” in the name refers to -- using a weighted adjacency matrix, where the co-expression similarity is raised to a power
-#     * 2) Maintain a high number of connections
-# * Here we’re using a hard threshold cutoff
-# * We can select different correlation function, default is Pearson.
 
 # Get perason correlation
+# This correlation matrix will represent the concordance
+# between two gene expression profiles
 pao1_corr = pao1_compendium.corr()
 pa14_corr = pa14_compendium.corr()
 
 pao1_corr.head()
 
 # Create adjacency matrix using threshold defined above
-pao1_adj = (pao1_corr >= corr_threshold).astype(int)
-pa14_adj = (pa14_corr >= corr_threshold).astype(int)
+# The adjacency matrix will determine the strength of the connection between two genes
+# If the concordance is strong enough (i.e. above the threshold), then
+# the genes are connected by an edge
+pao1_adj = (pao1_corr.abs() >= corr_threshold).astype(float)
+pa14_adj = (pa14_corr.abs() >= corr_threshold).astype(float)
 
 pao1_adj.head()
 
+# +
+# Save
+# pao1_adj_filename = os.path.join(paths.LOCAL_DATA_DIR, f"pao1_adj_threshold_{corr_threshold}.tsv")
+# pao1_adj.to_csv(pao1_adj_filename, sep="\t")
+# -
+
 # ## Module detection
 # Detect modules. Get membership of genes that are closely related based on adjacency matrix (Function: `TOMsimilarity`)
-# * First we need to calculate the topological overlap measure (TOM)
-# * The topological overlap of two nodes reflects their similarity in terms of the commonality of the nodes they connect to
-# * We can group genes into modules based on their shared connections using clustering -- we’ll probably start with hierarchical clustering
+#
+# * First we need to calculate the topological overlap measure (TOM). The topological overlap of two nodes reflects their similarity in terms of the commonality of the nodes they connect to. What is the input and output???
+#
+# * We can group genes into modules based on their shared connections using clustering. What is the input and output of clustering???
 
 # + language="R"
 # library("WGCNA")
 
-# + magic_args="-i pao1_adj -o tom_similarity" language="R"
+# + magic_args="-i pao1_adj -o TOMdis" language="R"
 #
-# print(head(pao1_adj))
-# tom_similarity = TOMsimilarity(pao1_adj)
+# pao1_adj_mat <- as.matrix(pao1_adj)
+# print(is.numeric(pao1_adj_mat))
+#
+# # Similarity based on adjacency
+# TOMsim <- TOMsimilarity(pao1_adj_mat)
+# TOMdis <- 1-TOMsim
+#
+# mode(TOMdis) <- "integer"
+#
+# # clustering
+# modules <- hclust(TOMdis)
 
 # +
 # TO DO
-# # 1-TOMsim?
-# # hclust(1-TOMsim)?
 # cutTreeDynamic to get modules from htree?
+
+# Format output
 # Get community membership for a single threshold
 # Format and save output to have columns: gene_id | group_id
+
+# Organize and clean
 # Organize script to be able to run for multiple different thresholds as a script and save membership
+# Add comments on what each step is doing
