@@ -31,15 +31,30 @@ from core_acc_modules import paths
 from rpy2.robjects import pandas2ri
 
 pandas2ri.activate()
+# -
+
+# ## Set user parameters
+#
+# For now we will vary the correlation threshold (`corr_threshold`) but keep the other parameters consistent
+#
+# We will run this notebook for each threshold parameter
 
 # +
 # Params
-corr_threshold = 0.9
+corr_threshold = 0.5
 
-# params for hclust?
+# Params for hclust
+# clustering_method is the distance metric used to determine if clusters should be merged
+# https://en.wikipedia.org/wiki/Hierarchical_clustering
+clustering_method = "average"
 
-# params for cutreeDynamic
-minModuleSize = 30
+# Params for cutreeDynamic
+# minimum cluster size
+min_cluster_size = 30
+
+# The higher the value (or if TRUE), the more and smaller clusters will be produced
+deep_split = 2
+
 
 # Output files
 pao1_membership_filename = f"pao1_membership_{corr_threshold}.tsv"
@@ -88,23 +103,25 @@ pao1_adj.head()
 # To detect modules, we want to look for genes that are closely related based on the adjacency matrix (i.e. genes that have similar connections)
 #
 # First we need to calculate the topological overlap measure (TOM) using [TOMsimilarity](https://rdrr.io/cran/WGCNA/man/TOMsimilarity.html). The topological overlap of two nodes reflects their similarity in terms of the commonality of the nodes they connect to.
+#
 # * input: adjacency matrix (square symmetric matrix with 0 and 1 entries)
 # * output: matrix holding the topological overlap. For an unweighted network, topological overlap = 1 if node _i_ and _j_ are linked and the neighbors of the node _i_ is connected to all of the neighbors of node _j_. Topological overlap = 0 if node _i_ and _j_ are unlinked and the two nodes have no common neighbors.
 #
-# Next, we need to cluster based on this information. For now, we will use heirarchal clustering, [hclust](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/hclust) to identify communities. A community is a group of genes with shared connections.
-# * input: lower triangle matrix of a distance matrix. In this case we measure the distance between rows (i.e. genes) in the dissimilarity matrix provided.
-# * output: What does hclust return? Why do we need the cutreeDynamic function?
-# * params which ones do we want to vary???
+# Next, we need to cluster based on this information. For now, we will use heirarchal clustering, [hclust](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/hclust) to identify communities. A community is a group of genes with shared connections. This function performs a hierarchical cluster analysis using a set of dissimilarities for the n objects being clustered. Initially, each object is assigned to its own cluster and then the algorithm proceeds iteratively, at each stage joining the two most similar clusters, continuing until there is just a single cluster. At each stage distances between clusters are recomputed by the Lance–Williams dissimilarity update formula according to the particular clustering method being used.
 #
-# Finally we need to use [cutreeDynamic](https://rdrr.io/cran/dynamicTreeCut/man/cutreeDynamic.html) to identify modules based on hclust output.
+#
+# * input: lower triangle matrix of a distance matrix. In this case we measure the distance between rows (i.e. genes) in the dissimilarity matrix provided.
+# * output: hclust object which describes the [tree](https://en.wikipedia.org/wiki/Dendrogram) produced by the clustering process.
+#
+# Finally we need to use [cutreeDynamic](https://rdrr.io/cran/dynamicTreeCut/man/cutreeDynamic.html) to identify modules based on hclust output (tree). Cutting the tree at a given height will give a partitioning clustering at a selected precision.
+#
 # * input: hierarchial clusterig dendogram returned from hclust
 # * output: A vector of numerical labels giving assignment of objects to modules. Unassigned objects are labeled 0, the largest module has label 1, next largest 2 etc.
-# * params which ones do we want to vary?????
 
 # + language="R"
 # library("WGCNA")
 
-# + magic_args="-i pao1_adj -i minModuleSize -o pao1_modules" language="R"
+# + magic_args="-i pao1_adj -i clustering_method -i deep_split -i min_cluster_size -o pao1_modules" language="R"
 #
 # pao1_adj_mat <- as.matrix(pao1_adj)
 # print(is.numeric(pao1_adj_mat))
@@ -114,21 +131,20 @@ pao1_adj.head()
 # dissTOM <- 1-TOM
 #
 # # Clustering
-# geneTree <- hclust(as.dist(dissTOM))
+# geneTree <- hclust(as.dist(dissTOM), method=clustering_method)
 #
 # # Module identification using dynamic tree cut:
 # pao1_modules <- cutreeDynamic(
 #     dendro = geneTree,
 #     distM = dissTOM,
-#     deepSplit = 2,
-#     pamRespectsDendro = FALSE,
-#     minClusterSize = minModuleSize
+#     deepSplit = deep_split,
+#     minClusterSize = min_cluster_size
 # )
 #
 #
 # table(pao1_modules)
 
-# + magic_args="-i pa14_adj -i minModuleSize -o pa14_modules" language="R"
+# + magic_args="-i pa14_adj -i clustering_method -i deep_split -i min_cluster_size -o pa14_modules" language="R"
 #
 # pa14_adj_mat <- as.matrix(pa14_adj)
 # print(is.numeric(pa14_adj_mat))
@@ -138,15 +154,14 @@ pao1_adj.head()
 # dissTOM <- 1-TOM
 #
 # # Clustering
-# geneTree <- hclust(as.dist(dissTOM))
+# geneTree <- hclust(as.dist(dissTOM), method=clustering_method)
 #
 # # Module identification using dynamic tree cut:
 # pa14_modules <- cutreeDynamic(
 #     dendro = geneTree,
 #     distM = dissTOM,
-#     deepSplit = 2,
-#     pamRespectsDendro = FALSE,
-#     minClusterSize = minModuleSize
+#     deepSplit = deep_split,
+#     minClusterSize = min_cluster_size
 # )
 #
 #
@@ -174,9 +189,3 @@ pa14_membership_df["module id"].value_counts()
 # Save membership dataframe
 pao1_membership_df.to_csv(pao1_membership_filename, sep="\t")
 pa14_membership_df.to_csv(pa14_membership_filename, sep="\t")
-
-# +
-# TO DO
-# Organize script to be able to run for multiple different thresholds as a script and save membership
-# Rerun notebook each time we vary params? Or auto run with different combinations of params?
-# What params do we want to specify?
