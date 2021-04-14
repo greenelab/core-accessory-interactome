@@ -205,7 +205,7 @@ fig2 += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
 
 print(fig2)
 
-fig1.save(filename=pa14_tpm_filename, format="svg", dpi=300)
+fig2.save(filename=pa14_tpm_filename, format="svg", dpi=300)
 # -
 
 # These plots are showing the median expression of PAO1 genes (PAO1 accessory genes) on the x-axis and the median expression of PA14-only genes (PA14 accessory genes) on the y-axis.

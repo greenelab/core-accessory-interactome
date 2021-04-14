@@ -6,6 +6,7 @@ channels:
 dependencies:
 - r::r=3.6.0
 - r::r-flashClust=1.01-2
+- r::r-stringi
 - bioconda::blast
 - bioconda::r-wgcna=1.69
 - bioconda::sra-tools=2.10.9
