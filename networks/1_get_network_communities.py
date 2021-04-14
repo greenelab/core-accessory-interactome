@@ -41,7 +41,7 @@ pandas2ri.activate()
 
 # +
 # Params
-corr_threshold = 0.5
+corr_threshold = 0.9
 
 # Params for hclust
 # clustering_method is the distance metric used to determine if clusters should be merged
@@ -93,24 +93,18 @@ pa14_adj = (pa14_corr.abs() >= corr_threshold).astype(float)
 
 pao1_adj.head()
 
-# +
-# Save
-# pao1_adj_filename = os.path.join(paths.LOCAL_DATA_DIR, f"pao1_adj_threshold_{corr_threshold}.tsv")
-# pao1_adj.to_csv(pao1_adj_filename, sep="\t")
-# -
-
 # ## Module detection
 # To detect modules, we want to look for genes that are closely related based on the adjacency matrix (i.e. genes that have similar connections)
 #
 # First we need to calculate the topological overlap measure (TOM) using [TOMsimilarity](https://rdrr.io/cran/WGCNA/man/TOMsimilarity.html). The topological overlap of two nodes reflects their similarity in terms of the commonality of the nodes they connect to.
 #
 # * input: adjacency matrix (square symmetric matrix with 0 and 1 entries)
-# * output: matrix holding the topological overlap. For an unweighted network, topological overlap = 1 if node _i_ and _j_ are linked and the neighbors of the node _i_ is connected to all of the neighbors of node _j_. Topological overlap = 0 if node _i_ and _j_ are unlinked and the two nodes have no common neighbors.
+# * output: matrix holding the topological overlap. For an unweighted network, topological overlap = 1 if node _i_ and _j_ are linked and the neighbors of the node _i_ is connected to all of the neighbors of node _j_. Topological overlap = 0 if node _i_ and _j_ are unlinked and the two nodes have no common neighbors. The TOM is a matrix of continuous values ranging from 0 to 1.
 #
 # Next, we need to cluster based on this information. For now, we will use heirarchal clustering, [hclust](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/hclust) to identify communities. A community is a group of genes with shared connections. This function performs a hierarchical cluster analysis using a set of dissimilarities for the n objects being clustered. Initially, each object is assigned to its own cluster and then the algorithm proceeds iteratively, at each stage joining the two most similar clusters, continuing until there is just a single cluster. At each stage distances between clusters are recomputed by the Lance–Williams dissimilarity update formula according to the particular clustering method being used.
 #
 #
-# * input: lower triangle matrix of a distance matrix. In this case we measure the distance between rows (i.e. genes) in the dissimilarity matrix provided.
+# * input: distance of the dissimilarity matrix (i.e. distance of 1- TOM). The dissimilarity matrix is a matrix that is max = 1 if two genes are very dissimilar based on their connections. This matrix contains continuous values. Taking the distance of the dissimilarity will compare the genes based on their dissimilarity scores and return a distance between them. This distance matrix is a continuous value. This matrix is a lower triangle matrix.
 # * output: hclust object which describes the [tree](https://en.wikipedia.org/wiki/Dendrogram) produced by the clustering process.
 #
 # Finally we need to use [cutreeDynamic](https://rdrr.io/cran/dynamicTreeCut/man/cutreeDynamic.html) to identify modules based on hclust output (tree). Cutting the tree at a given height will give a partitioning clustering at a selected precision.
@@ -153,6 +147,14 @@ pao1_adj.head()
 # TOM <- TOMsimilarity(pa14_adj_mat)
 # dissTOM <- 1-TOM
 #
+# print("TOM")
+# print(TOM)
+#
+# print("Dissimilarity")
+# print(dissTOM <- 1-TOM)
+#
+# print("Distance")
+# print(as.dist(dissTOM))
 # # Clustering
 # geneTree <- hclust(as.dist(dissTOM), method=clustering_method)
 #
