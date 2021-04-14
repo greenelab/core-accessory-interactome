@@ -4,6 +4,7 @@ from pathlib import Path
 # Path to this repository
 PROJECT_DIR = Path(__file__).parents[1]
 ANALYSIS_DIR = PROJECT_DIR / "explore_data"
+META_DIR = PROJECT_DIR / "data" / "metadata"
 
 # Path to local directory where data files will be stored
 LOCAL_DIR = Path.home()
@@ -34,3 +35,7 @@ PAO1_COMPENDIUM_LABEL = LOCAL_DATA_DIR / "pao1_compendia_labeled.tsv"
 PA14_COMPENDIUM_LABEL = LOCAL_DATA_DIR / "pa14_compendia_labeled.tsv"
 PAO1_COMPENDIUM = LOCAL_DATA_DIR / "pao1_compendia.tsv"
 PA14_COMPENDIUM = LOCAL_DATA_DIR / "pa14_compendia.tsv"
+
+# Location of metadata
+PAO1_REGULON = META_DIR / "regulons_format.csv"
+PAO1_OPERON = META_DIR / "operons_format.csv"
