@@ -15,6 +15,7 @@
 
 # ## Quick validation of network modules
 
+# +
 # %load_ext autoreload
 # %autoreload 2
 import os
@@ -24,6 +25,9 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from core_acc_modules import paths
+
+np.random.seed(1)
+# -
 
 # ## Examine size of modules
 
@@ -100,6 +104,9 @@ def plot_dist_modules(threshold_list):
 
 # Plot distribution of modules per threshold
 plot_dist_modules(corr_threshold_list)
+
+# **Takeaway:**
+# * Looks like as we decrease our correlation threshold (i.e. connections don't need to be very strong between nodes), more modules are able to form which is what I would expect.
 
 # ## Examine composition of modules
 #
@@ -192,7 +199,7 @@ pao1_operon.head()
 pao1_regulon.head()
 
 # +
-# Format df for plotting
+# Format df for plotting using displot
 pao1_operon_toplot = pd.melt(
     pao1_operon, value_vars=["Num_operon_modules", "Num_random_modules"]
 )
@@ -202,41 +209,8 @@ pao1_regulon_toplot = pd.melt(
 
 pao1_operon_toplot.tail()
 
-# +
-# Get bins using all data
-fig = sns.displot(
-    pao1_operon_toplot,
-    x="value",
-    hue="variable",
-    kde=False,
-)
 
-"""fig = sns.boxplot(
-    data=pao1_operon_toplot,
-    x="variable",
-    y="value",
-    notch=True,
-    palette=["#81448e", "lightgrey"],
-)"""
 # -
-
-(stats, pvalue) = scipy.stats.ttest_ind(
-    pao1_operon["Num_operon_modules"], pao1_operon["Num_random_modules"]
-)
-print(pvalue / 3000)
-
-fig = sns.displot(
-    pao1_regulon_toplot,
-    x="value",
-    hue="variable",
-    kde=False,
-)
-
-(stats, pvalue) = scipy.stats.ttest_ind(
-    pao1_regulon["Num_operon_modules"], pao1_regulon["Num_random_modules"]
-)
-print(pvalue)
-
 
 def cumulative_distribution(
     data,
@@ -264,6 +238,7 @@ def cumulative_distribution(
         plt.fill_between(x, y, alpha=0.5, step="pre", **kwargs)
 
 
+# +
 cumulative_distribution(
     pao1_operon["Num_operon_modules"],
     label="Number of modules containing operon genes",
@@ -275,9 +250,23 @@ cumulative_distribution(
     color="blue",
 )
 _ = plt.legend()
+plt.title("Distribution of module counts (operon vs random genes)")
 
+scipy.stats.ks_2samp(
+    pao1_operon["Num_operon_modules"], pao1_operon["Num_random_modules"]
+)
+# -
+
+fig = sns.displot(
+    pao1_operon_toplot,
+    x="value",
+    hue="variable",
+)
+plt.title("Distribution of module counts (operon vs random genes)")
+
+# +
 cumulative_distribution(
-    pao1_regulon["Num_operon_modules"],
+    pao1_regulon["Num_regulon_modules"],
     label="Number of modules containing regulon genes",
     color="red",
 )
@@ -287,13 +276,25 @@ cumulative_distribution(
     color="blue",
 )
 _ = plt.legend()
+plt.title("Distribution of module counts (regulon vs random genes)")
 
-# * Seeing same trend as Georgia -- no difference between random vs regulon/operon
-# * Possible reasons for the lack of difference -- thinking strain types? Mine are split out
-# * KS test instead
-# * x: number of modules that operons/regulons/random genes are contained in
-# * y: count
-# * Distribution plot but summing counts as you move from left to right, so a shift in the curves corresponds to a shift in the distribution (i.e. a curve shifted to the right means that the distribution is shifted to the right)
-# * Max distance between curves is what KS calculates
+scipy.stats.ks_2samp(
+    pao1_regulon["Num_regulon_modules"], pao1_regulon["Num_random_modules"]
+)
+# -
 
+fig = sns.displot(
+    pao1_regulon_toplot,
+    x="value",
+    hue="variable",
+)
+plt.title("Distribution of module counts (regulon vs random genes)")
 
+# **Takeaway:**
+# * The axis cumulative distribution plots are:
+#     * x: number of modules that operons/regulons/random genes are contained in
+#     * y: count
+# * These distribution plots are summing counts as you move from left to right, so a shift in the curves corresponds to a shift in the distribution (i.e. a curve shifted to the right means that the distribution is shifted to the right)
+#
+# * We can perform [Kolmogorov-Smirnov test](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test) to compare the distribution of module counts for genes in regulons/operons versus random genes. The KS test will quantify the difference in the cumulative distribution curves.
+# * Based on the KS test, there is a significant difference between the two distributions as we would expect. Though there is a very large significance for the operons due to the large sample size. There are~3K operons as opposed to the 17 regulons, which has a very modestly significant p-value. This difference is fairly consistent across thresholds, though as we decrease the threshold used to create the network, the significance for the operons increases slightly but the significance for the regulons decreases slightly.
