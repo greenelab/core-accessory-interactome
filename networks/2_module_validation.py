@@ -343,6 +343,26 @@ fig = sns.displot(
 )
 plt.title("PMF distribution of module counts (regulon vs random genes)")
 
+# ### Check what size the modules are that regulon/operon/random genes are found in
+
+pao1_operon["operon_module_ids"] = pao1_operon["Genes_processed"].apply(
+    lambda list_genes: pao1_membership.loc[list_genes]["module id"].unique()
+)
+pao1_operon["random_module_ids"] = pao1_operon["Random_Genes"].apply(
+    lambda list_genes: pao1_membership.loc[list_genes]["module id"].unique()
+)
+pao1_operon.head()
+
+pao1_membership["module id"].value_counts()
+
+pao1_regulon["regulon_module_ids"] = pao1_regulon["Genes_processed"].apply(
+    lambda list_genes: pao1_membership.loc[list_genes]["module id"].unique()
+)
+pao1_regulon["random_module_ids"] = pao1_regulon["Random_Genes"].apply(
+    lambda list_genes: pao1_membership.loc[list_genes]["module id"].unique()
+)
+pao1_regulon.head()
+
 # _About cumulative distribution plots:_
 # * The axis cumulative distribution plots are:
 #     * y-axis = The cumulative count of genes within operon/regulon (red) or random genes (blue).
