@@ -27,6 +27,14 @@ import matplotlib.pyplot as plt
 from core_acc_modules import paths
 
 np.random.seed(1)
+
+# +
+# User params
+# Remove modules of this size or greater for analysis looking at coverage of regulon/operons
+module_size_threshold = 1000
+
+# Correlation threshold to determine which network modules to examine
+corr_threshold_toexamine = 0.9
 # -
 
 # ## Examine size of modules
@@ -107,10 +115,17 @@ plot_dist_modules(corr_threshold_list)
 
 # **Takeaway:**
 # * Looks like as we decrease our correlation threshold (i.e. connections don't need to be very strong between nodes), more modules are able to form which is what I would expect.
+# * Genes in PA14 are less concentrated in one large module - there are many more small modules found.
 
 # ## Examine composition of modules
 #
 # We expect that genes within the same operon or regulon will cluster together (i.e. be within the same module). To test this we will compare the distribution of the number of modules that contain genes within the same regulon vs the number of modules that contain random genes
+#
+# _Some definitions:_
+#
+# [Operons](https://en.wikipedia.org/wiki/Operon#:~:text=An%20operon%20is%20made%20up,transcription%20of%20the%20structural%20genes.) are a group of genes that share a promoter (DNA sequence that is recognized by RNA polymerase and enables transcription) and an operator (DNA sequence that repressor binds to and blocks RNA polymerase). Therefore these group of genes are transcribed or turned off together (so we would expect a very high correlation amongst these genes)
+#
+# [Regulons](https://en.wikipedia.org/wiki/Regulon) are a group of genes that are regulated by the same regulatory protein. A regulon can be composed of multiple operons.
 
 # +
 # Load PAO1 regulon and operon file
@@ -118,18 +133,42 @@ pao1_regulon_filename = paths.PAO1_REGULON
 pao1_operon_filename = paths.PAO1_OPERON
 
 # Load membership for specific threshold
-corr_threshold = 0.9
-pao1_membership_filename = f"pao1_membership_{corr_threshold}.tsv"
+pao1_membership_filename = f"pao1_membership_{corr_threshold_toexamine}.tsv"
 
 pao1_membership = pd.read_csv(pao1_membership_filename, sep="\t", header=0, index_col=0)
 # -
 
 pao1_membership.head()
 
+# According to Jake relationships tend to be more meaningful if the module is smaller (e.g. if an operon with 5 genes is contained in a module consisting of 10 total genes, this seems more biologically/functionally meaningful than an operon with 5 genes contained in a module consisting of 500 genes).
+#
+# To correct for the single or couple very large modules, we will remove them from the analysis
+
+# +
+# Get module ids that exceed size limit
+module_todrop = (
+    pao1_membership["module id"]
+    .value_counts()[
+        (pao1_membership["module id"].value_counts() > module_size_threshold)
+    ]
+    .index
+)
+
+print(module_todrop)
+
+# +
+# Get genes to drop
+genes_todrop = pao1_membership[pao1_membership["module id"].isin(module_todrop)].index
+
+# Drop genes
+pao1_membership = pao1_membership.drop(genes_todrop)
+# -
+
 # ### Format operon/regulon files
 #
 # * Remove genes from operons/regulons that don't have membership information
 # * Make random list of genes with matched size
+# * There are many single gene operons, we will remove these for this analysis
 
 # +
 # Read file
@@ -163,6 +202,16 @@ pao1_regulon["Genes_processed"] = pao1_regulon["Genes"].apply(
 # Update length based on filtered gene list ("Genes_processed" column)
 pao1_operon["Length_processed"] = pao1_operon["Genes_processed"].str.len()
 pao1_regulon["Length_processed"] = pao1_regulon["Genes_processed"].str.len()
+
+# +
+# If number genes in operon are 1 then remove
+# Drop operons and regulons that have 0 genes due to no module filtering
+pao1_operon = pao1_operon.drop(pao1_operon.query("Length_processed<=1").index)
+pao1_regulon = pao1_regulon.drop(pao1_regulon.query("Length_processed<=1").index)
+
+print(pao1_operon.shape)
+print(pao1_regulon.shape)
+# -
 
 # For each regulon/operon, select a random set of genes that are the same size at the regulon/operon
 pao1_operon["Random_Genes"] = pao1_operon["Length_processed"].apply(
@@ -250,7 +299,9 @@ cumulative_distribution(
     color="blue",
 )
 _ = plt.legend()
-plt.title("Distribution of module counts (operon vs random genes)")
+plt.title("Cumulative distribution of module counts (operon vs random genes)")
+plt.ylabel("Cumulative count of genes")
+plt.xlabel("The number of modules that genes are contained in")
 
 scipy.stats.ks_2samp(
     pao1_operon["Num_operon_modules"], pao1_operon["Num_random_modules"]
@@ -262,7 +313,7 @@ fig = sns.displot(
     x="value",
     hue="variable",
 )
-plt.title("Distribution of module counts (operon vs random genes)")
+plt.title("PMF distribution of module counts (operon vs random genes)")
 
 # +
 cumulative_distribution(
@@ -276,7 +327,9 @@ cumulative_distribution(
     color="blue",
 )
 _ = plt.legend()
-plt.title("Distribution of module counts (regulon vs random genes)")
+plt.title("Cumulative distribution of module counts (regulon vs random genes)")
+plt.ylabel("Cumulative count of genes")
+plt.xlabel("The number of modules that genes are contained in")
 
 scipy.stats.ks_2samp(
     pao1_regulon["Num_regulon_modules"], pao1_regulon["Num_random_modules"]
@@ -288,13 +341,21 @@ fig = sns.displot(
     x="value",
     hue="variable",
 )
-plt.title("Distribution of module counts (regulon vs random genes)")
+plt.title("PMF distribution of module counts (regulon vs random genes)")
 
-# **Takeaway:**
+# _About cumulative distribution plots:_
 # * The axis cumulative distribution plots are:
-#     * x: number of modules that operons/regulons/random genes are contained in
-#     * y: count
+#     * y-axis = The cumulative count of genes within operon/regulon (red) or random genes (blue).
+#     * x-axis = The number of modules that genes are contained in
+#
+# * Looking at the operon plot, the value at "1" on the x-axis says that there are ~3000 operon genes found in exactly 1 module, and there are ~2700 random genes found in exactly 1 module
+#     * Then the increase at "2" on the x-axis is the number of operons or random genes that are spread across 2 or 1 different modules (this is the cumulative part). In other words, a random set (size matched with the operon) where the genes in that set are found in 2 modules.
+#     * There are >3000 operon genes that are found in either 1 or 2 modules. There are > 3000 random genes that are found in either 1 or 2 modules.
+#     * Then if you compare the blue and the red curves, the vertical distance between the two curves tells you how much of a shift there is between the distributions.
 # * These distribution plots are summing counts as you move from left to right, so a shift in the curves corresponds to a shift in the distribution (i.e. a curve shifted to the right means that the distribution is shifted to the right)
 #
+# **Takeaway:**
 # * We can perform [Kolmogorov-Smirnov test](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test) to compare the distribution of module counts for genes in regulons/operons versus random genes. The KS test will quantify the difference in the cumulative distribution curves.
-# * Based on the KS test, there is a significant difference between the two distributions as we would expect. Though there is a very large significance for the operons due to the large sample size. There are~3K operons as opposed to the 17 regulons, which has a very modestly significant p-value. This difference is fairly consistent across thresholds, though as we decrease the threshold used to create the network, the significance for the operons increases slightly but the significance for the regulons decreases slightly.
+#
+# * Based on the KS test, there is a significant difference (across thresholds) between the operon and random distribution, as we would expect.
+#     * There is only a significant difference between the regulon and random distributions at lower thresholds (0.7 and below). The lack of significance at higher thresholds is likely due to the small sample size (i.e. 6 or 10 regulons have genes that are contained in modules with fewer than 1000 genes)
