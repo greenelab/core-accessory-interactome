@@ -83,7 +83,6 @@ def plot_dist_modules(threshold_list):
             np.concatenate([pao1_membership["module id"], pa14_membership["module id"]])
         )
 
-        # Distribution plot for core genes
         fig = sns.distplot(
             pao1_membership["module id"],
             label="PAO1 modules",
@@ -202,6 +201,33 @@ pao1_regulon["Genes_processed"] = pao1_regulon["Genes"].apply(
 # Update length based on filtered gene list ("Genes_processed" column)
 pao1_operon["Length_processed"] = pao1_operon["Genes_processed"].str.len()
 pao1_regulon["Length_processed"] = pao1_regulon["Genes_processed"].str.len()
+
+# +
+# Quick look at distribution of size of regulons and operons
+# Update length based on filtered gene list ("Genes_processed" column)
+
+fig, axes = plt.subplots(ncols=2, nrows=1)
+
+fig = sns.distplot(
+    pao1_operon["Length_processed"],
+    label="PAO1 operon size",
+    color="red",
+    kde=False,
+    ax=axes[0],
+)
+
+fig = sns.distplot(
+    pao1_regulon["Length_processed"],
+    label="PAO1 regulon size",
+    color="blue",
+    kde=False,
+    ax=axes[1],
+)
+
+fig.set_title(
+    "Histogram of size of operons/regulons after filtering by membership",
+    fontsize=12,
+)
 
 # +
 # If number genes in operon are 1 then remove
