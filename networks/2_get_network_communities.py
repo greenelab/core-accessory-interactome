@@ -36,76 +36,62 @@ from core_acc_modules import paths
 
 # +
 # Params
-corr_threshold = 0.9
+corr_threshold = 0.5
 
-# Output files
-pao1_membership_filename = f"pao1_membership_{corr_threshold}.tsv"
-pa14_membership_filename = f"pa14_membership_{corr_threshold}.tsv"
+# Correlation matrix files
+pao1_corr_filename = f"pao1_corr_{corr_threshold}.tsv"
+pa14_corr_filename = f"pa14_corr_{corr_threshold}.tsv"
 # -
 
-# Load expression data
-pao1_compendium_filename = paths.PAO1_COMPENDIUM
-pa14_compendium_filename = paths.PA14_COMPENDIUM
-
-pao1_compendium = pd.read_csv(pao1_compendium_filename, sep="\t", header=0, index_col=0)
-pa14_compendium = pd.read_csv(pa14_compendium_filename, sep="\t", header=0, index_col=0)
-
-print(pao1_compendium.shape)
-pao1_compendium.head()
-
-print(pa14_compendium.shape)
-pa14_compendium.head()
-
-# ## Get similarity between genes
-#
-# To determine if genes are similar, we will calculate the correlation between genes and apply our threshold cutoff. When we apply our threshold, any scores that are below the threshold will be set to 0 (i.e. using a threshold of 0.5 means that gene pairs that have correlation scores of 0.52 and 0.78 will be left as is but a gene pair with a correlation score of 0.48 will be set to 0).
-
-# Get perason correlation
-# This correlation matrix will represent the concordance
-# between two gene expression profiles
-pao1_corr = pao1_compendium.corr()
-pa14_corr = pa14_compendium.corr()
-
-pao1_corr.head()
-
-# +
-# Create a similarity matrix usingn the threshold defined above
-# The similarity matrix will determine the strength of the connection between two genes
-# If the concordance is strong enough (i.e. above the threshold), then
-# the genes are connected by by the correlation score, otherwise the value is set to 0
-pao1_corr[pao1_corr.abs() < corr_threshold] = 0.0
-pa14_corr[pa14_corr.abs() < corr_threshold] = 0.0
-
-pao1_corr.head()
-# -
-
-pa14_corr.head()
+# Load correlation data
+pao1_corr = pd.read_csv(pao1_corr_filename, sep="\t", index_col=0, header=0)
+pa14_corr = pd.read_csv(pa14_corr_filename, sep="\t", index_col=0, header=0)
 
 # ## Module detection
-# To detect modules, will use a clustering algorithm
+# To detect modules, we will use a clustering algorithm
+
+# ### DBSCAN
+# [DBSCAN](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html#sklearn.cluster.DBSCAN):  Density-Based Spatial Clustering of Applications with Noise views clusters as areas of high density separated by areas of low density. The central component to the DBSCAN is the concept of _core samples_, which are samples that are in areas of high density. A cluster is therefore a set of _core samples_ that are close to each other (measured by some distance measure) and a set of non-core samples that are close to a core sample (but are not themselves core samples).
 #
-# **About the methods**
+# A cluster is a set of core samples that can be built by recursively taking a core sample, finding all of its neighbors that are core samples, finding all of their neighbors that are core samples, and so on. A cluster also has a set of non-core samples, which are samples that are neighbors of a core sample in the cluster but are not themselves core samples. Intuitively, these samples are on the fringes of a cluster.
 #
-# * [Hierachal clustering](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.AgglomerativeClustering.html#sklearn.cluster.AgglomerativeClustering):
-# * [DBSCAN](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html#sklearn.cluster.DBSCAN):
-# * [Affinity propogation](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.AffinityPropagation.html#sklearn.cluster.AffinityPropagation):
+# * We define a core sample as being a sample in the dataset such that there exist `min_samples` other samples within a distance of `eps`, which are defined as neighbors of the core sample.
+# * Using all default values
 #
-# **ADD RANDOM SEEDS, PLAY WITH PARAMS**
-#
-# What method will we use and why??
 
 # +
 # Clustering using DBSCAN
 # pao1_clustering = DBSCAN().fit(pao1_corr)
 # pa14_clustering = DBSCAN().fit(pa14_corr)
+# -
+
+# ### Hierarchal clustering
+# [Hierachal clustering](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.AgglomerativeClustering.html#sklearn.cluster.AgglomerativeClustering): Initially, each object is assigned to its own cluster and then the algorithm proceeds iteratively, at each stage joining the two most similar clusters (i.e. linkage distance is minimized), continuing until there is just a single cluster.
+#
+# * n_cluster: The number of clusters to find.
+# * linkage: Criterion used to determine distance between observations. 'average'=average distance of each observation in the two sets.
+#
+# * Note: It looks like this method tends to produce 1 very large cluster. To break this up we will iteratively apply hierarchal clustering on the largest cluster.
 
 # Clustering using hierarchal clustering
-pao1_clustering = AgglomerativeClustering(linkage="average").fit(pao1_corr)
-pa14_clustering = AgglomerativeClustering(linkage="average").fit(pa14_corr)
+pao1_clustering = AgglomerativeClustering(
+    n_clusters=None, distance_threshold=0.5, linkage="average"
+).fit(pao1_corr)
+pa14_clustering = AgglomerativeClustering(
+    n_clusters=None, distance_threshold=0.5, linkage="average"
+).fit(pa14_corr)
 
+# ### Affinity propogation
+#
+# [Affinity propogation](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.AffinityPropagation.html#sklearn.cluster.AffinityPropagation):
+
+# +
 # Clustering using affinity propogation
 # pao1_clustering = AffinityPropagation().fit(pao1_corr)
 # pa14_clustering = AffinityPropagation().fit(pa14_corr)
+# -
+
+# ## Membership assignments
 
 # +
 # Get module membership for a single threshold
@@ -124,6 +110,12 @@ pa14_membership_df = pd.DataFrame(
 )
 
 pa14_membership_df["module id"].value_counts()
+# -
+
+# **Final method:**
+# We will use <Method> because ...
+#
+#     Thoughts on different methods
 
 # +
 # Save membership dataframe

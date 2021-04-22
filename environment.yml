@@ -19,7 +19,7 @@ dependencies:
 - conda-forge::numpy=1.19.5
 - conda-forge::plotnine=0.5.1
 - conda-forge::scikit-learn
-- conda-forge::umap-learn
+- conda-forge::umap-learn=0.4.2
 - conda-forge::ipykernel=5.1.1
 - conda-forge::nb_conda_kernels
 - conda-forge::gxx_linux-64
