@@ -8,26 +8,23 @@
 #       format_version: '1.5'
 #       jupytext_version: 1.9.1+dev
 #   kernelspec:
-#     display_name: Python [conda env:core_acc_env] *
+#     display_name: Python [conda env:core_acc] *
 #     language: python
-#     name: conda-env-core_acc_env-py
+#     name: conda-env-core_acc-py
 # ---
 
 # # Correlation analysis
 #
 # This notebook performs correlation analysis to compare the similarity between genes and applies different threshold cutoffs to determine the strength of connection between genes
 
-# +
 # %load_ext autoreload
 # %autoreload 2
 import os
 import pandas as pd
 import plotnine as pn
-
-# import umap --> tsne
+import umap
 from scipy.spatial.distance import pdist, squareform
 from core_acc_modules import paths
-# -
 
 # ## Set user parameters
 #
@@ -120,6 +117,9 @@ pao1_encoded_df = pd.DataFrame(
     index=pao1_corr.index,
     columns=["1", "2"],
 )
+# -
+
+pao1_encoded_df.head()
 
 # +
 # Plot PAO1
@@ -137,7 +137,6 @@ fig += pn.theme(
     axis_text=pn.element_text(family="sans-serif", size=12),
     axis_title=pn.element_text(family="sans-serif", size=15),
 )
-fig += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
 
 print(fig)
 # -
