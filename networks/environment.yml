@@ -1,0 +1,21 @@
+name: umap_viz
+channels:
+- conda-forge
+dependencies:
+- conda-forge::python=3.7
+- conda-forge::notebook
+- conda-forge::pandas=0.24.2
+- conda-forge::seaborn=0.11.1
+- conda-forge::scipy=1.1.0
+- conda-forge::numpy=1.19.5
+- conda-forge::plotnine=0.5.1
+- conda-forge::scikit-learn
+- conda-forge::umap-learn
+- conda-forge::ipykernel=5.1.1
+- conda-forge::nb_conda_kernels
+- pip=19.2.1
+- pip:
+  - black==20.8b1
+  - flake8==3.8.4
+  - pre_commit==2.9.3
+  - jupytext==1.9.1

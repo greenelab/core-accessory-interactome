@@ -39,8 +39,12 @@ from core_acc_modules import paths
 corr_threshold = 0.5
 
 # Correlation matrix files
-pao1_corr_filename = f"pao1_corr_{corr_threshold}.tsv"
-pa14_corr_filename = f"pa14_corr_{corr_threshold}.tsv"
+pao1_corr_filename = os.path.join(
+    paths.LOCAL_DATA_DIR, f"pao1_corr_{corr_threshold}.tsv"
+)
+pa14_corr_filename = os.path.join(
+    paths.LOCAL_DATA_DIR, f"pa14_corr_{corr_threshold}.tsv"
+)
 # -
 
 # Load correlation data

@@ -24,7 +24,7 @@ import os
 import pandas as pd
 import plotnine as pn
 
-# import umap
+# import umap --> tsne
 from scipy.spatial.distance import pdist, squareform
 from core_acc_modules import paths
 # -
@@ -82,12 +82,21 @@ pao1_corr.head()
 
 pa14_corr.head()
 
+# ## Plot distribution of pairwise distances
+#
+# This will particularly help to inform the parameters we use for DBSCAN, which is density based
+
 # Get distribution of pairwise distances to determine what a dense region should be
 squareform(pdist(pao1_corr))
 
 squareform(pdist(pa14_corr))
 
 # ## Plot correlation
+#
+# We will plot a heatmap and umap of the correlations to identify clusters, which should help to inform the parameters for hierarchal clustering
+
+# +
+# Plot heatmap
 
 # +
 model_pao1 = umap.UMAP(random_state=123).fit(pao1_corr)
@@ -136,5 +145,5 @@ print(fig)
 # Save
 pao1_corr_filename = f"pao1_corr_{corr_threshold}.tsv"
 pa14_corr_filename = f"pa14_corr_{corr_threshold}.tsv"
-# pao1_corr.to_csv(pao1_corr_filename, sep="\t")
-# pa14_corr.to_csv(pa14_corr_filename, sep="\t")
+pao1_corr.to_csv(os.path.join(paths.LOCAL_DATA_DIR, pao1_corr_filename), sep="\t")
+pa14_corr.to_csv(os.path.join(paths.LOCAL_DATA_DIR, pa14_corr_filename), sep="\t")
