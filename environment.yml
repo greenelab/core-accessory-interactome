@@ -1,4 +1,4 @@
-name: core_acc_env
+name: core_acc
 channels:
 - conda-forge
 - r
@@ -20,11 +20,11 @@ dependencies:
 - conda-forge::plotnine=0.5.1
 - conda-forge::scikit-learn
 - conda-forge::umap-learn=0.4.2
+- conda-forge::numba=0.50.1
 - conda-forge::ipykernel=5.1.1
 - conda-forge::nb_conda_kernels
 - conda-forge::gxx_linux-64
 - conda-forge::clang_osx-64
-- conda-forge::rpy2=2.9.4
 - conda-forge::libiconv=1.15
 - conda-forge::biopython
 - pip=19.2.1
