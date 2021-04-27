@@ -25,6 +25,8 @@ import plotnine as pn
 import seaborn as sns
 import matplotlib.pyplot as plt
 import umap
+import random
+import numpy as np
 from scipy.spatial.distance import pdist, squareform
 from core_acc_modules import paths
 
@@ -55,6 +57,28 @@ pao1_compendium.head()
 
 print(pa14_compendium.shape)
 pa14_compendium.head()
+
+# ## Visualize distribution of raw data
+
+# Random PAO1 genes
+random_pao1_ids = random.sample(list(pao1_compendium.columns), 4)
+sns.pairplot(pao1_compendium[random_pao1_ids])
+plt.suptitle("Random set of genes", y=1.05)
+
+# Co-operonic PAO1 genes
+# pao1_co_operonic_ids = ["PA0001", "PA0002", "PA0003", "PA0004"]
+# pao1_co_operonic_ids = ["PA0054","PA0055", "PA0056"]
+pao1_co_operonic_ids = ["PA1335", "PA1336", "PA1337"]
+sns.pairplot(pao1_compendium[pao1_co_operonic_ids])
+plt.suptitle("Co-operonic set of genes", y=1.05)
+
+# Houskeeping PAO1 gene that we would expect a consistently high expression across samples
+# which doesn't have that peak at 0
+sns.displot(pao1_compendium["PA1805"])
+
+# Random PA14 gene
+random_pa14_ids = random.sample(list(pa14_compendium.columns), 4)
+sns.pairplot(pa14_compendium[random_pa14_ids])
 
 # ## Get similarity between genes
 #
@@ -186,13 +210,13 @@ pa14_corr_filename = f"pa14_corr_{corr_threshold}.tsv"
 pao1_corr.to_csv(os.path.join(paths.LOCAL_DATA_DIR, pao1_corr_filename), sep="\t")
 pa14_corr.to_csv(os.path.join(paths.LOCAL_DATA_DIR, pa14_corr_filename), sep="\t")
 
-# **Observations:**
-# * At a threshold of 0.5, there is 1 very large cluster and a few very small clusters and then everything else for PAO1 genes. For PA14 genes, there is 1 large cluster and everything else. High density regions look like those > 20.
-# * At a threshold of 0.6, there is 1 very large cluster and everything else for PAO1 genes. For PA14 genes there looks to be 1 large cluster and 1 smaller cluster and then everything else. High density regions look like those > 20.
-# * At a threshold of 0.7, High density regions look like those > 15.
-# * At a threshold of 0.8, High density regions look like those > 15.
-# * At a threshold of 0.9, High density regions look like those > 15.
+# **Takeaway:**
 #
-# Overall there are smaller clusters at a higher threshold, which we would expect since we wouldn't expect as many genes to have such a high correlation. We will use the number of clusters observed to help validate the clustering results in the next notebook.
+# Here we are visualizing the clustering of raw correlation scores where values < `corr_threshold` are set to 0. If we compare the clustermap results in this notebook with [1a_get_network_communities_complex.ipynb](1a_get_network_communities_complex.ipynb) where we cluster the on the Topological Overlap Matrix (TOM) we see:
+# * Clustering pattern between using raw correlation score vs TOM is similar. TOM is considering secondary relationships (i.e. gene _i_ and _j_ are similar if they are linked in the adjacency matrix and gene _i_ is connected to all the neighbors of gene _j_)
+# * At thresholds 0.5, 0.6 there seems to be 1 large cluster, some very smaller clusters, then all other genes that are below the threshold
+# * As we increase the threshold to 0.8 and 0.9, this very large cluster is broken up into more equal sized smaller clusters
+# * In terms of distance, for threshold of 0.5, 0.6 high density regions look like those > 20. For thresholds 0.7-0.9, high density regions look like those > 15.
 #
-# What do we do about the remaining group of genes (i.e. the ones with 0 correlation)?
+# Overall, clustering may make sense using higher thresholds (0.8, 0.9) and excluding the community containing the remaining genes. However then we are not left with many genes, so perhaps it makes sense to consider a different similarity/correlation metric to use?
+# * Looking at the pair plots of the raw expression data (TPM). There is a tendency for genes to have a long right tail where some genes have a spike at 0 and some do not.
