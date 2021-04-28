@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ---
 # jupyter:
 #   jupytext:
@@ -38,7 +39,7 @@ from core_acc_modules import paths
 
 # +
 # Params
-corr_threshold = 0.9
+corr_threshold = 0.5
 
 # Output files
 pao1_membership_filename = f"pao1_membership_{corr_threshold}.tsv"
@@ -142,66 +143,6 @@ pa14_clustermap_filename = os.path.join(
     paths.LOCAL_DATA_DIR, f"pa14_corr_{corr_threshold}_clustermap.png"
 )
 h2.savefig(pa14_clustermap_filename, dpi=300)
-
-# +
-model_pao1 = umap.UMAP(random_state=123).fit(pao1_corr)
-
-pao1_encoded = model_pao1.transform(pao1_corr)
-
-pao1_encoded_df = pd.DataFrame(
-    data=pao1_encoded,
-    index=pao1_corr.index,
-    columns=["1", "2"],
-)
-
-# +
-model_pa14 = umap.UMAP(random_state=123).fit(pa14_corr)
-
-pa14_encoded = model_pa14.transform(pa14_corr)
-
-pa14_encoded_df = pd.DataFrame(
-    data=pa14_encoded,
-    index=pa14_corr.index,
-    columns=["1", "2"],
-)
-
-# +
-# Plot PAO1
-u1 = pn.ggplot(pao1_encoded_df, pn.aes(x="1", y="2"))
-u1 += pn.geom_point(pn.aes(alpha=0.1))
-u1 += pn.labs(x="UMAP 1", y="UMAP 2", title="Correlation of PAO1 genes")
-u1 += pn.theme_bw()
-u1 += pn.theme(
-    legend_title_align="center",
-    plot_background=pn.element_rect(fill="white"),
-    legend_key=pn.element_rect(fill="white", colour="white"),
-    legend_title=pn.element_text(family="sans-serif", size=15),
-    legend_text=pn.element_text(family="sans-serif", size=12),
-    plot_title=pn.element_text(family="sans-serif", size=15),
-    axis_text=pn.element_text(family="sans-serif", size=12),
-    axis_title=pn.element_text(family="sans-serif", size=15),
-)
-
-print(u1)
-
-# +
-# Plot PA14
-u2 = pn.ggplot(pa14_encoded_df, pn.aes(x="1", y="2"))
-u2 += pn.geom_point(pn.aes(alpha=0.2))
-u2 += pn.labs(x="UMAP 1", y="UMAP 2", title="Correlation of PA14 genes")
-u2 += pn.theme_bw()
-u2 += pn.theme(
-    legend_title_align="center",
-    plot_background=pn.element_rect(fill="white"),
-    legend_key=pn.element_rect(fill="white", colour="white"),
-    legend_title=pn.element_text(family="sans-serif", size=15),
-    legend_text=pn.element_text(family="sans-serif", size=12),
-    plot_title=pn.element_text(family="sans-serif", size=15),
-    axis_text=pn.element_text(family="sans-serif", size=12),
-    axis_title=pn.element_text(family="sans-serif", size=15),
-)
-
-print(u2)
 # -
 
 # Save
@@ -219,4 +160,11 @@ pa14_corr.to_csv(os.path.join(paths.LOCAL_DATA_DIR, pa14_corr_filename), sep="\t
 # * In terms of distance, for threshold of 0.5, 0.6 high density regions look like those > 20. For thresholds 0.7-0.9, high density regions look like those > 15.
 #
 # Overall, clustering may make sense using higher thresholds (0.8, 0.9) and excluding the community containing the remaining genes. However then we are not left with many genes, so perhaps it makes sense to consider a different similarity/correlation metric to use?
-# * Looking at the pair plots of the raw expression data (TPM). There is a tendency for genes to have a long right tail where some genes have a spike at 0 and some do not.
+# * Looking at the pair plots of the raw expression data (estimated counts - an estimate of the number of reads drawn from this transcript given the transcript’s relative abundance and length). There is a tendency for genes to have a long right tail where some genes have a spike at 0 and some do not. In this case Spearman correlation might be more appropriate here.
+#
+# After meeting with Casey, the main takeaway is that:
+# * It appears that the TOM matrix is not as sensitive since its setting nearby genes to have a score of 1.
+# Using just the correlation score is grouping genes into one large cluster.
+# * To dappen the overwhelming signal of highly correlated genes we will look into applying these two methods:
+# https://pubmed.ncbi.nlm.nih.gov/17724061/
+# https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4768301/
