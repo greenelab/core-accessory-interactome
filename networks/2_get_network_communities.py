@@ -45,6 +45,10 @@ pao1_corr_filename = os.path.join(
 pa14_corr_filename = os.path.join(
     paths.LOCAL_DATA_DIR, f"pa14_corr_{corr_threshold}.tsv"
 )
+
+# +
+## TO DO
+# Create variable to determine which clustering method to use
 # -
 
 # Load correlation data
@@ -69,8 +73,8 @@ pa14_corr = pd.read_csv(pa14_corr_filename, sep="\t", index_col=0, header=0)
 # pa14_clustering = DBSCAN().fit(pa14_corr)
 # -
 
-# ### Hierarchal clustering
-# [Hierachal clustering](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.AgglomerativeClustering.html#sklearn.cluster.AgglomerativeClustering): Initially, each object is assigned to its own cluster and then the algorithm proceeds iteratively, at each stage joining the two most similar clusters (i.e. linkage distance is minimized), continuing until there is just a single cluster.
+# ### Hierarchical clustering
+# [Hierarchical clustering](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.AgglomerativeClustering.html#sklearn.cluster.AgglomerativeClustering): Initially, each object is assigned to its own cluster and then the algorithm proceeds iteratively, at each stage joining the two most similar clusters (i.e. linkage distance is minimized), continuing until there is just a single cluster.
 #
 # * n_cluster: The number of clusters to find.
 # * linkage: Criterion used to determine distance between observations. 'average'=average distance of each observation in the two sets.
