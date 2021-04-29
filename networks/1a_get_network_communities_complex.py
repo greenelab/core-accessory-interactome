@@ -9,9 +9,9 @@
 #       format_version: '1.5'
 #       jupytext_version: 1.9.1+dev
 #   kernelspec:
-#     display_name: Python [conda env:core_acc_env] *
+#     display_name: Python [conda env:core_acc] *
 #     language: python
-#     name: conda-env-core_acc_env-py
+#     name: conda-env-core_acc-py
 # ---
 
 # # Get network communities
@@ -27,6 +27,8 @@
 # %load_ext rpy2.ipython
 import os
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 from core_acc_modules import paths
 from rpy2.robjects import pandas2ri
 
@@ -41,7 +43,7 @@ pandas2ri.activate()
 
 # +
 # Params
-corr_threshold = 0.9
+corr_threshold = 0.5
 
 # Params for hclust
 # clustering_method is the distance metric used to determine if clusters should be merged
@@ -93,6 +95,35 @@ pa14_adj = (pa14_corr.abs() >= corr_threshold).astype(float)
 
 pao1_adj.head()
 
+# ## Plot
+#
+# Plot clustering of adjacency matrix
+
+# +
+# Plot heatmap
+plt.figure(figsize=(20, 20))
+h1 = sns.clustermap(pao1_adj, cmap="viridis")
+h1.fig.suptitle(f"Adjacency of PAO1 genes using threshold={corr_threshold}")
+
+# Save
+pao1_clustermap_filename = os.path.join(
+    paths.LOCAL_DATA_DIR, f"pao1_adj_{corr_threshold}_clustermap.png"
+)
+h1.savefig(pao1_clustermap_filename, dpi=300)
+
+# +
+# Plot heatmap
+plt.figure(figsize=(20, 20))
+h2 = sns.clustermap(pa14_adj, cmap="viridis")
+h2.fig.suptitle(f"Adjacency of PA14 genes using threshold={corr_threshold}")
+
+# Save
+pa14_clustermap_filename = os.path.join(
+    paths.LOCAL_DATA_DIR, f"pa14_adj_{corr_threshold}_clustermap.png"
+)
+h2.savefig(pa14_clustermap_filename, dpi=300)
+# -
+
 # ## Module detection
 # To detect modules, we want to look for genes that are closely related based on the adjacency matrix (i.e. genes that have similar connections)
 #
@@ -115,14 +146,14 @@ pao1_adj.head()
 # + language="R"
 # library("WGCNA")
 
-# + magic_args="-i pao1_adj -i clustering_method -i deep_split -i min_cluster_size -o pao1_modules" language="R"
+# + magic_args="-i pao1_adj -i clustering_method -i deep_split -i min_cluster_size -o pao1_modules -o TOM_pao1" language="R"
 #
 # pao1_adj_mat <- as.matrix(pao1_adj)
 # print(is.numeric(pao1_adj_mat))
 #
 # # Similarity based on adjacency
-# TOM <- TOMsimilarity(pao1_adj_mat)
-# dissTOM <- 1-TOM
+# TOM_pao1 <- TOMsimilarity(pao1_adj_mat)
+# dissTOM <- 1-TOM_pao1
 #
 # # Clustering
 # geneTree <- hclust(as.dist(dissTOM), method=clustering_method)
@@ -138,23 +169,18 @@ pao1_adj.head()
 #
 # table(pao1_modules)
 
-# + magic_args="-i pa14_adj -i clustering_method -i deep_split -i min_cluster_size -o pa14_modules" language="R"
+# + magic_args="-i pa14_adj -i clustering_method -i deep_split -i min_cluster_size -o pa14_modules -o TOM_pa14" language="R"
 #
 # pa14_adj_mat <- as.matrix(pa14_adj)
 # print(is.numeric(pa14_adj_mat))
 #
 # # Similarity based on adjacency
-# TOM <- TOMsimilarity(pa14_adj_mat)
-# dissTOM <- 1-TOM
+# TOM_pa14 <- TOMsimilarity(pa14_adj_mat)
+# dissTOM <- 1-TOM_pa14
 #
 # print("TOM")
-# print(TOM)
+# print(TOM_pa14)
 #
-# print("Dissimilarity")
-# print(dissTOM <- 1-TOM)
-#
-# print("Distance")
-# print(as.dist(dissTOM))
 # # Clustering
 # geneTree <- hclust(as.dist(dissTOM), method=clustering_method)
 #
@@ -168,6 +194,36 @@ pao1_adj.head()
 #
 #
 # table(pa14_modules)
+# -
+
+# ## Plot TOM
+
+# +
+# Plot heatmap
+plt.figure(figsize=(20, 20))
+h3 = sns.clustermap(TOM_pao1, cmap="viridis")
+h3.fig.suptitle(f"Similarity (TOM) of PAO1 genes using threshold={corr_threshold}")
+
+# Save
+pao1_clustermap_filename = os.path.join(
+    paths.LOCAL_DATA_DIR, f"pao1_TOM_{corr_threshold}_clustermap.png"
+)
+h3.savefig(pao1_clustermap_filename, dpi=300)
+
+# +
+# Plot heatmap
+plt.figure(figsize=(20, 20))
+h4 = sns.clustermap(TOM_pa14, cmap="viridis")
+h4.fig.suptitle(f"Similarity (TOM) of PA14 genes using threshold={corr_threshold}")
+
+# Save
+pa14_clustermap_filename = os.path.join(
+    paths.LOCAL_DATA_DIR, f"pa14_TOM_{corr_threshold}_clustermap.png"
+)
+h4.savefig(pa14_clustermap_filename, dpi=300)
+# -
+
+# ## Get membership
 
 # +
 # Get module membership for a single threshold
@@ -186,8 +242,8 @@ pa14_membership_df = pd.DataFrame(
 )
 
 pa14_membership_df["module id"].value_counts()
-# -
 
+# +
 # Save membership dataframe
-pao1_membership_df.to_csv(pao1_membership_filename, sep="\t")
-pa14_membership_df.to_csv(pa14_membership_filename, sep="\t")
+# pao1_membership_df.to_csv(pao1_membership_filename, sep="\t")
+# pa14_membership_df.to_csv(pa14_membership_filename, sep="\t")

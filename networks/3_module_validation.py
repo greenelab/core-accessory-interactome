@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.9.1+dev
+#       jupytext_version: 1.9.1
 #   kernelspec:
 #     display_name: Python [conda env:core_acc_env] *
 #     language: python
@@ -326,8 +326,8 @@ cumulative_distribution(
 )
 _ = plt.legend()
 plt.title("Cumulative distribution of module counts (operon vs random genes)")
-plt.ylabel("Cumulative count of genes")
-plt.xlabel("The number of modules that genes are contained in")
+plt.ylabel("Number of operons/random groups")
+plt.xlabel("The number of modules that operons/random genes are contained in")
 
 scipy.stats.ks_2samp(
     pao1_operon["Num_operon_modules"], pao1_operon["Num_random_modules"]
@@ -354,8 +354,8 @@ cumulative_distribution(
 )
 _ = plt.legend()
 plt.title("Cumulative distribution of module counts (regulon vs random genes)")
-plt.ylabel("Cumulative count of genes")
-plt.xlabel("The number of modules that genes are contained in")
+plt.ylabel("Number of regulons/random groups")
+plt.xlabel("The number of modules that regulons/random genes are contained in")
 
 scipy.stats.ks_2samp(
     pao1_regulon["Num_regulon_modules"], pao1_regulon["Num_random_modules"]
@@ -391,12 +391,12 @@ pao1_regulon.head()
 
 # _About cumulative distribution plots:_
 # * The axis cumulative distribution plots are:
-#     * y-axis = The cumulative count of genes within operon/regulon (red) or random genes (blue).
-#     * x-axis = The number of modules that genes are contained in
+#     * y-axis = The number of operon/regulon (red) or random (blue) groups.
+#     * x-axis = The number of modules that operon/regulon/random genes are contained in
 #
-# * Looking at the operon plot, the value at "1" on the x-axis says that there are ~3000 operon genes found in exactly 1 module, and there are ~2700 random genes found in exactly 1 module
+# * Looking at the operon plot, the value at "1" on the x-axis says that there are 75 operons found in exactly 1 module, and there are 10 random groups found in exactly 1 module
 #     * Then the increase at "2" on the x-axis is the number of operons or random genes that are spread across 2 or 1 different modules (this is the cumulative part). In other words, a random set (size matched with the operon) where the genes in that set are found in 2 modules.
-#     * There are >3000 operon genes that are found in either 1 or 2 modules. There are > 3000 random genes that are found in either 1 or 2 modules.
+#     * There are 150 operons that are found in either 1 or 2 modules. There are 120 random groups that are found in either 1 or 2 modules.
 #     * Then if you compare the blue and the red curves, the vertical distance between the two curves tells you how much of a shift there is between the distributions.
 # * These distribution plots are summing counts as you move from left to right, so a shift in the curves corresponds to a shift in the distribution (i.e. a curve shifted to the right means that the distribution is shifted to the right)
 #

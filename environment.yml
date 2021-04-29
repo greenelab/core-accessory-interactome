@@ -1,4 +1,4 @@
-name: core_acc_env
+name: core_acc
 channels:
 - conda-forge
 - r
@@ -10,7 +10,6 @@ dependencies:
 - bioconda::blast
 - bioconda::r-wgcna=1.69
 - bioconda::sra-tools=2.10.9
-- bioconda::bioconductor-deseq2
 - bioconda::salmon=0.11.2
 - conda-forge::python=3.7
 - conda-forge::notebook
@@ -20,12 +19,12 @@ dependencies:
 - conda-forge::numpy=1.19.5
 - conda-forge::plotnine=0.5.1
 - conda-forge::scikit-learn
-- conda-forge::umap-learn
+- conda-forge::umap-learn=0.4.2
+- conda-forge::numba=0.50.1
 - conda-forge::ipykernel=5.1.1
 - conda-forge::nb_conda_kernels
 - conda-forge::gxx_linux-64
 - conda-forge::clang_osx-64
-- conda-forge::rpy2=2.9.4
 - conda-forge::libiconv=1.15
 - conda-forge::biopython
 - pip=19.2.1
@@ -37,3 +36,6 @@ dependencies:
   - pre_commit==2.9.3
   - jupytext==1.9.1
   - rpy2 == 3.0.1
+  - hdbscan == 0.8.27
+  - fastcluster == 1.1.28
+  - tzlocal == 2.1
