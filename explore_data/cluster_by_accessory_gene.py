@@ -9,9 +9,9 @@
 #       format_version: '1.5'
 #       jupytext_version: 1.9.1+dev
 #   kernelspec:
-#     display_name: Python [conda env:core_acc_env] *
+#     display_name: Python [conda env:core_acc] *
 #     language: python
-#     name: conda-env-core_acc_env-py
+#     name: conda-env-core_acc-py
 # ---
 
 # # Cluster by accessory gene expression
