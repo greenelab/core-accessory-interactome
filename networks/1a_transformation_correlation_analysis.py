@@ -136,3 +136,6 @@ h4 = sns.clustermap(pa14_corr_normalized.abs(), cmap="viridis")
 h4.fig.suptitle("Correlation of 0-1 normalized PA14 genes", y=1.05)
 
 # **Takeaway:**
+#
+# * Using log transform, it looks like there are some smaller modules forming but still one very large module for PAO1. For the pA14 data, it looks like there are more equal-sized modules
+# * Normalizing the data, it looks like there is predominantly one large module for both PAO1 and PA14.
