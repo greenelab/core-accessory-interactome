@@ -16,16 +16,15 @@
 
 # # Correlation analysis
 #
+# ## Upate text based on papers
 # This notebook examines the correlation structure in the gene expression data generated in [1_create_compendia.ipynb](../processing/1_create_compendia.ipynb).
 #
 # When we performed clustering on the correlation matrices (using Pearson correlation) we found that pairs of genes had either very high correlation scores (>0.5) or very low correlation scores (<0.1). As a result gene pairs that were highly correlated clustered into a single large module. This clustering pattern is not ideal for a couple of reasons:
 # 1. Given that our goal is to examine the composition of gene groups, having all genes within one module does not allow us to do this
 # 2. These highly correlated group of genes are likely masking other relevant specific signals/relationships in the data
 #
-# Here we perform two approaches to extracting correlations between genes that correct for this:
-# 1. From [Hibbs et. al.](https://academic.oup.com/bioinformatics/article/23/20/2692/229926), we apply their "signal balancing technique that enhances biological information". This is the first part of their [SPELL](https://spell.yeastgenome.org/) algorithm that is described in section 2.3.1. They apply SVD to the gene expression matrix to reduce the noise that can lead to spurious results and then apply correlation between genes using the singular vector.  Correlations between genes in U equally weight each dimension of the orthonormal basis and balance their contributions such that the least prominent patterns are amplified and more dominant patterns are dampened. This process helps reveal biological signals, as some of the dominant patterns in many microarray datasets are not biologically meaningful. These dominant signals might be due to technical artifacts that lead to artificially high correlation levels (i.e. If a set of samples have all genes highly expressed or lowly expressed). Section 2.4 evaluates SPELL on its ability to capture known biology using this balancing approach compared to just applying Pearson correlation. They look to see if groups of related genes are from the same GO term (i.e. do genes from the same GO term cluster together?)
-#
-# 2. From [Zhu et. al.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4768301/), we apply their "gene hubbiness correction" procedure. This is part of their [SEEK](https://seek.princeton.edu/seek/) algorithm. This correction procedure is motivated by the observation that hubby or well-connected genes in the co-expression network represent global, well-co-expressed processes, and can contaminate the search results regardless of query composition due to the effect of unbalanced gene connectivity in a scale-free co-expression network, and can lead to non-specific results in search or clustering approaches. To avoid the bias created by hubby genes they correct for each gene g’s correlation by subtracting g's average correlation.
+# * DESCRIBE FINDINGS FROM PAPERS AND WHAT WE OBSERVED
+# * DESCRIBE HIGH LEVEL APPROACH IN THIS NOTEBOOK
 
 # %load_ext autoreload
 # %autoreload 2
@@ -44,13 +43,15 @@ from core_acc_modules import paths
 
 # ## Set user parameters
 #
+# # Update variables for PC vs log version
+# # Note using corr threshold only for hetionet
 # For now we will vary the correlation threshold (`corr_threshold`) but keep the other parameters consistent
 #
 # We will run this notebook for each threshold parameter
 
 # Params
 num_PCs = 100
-num_singular_values = 100
+num_singular_values = 300
 corr_threshold = 0.5
 
 # Load expression data
@@ -68,7 +69,7 @@ pa14_compendium.head()
 
 # ## Correlation of raw gene expression data
 #
-# Use this as a comparison to see how the correlations are changed after each correction method
+# Here is the correlation of the raw data without any malnipulations. This will serve as a reference to compare the correlations below where applied corrections to the correlations to account for the dominant signal described above.
 
 # Correlation
 pao1_corr_original = pao1_compendium.corr()
@@ -90,14 +91,15 @@ o2.fig.suptitle(f"Correlation of raw PA14 genes", y=1.05)"""
 
 # ## Correlation of permuted raw gene expression data
 #
+# Here I am trying to create a null distribution of correlation score to determine if a pair of genes are more correlated than expected. This will still require some thought, but for now this is a first pass.
 
 # Shuffle values per gene
 pao1_shuffled_compendium = pao1_compendium.apply(lambda x: x.sample(frac=1).values)
 pa14_shuffled_compendium = pa14_compendium.apply(lambda x: x.sample(frac=1).values)
 
-# Correlation
+"""# Correlation
 pao1_corr_shuffled = pao1_shuffled_compendium.corr()
-pa14_corr_shuffled = pa14_shuffled_compendium.corr()
+pa14_corr_shuffled = pa14_shuffled_compendium.corr()"""
 
 """# Plot heatmap
 plt.figure(figsize=(20, 20))
@@ -110,6 +112,8 @@ o4 = sns.clustermap(pa14_corr_shuffled.abs(), cmap="viridis")
 o4.fig.suptitle(f"Correlation of Shuffled PA14 genes", y=1.05)"""
 
 # ## SPELL + correlation
+#
+# ## Update logic
 #
 # _Review of SVD_
 #
@@ -152,15 +156,10 @@ pa14_U_df = pd.DataFrame(
 
 pao1_U_df.head()
 
-# +
 # Correlation of U
 # Since `corr()` computes pairwise correlation of columns we need to invert U
 pao1_corr_spell = pao1_U_df.iloc[:, :num_singular_values].T.corr()
 pa14_corr_spell = pa14_U_df.iloc[:, :num_singular_values].T.corr()
-
-# pao1_corr_spell = pao1_U_df.T.corr()
-# pa14_corr_spell = pa14_U_df.T.corr()
-# -
 
 # Plot heatmap
 plt.figure(figsize=(20, 20))
@@ -180,12 +179,8 @@ h2.fig.suptitle(
 # ## log transform + SPELL + correlation
 
 # log transform data
-pao1_compendium_log10 = np.log10(pao1_compendium_T)
-pa14_compendium_log10 = np.log10(pa14_compendium_T)
-
-# Set inf to 0
-pao1_compendium_log10[np.isinf(pao1_compendium_log10)] = 0
-pa14_compendium_log10[np.isinf(pa14_compendium_log10)] = 0
+pao1_compendium_log10 = np.log10(1 + pao1_compendium_T)
+pa14_compendium_log10 = np.log10(1 + pa14_compendium_T)
 
 # Apply SVD
 pao1_U, pao1_s, pao1_Vh = np.linalg.svd(pao1_compendium_log10, full_matrices=False)
@@ -215,31 +210,30 @@ pao1_corr_spell = pao1_U_df.iloc[:, :num_singular_values].T.corr()
 pa14_corr_spell = pa14_U_df.iloc[:, :num_singular_values].T.corr()
 # -
 
-# Plot heatmap
+"""# Plot heatmap
 plt.figure(figsize=(20, 20))
 h1a = sns.clustermap(pao1_corr_spell.abs(), cmap="viridis")
 h1a.fig.suptitle(
     f"log transform + SPELL corrected using {num_singular_values} vectors (PAO1)",
     y=1.05,
-)
+)"""
 
-plt.figure(figsize=(20, 20))
+"""plt.figure(figsize=(20, 20))
 h2a = sns.clustermap(pa14_corr_spell.abs(), cmap="viridis")
 h2a.fig.suptitle(
     f"log transformed + SPELL corrected using {num_singular_values} vectors (PA14)",
     y=1.05,
-)
+)"""
 
 # ## PCA + correlation
 #
-# Here we try applying the correlation to the data matrix projected onto the reduced space as well as looking at the correlation on the components matrix that contains gene coefficients per PC.
+# Here we are going to calculate the correlation of the gene coefficients, stored in the PC components matrix. We expect this correlation matrix to look very similar to the SPELL results. This is acting as a positive control that we implemented the SPELL correction correctly
 
 # +
 # Embed expression data into low dimensional space
 pca = PCA(n_components=num_PCs)
 
 model_pao1 = pca.fit(pao1_compendium)
-pao1_encoded = model_pao1.transform(pao1_compendium)
 
 # Using components matrix: gene x PCs (each PC value is how much a gene contributes)
 print(model_pao1.components_.shape)
@@ -247,10 +241,6 @@ pao1_pc_weights_df = pd.DataFrame(
     data=model_pao1.components_, columns=pao1_compendium.columns
 )
 pao1_pc_weights_df.head()
-
-# Using reduced matrix: gene x PCs (each PC is a linear combination of samples)
-# pao1_encoded_df = pd.DataFrame(data=pao1_encoded, index=pao1_compendium_T.index)
-# print(pao1_encoded_df.shape)
 
 # +
 pca_variance = model_pao1.explained_variance_
@@ -267,17 +257,12 @@ plt.show()
 
 # +
 model_pa14 = pca.fit(pa14_compendium)
-pa14_encoded = model_pa14.transform(pa14_compendium)
 
 # Using components matrix: gene x PCs (each PC value is how much a gene contributes)
 print(model_pa14.components_.shape)
 pa14_pc_weights_df = pd.DataFrame(
     data=model_pa14.components_, columns=pa14_compendium.columns
 )
-
-# Using reduced matrix: gene x PCs (each PC is a linear combination of samples)
-# pa14_encoded_df = pd.DataFrame(data=pa14_encoded, index=pa14_compendium.index)
-# print(pa14_encoded_df.shape)
 
 # +
 pca_variance = model_pa14.explained_variance_
@@ -294,33 +279,24 @@ plt.show()
 # -
 
 # Correlation
-# pao1_corr_pca = pao1_encoded_df.T.corr()
-# pa14_corr_pca = pa14_encoded_df.T.corr()
 pao1_corr_pca = pao1_pc_weights_df.corr()
 pa14_corr_pca = pa14_pc_weights_df.corr()
 
-# Plot heatmap
+"""# Plot heatmap
 plt.figure(figsize=(20, 20))
 h3 = sns.clustermap(pao1_corr_pca.abs(), cmap="viridis")
-h3.fig.suptitle(f"PCA using {num_PCs} PCs (PAO1 genes)", y=1.05)
+h3.fig.suptitle(f"PCA using {num_PCs} PCs (PAO1 genes)", y=1.05)"""
 
-plt.figure(figsize=(20, 20))
+"""plt.figure(figsize=(20, 20))
 h4 = sns.clustermap(pa14_corr_pca.abs(), cmap="viridis")
-h4.fig.suptitle(f"PCA using {num_PCs} PCs (PA14 genes)", y=1.05)
-
-# Would expect SVD and PCA to dappen highlight high correlation signals, but this is not what we see. At least this issue seems to be consistent between SVD and PCA. So either
-# * Implemented both incorrectly
-# * This is real but what explains this pattern
+h4.fig.suptitle(f"PCA using {num_PCs} PCs (PA14 genes)", y=1.05)"""
 
 # ## log transform + PCA + correlation
 
 # log transform data
-pao1_compendium_log10 = np.log10(pao1_compendium)
-pa14_compendium_log10 = np.log10(pa14_compendium)
-
-# Set inf to 0
-pao1_compendium_log10[np.isinf(pao1_compendium_log10)] = 0
-pa14_compendium_log10[np.isinf(pa14_compendium_log10)] = 0
+# Note: add 1 to avoid -inf and so 0 maps to those
+pao1_compendium_log10 = np.log10(1 + pao1_compendium)
+pa14_compendium_log10 = np.log10(1 + pa14_compendium)
 
 # +
 # Embed expression data into low dimensional space
@@ -377,16 +353,18 @@ plt.show()
 pao1_corr_pca = pao1_pc_weights_df.corr()
 pa14_corr_pca = pa14_pc_weights_df.corr()
 
-# Plot heatmap
+"""# Plot heatmap
 plt.figure(figsize=(20, 20))
 h3a = sns.clustermap(pao1_corr_pca.abs(), cmap="viridis")
-h3a.fig.suptitle(f"log transformed + PCA using {num_PCs} PCs (PAO1 genes)", y=1.05)
+h3a.fig.suptitle(f"log transformed + PCA using {num_PCs} PCs (PAO1 genes)", y=1.05)"""
 
-plt.figure(figsize=(20, 20))
+"""plt.figure(figsize=(20, 20))
 h4a = sns.clustermap(pa14_corr_pca.abs(), cmap="viridis")
-h4a.fig.suptitle(f"log transformed + PCA using {num_PCs} PCs (PA14 genes)", y=1.05)
+h4a.fig.suptitle(f"log transformed + PCA using {num_PCs} PCs (PA14 genes)", y=1.05)"""
 
 # ## SEEK + correlation
+#
+# ## Update logic
 #
 # From [Zhu et. al.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4768301/), we apply their "gene hubbiness correction" procedure. This is part of their [SEEK](https://seek.princeton.edu/seek/) algorithm. This correction procedure is motivated by the observation that hubby or well-connected genes in the co-expression network represent global, well-co-expressed processes, and can contaminate the search results regardless of query composition due to the effect of unbalanced gene connectivity in a scale-free co-expression network, and can lead to non-specific results in search or clustering approaches. To avoid the bias created by hubby genes they correct for each gene g’s correlation by subtracting g's average correlation.
 #
@@ -411,14 +389,14 @@ pao1_corr_original.head()
 
 pao1_corr_seek.head()
 
-# Plot heatmap
+"""# Plot heatmap
 plt.figure(figsize=(20, 20))
 h5 = sns.clustermap(pao1_corr_seek.abs(), cmap="viridis")
-h5.fig.suptitle("Correlation of PAO1 genes using (SEEK corrected)")
+h5.fig.suptitle("Correlation of PAO1 genes using (SEEK corrected)", y=1.05)"""
 
-plt.figure(figsize=(20, 20))
+"""plt.figure(figsize=(20, 20))
 h6 = sns.clustermap(pa14_corr_seek.abs(), cmap="viridis")
-h6.fig.suptitle("Correlation of PA14 genes (SEEK corrected)")
+h6.fig.suptitle("Correlation of PA14 genes (SEEK corrected)", y=1.05)"""
 
 # ## Hetio
 #
@@ -468,16 +446,68 @@ pao1_corr_hetio_df.head()
 
 pa14_corr_hetio_df.head()
 
-# Plot heatmap
+"""# Plot heatmap
 plt.figure(figsize=(20, 20))
 h7 = sns.clustermap(pao1_corr_hetio_df.abs(), cmap="viridis")
-h7.fig.suptitle("Correlation of PAO1 genes using (Hetio corrected)")
+h7.fig.suptitle("Correlation of PAO1 genes using (Hetio corrected)", y=1.05)"""
+
+"""# Plot heatmap
+plt.figure(figsize=(20, 20))
+h8 = sns.clustermap(pa14_corr_hetio_df.abs(), cmap="viridis")
+h8.fig.suptitle("Correlation of PA14 genes using (Hetio corrected)", y=1.05)"""
+
+# ## Subtract the mean
+#
+# Here we are subtracting the mean of the row and column from each correlation value.
+#
+# _implementation note:_
+#
+# We are subtracting the row mean and column mean separately based on a simple proof where $A_ij$ is the value in row _i_ and column _j_, There are a total of _N_ columns and rows since the matrix is square.
+#
+# $A_{ij} - \frac{\Sigma_{x=0}^N A_{xj} - \Sigma_{x=0}^N A_{ix}}{2N}$
+#
+# $A_{ij} - \frac{\Sigma_{x=0}^N A_{xj}}{2N} - \frac{\Sigma_{x=0}^N A_{ix}}{2N}$
+#
+# $A_{ij} - \frac{1}{2}\frac{\Sigma_{x=0}^N A_{xj}}{N} - \frac{1}{2}\frac{\Sigma_{x=0}^N A_{ix}}{N}$
+
+pao1_corr_mean_subtract = pao1_corr_original.subtract(
+    pao1_corr_original.mean(axis=0) / 2, axis=0
+).subtract(pao1_corr_original.mean(axis=1) / 2, axis=1)
+
+pa14_corr_mean_subtract = pa14_corr_original.subtract(
+    pa14_corr_original.mean(axis=0) / 2, axis=0
+).subtract(pa14_corr_original.mean(axis=1) / 2, axis=1)
+
+pao1_corr_mean_subtract.head()
 
 # Plot heatmap
 plt.figure(figsize=(20, 20))
-h8 = sns.clustermap(pa14_corr_hetio_df.abs(), cmap="viridis")
-h8.fig.suptitle("Correlation of PA14 genes using (Hetio corrected)")
+h9 = sns.clustermap(pao1_corr_mean_subtract.abs(), cmap="viridis")
+h9.fig.suptitle("Subtract mean from correlation of PAO1 genes", y=1.05)
 
-# ## Subtract the mean
+# Plot heatmap
+plt.figure(figsize=(20, 20))
+h10 = sns.clustermap(pa14_corr_mean_subtract.abs(), cmap="viridis")
+h10.fig.suptitle("Subtract mean from correlation of PA14 genes", y=1.05)
 
 # **Takeaway:**
+#
+# * PCA vs SVD
+#
+# Given $ X W = Z$.
+#
+# The goal of **Principal Component Analysis (PCA)** is to find a weight matrix ($W$) that reduces the data into a low dimensional space that captures the as much information from our input data, $X$, as possible. In other words, we want to find a $W$ that captures as much of the variance in the original data as possible.
+#
+# We can use the covariance matrix to describe the input data $X$. $Cov(X)$ is a symmetric matrix that has variances along the diagonal (i.e. spread of the data) and covariances on the off diagonal (orientation of the data).
+#
+# We can factorize $Cov(X) = VDV^T$, where $V$ are the eigenvectors, which represent the direction of variance in our data. $V$ are the our principal components to project our data onto. So the weight matrix is composed of these principal components. And when you multiple $XW = XVD = Z$, which is our data projected onto the most variable directions
+#
+# **Singular Value Decomposition (SVD)** is a way to factorize your matrix, $X^{mxn}$ into singular vectors and singular values: $X = U \Sigma V^*$
+#
+# In our case $X$ is **gene x sample** and then the columns of $U$ are the left singular vectors; $\Sigma$ (eigengene x eigensample) has singular values and is diagonal (mode amplitudes); and $V^T$ has rows that are the right singular vectors.
+#
+# Overall, PCA is performing SVD but using the covariance matrix as input. Using the covariance matrix as the input means that the data is centered (i.e. mean is 0). So there is no difference and we might want to use SVD in this case because there is an associated publication to cite.
+#
+# * log + method
+#
+# * Subtracting the mean correlation score is trying to account for a baseline signal that is present

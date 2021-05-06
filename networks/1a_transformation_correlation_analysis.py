@@ -16,6 +16,7 @@
 
 # # Transformation + correlation analysis
 #
+# ## update text based on papers
 # This notebook examines the correlation structure in the gene expression data generated in [1_create_compendia.ipynb](../processing/1_create_compendia.ipynb).
 #
 # When we performed clustering on the correlation matrices (using Pearson correlation) we found that pairs of genes had either very high correlation scores (>0.5) or very low correlation scores (<0.1). As a result gene pairs that were highly correlated clustered into a single large module. This clustering pattern is not ideal for a couple of reasons:
@@ -73,9 +74,15 @@ pa14_compendium.head()
 pao1_corr_original = pao1_compendium.corr()
 pa14_corr_original = pa14_compendium.corr()
 
-pao1_corr_original.head(10)
+# Plot heatmap
+plt.figure(figsize=(20, 20))
+o1 = sns.clustermap(pao1_corr_original.abs(), cmap="viridis")
+o1.fig.suptitle("Correlation of raw PAO1 genes", y=1.05)
 
-pa14_corr_original.head(10)
+# Plot heatmap
+plt.figure(figsize=(20, 20))
+o2 = sns.clustermap(pa14_corr_original.abs(), cmap="viridis")
+o2.fig.suptitle("Correlation of raw PA14 genes", y=1.05)
 
 # ## Scaling + correlation
 #
@@ -86,8 +93,11 @@ pa14_corr_original.head(10)
 # ### Log transform + correlation
 
 # log transform data
-pao1_compendium_log10 = np.log10(pao1_compendium)
-pa14_compendium_log10 = np.log10(pa14_compendium)
+# Note: add 1 to avoid -inf and so 0 corresponds to those with 0 counts
+pao1_compendium_log10 = np.log10(1 + pao1_compendium)
+pa14_compendium_log10 = np.log10(1 + pa14_compendium)
+
+sns.displot(pao1_compendium_log10["PA0001"])
 
 # Correlation
 pao1_corr_log10 = pao1_compendium_log10.corr()
@@ -136,6 +146,11 @@ h4 = sns.clustermap(pa14_corr_normalized.abs(), cmap="viridis")
 h4.fig.suptitle("Correlation of 0-1 normalized PA14 genes", y=1.05)
 
 # **Takeaway:**
+# Here we are using the Pearson correlation metric, which is defined by the formula:
 #
-# * Using log transform, it looks like there are some smaller modules forming but still one very large module for PAO1. For the pA14 data, it looks like there are more equal-sized modules
-# * Normalizing the data, it looks like there is predominantly one large module for both PAO1 and PA14.
+# $$ \frac{\sigma_{XY}}{\sigma_X \sigma_Y}$$
+#
+# In other words, the correlation is calculated based on the covariance between X,Y (i.e. how X jointly varies with Y) and the scaled by the standard deviation of X and Y (i.e. how variable X and Y are). So this Pearson correlation is testing for linear associations between X and Y.
+#
+# * We find the same correlation patterns if we compare the raw data vs normalized data. This is because the normalization we perform is scaling the values linearly.
+# * By comparison, if we apply a non-linear scaling like log transform, the correlation values are changed. In fact, the correlation patterns using log data reveals more smaller modules compared to using raw data. After applying the log transform to our data, the data will be compressed (i.e. values in the right tail will be scaled down and these high values are what are creating the very dominant high correlation scores. Looking at the equation above the correlation score will be high if the covariance is high. And the covariance will be high if gene X and Y have long right tails and low means which they tend to as seen in the displots above).
