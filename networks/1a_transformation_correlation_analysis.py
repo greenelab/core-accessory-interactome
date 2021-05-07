@@ -14,7 +14,11 @@
 #     name: conda-env-core_acc-py
 # ---
 
-# # Transformation + correlation analysis
+# # Scaling & correlation
+#
+# Try different processing of the raw gene expression data and then applying correlation:
+# * log transform then correlation
+# * Normalize then correlation
 #
 # ## update text based on papers
 # This notebook examines the correlation structure in the gene expression data generated in [1_create_compendia.ipynb](../processing/1_create_compendia.ipynb).
@@ -37,21 +41,6 @@ import random
 import numpy as np
 from sklearn import preprocessing
 from core_acc_modules import paths
-
-# ## Set user parameters
-#
-# For now we will vary the correlation threshold (`corr_threshold`) but keep the other parameters consistent
-#
-# We will run this notebook for each threshold parameter
-
-# +
-# Params -- REMOVE???
-corr_threshold = 0.5
-
-# Output files
-pao1_membership_filename = f"pao1_membership_{corr_threshold}.tsv"
-pa14_membership_filename = f"pa14_membership_{corr_threshold}.tsv"
-# -
 
 # Load expression data
 pao1_compendium_filename = paths.PAO1_COMPENDIUM
@@ -84,13 +73,7 @@ plt.figure(figsize=(20, 20))
 o2 = sns.clustermap(pa14_corr_original.abs(), cmap="viridis")
 o2.fig.suptitle("Correlation of raw PA14 genes", y=1.05)
 
-# ## Scaling + correlation
-#
-# Try different processing of the raw gene expression data and then applying correlation:
-# * log transform + correlation
-# * Normalize + correlation
-
-# ### Log transform + correlation
+# ## Log transform + correlation
 
 # log transform data
 # Note: add 1 to avoid -inf and so 0 corresponds to those with 0 counts
@@ -112,7 +95,7 @@ plt.figure(figsize=(20, 20))
 h2 = sns.clustermap(pa14_corr_log10.abs(), cmap="viridis")
 h2.fig.suptitle("Correlation of log10 transformed PA14 genes", y=1.05)
 
-# ### 0-1 normalize + correlation
+# ## 0-1 normalize + correlation
 
 # +
 # 0-1 normalize per gene
