@@ -31,7 +31,6 @@ import plotnine as pn
 import seaborn as sns
 from sklearn import preprocessing
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 import umap
 import random
 import numpy as np
@@ -73,6 +72,7 @@ pao1_corr_original.head()
 pa14_corr_original.head()
 
 # +
+# %%time
 # Plot heatmap
 o1 = sns.clustermap(pao1_corr_original.abs(), cmap="viridis", figsize=(20, 20))
 o1.fig.suptitle("Correlation of raw PAO1 genes", y=1.05)
