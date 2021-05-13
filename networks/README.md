@@ -18,7 +18,7 @@ Figure 3 shows how well SPELL recapitulates biology (i.e. the relationship betwe
 
 Overall, this notebook calculates and visualizes the correlation matrix that will be used to cluster the data into modules. These visualizations will be used to inform the clustering approach used in the next notebook.
 
-_Note:_ Exploration of different correction methods can be found in [archive notebooks](archive/1b_corrected_correlation_analysis.ipynb)
+_Note:_ Exploration of different correction methods can be found in [archive notebooks](archive/corrected_correlation_analysis.ipynb). Each of these notebooks can be run independently.
 
 [2_get_network_communities.ipynb](2_get_network_communities.ipynb) Applies clustering methods to identify gene modules based on the correlation matrices.
 
