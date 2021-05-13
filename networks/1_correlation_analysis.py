@@ -35,6 +35,7 @@ import umap
 import random
 import numpy as np
 import scipy
+from scipy.spatial.distance import pdist, squareform
 from sklearn.decomposition import PCA
 from core_acc_modules import paths
 
@@ -224,12 +225,53 @@ pa14_log_spell_filename = os.path.join(
 h2a.savefig(pa14_log_spell_filename, dpi=300)
 # -
 
+# ## Plot distribution of pairwise distances
+#
+# This will particularly help to inform the parameters we use for DBSCAN, which is density based. Here we looking at the distribution of both global distances and local distances. Global distances are defined using `pdist`, which takes the pairwise Euclidean distance of each of the correlation vectors (so the distance between gene `p` and gene `q` is based on the difference in correlation between `p` and all other genes, and `q` and all other genes). Whereas the local distance is defined as 1 - |correlation(`p`, `q`)|
+
+# Get distribution of pairwise distances to determine a cutoff defining what a dense region should be
+f1 = sns.displot(pdist(pao1_corr_log_spell))
+plt.title("Distribution of pairwise distances for PAO1 genes")
+
+f2 = sns.displot(pdist(pa14_corr_log_spell))
+plt.title("Distribution of pairwise distances for PA14 genes")
+
+# +
+pao1_local_dist = 1 - pao1_corr_log_spell.abs()
+pao1_local_dist = pao1_local_dist.where(
+    np.triu(np.ones(pao1_local_dist.shape), k=1).astype(np.bool)
+)
+pao1_local_dist = pao1_local_dist.stack().reset_index()
+pao1_local_dist.columns = ["Row", "Column", "Value"]
+
+pao1_local_dist.head(10)
+# -
+
+f3 = sns.displot(pao1_local_dist["Value"])
+plt.title("Distribution of pairwise distances for PAO1 genes")
+
+# +
+pa14_local_dist = 1 - pa14_corr_log_spell.abs()
+pa14_local_dist = pa14_local_dist.where(
+    np.triu(np.ones(pa14_local_dist.shape), k=1).astype(np.bool)
+)
+pa14_local_dist = pa14_local_dist.stack().reset_index()
+pa14_local_dist.columns = ["Row", "Column", "Value"]
+
+pa14_local_dist.head(10)
+# -
+
+f4 = sns.displot(pa14_local_dist["Value"])
+plt.title("Distribution of pairwise distances for PA14 genes")
+
 # Save log transform + SPELL correlation matrices
-pao1_log_spell_mat_filename = os.path.join(
+"""pao1_log_spell_mat_filename = os.path.join(
     paths.LOCAL_DATA_DIR, "pao1_log_spell_mat.tsv"
 )
 pa14_log_spell_mat_filename = os.path.join(
     paths.LOCAL_DATA_DIR, "pa14_log_spell_mat.tsv"
 )
 pao1_corr_log_spell.to_csv(pao1_log_spell_mat_filename, sep="\t")
-pa14_corr_log_spell.to_csv(pa14_log_spell_mat_filename, sep="\t")
+pa14_corr_log_spell.to_csv(pa14_log_spell_mat_filename, sep="\t")"""
+
+

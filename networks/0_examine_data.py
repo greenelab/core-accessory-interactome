@@ -27,7 +27,6 @@ import matplotlib.pyplot as plt
 import umap
 import random
 import numpy as np
-from scipy.spatial.distance import pdist, squareform
 from core_acc_modules import paths
 
 # Load expression data
@@ -66,42 +65,3 @@ sns.pairplot(pa14_compendium[random_pa14_ids])
 # These pair plots tell us what the distribution of the genes look like in our compendia. Overall it looks like genes tend to have a heavy right tail and some genes have a spike at 0 while others don't. As expected, our example housekeeping gene doesn't have this peak since this is a gene that tends to be highly active across all samples.
 #
 # These pair plots also give us a rough sense for how correlated genes are. We would expect co-operonic genes to be more highly correlated compared to a random set of genes, which we do see. Some correlations appear not as strong due to the differences in scales between genes - something to consider when we are looking at correlations between genes.
-
-# ## Plot distribution of pairwise distances
-#
-# This will particularly help to inform the parameters we use for DBSCAN, which is density based. Here we looking at the distribution of both global distances and local distances. Global distances are defined using `pdist`, which takes the pairwise Euclidean distance of each of the correlation vectors (so the distance between gene `p` and gene `q` is based on the difference in correlation between `p` and all other genes, and `q` and all other genes). Whereas the local distance is defined as 1 - |correlation(`p`, `q`)|
-
-# Get distribution of pairwise distances to determine a cutoff defining what a dense region should be
-f1 = sns.displot(pdist(pao1_corr))
-plt.title("Distribution of pairwise distances for PAO1 genes")
-
-f2 = sns.displot(pdist(pa14_corr))
-plt.title("Distribution of pairwise distances for PA14 genes")
-
-# +
-pao1_local_dist = 1 - pao1_corr.abs()
-pao1_local_dist = pao1_local_dist.where(
-    np.triu(np.ones(pao1_local_dist.shape), k=1).astype(np.bool)
-)
-pao1_local_dist = pao1_local_dist.stack().reset_index()
-pao1_local_dist.columns = ["Row", "Column", "Value"]
-
-pao1_local_dist.head(10)
-# -
-
-f3 = sns.displot(pao1_local_dist["Value"])
-plt.title("Distribution of pairwise distances for PAO1 genes")
-
-# +
-pa14_local_dist = 1 - pa14_corr.abs()
-pa14_local_dist = pa14_local_dist.where(
-    np.triu(np.ones(pa14_local_dist.shape), k=1).astype(np.bool)
-)
-pa14_local_dist = pa14_local_dist.stack().reset_index()
-pa14_local_dist.columns = ["Row", "Column", "Value"]
-
-pa14_local_dist.head(10)
-# -
-
-f4 = sns.displot(pa14_local_dist["Value"])
-plt.title("Distribution of pairwise distances for PA14 genes")
