@@ -16,7 +16,12 @@
 
 # # Correlation analysis
 #
-# This notebook performs correlation analysis to compare the similarity between genes and applies different threshold cutoffs to determine the strength of connection between genes
+# This notebook examines the correlation structure in the gene expression data generated in [1_create_compendia.ipynb](../processing/1_create_compendia.ipynb).
+#
+# When we performed clustering on the correlation matrices (using Pearson correlation) we found that pairs of genes had either very high correlation scores (>0.5) or very low correlation scores (<0.1). As a result gene pairs that were highly correlated clustered into a single large module. This finding is consistent with a [previous study](https://link.springer.com/article/10.1186/1471-2164-7-187), which found that KEGG (a database that containes genes or proteins annotated with specific biological processes as reported in the literature) is bias in some biological processes represented. Figure 1C demonstrates that a large fraction of gene pairs are ribosomal relationships - in the top 0.1% most co-expressed genes, 99% belong to the ribosome pathway.
+# Furthermore, protein function prediction based on co-expression drop dramatically after removing the ribisome pathway (Figure 1A, B).
+#
+# This notebook applies different corrections to try to remove this very dominant global signal in the data. This notebook follows from [1a_transformation_correlation_analysis.ipynb](1a_transformation_correlation_analysis.ipynb). Here we are applying dimensionality reduction techniques in addition to scaling the data.
 
 # %load_ext autoreload
 # %autoreload 2
@@ -24,27 +29,23 @@ import os
 import pandas as pd
 import plotnine as pn
 import seaborn as sns
+from sklearn import preprocessing
 import matplotlib.pyplot as plt
 import umap
 import random
 import numpy as np
+import scipy
 from scipy.spatial.distance import pdist, squareform
+from sklearn.decomposition import PCA
 from core_acc_modules import paths
 
 # ## Set user parameters
 #
-# For now we will vary the correlation threshold (`corr_threshold`) but keep the other parameters consistent
-#
-# We will run this notebook for each threshold parameter
+# Here we set the number of PCs or singular vectors to use. We are starting with 300 since this is what [eADAGE](https://pubmed.ncbi.nlm.nih.gov/28711280/) used.
 
-# +
 # Params
-corr_threshold = 0.5
-
-# Output files
-pao1_membership_filename = f"pao1_membership_{corr_threshold}.tsv"
-pa14_membership_filename = f"pa14_membership_{corr_threshold}.tsv"
-# -
+num_singular_values = 300
+num_singular_values_log = 100
 
 # Load expression data
 pao1_compendium_filename = paths.PAO1_COMPENDIUM
@@ -59,69 +60,184 @@ pao1_compendium.head()
 print(pa14_compendium.shape)
 pa14_compendium.head()
 
-# ## Visualize distribution of raw data
-
-# Random PAO1 genes
-random_pao1_ids = random.sample(list(pao1_compendium.columns), 4)
-sns.pairplot(pao1_compendium[random_pao1_ids])
-plt.suptitle("Random set of genes", y=1.05)
-
-# Try removing outlier samples
-pao1_compendium_tmp = pao1_compendium[pao1_compendium["PA1337"] < 200]
-
-# Co-operonic PAO1 genes
-# pao1_co_operonic_ids = ["PA0001", "PA0002", "PA0003", "PA0004"]
-# pao1_co_operonic_ids = ["PA0054","PA0055", "PA0056"]
-pao1_co_operonic_ids = ["PA1335", "PA1336", "PA1337"]
-sns.pairplot(pao1_compendium_tmp[pao1_co_operonic_ids])
-plt.suptitle("Co-operonic set of genes", y=1.05)
-
-# Houskeeping PAO1 gene that we would expect a consistently high expression across samples
-# which doesn't have that peak at 0
-sns.displot(pao1_compendium["PA1805"])
-
-# Random PA14 gene
-random_pa14_ids = random.sample(list(pa14_compendium.columns), 4)
-sns.pairplot(pa14_compendium[random_pa14_ids])
-
-# ## Get similarity between genes
+# ## Correlation of raw gene expression data
 #
-# To determine if genes are similar, we will calculate the correlation between genes and apply our threshold cutoff. When we apply our threshold, any scores that are below the threshold will be set to 0 (i.e. using a threshold of 0.5 means that gene pairs that have correlation scores of 0.52 and 0.78 will be left as is but a gene pair with a correlation score of 0.48 will be set to 0).
+# Here is the correlation of the raw data without any malnipulations. This will serve as a reference to compare the correlations below where applied corrections to the correlations to account for the dominant signal described above.
 
-# Get perason correlation
-# This correlation matrix will represent the concordance
-# between two gene expression profiles
-pao1_corr = pao1_compendium.corr()
-pa14_corr = pa14_compendium.corr()
+# Correlation
+pao1_corr_original = pao1_compendium.corr()
+pa14_corr_original = pa14_compendium.corr()
 
-pao1_corr.head()
+pao1_corr_original.head()
+
+pa14_corr_original.head()
 
 # +
-# Create a similarity matrix usingn the threshold defined above
-# The similarity matrix will determine the strength of the connection between two genes
-# If the concordance is strong enough (i.e. above the threshold), then
-# the genes are connected by by the correlation score, otherwise the value is set to 0
-pao1_corr[pao1_corr.abs() < corr_threshold] = 0.0
-pa14_corr[pa14_corr.abs() < corr_threshold] = 0.0
+# %%time
+# Plot heatmap
+o1 = sns.clustermap(pao1_corr_original.abs(), cmap="viridis", figsize=(20, 20))
+o1.fig.suptitle("Correlation of raw PAO1 genes", y=1.05)
 
-pao1_corr.head()
+# Save
+pao1_pearson_filename = os.path.join(
+    paths.LOCAL_DATA_DIR, "pao1_pearson_clustermap.png"
+)
+o1.savefig(pao1_pearson_filename, dpi=300)
+
+# +
+# Plot heatmap
+o2 = sns.clustermap(pa14_corr_original.abs(), cmap="viridis", figsize=(20, 20))
+o2.fig.suptitle("Correlation of raw PA14 genes", y=1.05)
+
+# Save
+pa14_pearson_filename = os.path.join(
+    paths.LOCAL_DATA_DIR, "pa14_pearson_clustermap.png"
+)
+o2.savefig(pa14_pearson_filename, dpi=300)
 # -
 
-pa14_corr.head()
+# Save original correlation matrices
+pao1_pearson_mat_filename = os.path.join(paths.LOCAL_DATA_DIR, "pao1_pearson_mat.tsv")
+pa14_pearson_mat_filename = os.path.join(paths.LOCAL_DATA_DIR, "pa14_pearson_mat.tsv")
+pao1_corr_original.to_csv(pao1_pearson_mat_filename, sep="\t")
+pa14_corr_original.to_csv(pa14_pearson_mat_filename, sep="\t")
+
+# ## SPELL
+#
+# _Review of SVD_
+#
+# Singular Value Decomposition is a way to factorize your matrix, $X^{mxn}$ into singular vectors and singular values: $X = U \Sigma V^*$
+#
+# In our case $X$ is **gene x sample** and then the columns of $U$ (gene x eigensample) are the left singular vectors (gene coefficient vectors); $\Sigma$ (eigengene x eigensample) has singular values and is diagonal (mode amplitudes); and $V^T$ (eigengene x sample) has rows that are the right singular vectors (expression level vectors).
+#
+# Here we are using SVD to reduce the noise in our original data by performing dimensionality reduction. This dimensionality is done by neglecting the small singular values in the diagonal matrix $\Sigma$. Normally people would get the projection of the original data onto the singular vectors by $U \Sigma$ and apply the correlation on the projected data. Here, we're following the description in [Hibbs et. al.](https://academic.oup.com/bioinformatics/article/23/20/2692/229926) where they performed correlation on $U$ only.
+#
+# From [Hibbs et. al.](https://academic.oup.com/bioinformatics/article/23/20/2692/229926), we apply their "signal balancing technique that enhances biological information". This is the first part of their [SPELL](https://spell.yeastgenome.org/) algorithm that is described in section 2.3.1. SPELL calculates the correlation on the gene coefficient matrix, $U$ (i.e. how much genes contribute to a latent variable) that is generated after applying SVD. This matrix represents how genes contribute to independent latent variables that capture the signal in the data where the variance of the variables is 1. The idea is that correlations between gene contributions are more balanced so that less prominent patterns are amplified and more dominant patterns are dampended due to this compression. Figure 3 shows how well SPELL recapitulates biology (i.e. the relationship between genes within a GO term) compared to Pearson correlation.
+
+# Transpose compendia to be gene x sample
+# Here we're interested in how genes cluster
+pao1_compendium_T = pao1_compendium.T
+pa14_compendium_T = pa14_compendium.T
+
+# Apply SVD
+pao1_U, pao1_s, pao1_Vh = np.linalg.svd(pao1_compendium_T, full_matrices=False)
+pa14_U, pa14_s, pa14_Vh = np.linalg.svd(pa14_compendium_T, full_matrices=False)
+
+print(pao1_compendium_T.shape)
+print(pao1_U.shape, pao1_s.shape, pao1_Vh.shape)
+
+print(pa14_compendium_T.shape)
+print(pa14_U.shape, pa14_s.shape, pa14_Vh.shape)
+
+# Convert ndarray to df to use corr()
+pao1_U_df = pd.DataFrame(data=pao1_U, index=pao1_compendium_T.index)
+pa14_U_df = pd.DataFrame(data=pa14_U, index=pa14_compendium_T.index)
+
+pao1_U_df.head()
+
+# Correlation of U
+# Since `corr()` computes pairwise correlation of columns we need to invert U
+pao1_corr_spell = pao1_U_df.iloc[:, :num_singular_values].T.corr()
+pa14_corr_spell = pa14_U_df.iloc[:, :num_singular_values].T.corr()
+
+# +
+# Plot heatmap
+h1 = sns.clustermap(pao1_corr_spell.abs(), cmap="viridis", figsize=(20, 20))
+h1.fig.suptitle(
+    f"Correlation of PAO1 genes (SPELL corrected using {num_singular_values} vectors)",
+    y=1.05,
+)
+
+# Save
+pao1_spell_filename = os.path.join(paths.LOCAL_DATA_DIR, "pao1_spell_clustermap.png")
+h1.savefig(pao1_spell_filename, dpi=300)
+
+# +
+h2 = sns.clustermap(pa14_corr_spell.abs(), cmap="viridis", figsize=(20, 20))
+h2.fig.suptitle(
+    f"Correlation of PA14 genes (SPELL corrected using {num_singular_values} vectors)",
+    y=1.05,
+)
+
+# Save
+pa14_spell_filename = os.path.join(paths.LOCAL_DATA_DIR, "pa14_spell_clustermap.png")
+h2.savefig(pa14_spell_filename, dpi=300)
+# -
+
+# Save SPELL correlation matrices
+pao1_spell_mat_filename = os.path.join(paths.LOCAL_DATA_DIR, "pao1_spell_mat.tsv")
+pa14_spell_mat_filename = os.path.join(paths.LOCAL_DATA_DIR, "pa14_spell_mat.tsv")
+pao1_corr_spell.to_csv(pao1_spell_mat_filename, sep="\t")
+pa14_corr_spell.to_csv(pa14_spell_mat_filename, sep="\t")
+
+# ## log transform + SPELL + correlation
+
+# log transform data
+pao1_compendium_log10 = np.log10(1 + pao1_compendium_T)
+pa14_compendium_log10 = np.log10(1 + pa14_compendium_T)
+
+# Apply SVD
+pao1_U, pao1_s, pao1_Vh = np.linalg.svd(pao1_compendium_log10, full_matrices=False)
+pa14_U, pa14_s, pa14_Vh = np.linalg.svd(pa14_compendium_log10, full_matrices=False)
+
+print(pao1_compendium_T.shape)
+print(pao1_U.shape, pao1_s.shape, pao1_Vh.shape)
+
+print(pa14_compendium_T.shape)
+print(pa14_U.shape, pa14_s.shape, pa14_Vh.shape)
+
+# Convert ndarray to df to use corr()
+pao1_U_df = pd.DataFrame(data=pao1_U, index=pao1_compendium_T.index)
+pa14_U_df = pd.DataFrame(data=pa14_U, index=pa14_compendium_T.index)
+
+# +
+# Correlation of U
+# Since `corr()` computes pairwise correlation of columns we need to invert U
+
+pao1_corr_log_spell = pao1_U_df.iloc[:, :num_singular_values_log].T.corr()
+pa14_corr_log_spell = pa14_U_df.iloc[:, :num_singular_values_log].T.corr()
+
+# +
+# Plot heatmap
+h1a = sns.clustermap(pao1_corr_log_spell.abs(), cmap="viridis", figsize=(20, 20))
+h1a.fig.suptitle(
+    f"log transform + SPELL corrected using {num_singular_values} vectors (PAO1)",
+    y=1.05,
+)
+
+# Save
+pao1_log_spell_filename = os.path.join(
+    paths.LOCAL_DATA_DIR, "pao1_log_spell_clustermap.png"
+)
+h1a.savefig(pao1_log_spell_filename, dpi=300)
+
+# +
+h2a = sns.clustermap(pa14_corr_log_spell.abs(), cmap="viridis", figsize=(20, 20))
+h2a.fig.suptitle(
+    f"log transformed + SPELL corrected using {num_singular_values} vectors (PA14)",
+    y=1.05,
+)
+
+# Save
+pa14_log_spell_filename = os.path.join(
+    paths.LOCAL_DATA_DIR, "pa14_log_spell_clustermap.png"
+)
+h2a.savefig(pa14_log_spell_filename, dpi=300)
+# -
 
 # ## Plot distribution of pairwise distances
 #
 # This will particularly help to inform the parameters we use for DBSCAN, which is density based. Here we looking at the distribution of both global distances and local distances. Global distances are defined using `pdist`, which takes the pairwise Euclidean distance of each of the correlation vectors (so the distance between gene `p` and gene `q` is based on the difference in correlation between `p` and all other genes, and `q` and all other genes). Whereas the local distance is defined as 1 - |correlation(`p`, `q`)|
 
 # Get distribution of pairwise distances to determine a cutoff defining what a dense region should be
-f1 = sns.displot(pdist(pao1_corr))
+f1 = sns.displot(pdist(pao1_corr_log_spell))
 plt.title("Distribution of pairwise distances for PAO1 genes")
 
-f2 = sns.displot(pdist(pa14_corr))
+f2 = sns.displot(pdist(pa14_corr_log_spell))
 plt.title("Distribution of pairwise distances for PA14 genes")
 
 # +
-pao1_local_dist = 1 - pao1_corr.abs()
+pao1_local_dist = 1 - pao1_corr_log_spell.abs()
 pao1_local_dist = pao1_local_dist.where(
     np.triu(np.ones(pao1_local_dist.shape), k=1).astype(np.bool)
 )
@@ -135,7 +251,7 @@ f3 = sns.displot(pao1_local_dist["Value"])
 plt.title("Distribution of pairwise distances for PAO1 genes")
 
 # +
-pa14_local_dist = 1 - pa14_corr.abs()
+pa14_local_dist = 1 - pa14_corr_log_spell.abs()
 pa14_local_dist = pa14_local_dist.where(
     np.triu(np.ones(pa14_local_dist.shape), k=1).astype(np.bool)
 )
@@ -148,54 +264,14 @@ pa14_local_dist.head(10)
 f4 = sns.displot(pa14_local_dist["Value"])
 plt.title("Distribution of pairwise distances for PA14 genes")
 
-# ## Plot correlation
-#
-# We will plot a heatmap and umap of the correlations to identify clusters, which should help to inform the parameters for hierarchal clustering - i.e. how many clusters can we expect?
-
-# +
-# Plot heatmap
-plt.figure(figsize=(20, 20))
-h1 = sns.clustermap(pao1_corr.abs(), cmap="viridis")
-h1.fig.suptitle(f"Correlation of PAO1 genes using threshold={corr_threshold}")
-
-# Save
-pao1_clustermap_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pao1_corr_{corr_threshold}_clustermap.png"
+# Save log transform + SPELL correlation matrices
+"""pao1_log_spell_mat_filename = os.path.join(
+    paths.LOCAL_DATA_DIR, "pao1_log_spell_mat.tsv"
 )
-h1.savefig(pao1_clustermap_filename, dpi=300)
-
-# +
-plt.figure(figsize=(20, 20))
-h2 = sns.clustermap(pa14_corr.abs(), cmap="viridis")
-h2.fig.suptitle(f"Correlation of PA14 genes using threshold={corr_threshold}")
-
-# Save
-pa14_clustermap_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pa14_corr_{corr_threshold}_clustermap.png"
+pa14_log_spell_mat_filename = os.path.join(
+    paths.LOCAL_DATA_DIR, "pa14_log_spell_mat.tsv"
 )
-h2.savefig(pa14_clustermap_filename, dpi=300)
-# -
+pao1_corr_log_spell.to_csv(pao1_log_spell_mat_filename, sep="\t")
+pa14_corr_log_spell.to_csv(pa14_log_spell_mat_filename, sep="\t")"""
 
-# Save
-pao1_corr_filename = f"pao1_corr_{corr_threshold}.tsv"
-pa14_corr_filename = f"pa14_corr_{corr_threshold}.tsv"
-pao1_corr.to_csv(os.path.join(paths.LOCAL_DATA_DIR, pao1_corr_filename), sep="\t")
-pa14_corr.to_csv(os.path.join(paths.LOCAL_DATA_DIR, pa14_corr_filename), sep="\t")
 
-# **Takeaway:**
-#
-# Here we are visualizing the clustering of raw correlation scores where values < `corr_threshold` are set to 0. If we compare the clustermap results in this notebook with [1a_get_network_communities_complex.ipynb](1a_get_network_communities_complex.ipynb) where we cluster the on the Topological Overlap Matrix (TOM) we see:
-# * Clustering pattern between using raw correlation score vs TOM is similar. TOM is considering secondary relationships (i.e. gene _i_ and _j_ are similar if they are linked in the adjacency matrix and gene _i_ is connected to all the neighbors of gene _j_)
-# * At thresholds 0.5, 0.6 there seems to be 1 large cluster, some very smaller clusters, then all other genes that are below the threshold
-# * As we increase the threshold to 0.8 and 0.9, this very large cluster is broken up into more equal sized smaller clusters
-# * In terms of distance, for threshold of 0.5, 0.6 high density regions look like those > 20. For thresholds 0.7-0.9, high density regions look like those > 15.
-#
-# Overall, clustering may make sense using higher thresholds (0.8, 0.9) and excluding the community containing the remaining genes. However then we are not left with many genes, so perhaps it makes sense to consider a different similarity/correlation metric to use?
-# * Looking at the pair plots of the raw expression data (estimated counts - an estimate of the number of reads drawn from this transcript given the transcript’s relative abundance and length). There is a tendency for genes to have a long right tail where some genes have a spike at 0 and some do not. In this case Spearman correlation might be more appropriate here.
-#
-# After meeting with Casey, the main takeaway is that:
-# * It appears that the TOM matrix is not as sensitive since its setting nearby genes to have a score of 1.
-# Using just the correlation score is grouping genes into one large cluster.
-# * To dappen the overwhelming signal of highly correlated genes we will look into applying these two methods:
-# https://pubmed.ncbi.nlm.nih.gov/17724061/
-# https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4768301/
