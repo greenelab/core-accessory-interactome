@@ -8,9 +8,9 @@
 #       format_version: '1.5'
 #       jupytext_version: 1.9.1+dev
 #   kernelspec:
-#     display_name: Python [conda env:core_acc_env] *
+#     display_name: Python [conda env:core_acc] *
 #     language: python
-#     name: conda-env-core_acc_env-py
+#     name: conda-env-core_acc-py
 # ---
 
 # # Validate new compendia
@@ -26,6 +26,10 @@ from sklearn.preprocessing import MinMaxScaler
 import umap
 import matplotlib.pyplot as plt
 from core_acc_modules import paths, utils
+
+# User param
+# Threshold: if median accessory expression of PAO1 samples > threshold then this sample is binned as PAO1
+threshold = 5
 
 # +
 # Expression data with SRA labels
@@ -55,10 +59,18 @@ sra_annotation = pd.read_csv(sra_annotation_filename, sep="\t", index_col=0, hea
 # -
 
 # Output filenames
-pao1_tpm_filename = "TPM_median_acc_expression_pao1_compendium_10threshold.svg"
-pa14_tpm_filename = "TPM_median_acc_expression_pa14_compendium_10threshold.svg"
-pao1_dist_filename = "dist_median_acc_expression_pao1_compendium_10threshold.svg"
-pa14_dist_filename = "dist_median_acc_expression_pa14_compendium_10threshold.svg"
+pao1_tpm_filename = (
+    f"TPM_median_acc_expression_pao1_compendium_{threshold}threshold.svg"
+)
+pa14_tpm_filename = (
+    f"TPM_median_acc_expression_pa14_compendium_{threshold}threshold.svg"
+)
+pao1_dist_filename = (
+    f"dist_median_acc_expression_pao1_compendium_{threshold}threshold.svg"
+)
+pa14_dist_filename = (
+    f"dist_median_acc_expression_pa14_compendium_{threshold}threshold.svg"
+)
 
 # ## Get core and accessory annotations
 
@@ -238,13 +250,15 @@ pao1_binned_non_pao1_sra = pao1_pa14_acc_pao1_compendium_label.loc[
 ]
 
 # +
-f = sns.distplot(pao1_binned_pao1_sra, color="grey")
-f = sns.distplot(pao1_binned_non_pao1_sra, color="blue")
+f = sns.distplot(pao1_binned_pao1_sra, color="grey", kde=False)
+f = sns.distplot(pao1_binned_non_pao1_sra, color="blue", kde=False)
+if threshold == 0:
+    plt.axvline(5, 0, 100, color="red")
 
 f.figure.savefig(pao1_dist_filename, format="svg", dpi=300)
 
 # +
-# Get PAO1 samples that are labeled PAO1 and non-PAO1
+# Get PA14 samples that are labeled PA14 and non-PA14
 pa14_binned_pa14_sra = pao1_pa14_acc_pa14_compendium_label.loc[
     pao1_pa14_acc_pa14_compendium_label["Strain type_pa14"] == "PA14",
     "median acc expression_pa14",
@@ -256,8 +270,10 @@ pa14_binned_non_pa14_sra = pao1_pa14_acc_pa14_compendium_label.loc[
 ]
 
 # +
-g = sns.distplot(pa14_binned_pa14_sra, color="grey")
-g = sns.distplot(pa14_binned_non_pa14_sra, color="blue")
+g = sns.distplot(pa14_binned_pa14_sra, color="grey", kde=False)
+g = sns.distplot(pa14_binned_non_pa14_sra, color="blue", kde=False)
+if threshold == 0:
+    plt.axvline(5, 0, 100, color="red")
 
 g.figure.savefig(pa14_dist_filename, format="svg", dpi=300)
 # -

@@ -8,9 +8,9 @@
 #       format_version: '1.5'
 #       jupytext_version: 1.9.1+dev
 #   kernelspec:
-#     display_name: Python [conda env:core_acc_env] *
+#     display_name: Python [conda env:core_acc] *
 #     language: python
-#     name: conda-env-core_acc_env-py
+#     name: conda-env-core_acc-py
 # ---
 
 # # Create PAO1 and PA14 compendia
@@ -28,6 +28,10 @@ import seaborn as sns
 from textwrap import fill
 import matplotlib.pyplot as plt
 from core_acc_modules import paths, utils
+
+# User param
+# Threshold: if median accessory expression of PAO1 samples > threshold then this sample is binned as PAO1
+threshold = 5
 
 # ## Load data
 
@@ -127,14 +131,14 @@ pao1_pa14_acc_expression.head()
 # Find PAO1 samples
 pao1_binned_ids = list(
     pao1_pa14_acc_expression.query(
-        "median_acc_expression_pao1>10 & median_acc_expression_pa14==0"
+        "median_acc_expression_pao1>@threshold & median_acc_expression_pa14==0"
     ).index
 )
 
 # Find PA14 samples
 pa14_binned_ids = list(
     pao1_pa14_acc_expression.query(
-        "median_acc_expression_pao1==0 & median_acc_expression_pa14>10"
+        "median_acc_expression_pao1==0 & median_acc_expression_pa14>@threshold"
     ).index
 )
 
