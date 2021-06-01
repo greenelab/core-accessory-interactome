@@ -265,13 +265,13 @@ f4 = sns.displot(pa14_local_dist["Value"])
 plt.title("Distribution of pairwise distances for PA14 genes")
 
 # Save log transform + SPELL correlation matrices
-"""pao1_log_spell_mat_filename = os.path.join(
+pao1_log_spell_mat_filename = os.path.join(
     paths.LOCAL_DATA_DIR, "pao1_log_spell_mat.tsv"
 )
 pa14_log_spell_mat_filename = os.path.join(
     paths.LOCAL_DATA_DIR, "pa14_log_spell_mat.tsv"
 )
 pao1_corr_log_spell.to_csv(pao1_log_spell_mat_filename, sep="\t")
-pa14_corr_log_spell.to_csv(pa14_log_spell_mat_filename, sep="\t")"""
+pa14_corr_log_spell.to_csv(pa14_log_spell_mat_filename, sep="\t")
 
 
