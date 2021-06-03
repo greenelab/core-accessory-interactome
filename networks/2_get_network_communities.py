@@ -35,13 +35,25 @@ from core_acc_modules import paths
 # We will run this notebook for each threshold parameter
 
 # +
-# Params
+# User params to set
+
+# Clustering method
 # Choices: {"dbscan", "hierarchal", "affinity"}
 cluster_method = "affinity"
 
+# DBSCAN params
+density_threshold = 8
+
+# Hierarchical clustering params
+hier_threshold = 8
+link_dist = "average"
+
+# Affinity params
+affinity_damping = 0.6
+
 # Correlation matrix files
-pao1_corr_filename = os.path.join(paths.LOCAL_DATA_DIR, "pao1_log_spell_mat.tsv")
-pa14_corr_filename = os.path.join(paths.LOCAL_DATA_DIR, "pa14_log_spell_mat.tsv")
+pao1_corr_filename = paths.PAO1_CORR_LOG_SPELL
+pa14_corr_filename = paths.PA14_CORR_LOG_SPELL
 # -
 
 # Load correlation data
@@ -57,13 +69,13 @@ pa14_corr = pd.read_csv(pa14_corr_filename, sep="\t", index_col=0, header=0)
 # A cluster is a set of core samples that can be built by recursively taking a core sample, finding all of its neighbors that are core samples, finding all of their neighbors that are core samples, and so on. A cluster also has a set of non-core samples, which are samples that are neighbors of a core sample in the cluster but are not themselves core samples. Intuitively, these samples are on the fringes of a cluster.
 #
 # * We define a core sample as being a sample in the dataset such that there exist `min_samples` other samples within a distance of `eps`, which are defined as neighbors of the core sample.
-# * Here we use `eps=8` based on the observations in the [prevous notebook](1_correlation_analysis.ipynb)
+# * Here we use `eps=8` based on the observations in the [prevous notebook](1_correlation_analysis.ipynb). In the previous notebook we plotted the distribution of pairwise distances (pdist) per gene and we selected 8 based on where the distribution curve drops off on the left side to mark how similar gene pairs are.
 #
 
 # Clustering using DBSCAN
 if cluster_method == "dbscan":
-    pao1_clustering = DBSCAN(eps=8).fit(pao1_corr)
-    pa14_clustering = DBSCAN(eps=8).fit(pa14_corr)
+    pao1_clustering = DBSCAN(eps=density_threshold).fit(pao1_corr)
+    pa14_clustering = DBSCAN(eps=density_threshold).fit(pa14_corr)
 
 # ### Hierarchical clustering
 # [Hierarchical clustering](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.AgglomerativeClustering.html#sklearn.cluster.AgglomerativeClustering): Initially, each object is assigned to its own cluster and then the algorithm proceeds iteratively, at each stage joining the two most similar clusters (i.e. linkage distance is minimized), continuing until there is just a single cluster.
@@ -71,17 +83,17 @@ if cluster_method == "dbscan":
 # * n_cluster: The number of clusters to find.
 # * linkage: Criterion used to determine distance between observations. 'average'=average distance of each observation in the two sets.
 # * distance_threshold: The linkage distance threshold above which, clusters will not be merged
-# * Here we use `distance_threshold=8` based on the observations in the [prevous notebook](1_correlation_analysis.ipynb)
+# * Here we use `distance_threshold=8` based on the observations in the [prevous notebook](1_correlation_analysis.ipynb). In the previous notebook we plotted the distribution of pairwise distances (pdist) per gene and we selected 8 based on where the distribution curve drops off on the left side to mark how similar gene pairs are.
 #
 # * Note: It looks like this method tends to produce 1 very large cluster. To break this up we will iteratively apply hierarchal clustering on the largest cluster.
 
 # Clustering using hierarchal clustering
 if cluster_method == "hierarchal":
     pao1_clustering = AgglomerativeClustering(
-        n_clusters=None, distance_threshold=8, linkage="average"
+        n_clusters=None, distance_threshold=hier_threshold, linkage=link_dist
     ).fit(pao1_corr)
     pa14_clustering = AgglomerativeClustering(
-        n_clusters=None, distance_threshold=8, linkage="average"
+        n_clusters=None, distance_threshold=hier_threshold, linkage=link_dist
     ).fit(pa14_corr)
 
 # ### Affinity propogation
@@ -94,7 +106,9 @@ if cluster_method == "hierarchal":
 # Clustering using affinity propogation
 if cluster_method == "affinity":
     pao1_clustering = AffinityPropagation(random_state=0).fit(pao1_corr)
-    pa14_clustering = AffinityPropagation(random_state=0, damping=0.6).fit(pa14_corr)
+    pa14_clustering = AffinityPropagation(random_state=0, damping=affinity_damping).fit(
+        pa14_corr
+    )
 
 # ## Membership assignments
 

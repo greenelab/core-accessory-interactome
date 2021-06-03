@@ -26,15 +26,20 @@ GENE_PA14_ANNOT = LOCAL_DATA_DIR / "PA14_ID_2_PAO1_ID_PA14ref.csv"
 PAO1_LOGS = LOCAL_DATA_DIR / "logs_pao1_cdna_k15.csv"
 PA14_LOGS = LOCAL_DATA_DIR / "logs_pa14_cdna_k15.csv"
 
-# Location for pre-binned compendia files
+# Location for pre-binned compendia files that have been formated to be
+# sample x gene matrices with experiment id as sample id
 PAO1_PREBIN_COMPENDIUM = LOCAL_DATA_DIR / "pao1_prebin_compendia.tsv"
 PA14_PREBIN_COMPENDIUM = LOCAL_DATA_DIR / "pa14_prebin_compendia.tsv"
 
-# Location for processed compendia files
+# Location for processed/binned compendia files
 PAO1_COMPENDIUM_LABEL = LOCAL_DATA_DIR / "pao1_compendia_labeled.tsv"
 PA14_COMPENDIUM_LABEL = LOCAL_DATA_DIR / "pa14_compendia_labeled.tsv"
 PAO1_COMPENDIUM = LOCAL_DATA_DIR / "pao1_compendia.tsv"
 PA14_COMPENDIUM = LOCAL_DATA_DIR / "pa14_compendia.tsv"
+
+# Location of correlation matrices
+PAO1_CORR_LOG_SPELL = LOCAL_DATA_DIR / "pao1_log_spell_mat.tsv"
+PA14_CORR_LOG_SPELL = LOCAL_DATA_DIR / "pa14_log_spell_mat.tsv"
 
 # Location of metadata
 PAO1_REGULON = META_DIR / "regulons_format.csv"
