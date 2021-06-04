@@ -201,7 +201,7 @@ pa14_corr_log_spell = pa14_U_df.iloc[:, :num_singular_values_log].T.corr()
 # Plot heatmap
 h1a = sns.clustermap(pao1_corr_log_spell.abs(), cmap="viridis", figsize=(20, 20))
 h1a.fig.suptitle(
-    f"log transform + SPELL corrected using {num_singular_values} vectors (PAO1)",
+    f"log transform + SPELL corrected using {num_singular_values_log} vectors (PAO1)",
     y=1.05,
 )
 
@@ -214,7 +214,7 @@ h1a.savefig(pao1_log_spell_filename, dpi=300)
 # +
 h2a = sns.clustermap(pa14_corr_log_spell.abs(), cmap="viridis", figsize=(20, 20))
 h2a.fig.suptitle(
-    f"log transformed + SPELL corrected using {num_singular_values} vectors (PA14)",
+    f"log transformed + SPELL corrected using {num_singular_values_log} vectors (PA14)",
     y=1.05,
 )
 
@@ -273,5 +273,3 @@ pa14_log_spell_mat_filename = os.path.join(
 )
 pao1_corr_log_spell.to_csv(pao1_log_spell_mat_filename, sep="\t")
 pa14_corr_log_spell.to_csv(pa14_log_spell_mat_filename, sep="\t")
-
-

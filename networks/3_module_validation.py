@@ -60,15 +60,13 @@ for method_name in clustering_method_list:
     pa14_membership = pd.read_csv(
         pa14_membership_filename, sep="\t", header=0, index_col=0
     )
+    # Note: Sort module ids by occurence for plotting later
+    pao1_membership.sort_values(by="module id", ascending=False, inplace=True)
+    pa14_membership.sort_values(by="module id", ascending=False, inplace=True)
 
     print(pao1_membership["module id"].value_counts())
     print(pa14_membership["module id"].value_counts())
 
-
-# +
-# Plot so that its one module id per bin -- step plot
-# Sort module ids when plotting, right now not sorted and averaging across
-# -
 
 # plotting function
 def plot_dist_modules(clustering_method_list):
@@ -91,6 +89,9 @@ def plot_dist_modules(clustering_method_list):
         pa14_membership = pd.read_csv(
             pa14_membership_filename, sep="\t", header=0, index_col=0
         )
+        # Note: Sort module ids by occurence for plotting later
+        pao1_membership.sort_values(by="module id", ascending=False, inplace=True)
+        pa14_membership.sort_values(by="module id", ascending=False, inplace=True)
 
         # Get bins using all data
         hist, bins_corr = np.histogram(
@@ -129,7 +130,7 @@ plot_dist_modules(clustering_method_list)
 # **Takeaway:**
 # * Looks like there is one large modules using DBSCAN and hierarachal clustering
 # * There are more even sized modules using affinity propogation
-# * For all methods, the size of the modules are fairly large (i.e. hundreds of genes in one modules)
+# * For all methods, the size of most modules are 10-50's (Note: as a results of the binning which is summing counts across multiple modules, the height of the binds are in the hundreds)
 
 # ## Examine composition of modules
 #

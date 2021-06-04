@@ -44,3 +44,13 @@ PA14_CORR_LOG_SPELL = LOCAL_DATA_DIR / "pa14_log_spell_mat.tsv"
 # Location of metadata
 PAO1_REGULON = META_DIR / "regulons_format.csv"
 PAO1_OPERON = META_DIR / "operons_format.csv"
+
+# Location of PAO1 array compendium metadata file
+ARRAY_DATA = "https://raw.githubusercontent.com/greenelab/adage/master/Data_collection_processing/Pa_compendium_02.22.2014.pcl"
+ARRAY_METADATA = "https://raw.githubusercontent.com/greenelab/generic-expression-patterns/97a55c8d53b5d1812399479d530b9cbaee689079/pseudomonas_analysis/data/metadata/sample_annotations.tsv"
+
+# Location of processed PAO1 array and RNA-seq compendia files
+# These compendia are using the same set of genes to compare
+# module composition between array and RNA-seq
+ARRAY_COMPENDIUM_TO_COMPARE = LOCAL_DATA_DIR / "pao1_array_compendia_tocompare.tsv"
+RNASEQ_COMPENDIUM_TO_COMPARE = LOCAL_DATA_DIR / "pao1_rnaseq_compendia_tocompare.tsv"
