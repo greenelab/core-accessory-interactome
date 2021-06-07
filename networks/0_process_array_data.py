@@ -50,10 +50,8 @@ pao1_strain_values = [
 ]
 
 pao1_sample_ids = array_metadata[
-    array_metadata["strain"].apply(
-        lambda strain_name: strain_name in pao1_strain_values
-    )
-]["ml_data_source"]
+    array_metadata["strain"].isin(pao1_strain_values)
+].loc[:, "ml_data_source"]
 
 # Drop any sample ids that are na
 pao1_sample_ids.dropna(inplace=True)
