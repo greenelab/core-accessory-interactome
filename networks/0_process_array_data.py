@@ -60,7 +60,7 @@ pao1_sample_ids.dropna(inplace=True)
 #
 # Select only those sample ids that are using PAO1-like strains and have expression data available
 
-pao1_array_compendium = array_compendium.loc[pao1_sample_ids]
+pao1_array_compendium = array_compendium.loc[set(pao1_sample_ids.values).intersection(array_compendium.index)]
 
 print(pao1_array_compendium.shape)
 pao1_array_compendium.head()
