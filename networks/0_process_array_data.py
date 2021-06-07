@@ -26,8 +26,8 @@ from core_acc_modules import paths
 
 # +
 # Files
-array_compendium_filename = paths.ARRAY_DATA
-array_metadata_filename = paths.ARRAY_METADATA
+array_compendium_filename = paths.ARRAY_DATA_URL
+array_metadata_filename = paths.ARRAY_METADATA_URL
 
 pao1_rnaseq_compendium_filename = paths.PAO1_COMPENDIUM
 # -
@@ -49,9 +49,9 @@ pao1_strain_values = [
     if ("PAO1" in strain_name) & ("MPAO1" not in strain_name)
 ]
 
-pao1_sample_ids = array_metadata[
-    array_metadata["strain"].isin(pao1_strain_values)
-].loc[:, "ml_data_source"]
+pao1_sample_ids = array_metadata[array_metadata["strain"].isin(pao1_strain_values)].loc[
+    :, "ml_data_source"
+]
 
 # Drop any sample ids that are na
 pao1_sample_ids.dropna(inplace=True)
@@ -60,7 +60,9 @@ pao1_sample_ids.dropna(inplace=True)
 #
 # Select only those sample ids that are using PAO1-like strains and have expression data available
 
-pao1_array_compendium = array_compendium.loc[set(pao1_sample_ids.values).intersection(array_compendium.index)]
+pao1_array_compendium = array_compendium.loc[
+    set(pao1_sample_ids.values).intersection(array_compendium.index)
+]
 
 print(pao1_array_compendium.shape)
 pao1_array_compendium.head()

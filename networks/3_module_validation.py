@@ -35,10 +35,15 @@ clustering_method_list = ["dbscan", "hierarchal", "affinity"]
 
 # Params for regulon/operon coverage
 # Clustering method to examine regulon/operon coverage
+# This method needs to be one of the ones listed above in `clustering_method_list`
 method_toexamine = "dbscan"
 
 # Remove modules of this size or greater for analysis looking at coverage of regulon/operons
 module_size_threshold = 1000
+
+# Seed to use to randomly sample a matched-sized set of genes
+# to compare against regulon/operon composition
+sample_seed = 1
 # -
 
 # ## Examine size of modules
@@ -46,7 +51,7 @@ module_size_threshold = 1000
 # This will serve as a quick check that we are using reasonable clustering params in [2_get_network_communities.ipynb](2_get_network_communities.ipynb)
 
 for method_name in clustering_method_list:
-    print(f"Modules using correlation threshold: {method_name}")
+    print(f"Modules using clustering method: {method_name}")
     pao1_membership_filename = os.path.join(
         paths.LOCAL_DATA_DIR, f"pao1_modules_{method_name}.tsv"
     )
@@ -93,38 +98,18 @@ def plot_dist_modules(clustering_method_list):
         pao1_membership.sort_values(by="module id", ascending=False, inplace=True)
         pa14_membership.sort_values(by="module id", ascending=False, inplace=True)
 
-        # Get bins using all data
-        hist, bins_corr = np.histogram(
-            np.concatenate([pao1_membership["module id"], pa14_membership["module id"]])
-        )
-
-        fig = sns.distplot(
-            pao1_membership["module id"],
-            label="PAO1 modules",
-            color="red",
-            bins=bins_corr,
-            kde=False,
-            ax=axes[i],
-        )
-
-        fig = sns.distplot(
-            pa14_membership["module id"],
-            label="PA14 modules",
-            color="blue",
-            bins=bins_corr,
-            kde=False,
-            ax=axes[i],
-        )
+        fig = pao1_membership["module id"].value_counts().sort_index().plot(ax=axes[i])
+        fig = pa14_membership["module id"].value_counts().sort_index().plot(ax=axes[i])
 
         fig.set_title(
             f"Histogram of size of modules using {clustering_method_list[i]}",
             fontsize=12,
         )
         handles, labels = fig.get_legend_handles_labels()
-        fig.legend(handles, labels, loc="center right")
+        fig.legend(handles, ["PAO1", "PA14"], loc="upper right")
 
 
-# Plot distribution of modules per threshold
+# Plot distribution of modules per clustering method
 plot_dist_modules(clustering_method_list)
 
 # **Takeaway:**
@@ -147,7 +132,7 @@ plot_dist_modules(clustering_method_list)
 pao1_regulon_filename = paths.PAO1_REGULON
 pao1_operon_filename = paths.PAO1_OPERON
 
-# Load membership for specific threshold
+# Load membership for specific clustering method
 pao1_membership_filename = os.path.join(
     paths.LOCAL_DATA_DIR, f"pao1_modules_{method_toexamine}.tsv"
 )
@@ -265,10 +250,14 @@ print(pao1_regulon.shape)
 
 # For each regulon/operon, select a random set of genes that are the same size at the regulon/operon
 pao1_operon["Random_Genes"] = pao1_operon["Length_processed"].apply(
-    lambda num_genes: pao1_membership.sample(num_genes).index.values
+    lambda num_genes: pao1_membership.sample(
+        num_genes, random_state=sample_seed
+    ).index.values
 )
 pao1_regulon["Random_Genes"] = pao1_regulon["Length_processed"].apply(
-    lambda num_genes: pao1_membership.sample(num_genes).index.values
+    lambda num_genes: pao1_membership.sample(
+        num_genes, random_state=sample_seed
+    ).index.values
 )
 
 pao1_operon.head()

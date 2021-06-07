@@ -174,6 +174,10 @@ pao1_rnaseq_membership_df.head()
 # ## Compare composition of modules
 #
 # For a given array module, are the genes within 1 module in the RNA-seq compendium?
+#
+# For rna-seq data, `grp_id` is the cluster id, `grp` contains the list of genes in this cluster. We can then look up which cluster these genes from the rna-seq cluster map to in the array compendium:  `pao1_array_membership_df.loc[grp.index]` returns the list of array cluster ids for each gene found in the rna-seq cluster. Finally, `rnaseq_module_mapping[grp_id]` contains the list of cluster ids in array data that contain each of these genes in the cluster grp_id in rnaq-seq data.
+#
+# Here we are looking to see if modules are consistent (i.e. are genes found in an array module also found in a single module in rna-seq)?
 
 # +
 array_module_mapping = {}
