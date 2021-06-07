@@ -39,7 +39,7 @@ from core_acc_modules import paths
 
 # Clustering method
 # Choices: {"dbscan", "hierarchal", "affinity"}
-cluster_method = "affinity"
+cluster_method = "dbscan"
 
 # DBSCAN params
 density_threshold = 8
@@ -120,6 +120,9 @@ pao1_membership_df = pd.DataFrame(
 )
 
 pao1_membership_df["module id"].value_counts()
+# -
+
+pao1_membership_df.head()
 
 # +
 # Get module membership for a single threshold
@@ -130,6 +133,8 @@ pa14_membership_df = pd.DataFrame(
 
 pa14_membership_df["module id"].value_counts()
 # -
+
+pa14_membership_df.head()
 
 # **Final method:**
 # We will use <Method> because ...
