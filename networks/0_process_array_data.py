@@ -37,6 +37,7 @@ array_compendium = pd.read_csv(
 ).T
 array_metadata = pd.read_csv(array_metadata_filename, sep="\t", index_col=0, header=0)
 
+print(array_compendium.shape)
 array_compendium.head()
 
 print(array_metadata.shape)
