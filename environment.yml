@@ -27,7 +27,7 @@ dependencies:
 - conda-forge::clang_osx-64
 - conda-forge::libiconv=1.15
 - conda-forge::biopython
-- conda-forge::python-igraph=0.7
+- conda-forge::python-igraph=0.7.1
 - pip=19.2.1
 - pip:
   - matplotlib==3.0.0
