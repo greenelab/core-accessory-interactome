@@ -31,16 +31,16 @@ from core_acc_modules import paths
 # User params
 
 # Choices = ["fastgreedy", "walktrap", "louvain", "infomap"]
-method = "fastgreedy"
+method = "walktrap"
 
 # TO DO: params for different methods to adjust
 # steps for walktrap
 # trails for infomap
 
 # +
-# Load correlation matrix --> which correlation matrix to use?
-pao1_pearson_mat_filename = os.path.join(paths.LOCAL_DATA_DIR, "pao1_pearson_mat.tsv")
-pa14_pearson_mat_filename = os.path.join(paths.LOCAL_DATA_DIR, "pa14_pearson_mat.tsv")
+# Load correlation matrix
+pao1_pearson_mat_filename = paths.PAO1_CORR_LOG_SPELL
+pa14_pearson_mat_filename = paths.PA14_CORR_LOG_SPELL
 
 # Take abs of correlation scores
 # In this case we care about the strength and not the direction
@@ -73,6 +73,7 @@ pa14_corr_graph = pa14_corr_graph.drop_duplicates()
 pao1_corr_graph = pao1_corr_graph[pao1_corr_graph["from"] != pao1_corr_graph["to"]]
 pa14_corr_graph = pa14_corr_graph[pa14_corr_graph["from"] != pa14_corr_graph["to"]]
 
+print(pao1_corr_graph.shape)
 pao1_corr_graph.head()
 
 # Make into a graph object
@@ -91,43 +92,56 @@ print(pao1_G.es["weight"][:5])
 # ### Fast-greedy
 # This algorithm starts from a completely unclustered set of nodes and iteratively adds communities such that the modularity (score maximizing within edges and minimizing between edges) is maximized until no additional improvement can be made.
 #
-# **What is this simplification step doing?**
-# This is removing multiple edges and loops -- how???
+# Note: Looks like fast-greedy requires a simple graph (i.e. no multiple edges per node), so we use [simplify](https://igraph.org/python/doc/api/igraph._igraph.GraphBase.html#simplify) to combine edges
 
+# %%time
 if method == "fastgreedy":
-    pao1_partition = pao1_G.simplify().community_fastgreedy(weights=pao1_G.es["weight"])
-    pa14_partition = pao1_G.simplify().community_fastgreedy(weights=pa14_G.es["weight"])
+    # Simplify graph to remove multiple edges and loops
+    if not pao1_G.is_simple():
+        pao1_G.simplify()
+    if not pa14_G.is_simple():
+        pa14_G.simplify()
+
+    assert pao1_G.is_simple()
+    assert pa14_G.is_simple()
+
+    # Detection method
+    pao1_partition = pao1_G.community_fastgreedy(weights=pao1_G.es["weight"])
+    pa14_partition = pa14_G.community_fastgreedy(weights=pa14_G.es["weight"])
 
 # +
-# Error at fast_community.c:553: fast-greedy community finding works only on graphs without multiple edges, Invalid value
+# pao1_G.vs.attribute_names()
 # -
 
 # ### Walktrap
 # This algorithm performs random walks using a specified step size. Where densely connected areas occur, the random walk becomes “trapped” in local regions that then define communities
 #
 
+# %%time
 if method == "walktrap":
     pao1_partition = pao1_G.community_walktrap(weights=pao1_G.es["weight"])
-    pa14_partition = pa14_G.community_walktrap(weights=pao1_G.es["weight"])
+    pa14_partition = pa14_G.community_walktrap(weights=pa14_G.es["weight"])
 
 # ### Multilevel
 # This algorithm is similar to fastgreedy, but it merges communities to optimize modularity based upon only the neighboring communities as opposed to all communities. The algorithm terminates when only a single node is left, or when the improvement in modularity cannot result from the simple merge of two neighboring communities. (Louvain clustering)
 
+# %%time
 if method == "louvain":
     pao1_partition = pao1_G.community_multilevel(
         weights=pao1_G.es["weight"], return_levels=False
     )
     pa14_partition = pa14_G.community_multilevel(
-        weights=pao1_G.es["weight"], return_levels=False
+        weights=pa14_G.es["weight"], return_levels=False
     )
 
 # ### Infomap
 # This algorithm uses the probability flow of information in random walks, which occurs more readily in groups of heavily connected nodes. Thus, information about network structure can be compressed in maps of modules (nodes where information travels quickly)
 #
 
+# %%time
 if method == "infomap":
     pao1_partition = pao1_G.community_infomap(edge_weights=pao1_G.es["weight"])
-    pa14_partition = pa14_G.community_infomap(edge_weights=pao1_G.es["weight"])
+    pa14_partition = pa14_G.community_infomap(edge_weights=pa14_G.es["weight"])
 
 
 # ## Get membership
@@ -137,8 +151,14 @@ def graph_partition_to_df(G, partition):
     clusters = []
     for label, vl in enumerate(partition):
         clusters += [(G.vs["name"][v], label, G.degree(v)) for v in vl]
-    return pd.DataFrame(clusters, columns=["gene", "module id", "degree"])
 
+    membership_df = pd.DataFrame(clusters, columns=["gene", "module id", "degree"])
+    membership_df = membership_df.set_index("gene")
+
+    return membership_df
+
+
+pao1_partition.es.attribute_names()
 
 pao1_membership_df = graph_partition_to_df(pao1_G, pao1_partition)
 print(len(pao1_membership_df["module id"].unique()))

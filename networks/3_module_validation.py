@@ -18,6 +18,7 @@
 # +
 # %load_ext autoreload
 # %autoreload 2
+# %matplotlib inline
 import os
 import scipy
 import pandas as pd
@@ -31,12 +32,12 @@ np.random.seed(1)
 # +
 # User params
 # Params to examine module size
-clustering_method_list = ["dbscan", "hierarchal", "affinity"]
+clustering_method_list = ["dbscan", "hierarchal", "affinity", "louvain", "infomap"]
 
 # Params for regulon/operon coverage
 # Clustering method to examine regulon/operon coverage
 # This method needs to be one of the ones listed above in `clustering_method_list`
-method_toexamine = "dbscan"
+method_toexamine = "infomap"
 
 # Remove modules of this size or greater for analysis looking at coverage of regulon/operons
 module_size_threshold = 1000
@@ -77,7 +78,7 @@ for method_name in clustering_method_list:
 def plot_dist_modules(clustering_method_list):
 
     # Set up the matplotlib figure
-    fig, axes = plt.subplots(ncols=3, nrows=1, figsize=(15, 5))
+    fig, axes = plt.subplots(ncols=2, nrows=3, figsize=(15, 15))
     axes = axes.ravel()
 
     for i in range(len(clustering_method_list)):
