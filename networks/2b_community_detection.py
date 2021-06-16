@@ -17,6 +17,8 @@
 # # Network community detection
 #
 # This notebook performs community detection approaches to identify network modules.
+#
+# Note: All methods here are using undirected weighted networks. All methods take edge weights as input.
 
 # +
 import os
@@ -33,9 +35,16 @@ from core_acc_modules import paths
 # Choices = ["fastgreedy", "walktrap", "louvain", "infomap"]
 method = "walktrap"
 
-# TO DO: params for different methods to adjust
-# steps for walktrap
-# trails for infomap
+# Params for different methods to adjust
+# length of random walk to perform for walktrap
+# Short random walks tend to stay in the same community
+nsteps = 10
+
+# Number of trials to attempt to partition the network for infomap
+ntrials = 20
+
+# TO DO
+# Think about running these methods across multiple seeds and taking a consensus
 
 # +
 # Load correlation matrix
@@ -83,16 +92,14 @@ pa14_G = ig.Graph.TupleList(pa14_corr_graph.values, weights=True, directed=False
 # make sure vertex/edge properties exist
 print(pao1_G.es["weight"][:5])
 
-# +
-# TO DO: Add label for core, accessory gene
-# -
-
 # ## Community detection
 
 # ### Fast-greedy
 # This algorithm starts from a completely unclustered set of nodes and iteratively adds communities such that the modularity (score maximizing within edges and minimizing between edges) is maximized until no additional improvement can be made.
 #
 # Note: Looks like fast-greedy requires a simple graph (i.e. no multiple edges per node), so we use [simplify](https://igraph.org/python/doc/api/igraph._igraph.GraphBase.html#simplify) to combine edges
+#
+# Returns VertextDendrogram
 
 # %%time
 if method == "fastgreedy":
@@ -116,14 +123,21 @@ if method == "fastgreedy":
 # ### Walktrap
 # This algorithm performs random walks using a specified step size. Where densely connected areas occur, the random walk becomes “trapped” in local regions that then define communities
 #
+# Returns VertextDendrogram
 
 # %%time
 if method == "walktrap":
-    pao1_partition = pao1_G.community_walktrap(weights=pao1_G.es["weight"])
-    pa14_partition = pa14_G.community_walktrap(weights=pa14_G.es["weight"])
+    pao1_partition = pao1_G.community_walktrap(
+        weights=pao1_G.es["weight"], steps=nsteps
+    )
+    pa14_partition = pa14_G.community_walktrap(
+        weights=pa14_G.es["weight"], steps=nsteps
+    )
 
 # ### Multilevel
 # This algorithm is similar to fastgreedy, but it merges communities to optimize modularity based upon only the neighboring communities as opposed to all communities. The algorithm terminates when only a single node is left, or when the improvement in modularity cannot result from the simple merge of two neighboring communities. (Louvain clustering)
+#
+# Returns VertexClustering
 
 # %%time
 if method == "louvain":
@@ -137,34 +151,40 @@ if method == "louvain":
 # ### Infomap
 # This algorithm uses the probability flow of information in random walks, which occurs more readily in groups of heavily connected nodes. Thus, information about network structure can be compressed in maps of modules (nodes where information travels quickly)
 #
+# Returns VertexClustering
 
 # %%time
 if method == "infomap":
-    pao1_partition = pao1_G.community_infomap(edge_weights=pao1_G.es["weight"])
-    pa14_partition = pa14_G.community_infomap(edge_weights=pa14_G.es["weight"])
+    pao1_partition = pao1_G.community_infomap(
+        edge_weights=pao1_G.es["weight"], trials=ntrials
+    )
+    pa14_partition = pa14_G.community_infomap(
+        edge_weights=pa14_G.es["weight"], trials=ntrials
+    )
 
 
 # ## Get membership
 
 # get dataframe mapping Pa genes to communities
-def graph_partition_to_df(G, partition):
-    clusters = []
-    for label, vl in enumerate(partition):
-        clusters += [(G.vs["name"][v], label, G.degree(v)) for v in vl]
+def graph_partition_to_df(G, partition, method):
+    if method in ["louvain", "infomap"]:
+        clusters = []
+        for label, vl in enumerate(partition):
+            clusters += [(G.vs["name"][v], label, G.degree(v)) for v in vl]
 
-    membership_df = pd.DataFrame(clusters, columns=["gene", "module id", "degree"])
-    membership_df = membership_df.set_index("gene")
+        membership_df = pd.DataFrame(clusters, columns=["gene", "module id", "degree"])
+        membership_df = membership_df.set_index("gene")
 
-    return membership_df
+        return membership_df
 
 
 pao1_partition.es.attribute_names()
 
-pao1_membership_df = graph_partition_to_df(pao1_G, pao1_partition)
+pao1_membership_df = graph_partition_to_df(pao1_G, pao1_partition, method)
 print(len(pao1_membership_df["module id"].unique()))
 pao1_membership_df.sort_values(by="degree", ascending=False).head()
 
-pa14_membership_df = graph_partition_to_df(pa14_G, pa14_partition)
+pa14_membership_df = graph_partition_to_df(pa14_G, pa14_partition, method)
 print(len(pa14_membership_df["module id"].unique()))
 pa14_membership_df.sort_values(by="degree", ascending=False).head()
 
