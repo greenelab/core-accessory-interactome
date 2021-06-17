@@ -33,7 +33,7 @@ from core_acc_modules import paths
 # User params
 
 # Choices = ["fastgreedy", "walktrap", "louvain", "infomap"]
-method = "walktrap"
+method = "infomap"
 
 # Params for different methods to adjust
 # length of random walk to perform for walktrap
@@ -178,7 +178,9 @@ def graph_partition_to_df(G, partition, method):
         return membership_df
 
 
-pao1_partition.es.attribute_names()
+# +
+# pao1_partition.es.attribute_names()
+# -
 
 pao1_membership_df = graph_partition_to_df(pao1_G, pao1_partition, method)
 print(len(pao1_membership_df["module id"].unique()))

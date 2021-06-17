@@ -37,7 +37,7 @@ clustering_method_list = ["dbscan", "hierarchal", "affinity", "louvain", "infoma
 # Params for regulon/operon coverage
 # Clustering method to examine regulon/operon coverage
 # This method needs to be one of the ones listed above in `clustering_method_list`
-method_toexamine = "infomap"
+method_toexamine = "affinity"
 
 # Remove modules of this size or greater for analysis looking at coverage of regulon/operons
 module_size_threshold = 1000

@@ -39,7 +39,7 @@ from core_acc_modules import paths
 
 # Clustering method
 # Choices: {"dbscan", "hierarchal", "affinity"}
-cluster_method = "dbscan"
+cluster_method = "affinity"
 
 # DBSCAN params
 density_threshold = 8
@@ -101,7 +101,7 @@ if cluster_method == "hierarchal":
 # [Affinity propogation](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.AffinityPropagation.html#sklearn.cluster.AffinityPropagation): creates clusters by sending messages between pairs of samples until convergence. The messages sent between points belong to one of two categories. The first is the responsibility $r(k,i)$, which is the accumulated evidence that sample $k$ should be the exemplar for sample $i$ compared to other exemplars. The second is the availability $a(k,i)$ which is the accumulated evidence that sample $i$ should choose sample $k$to be its exemplar. _Exemplar_ meaning the members of the input set that are representative of clusters -- similar to _centroids_ in k-means. Unlike k-means this method doesn't require a preset $k$ to be chosen.
 #
 # * damping: Damping factor (between 0.5 and 1) is the extent to which the current value is maintained relative to incoming values (weighted 1 - damping). This in order to avoid numerical oscillations when updating these values. Default is 0.5. Using default for PA14 data, the model didn't converge so we increased this to 0.6.
-#
+# * affinity: Method used to calculate the distance between clusters. Here we will use `euclidean` distance which is the default. `Precomputed` is expecting a distance matrix as input [source code](https://github.com/scikit-learn/scikit-learn/blob/bac89c2/sklearn/cluster/hierarchical.py#L454)
 
 # Clustering using affinity propogation
 if cluster_method == "affinity":
@@ -135,11 +135,6 @@ pa14_membership_df["module id"].value_counts()
 # -
 
 pa14_membership_df.head()
-
-# **Final method:**
-# We will use <Method> because ...
-#
-#     Thoughts on different methods
 
 # Save membership dataframe
 pao1_membership_filename = os.path.join(
