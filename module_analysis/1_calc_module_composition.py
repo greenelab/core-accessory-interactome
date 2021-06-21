@@ -19,7 +19,6 @@
 #
 # The strategy we will use will be the following:
 # 1. Given a module
-# 2.
 
 # %load_ext autoreload
 # %autoreload 2
@@ -30,7 +29,7 @@ from core_acc_modules import utils, paths
 
 # User params
 method = "affinity"
-num_samples = 10
+num_samples = 100
 
 # ### Import module memberships
 
@@ -102,16 +101,100 @@ assert len(ls_core_pa14_samples[0]) == num_pa14_acc
 
 # ### Calculate composition of modules
 
-# +
-# Each module should have a distribution of number of core genes
+# Get list of modules ids
+pao1_module_ids = pao1_membership["module id"].unique()
+pa14_module_ids = pa14_membership["module id"].unique()
+
+print(len(pao1_module_ids))
+print(len(pa14_module_ids))
 
 # +
+# For each module get the distribution of number of core genes
+pao1_gene_group_composition = pd.DataFrame(
+    index=pao1_module_ids, columns=range(0, num_samples)
+)
+pa14_gene_group_composition = pd.DataFrame(
+    index=pa14_module_ids, columns=range(0, num_samples)
+)
+
+
+def get_module_composition(membership_df, core_samples_list, acc_genes, composition_df):
+    # Get number of core genes from each sampling per module
+    for i in range(len(core_samples_list)):
+        num_core_genes = membership_df.loc[core_samples_list[i]][
+            "module id"
+        ].value_counts()
+        composition_df[i] = num_core_genes
+
+    # Get the number of accessory genes per module
+    num_acc_genes = membership_df.loc[acc_genes]["module id"].value_counts()
+    composition_df["acc"] = num_acc_genes
+
+    composition_df = composition_df.fillna(0)
+
+    return composition_df
+
+
+# -
+
+pao1_gene_group_composition_processed = get_module_composition(
+    pao1_membership, ls_core_pao1_samples, pao1_acc, pao1_gene_group_composition
+)
+pa14_gene_group_composition_processed = get_module_composition(
+    pa14_membership, ls_core_pa14_samples, pa14_acc, pa14_gene_group_composition
+)
+
+pao1_gene_group_composition_processed.head()
+
+pa14_gene_group_composition_processed.head()
+
+# +
+# core_composition.quantile(.9, axis=1)[562]
+# -
+
+"""core_composition = pao1_gene_group_composition_processed.drop("acc", axis=1)
+
+pao1_gene_group_composition_processed[
+    pao1_gene_group_composition_processed["acc"] > core_composition.quantile(.9, axis=1)
+]"""
+
+
 # For a given module,
 # If the number of accessory genes < 10th quantile of core genes then the module is core
 # If the number of accessory genes > 90th quantile of core genes then the module is accessory
 # Else the module is mixed
+def label_modules(module_composition_df):
+    core_composition = module_composition_df.drop("acc", axis=1)
+
+    module_composition_df["module label"] = "mixed"
+    module_composition_df.loc[
+        module_composition_df["acc"] < core_composition.quantile(0.1, axis=1),
+        "module label",
+    ] = "mostly core"
+    module_composition_df.loc[
+        module_composition_df["acc"] > core_composition.quantile(0.9, axis=1),
+        "module label",
+    ] = "mostly accessory"
+
+    return module_composition_df
+
+
+pao1_module_labels = label_modules(pao1_gene_group_composition_processed)
+pa14_module_labels = label_modules(pa14_gene_group_composition_processed)
+
+pao1_module_labels.head()
+
+pa14_module_labels.head()
+
+# ### Let's look into the module labels
+
+pao1_module_labels["module label"].value_counts()
+
+pa14_module_labels["module label"].value_counts()
 
 # +
+# Is the way we are choosing to calculate composition sensible? What are the caveats?
+# Based on this output, what should we do?
 # What is the percentage of core, accessory, mixed modules?
 
 # +
