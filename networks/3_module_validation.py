@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.9.1+dev
+#       jupytext_version: 1.9.1
 #   kernelspec:
 #     display_name: Python [conda env:core_acc] *
 #     language: python
@@ -18,6 +18,7 @@
 # +
 # %load_ext autoreload
 # %autoreload 2
+# %matplotlib inline
 import os
 import scipy
 import pandas as pd
@@ -31,12 +32,12 @@ np.random.seed(1)
 # +
 # User params
 # Params to examine module size
-clustering_method_list = ["dbscan", "hierarchal", "affinity"]
+clustering_method_list = ["dbscan", "hierarchal", "affinity", "louvain", "infomap"]
 
 # Params for regulon/operon coverage
 # Clustering method to examine regulon/operon coverage
 # This method needs to be one of the ones listed above in `clustering_method_list`
-method_toexamine = "dbscan"
+method_toexamine = "affinity"
 
 # Remove modules of this size or greater for analysis looking at coverage of regulon/operons
 module_size_threshold = 1000
@@ -77,7 +78,7 @@ for method_name in clustering_method_list:
 def plot_dist_modules(clustering_method_list):
 
     # Set up the matplotlib figure
-    fig, axes = plt.subplots(ncols=3, nrows=1, figsize=(15, 5))
+    fig, axes = plt.subplots(ncols=2, nrows=3, figsize=(15, 15))
     axes = axes.ravel()
 
     for i in range(len(clustering_method_list)):
@@ -94,12 +95,21 @@ def plot_dist_modules(clustering_method_list):
         pa14_membership = pd.read_csv(
             pa14_membership_filename, sep="\t", header=0, index_col=0
         )
-        # Note: Sort module ids by occurence for plotting later
-        pao1_membership.sort_values(by="module id", ascending=False, inplace=True)
-        pa14_membership.sort_values(by="module id", ascending=False, inplace=True)
 
-        fig = pao1_membership["module id"].value_counts().sort_index().plot(ax=axes[i])
-        fig = pa14_membership["module id"].value_counts().sort_index().plot(ax=axes[i])
+        fig = (
+            pao1_membership["module id"]
+            .value_counts()
+            .sort_values(ascending=False)
+            .reset_index()["module id"]
+            .plot(ax=axes[i])
+        )
+        fig = (
+            pa14_membership["module id"]
+            .value_counts()
+            .sort_values(ascending=False)
+            .reset_index()["module id"]
+            .plot(ax=axes[i])
+        )
 
         fig.set_title(
             f"Histogram of size of modules using {clustering_method_list[i]}",
@@ -113,9 +123,14 @@ def plot_dist_modules(clustering_method_list):
 plot_dist_modules(clustering_method_list)
 
 # **Takeaway:**
-# * Looks like there is one large modules using DBSCAN and hierarachal clustering
-# * There are more even sized modules using affinity propogation
-# * For all methods, the size of most modules are 10-50's (Note: as a results of the binning which is summing counts across multiple modules, the height of the binds are in the hundreds)
+# Our expectation on size of modules would be 2-50 genes. Most operons have fewer than 10 genes and most regulons have fewer than 100 genes. Some examples that demonstrate the size of co-expression networks can be found in papers using ADAGE signatures to define modules:
+# * Figure 5 in [eADAGE paper](https://bmcbioinformatics.biomedcentral.com/track/pdf/10.1186/s12859-017-1905-4.pdf)
+# * Figure 7 in [Harty et al. paper](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6531624/)
+# * Figure 2 in [Doing et al. paper](https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1008783)
+#
+# What did we find? Which method follows our expectation? This is the one we will move forward.
+# * Looks like there is one large modules using DBSCAN clustering
+# * There are more even sized modules using hierarchal clustering and affinity propogation so we will probably use one of these 2 methods.
 
 # ## Examine composition of modules
 #
