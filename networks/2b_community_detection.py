@@ -16,7 +16,10 @@
 
 # # Network community detection
 #
-# This notebook performs community detection approaches to identify network modules.
+# This notebook performs community detection approaches to identify network modules. Community detection considers genes to be in a network/graph where genes are connected to other genes based on similarity between expression pattern across samples (i.e. correlation score between gene A and B). Community detection will define modules as a group of genes that are densely connected to each other but sparsely connected to other genes in the network (within vs between edges). Here each gene still belongs to a single module
+#
+# The output of this notebook are files that have the following columns:
+# gene id | module id
 #
 # Note: All methods here are using undirected weighted networks. All methods take edge weights as input.
 
@@ -190,7 +193,6 @@ pa14_membership_df = graph_partition_to_df(pa14_G, pa14_partition, method)
 print(len(pa14_membership_df["module id"].unique()))
 pa14_membership_df.sort_values(by="degree", ascending=False).head()
 
-# Save
 # Save membership dataframe
 pao1_membership_filename = os.path.join(
     paths.LOCAL_DATA_DIR, f"pao1_modules_{method}.tsv"
