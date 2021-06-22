@@ -18,14 +18,26 @@
 # Given our co-acting gene modules, we will now calculate the composition of those modules - are modules predominantly core, predominantly accessory or mixed.
 #
 # The strategy we will use will be the following:
-# 1. Given a module
+#
+# 1. Given _N_ accessory genes, sample _N_ core genes 100 times
+# 2. For each module in the network, compare the number of accessory genes in the module to the distribution of core gene counts in that module from your 100 samples
+#     * if the number of accessory genes < 10th quantile of core genes then the module is mostly core
+#     * if the number of accessory genes > 90th quantile of core genes then the module is mostly accessory
+#     * else the module is mixed
 
+# +
 # %load_ext autoreload
 # %autoreload 2
+# %matplotlib inline
 import os
 import random
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 from core_acc_modules import utils, paths
+
+random.seed(1)
+# -
 
 # User params
 method = "affinity"
@@ -148,16 +160,6 @@ pao1_gene_group_composition_processed.head()
 
 pa14_gene_group_composition_processed.head()
 
-# +
-# core_composition.quantile(.9, axis=1)[562]
-# -
-
-"""core_composition = pao1_gene_group_composition_processed.drop("acc", axis=1)
-
-pao1_gene_group_composition_processed[
-    pao1_gene_group_composition_processed["acc"] > core_composition.quantile(.9, axis=1)
-]"""
-
 
 # For a given module,
 # If the number of accessory genes < 10th quantile of core genes then the module is core
@@ -186,19 +188,61 @@ pao1_module_labels.head()
 
 pa14_module_labels.head()
 
-# ### Let's look into the module labels
+# ### Examine module composition
 
 pao1_module_labels["module label"].value_counts()
 
 pa14_module_labels["module label"].value_counts()
 
-# +
-# Is the way we are choosing to calculate composition sensible? What are the caveats?
-# Based on this output, what should we do?
-# What is the percentage of core, accessory, mixed modules?
+# Add size of modules to df
+pao1_module_labels["size"] = pao1_membership["module id"].value_counts()
+pa14_module_labels["size"] = pa14_membership["module id"].value_counts()
+
+pao1_module_labels.head()
+
+pa14_module_labels.head()
 
 # +
-# What is the size distribution of core, accessory, mixed modules?
+# Size distributions of PAO1 modules
+f1 = sns.displot(
+    pao1_module_labels.loc[pao1_module_labels["module label"] == "mixed", "size"]
+)
+plt.title("Size distribution of PAO1 mixed modules")
+
+f2 = sns.displot(
+    pao1_module_labels.loc[
+        pao1_module_labels["module label"] == "mostly accessory", "size"
+    ]
+)
+plt.title("Size distribution of PAO1 mostly accessory modules")
 
 # +
-# Think about how to compare the composition across partitions
+# Size distributions of PA14 moduels
+g1 = sns.displot(
+    pa14_module_labels.loc[pa14_module_labels["module label"] == "mixed", "size"]
+)
+plt.title("Size distribution of PA14 mixed modules")
+
+g2 = sns.displot(
+    pa14_module_labels.loc[
+        pa14_module_labels["module label"] == "mostly accessory", "size"
+    ]
+)
+plt.title("Size distribution of PA14 mostly accessory modules")
+
+g3 = sns.displot(
+    pa14_module_labels.loc[pa14_module_labels["module label"] == "mostly core", "size"]
+)
+plt.title("Size distribution of PA14 mostly core modules")
+
+# +
+# TO DO: Compare the composition across partitions
+# Save the matrix that maps module id to module label per partition
+# In another notebook look through module labels per partition
+# Calculate consistency of labeling using ARI for each pair of partitions
+# -
+
+# **Takeaway:**
+# * Most modules are mixed, some are mostly accessory. Only PA14 compendium have some mostly core modules
+# * PAO1 mixed and mostly accessory modules have similar sizes (~10 genes)
+# * PA14 mixed modules are ~10 genes, mostly accessory modules are smaller ~5 genes, mostly core modules are larger ~ 20 genes
