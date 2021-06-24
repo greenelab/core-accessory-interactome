@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ---
 # jupyter:
 #   jupytext:
@@ -17,18 +18,7 @@
 #
 # Given our co-acting gene modules, we will now calculate the composition of those modules - are modules predominantly core, predominantly accessory or mixed.
 #
-# The strategy we will use will be the following:
-#
-# 1. Given _N_ accessory genes, sample _N_ core genes 100 times
-# 2. For each module in the network, compare the number of accessory genes in the module to the distribution of core gene counts in that module from your 100 samples
-#     * if the number of accessory genes < 10th quantile of core genes then the module is mostly core
-#     * if the number of accessory genes > 90th quantile of core genes then the module is mostly accessory
-#     * else the module is mixed
-#
-#
-# Explain fisher's exact test***
-#
-# Here we are comparing the ratio of core/acc within a given module to the ratio of core/acc outside that module.
+# To label modules we will use the [Fisher's exact test](https://en.wikipedia.org/wiki/Fisher%27s_exact_test) which is used to determine whether there is a significant association between two categorical variables in a contingency table (i.e two classifications of the data). Fisher’s exact test is used to determine if there is an association between the two classifications. In our case our classification are: whether a gene is core or accessory and whether the gene is inside a given module or outside. In other words, we want to determine if there is a statistically significant association between gene group and our given module. To do this we compare the ratio of core vs accessory genes within a given module are significantly different to the ratio of core vs accessory outside that module.
 
 # +
 # %load_ext autoreload
@@ -48,7 +38,6 @@ random.seed(1)
 
 # User params
 method = "affinity"
-# num_samples = 100
 
 # ### Import module memberships
 
@@ -100,10 +89,12 @@ pao1_module_ids = pao1_membership["module id"].unique()
 pa14_module_ids = pa14_membership["module id"].unique()
 
 pao1_gene_group_composition = pd.DataFrame(
-    index=pao1_module_ids, columns=["odds ratio", "p-value", "module label"]
+    index=pao1_module_ids,
+    columns=["num core", "num acc", "odds ratio", "p-value", "module label"],
 )
 pa14_gene_group_composition = pd.DataFrame(
-    index=pa14_module_ids, columns=["odds ratio", "p-value", "module label"]
+    index=pa14_module_ids,
+    columns=["num core", "num acc", "odds ratio", "p-value", "module label"],
 )
 
 pao1_gene_group_composition.head()
@@ -115,11 +106,6 @@ def label_modules(
     all_genes = list(membership_df.index)
 
     for module_id in module_ids_list:
-        # For each module create a table
-        # -----|inside module|outside module
-        # core | # genes     | # genes
-        # acc  | # genes     | # genes
-
         # Find genes in module and outside module
         genes_in_module = list(
             membership_df[membership_df["module id"] == module_id].index
@@ -151,27 +137,54 @@ def label_modules(
         )
 
         # Make contingency table
+        # -----|inside module|outside module
+        # core | # genes     | # genes
+        # acc  | # genes     | # genes
         observed_contingency_table = np.array(
             [
                 [len(core_genes_in_module), len(core_genes_outside_module)],
                 [len(acc_genes_in_module), len(acc_genes_outside_module)],
             ]
         )
-        odds_ratio, pval = scipy.stats.fisher_exact(
-            observed_contingency_table, alternative="two-sided"
-        )
+
+        # H0: The probability that the gene is core is the same
+        # whether or not you're in the module or outside
+        # H1: The probability that a gene is core is higher or lower inside the module
+        # than outside the module
+        # Should I do 2 one-sided tests, one for testing if
+        odds_ratio, pval = scipy.stats.fisher_exact(observed_contingency_table)
+
+        # odds_ratio, pval_greater = scipy.stats.fisher_exact(
+        #    observed_contingency_table, alternative="greater"
+        # )
+        # odds_ratio, pval_less = scipy.stats.fisher_exact(
+        #    observed_contingency_table, alternative="less"
+        # )
 
         # Fill in df
+        out_df.loc[module_id, "num core"] = len(core_genes_in_module)
+        out_df.loc[module_id, "num acc"] = len(acc_genes_in_module)
         out_df.loc[module_id, "odds ratio"] = odds_ratio
         out_df.loc[module_id, "p-value"] = pval
 
-        # Do we want to include odds ratio >1 and significant p-value???
+        # Do we want to include p-value criteria?
+        # Given the small sizes of the modules I think this is why
+        # most of the findings are not significant
+        # Should we increase the threshold?
         if odds_ratio > 1 and pval < 0.05:
             out_df.loc[module_id, "module label"] = "mostly core"
         elif odds_ratio < 1 and pval < 0.05:
             out_df.loc[module_id, "module label"] = "mostly accessory"
         else:
             out_df.loc[module_id, "module label"] = "mixed"
+
+        # If using two separate one-sided tests
+        # if odds_ratio > 1 and pval_greater < 0.05:
+        #    out_df.loc[module_id, "module label"] = "mostly core"
+        # elif odds_ratio < 1 and pval_less < 0.05:
+        #    out_df.loc[module_id, "module label"] = "mostly accessory"
+        # else:
+        #    out_df.loc[module_id, "module label"] = "mixed"
 
     return out_df
 
@@ -190,105 +203,11 @@ pa14_module_labels = label_modules(
 
 pao1_module_labels.head()
 
-# ### Get matched number of core genes
+pa14_module_labels.head()
 
-"""# Sample same number of accessory genes from core genes `num_samples` times
-# Store sets of core genes in a df
-ls_core_pao1_samples = []
-ls_core_pa14_samples = []
-
-num_pao1_acc = len(pao1_acc)
-num_pa14_acc = len(pa14_acc)
-
-for i in range(num_samples):
-    pao1_sample = random.sample(pao1_core, num_pao1_acc)
-    pa14_sample = random.sample(pa14_core, num_pa14_acc)
-
-    ls_core_pao1_samples.append(pao1_sample)
-    ls_core_pa14_samples.append(pa14_sample)"""
-
-"""assert len(ls_core_pao1_samples) == num_samples
-assert len(ls_core_pa14_samples) == num_samples"""
-
-"""assert len(ls_core_pao1_samples[0]) == num_pao1_acc
-assert len(ls_core_pa14_samples[0]) == num_pa14_acc"""
-
-# ### Calculate composition of modules
-
-"""# Get list of modules ids
-pao1_module_ids = pao1_membership["module id"].unique()
-pa14_module_ids = pa14_membership["module id"].unique()"""
-
-"""print(len(pao1_module_ids))
-print(len(pa14_module_ids))"""
-
-"""# For each module get the distribution of number of core genes
-pao1_gene_group_composition = pd.DataFrame(
-    index=pao1_module_ids, columns=range(0, num_samples)
-)
-pa14_gene_group_composition = pd.DataFrame(
-    index=pa14_module_ids, columns=range(0, num_samples)
-)
-
-
-def get_module_composition(membership_df, core_samples_list, acc_genes, composition_df):
-    # Get number of core genes from each sampling per module
-    for i in range(len(core_samples_list)):
-        num_core_genes = membership_df.loc[core_samples_list[i]][
-            "module id"
-        ].value_counts()
-        composition_df[i] = num_core_genes
-
-    # Get the number of accessory genes per module
-    num_acc_genes = membership_df.loc[acc_genes]["module id"].value_counts()
-    composition_df["acc"] = num_acc_genes
-
-    composition_df = composition_df.fillna(0)
-
-    return composition_df"""
-
-"""pao1_gene_group_composition_processed = get_module_composition(
-    pao1_membership, ls_core_pao1_samples, pao1_acc, pao1_gene_group_composition
-)
-pa14_gene_group_composition_processed = get_module_composition(
-    pa14_membership, ls_core_pa14_samples, pa14_acc, pa14_gene_group_composition
-)"""
-
-# +
-# pao1_gene_group_composition_processed.head()
-
-# +
-# pa14_gene_group_composition_processed.head()
-# -
-
-"""# For a given module,
-# If the number of accessory genes < 10th quantile of core genes then the module is core
-# If the number of accessory genes > 90th quantile of core genes then the module is accessory
-# Else the module is mixed
-def label_modules(module_composition_df):
-    core_composition = module_composition_df.drop("acc", axis=1)
-
-    module_composition_df["module label"] = "mixed"
-    module_composition_df.loc[
-        module_composition_df["acc"] < core_composition.quantile(0.1, axis=1),
-        "module label",
-    ] = "mostly core"
-    module_composition_df.loc[
-        module_composition_df["acc"] > core_composition.quantile(0.9, axis=1),
-        "module label",
-    ] = "mostly accessory"
-
-    return module_composition_df"""
-
-"""pao1_module_labels = label_modules(pao1_gene_group_composition_processed)
-pa14_module_labels = label_modules(pa14_gene_group_composition_processed)"""
-
-# +
-# pao1_module_labels.head()
-
-# +
-# pa14_module_labels.head()
-# -
+# Distribution of p-values
+sns.displot(pao1_module_labels["p-value"])
+sns.displot(pa14_module_labels["p-value"])
 
 # ### Examine module composition
 
@@ -343,36 +262,13 @@ g3 = sns.displot(
 plt.title("Size distribution of PA14 mostly core modules")
 # -
 
-# ### Lookup which genes are in which module
-#
-# TO DO
-# * Move this into a different notebook?
-# * Add annotations for KEGG, GO, gene name here
-
-"""pao1_module_labels_truncated = pao1_module_labels[["module label", "size"]]
-pa14_module_labels_truncated = pa14_module_labels[["module label", "size"]]"""
-
-"""# Map genes to modules to labels
-pao1_gene_module_labels = pao1_membership.merge(
-    pao1_module_labels_truncated, left_on="module id", right_index=True
+# Save
+pao1_module_labels.to_csv(
+    os.path.join(paths.LOCAL_DATA_DIR, "pao1_gene_module_labels.tsv"), sep="\t"
 )
-pa14_gene_module_labels = pa14_membership.merge(
-    pa14_module_labels_truncated, left_on="module id", right_index=True
-)"""
-
-"""# Save
-pao1_gene_module_labels.to_csv(
-    os.path.join(
-        paths.LOCAL_DATA_DIR, "pao1_gene_module_labels.tsv"
-    ),
-    sep="\t"
+pa14_module_labels.to_csv(
+    os.path.join(paths.LOCAL_DATA_DIR, "pa14_gene_module_labels.tsv"), sep="\t"
 )
-pa14_gene_module_labels.to_csv(
-    os.path.join(
-        paths.LOCAL_DATA_DIR, "pa14_gene_module_labels.tsv"
-    ),
-    sep="\t"
-)"""
 
 # +
 # TO DO: Compare the composition across partitions
