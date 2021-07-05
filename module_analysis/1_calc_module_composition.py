@@ -170,10 +170,10 @@ def label_modules(
         # Do we want to include p-value criteria?
         # Given the small sizes of the modules I think this is why
         # most of the findings are not significant
-        # Should we increase the threshold?
-        if odds_ratio > 1 and pval < 0.05:
+        # Use bonferrroni corrected p-value
+        if odds_ratio > 1 and pval < 0.05 / len(all_genes):
             out_df.loc[module_id, "module label"] = "mostly core"
-        elif odds_ratio < 1 and pval < 0.05:
+        elif odds_ratio < 1 and pval < 0.05 / len(all_genes):
             out_df.loc[module_id, "module label"] = "mostly accessory"
         else:
             out_df.loc[module_id, "module label"] = "mixed"
