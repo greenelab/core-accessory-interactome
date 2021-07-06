@@ -112,7 +112,7 @@ pa14_gene_module_labels.head()
 # For each pathway, what genes are contained in it
 
 # +
-pao1_pathway_filename = "https://raw.githubusercontent.com/greenelab/adage/master/Node_interpretation/pseudomonas_KEGG_terms.txt"
+pao1_pathway_filename = "https://raw.githubusercontent.com/greenelab/adage/7a4eda39d360b224268921dc1f2c14b32788ab16/Node_interpretation/pseudomonas_KEGG_terms.txt"
 
 pao1_pathways = pd.read_csv(pao1_pathway_filename, sep="\t", index_col=0, header=None)
 # -

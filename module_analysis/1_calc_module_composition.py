@@ -31,6 +31,7 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+from statsmodels.stats.multitest import multipletests
 from core_acc_modules import utils, paths
 
 random.seed(1)
@@ -101,7 +102,12 @@ pao1_gene_group_composition.head()
 
 
 def label_modules(
-    module_ids_list, membership_df, core_genes_list, acc_genes_list, out_df
+    module_ids_list,
+    membership_df,
+    core_genes_list,
+    acc_genes_list,
+    mult_test_correction,
+    out_df,
 ):
     all_genes = list(membership_df.index)
 
@@ -147,13 +153,16 @@ def label_modules(
             ]
         )
 
+        # Add 1 to avoid inf
+        observed_contingency_table = observed_contingency_table + 1
+
         # H0: The probability that the gene is core is the same
         # whether or not you're in the module or outside
         # H1: The probability that a gene is core is higher or lower inside the module
         # than outside the module
-        # Should I do 2 one-sided tests, one for testing if
         odds_ratio, pval = scipy.stats.fisher_exact(observed_contingency_table)
 
+        # If using two separate one-sided tests
         # odds_ratio, pval_greater = scipy.stats.fisher_exact(
         #    observed_contingency_table, alternative="greater"
         # )
@@ -162,29 +171,53 @@ def label_modules(
         # )
 
         # Fill in df
-        out_df.loc[module_id, "num core"] = len(core_genes_in_module)
-        out_df.loc[module_id, "num acc"] = len(acc_genes_in_module)
+        out_df.loc[module_id, "num core in module"] = len(core_genes_in_module)
+        out_df.loc[module_id, "num acc in module"] = len(acc_genes_in_module)
+        out_df.loc[module_id, "num core outside module"] = len(
+            core_genes_outside_module
+        )
+        out_df.loc[module_id, "num acc outside module"] = len(acc_genes_outside_module)
         out_df.loc[module_id, "odds ratio"] = odds_ratio
         out_df.loc[module_id, "p-value"] = pval
 
-        # Do we want to include p-value criteria?
         # Given the small sizes of the modules I think this is why
         # most of the findings are not significant
-        # Use bonferrroni corrected p-value
-        if odds_ratio > 1 and pval < 0.05 / len(all_genes):
-            out_df.loc[module_id, "module label"] = "mostly core"
-        elif odds_ratio < 1 and pval < 0.05 / len(all_genes):
-            out_df.loc[module_id, "module label"] = "mostly accessory"
-        else:
-            out_df.loc[module_id, "module label"] = "mixed"
+
+        # Bonferrroni corrected p-value
+        if mult_test_correction == "bonferroni":
+            if odds_ratio > 1 and pval < 0.05 / len(all_genes):
+                out_df.loc[module_id, "module label"] = "mostly core"
+            elif odds_ratio < 1 and pval < 0.05 / len(all_genes):
+                out_df.loc[module_id, "module label"] = "mostly accessory"
+            else:
+                out_df.loc[module_id, "module label"] = "mixed"
 
         # If using two separate one-sided tests
-        # if odds_ratio > 1 and pval_greater < 0.05:
+        # if odds_ratio > 1 and pval_greater < 0.05/len(all_genes):
         #    out_df.loc[module_id, "module label"] = "mostly core"
-        # elif odds_ratio < 1 and pval_less < 0.05:
+        # elif odds_ratio < 1 and pval_less < 0.05/len(all_genes):
         #    out_df.loc[module_id, "module label"] = "mostly accessory"
         # else:
         #    out_df.loc[module_id, "module label"] = "mixed"
+
+    # FDR multiple testing correction with FDR
+    if mult_test_correction == "fdr":
+        sign, cpval, alphacSidak, alphacBonferroni = multipletests(
+            out_df["p-value"], alpha=0.05, method="fdr_bh"
+        )
+
+        # Add columns
+        out_df["significant"] = sign
+        out_df["FDR corrected p-value"] = cpval
+
+        # Label modules
+        out_df["module label"] = "mixed"
+        out_df.loc[
+            (out_df["odds ratio"] > 1) & (out_df["significant"] == True), "module label"
+        ] = "mostly core"
+        out_df.loc[
+            (out_df["odds ratio"] < 1) & (out_df["significant"] == True), "module label"
+        ] = "mostly accessory"
 
     return out_df
 
@@ -192,13 +225,23 @@ def label_modules(
 # %%time
 # Get labels for PAO1 compendium
 pao1_module_labels = label_modules(
-    pao1_module_ids, pao1_membership, pao1_core, pao1_acc, pao1_gene_group_composition
+    pao1_module_ids,
+    pao1_membership,
+    pao1_core,
+    pao1_acc,
+    "fdr",
+    pao1_gene_group_composition,
 )
 
 # %%time
 # Get labels of PA14 compendium
 pa14_module_labels = label_modules(
-    pa14_module_ids, pa14_membership, pa14_core, pa14_acc, pa14_gene_group_composition
+    pa14_module_ids,
+    pa14_membership,
+    pa14_core,
+    pa14_acc,
+    "fdr",
+    pa14_gene_group_composition,
 )
 
 pao1_module_labels.head()
@@ -279,5 +322,4 @@ pa14_module_labels.to_csv(
 
 # **Takeaway:**
 # * Most modules are mixed, some are mostly accessory. Only PA14 compendium have some mostly core modules
-# * PAO1 mixed and mostly accessory modules have similar sizes (~10 genes)
-# * PA14 mixed modules are ~10 genes, mostly accessory modules are smaller ~5 genes, mostly core modules are larger ~ 20 genes
+# * PAO1, PA14 mixed and mostly accessory modules have similar sizes
