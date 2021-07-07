@@ -19,6 +19,7 @@
 
 # %load_ext autoreload
 # %autoreload 2
+# %matplotlib inline
 import os
 import pandas as pd
 import seaborn as sns
@@ -33,18 +34,12 @@ pa14_expression_filename = paths.PA14_GE
 
 # File containing table to map sample id to strain name
 sample_to_strain_filename = paths.SAMPLE_TO_STRAIN
+# -
 
-# +
 # Load expression data
 # Matrices will be sample x gene after taking the transpose
 pao1_expression = pd.read_csv(pao1_expression_filename, index_col=0, header=0).T
-
 pa14_expression = pd.read_csv(pa14_expression_filename, index_col=0, header=0).T
-
-# Drop row with gene ensembl ids
-pao1_expression.drop(["X"], inplace=True)
-pa14_expression.drop(["X"], inplace=True)
-# -
 
 # Load metadata
 # Set index to experiment id, which is what we will use to map to expression data
@@ -191,7 +186,7 @@ non_pao1_sra = pao1_pa14_acc_expression.loc[
 ]
 # -
 
-pao1_threshold = 5
+pao1_threshold = 25
 
 f = sns.distplot(pao1_sra, color="grey", kde=False)
 f = sns.distplot(non_pao1_sra, color="blue", kde=False)
@@ -210,7 +205,7 @@ non_pa14_sra = pao1_pa14_acc_expression.loc[
 ]
 # -
 
-pa14_threshold = 5
+pa14_threshold = 25
 
 g = sns.distplot(pa14_sra, color="grey", kde=False)
 g = sns.distplot(non_pa14_sra, color="blue", kde=False)

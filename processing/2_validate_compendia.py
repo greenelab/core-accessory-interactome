@@ -17,6 +17,7 @@
 
 # %load_ext autoreload
 # %autoreload 2
+# %matplotlib inline
 import os
 import pandas as pd
 import plotnine as pn
@@ -29,7 +30,7 @@ from core_acc_modules import paths, utils
 
 # User param
 # Threshold: if median accessory expression of PAO1 samples > threshold then this sample is binned as PAO1
-threshold = 5
+threshold = 25
 
 # +
 # Expression data with SRA labels
@@ -59,11 +60,11 @@ sra_annotation = pd.read_csv(sra_annotation_filename, sep="\t", index_col=0, hea
 # -
 
 # Output filenames
-pao1_tpm_filename = (
-    f"TPM_median_acc_expression_pao1_compendium_{threshold}threshold.svg"
+pao1_expression_filename = (
+    f"MR_median_acc_expression_pao1_compendium_{threshold}threshold.svg"
 )
-pa14_tpm_filename = (
-    f"TPM_median_acc_expression_pa14_compendium_{threshold}threshold.svg"
+pa14_expression_filename = (
+    f"MR_median_acc_expression_pa14_compendium_{threshold}threshold.svg"
 )
 pao1_dist_filename = (
     f"dist_median_acc_expression_pao1_compendium_{threshold}threshold.svg"
@@ -169,9 +170,9 @@ fig1 = pn.ggplot(
 )
 fig1 += pn.geom_point(pn.aes(color="Strain type_pao1"), alpha=0.2)
 fig1 += pn.labs(
-    x="median expression of PAO1-only genes (TPM)",
-    y="median expression of PA14-only genes (TPM)",
-    title="TPM of accessory genes in binned PAO1 compendium",
+    x="median expression of PAO1-only genes",
+    y="median expression of PA14-only genes",
+    title="MR normalized accessory gene expression in PAO1 compendium",
 )
 fig1 += pn.theme_bw()
 fig1 += pn.theme(
@@ -188,7 +189,7 @@ fig1 += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
 
 print(fig1)
 
-fig1.save(filename=pao1_tpm_filename, format="svg", dpi=300)
+fig1.save(filename=pao1_expression_filename, format="svg", dpi=300)
 
 # +
 # Plot accessory gene expression in PA14 compendium
@@ -198,9 +199,9 @@ fig2 = pn.ggplot(
 )
 fig2 += pn.geom_point(pn.aes(color="Strain type_pa14"), alpha=0.4)
 fig2 += pn.labs(
-    x="median expression of PAO1-only genes (TPM)",
-    y="median expression of PA14-only genes (TPM)",
-    title="TPM of accessory genes in binned PA14 compendium",
+    x="median expression of PAO1-only genes",
+    y="median expression of PA14-only genes",
+    title="MR normalized accessory gene expression in PA14 compendium",
 )
 fig2 += pn.theme_bw()
 fig2 += pn.theme(
@@ -217,7 +218,7 @@ fig2 += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
 
 print(fig2)
 
-fig2.save(filename=pa14_tpm_filename, format="svg", dpi=300)
+fig2.save(filename=pa14_expression_filename, format="svg", dpi=300)
 # -
 
 # These plots are showing the median expression of PAO1 genes (PAO1 accessory genes) on the x-axis and the median expression of PA14-only genes (PA14 accessory genes) on the y-axis.
@@ -461,7 +462,9 @@ normalized_pa14_core_encoded_df[["our label", "sra label"]] = pa14_core_label[
 fig3 = pn.ggplot(normalized_pao1_core_encoded_df, pn.aes(x="1", y="2"))
 fig3 += pn.geom_point(pn.aes(color="our label"), alpha=0.3)
 fig3 += pn.labs(
-    x="UMAP 1", y="UMAP 2", title="Normalized RNA-seq expression using PAO1 reference"
+    x="UMAP 1",
+    y="UMAP 2",
+    title="0-1 normalized RNA-seq expression using PAO1 reference",
 )
 fig3 += pn.theme_bw()
 fig3 += pn.theme(
@@ -483,7 +486,9 @@ print(fig3)
 fig4 = pn.ggplot(normalized_pao1_core_encoded_df, pn.aes(x="1", y="2"))
 fig4 += pn.geom_point(pn.aes(color="sra label"), alpha=0.3)
 fig4 += pn.labs(
-    x="UMAP 1", y="UMAP 2", title="Normalized RNA-seq expression using PAO1 reference"
+    x="UMAP 1",
+    y="UMAP 2",
+    title="0-1 normalized RNA-seq expression using PAO1 reference",
 )
 fig4 += pn.theme_bw()
 fig4 += pn.theme(
@@ -505,7 +510,9 @@ print(fig4)
 fig5 = pn.ggplot(normalized_pa14_core_encoded_df, pn.aes(x="1", y="2"))
 fig5 += pn.geom_point(pn.aes(color="our label"), alpha=0.3)
 fig5 += pn.labs(
-    x="UMAP 1", y="UMAP 2", title="Normalized RNA-seq expression using PA14 reference"
+    x="UMAP 1",
+    y="UMAP 2",
+    title="0-1 normalized RNA-seq expression using PA14 reference",
 )
 fig5 += pn.theme_bw()
 fig5 += pn.theme(
@@ -527,7 +534,9 @@ print(fig5)
 fig6 = pn.ggplot(normalized_pa14_core_encoded_df, pn.aes(x="1", y="2"))
 fig6 += pn.geom_point(pn.aes(color="sra label"), alpha=0.3)
 fig6 += pn.labs(
-    x="UMAP 1", y="UMAP 2", title="Normalized RNA-seq expression using PA14 reference"
+    x="UMAP 1",
+    y="UMAP 2",
+    title="0-1 normalized RNA-seq expression using PA14 reference",
 )
 fig6 += pn.theme_bw()
 fig6 += pn.theme(
@@ -590,7 +599,9 @@ normalized_pa14_core_encoded_df.head()
 fig7 = pn.ggplot(normalized_pao1_core_encoded_df, pn.aes(x="1", y="2"))
 fig7 += pn.geom_point(pn.aes(color="study id"), alpha=0.3)
 fig7 += pn.labs(
-    x="UMAP 1", y="UMAP 2", title="Normalized RNA-seq expression using PA14 reference"
+    x="UMAP 1",
+    y="UMAP 2",
+    title="0-1 normalized RNA-seq expression using PA14 reference",
 )
 fig7 += pn.theme_bw()
 fig7 += pn.theme(
@@ -612,7 +623,9 @@ print(fig7)
 fig8 = pn.ggplot(normalized_pa14_core_encoded_df, pn.aes(x="1", y="2"))
 fig8 += pn.geom_point(pn.aes(color="study id"), alpha=0.3)
 fig8 += pn.labs(
-    x="UMAP 1", y="UMAP 2", title="Normalized RNA-seq expression using PA14 reference"
+    x="UMAP 1",
+    y="UMAP 2",
+    title="0-1 normalized RNA-seq expression using PA14 reference",
 )
 fig8 += pn.theme_bw()
 fig8 += pn.theme(

@@ -22,6 +22,7 @@
 
 # %load_ext autoreload
 # %autoreload 2
+# %matplotlib inline
 import os
 import pandas as pd
 import seaborn as sns
@@ -29,9 +30,17 @@ from textwrap import fill
 import matplotlib.pyplot as plt
 from core_acc_modules import paths, utils
 
+# +
 # User param
-# Threshold: if median accessory expression of PAO1 samples > threshold then this sample is binned as PAO1
-threshold = 5
+# same_threshold: if median accessory expression of PAO1 samples > same_threshold then this sample is binned as PAO1
+# 25 threshold based on comparing expression of PAO1 SRA-labeled samples vs non-PAO1 samples
+same_threshold = 25
+
+# opp_threshold: if median accessory expression of PA14 samples < opp_threshold then this sample is binned as PAO1
+# 25 threshold based on previous plot (eye-balling trying to avoid samples
+# on the diagonal of explore_data/cluster_by_accessory_gene.ipynb plot)
+opp_threshold = 25
+# -
 
 # ## Load data
 
@@ -42,18 +51,12 @@ pa14_expression_filename = paths.PA14_GE
 
 # File containing table to map sample id to strain name
 sample_to_strain_filename = paths.SAMPLE_TO_STRAIN
+# -
 
-# +
 # Load expression data
 # Matrices will be sample x gene after taking the transpose
 pao1_expression = pd.read_csv(pao1_expression_filename, index_col=0, header=0).T
-
 pa14_expression = pd.read_csv(pa14_expression_filename, index_col=0, header=0).T
-
-# Drop row with gene ensembl ids
-pao1_expression.drop(["X"], inplace=True)
-pa14_expression.drop(["X"], inplace=True)
-# -
 
 # Load metadata
 # Set index to experiment id, which is what we will use to map to expression data
@@ -131,14 +134,14 @@ pao1_pa14_acc_expression.head()
 # Find PAO1 samples
 pao1_binned_ids = list(
     pao1_pa14_acc_expression.query(
-        "median_acc_expression_pao1>@threshold & median_acc_expression_pa14==0"
+        "median_acc_expression_pao1>@same_threshold & median_acc_expression_pa14<@opp_threshold"
     ).index
 )
 
 # Find PA14 samples
 pa14_binned_ids = list(
     pao1_pa14_acc_expression.query(
-        "median_acc_expression_pao1==0 & median_acc_expression_pa14>@threshold"
+        "median_acc_expression_pao1<@opp_threshold & median_acc_expression_pa14>@same_threshold"
     ).index
 )
 
@@ -146,7 +149,7 @@ pa14_binned_ids = list(
 # Check that there are no samples that are binned as both PAO1 and PA14
 shared_pao1_pa14_binned_ids = list(set(pao1_binned_ids).intersection(pa14_binned_ids))
 
-assert len(shared_pao1_pa14_binned_ids) == 0
+# assert len(shared_pao1_pa14_binned_ids) == 0
 # -
 
 # ## Format SRA annotations
