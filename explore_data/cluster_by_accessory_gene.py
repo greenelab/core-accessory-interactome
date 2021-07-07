@@ -18,6 +18,7 @@
 #
 # This notebook is visualizing the expression of accessory genes in the PAO1 and PA14 compendia
 
+# %matplotlib inline
 import os
 import numpy as np
 import pandas as pd
@@ -31,7 +32,7 @@ from core_acc_modules import paths, utils
 
 # ## Load data
 #
-# Raw data was processed in an external repository by a member of the Hogan lab: https://github.com/hoganlab-dartmouth/pa-seq-compendia
+# Raw data was processed in an external repository by Georgia Doing from the Hogan lab: https://github.com/hoganlab-dartmouth/pa-seq-compendia
 #
 # The basic processing steps to process the data were as follows:
 # 1. _P. aeruginosa_ transcriptome data was downloaded from SRA (~4K samples)
@@ -40,6 +41,9 @@ from core_acc_modules import paths, utils
 # 4. Samples were removed if:
 #     * Less than 1000 genes with 0 counts
 #     * median count <10
+# 5. Additional filtering was applied to maximize the quality of the samples in the compendium. The filtering rules and implementation were performed by Georgia Doing from the Hogan lab. Her steps are described in this [R markdown](pa-seq-compendia-QC.nb.html)
+#
+# The data are normalized estimated counts
 #
 # _Note:_
 # * Not sure yet where this data will permanently be stored but there are plans to share it. Currently this is being housed locally to run this analysis
@@ -51,18 +55,12 @@ pa14_expression_filename = paths.PA14_GE
 
 # File containing table to map sample id to strain name
 sample_to_strain_filename = paths.SAMPLE_TO_STRAIN
+# -
 
-# +
 # Load expression data
 # Matrices will be sample x gene after taking the transpose
 pao1_expression = pd.read_csv(pao1_expression_filename, index_col=0, header=0).T
-
 pa14_expression = pd.read_csv(pa14_expression_filename, index_col=0, header=0).T
-
-# Drop row with gene ensembl ids
-pao1_expression.drop(["X"], inplace=True)
-pa14_expression.drop(["X"], inplace=True)
-# -
 
 print(pao1_expression.shape)
 pao1_expression.head()
@@ -165,7 +163,7 @@ print(f"Number of PA14 core genes in my dataset: {len(my_core_pa14_genes)}")
 pao1_acc = list(set(pao1_ref_genes) - set(my_core_pao1_genes))
 print(f"Number of PAO1-specific genes: {len(pao1_acc)}")
 
-## TO DO: Get PA14-specific genes
+# Get PA14-specific genes
 pa14_acc = list(set(pa14_ref_genes) - set(my_core_pa14_genes))
 print(f"Number of PA14-specific genes: {len(pa14_acc)}")
 
@@ -400,7 +398,9 @@ normalized_pa14_encoded_df = normalized_pa14_encoded_df[
 fig = pn.ggplot(normalized_pao1_encoded_df, pn.aes(x="1", y="2"))
 fig += pn.geom_point(pn.aes(color="Strain_type"), alpha=0.3)
 fig += pn.labs(
-    x="UMAP 1", y="UMAP 2", title="Normalized RNA-seq expression using PAO1 reference"
+    x="UMAP 1",
+    y="UMAP 2",
+    title="0-1 normalized RNA-seq expression using PAO1 reference",
 )
 fig += pn.theme_bw()
 fig += pn.theme(
@@ -422,7 +422,9 @@ print(fig)
 fig = pn.ggplot(normalized_pa14_encoded_df, pn.aes(x="1", y="2"))
 fig += pn.geom_point(pn.aes(color="Strain_type"), alpha=0.3)
 fig += pn.labs(
-    x="UMAP 1", y="UMAP 2", title="Normalized RNA-seq expression using PA14 reference"
+    x="UMAP 1",
+    y="UMAP 2",
+    title="0-1 Normalized RNA-seq expression using PA14 reference",
 )
 fig += pn.theme_bw()
 fig += pn.theme(
@@ -450,9 +452,9 @@ fig = pn.ggplot(
 )
 fig += pn.geom_point(pn.aes(color="Strain type_pao1"), alpha=0.2)
 fig += pn.labs(
-    x="median expression of core genes (TPM)",
-    y="median expression of core genes (TPM)",
-    title="TPM of core genes",
+    x="median expression of core genes",
+    y="median expression of core genes",
+    title="MR normalized estimated counts of core genes",
 )
 fig += pn.theme_bw()
 fig += pn.theme(
@@ -479,9 +481,9 @@ fig2 += pn.scales.scale_x_log10()
 fig2 += pn.scales.scale_y_log10()
 fig2 += pn.geom_point(pn.aes(color="Strain type_pao1"), alpha=0.4)
 fig2 += pn.labs(
-    x="median expression of core genes (log10 TPM)",
-    y="median expression of core genes (log10 TPM)",
-    title="TPM of core genes",
+    x="median expression of core genes",
+    y="median expression of core genes",
+    title="log10 MR normalized estimated counts of core genes",
 )
 fig2 += pn.theme_bw()
 fig2 += pn.theme(
@@ -515,9 +517,10 @@ fig3 = pn.ggplot(
 )
 fig3 += pn.geom_point(pn.aes(color="Strain type_pao1"), alpha=0.4)
 fig3 += pn.labs(
-    x="median expression of PAO1-only genes (TPM)",
-    y="median expression of PA14-only genes (TPM)",
-    title="TPM of accessory genes",
+    x="median expression of PAO1-only genes",
+    y="median expression of PA14-only genes",
+    title="MR normalized estimated counts of accessory genes",
+    width=10,
 )
 fig3 += pn.theme_bw()
 fig3 += pn.theme(
@@ -534,7 +537,7 @@ fig3 += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
 
 print(fig3)
 
-fig3.save("TPM_accessory_genes_all_samples.svg", format="svg", dpi=300)
+fig3.save("Expression_accessory_genes_all_samples.svg", format="svg", dpi=300)
 
 # +
 # Plot log-scaled
@@ -546,9 +549,9 @@ fig4 += pn.scales.scale_x_log10()
 fig4 += pn.scales.scale_y_log10()
 fig4 += pn.geom_point(pn.aes(color="Strain type_pao1"), alpha=0.4)
 fig4 += pn.labs(
-    x="median expression of PAO1-only genes (log10 TPM)",
-    y="median expression of PA14-only genes (log10 TPM)",
-    title="TPM of accessory genes",
+    x="median expression of PAO1-only genes",
+    y="median expression of PA14-only genes",
+    title="log10 MR normalized estimated counts of accessory genes",
 )
 fig4 += pn.theme_bw()
 fig4 += pn.theme(
@@ -577,19 +580,7 @@ print(fig4)
 #
 # * Note: The NA strains are those where the strain information was not available in the metadata. By a quick manual spot check it looks like a bunch were clinical isolates (which is good since these NA seem to cluster with other clinical isolates).
 
-# ### How many samples have a very low or 0 expression?
-
 # +
-# Total number of PAO1 samples
-num_pao1_samples = (pao1_pa14_acc_expression_label["Strain type_pao1"] == "PAO1").sum()
-print(f"Number of PAO1 samples is {num_pao1_samples}")
-
-# Total number of PA14 samples
-num_pa14_samples = (pao1_pa14_acc_expression_label["Strain type_pao1"] == "PA14").sum()
-print(f"Number of PA14 samples if {num_pa14_samples}")
-print("\n\n")
-
-# Of those samples, how many have o or low expression?
 pao1_sample_ids = pao1_pa14_acc_expression_label["Strain type_pao1"] == "PAO1"
 pao1_acc_expression_label = pao1_pa14_acc_expression_label.loc[pao1_sample_ids]
 pao1_core_expression_label = pao1_pa14_core_expression_label.loc[pao1_sample_ids]
@@ -597,72 +588,6 @@ pao1_core_expression_label = pao1_pa14_core_expression_label.loc[pao1_sample_ids
 pa14_sample_ids = pao1_pa14_acc_expression_label["Strain type_pao1"] == "PA14"
 pa14_acc_expression_label = pao1_pa14_acc_expression_label.loc[pa14_sample_ids]
 pa14_core_expression_label = pao1_pa14_core_expression_label.loc[pa14_sample_ids]
-
-
-# Create a confusion matrix-like visualization
-pao1_acc_expression_low = pao1_acc_expression_label[
-    pao1_acc_expression_label["median acc expression_pao1"] == 0
-]
-pao1_sample_pao1_acc = pao1_acc_expression_low.shape[0] / num_pao1_samples
-
-pa14_acc_expression_low = pa14_acc_expression_label[
-    pa14_acc_expression_label["median acc expression_pa14"] == 0
-]
-pa14_sample_pa14_acc = pa14_acc_expression_low.shape[0] / num_pa14_samples
-
-pa14_acc_expression_low = pa14_acc_expression_label[
-    pa14_acc_expression_label["median acc expression_pao1"] == 0
-]
-pa14_sample_pao1_acc = pa14_acc_expression_low.shape[0] / num_pa14_samples
-
-pao1_acc_expression_low = pao1_acc_expression_label[
-    pao1_acc_expression_label["median acc expression_pa14"] == 0
-]
-pao1_sample_pa14_acc = pao1_acc_expression_low.shape[0] / num_pao1_samples
-
-cf_matrix = np.array(
-    [
-        [pao1_sample_pao1_acc, pa14_sample_pao1_acc],
-        [pao1_sample_pa14_acc, pa14_sample_pa14_acc],
-    ]
-)
-
-sns.heatmap(
-    cf_matrix,
-    annot=True,
-    xticklabels=["PAO1 samples", "PA14 samples"],
-    yticklabels=["PAO1-only genes", "PA14-only genes"],
-)
-
-# +
-# Print other statistics
-threshold = 50
-print("----- Matching sample and reference statistics -------")
-pao1_acc_expression_low = pao1_acc_expression_label[
-    pao1_acc_expression_label["median acc expression_pao1"] < threshold
-]
-print(
-    f"Proportion of PAO1 samples with median PAO1-only expression < {threshold}: {pao1_acc_expression_low.shape[0]/num_pao1_samples}"
-)
-pao1_core_expression_low = pao1_core_expression_label[
-    pao1_core_expression_label["median core expression_pao1"] < threshold
-]
-print(
-    f"Proportion of PAO1 samples with median core expression < {threshold}: {pao1_core_expression_low.shape[0]/num_pao1_samples}"
-)
-
-pa14_acc_expression_low = pa14_acc_expression_label[
-    pa14_acc_expression_label["median acc expression_pa14"] < threshold
-]
-print(
-    f"Proportion of PA14 samples with median PA14-only expression < {threshold}: {pa14_acc_expression_low.shape[0]/num_pa14_samples}"
-)
-pa14_core_expression_low = pa14_core_expression_label[
-    pa14_core_expression_label["median core expression_pa14"] < threshold
-]
-print(
-    f"Proportion of PA14 samples with median core expression < {threshold}: {pa14_core_expression_low.shape[0]/num_pa14_samples}"
-)
 # -
 
 sns.distplot(pao1_acc_expression_label["median acc expression_pao1"])
@@ -708,7 +633,6 @@ sns.distplot(pao1_logs["reads_mapped"])
 sns.distplot(pa14_logs["reads_mapped"])
 
 # **Takeaway:**
-# * Most samples have below 50 TPM, which is expected for accessory genes given the strong skewing toward 0
 # * As expected, PA14 samples tend to have 0 expression of PAO1-only genes. And similarly for PAO1 samples
 
 # ### Examine samples on the diagonal
@@ -717,8 +641,8 @@ sns.distplot(pa14_logs["reads_mapped"])
 
 # Get samples with high expression of both PAO1 and PA14 specific genes
 pao1_pa14_acc_expression_label[
-    (pao1_pa14_acc_expression_label["median acc expression_pao1"] > 30)
-    & (pao1_pa14_acc_expression_label["median acc expression_pa14"] > 30)
+    (pao1_pa14_acc_expression_label["median acc expression_pao1"] > 50)
+    & (pao1_pa14_acc_expression_label["median acc expression_pa14"] > 50)
 ]
 
 # About selected samples:
@@ -727,10 +651,10 @@ pao1_pa14_acc_expression_label[
 # Not much I could find about these samples other than they are clinical isolates that seem to have acquired accessory genes from both PAO1 and PA14, which is interesting!
 
 # Get PAO1 samples with high expression of PA14 specific genes
-pao1_acc_expression_label[pao1_acc_expression_label["median acc expression_pa14"] > 10]
+pao1_acc_expression_label[pao1_acc_expression_label["median acc expression_pa14"] > 25]
 
 # Get PA14 samples with high expression of PAO1 specific genes
-pa14_acc_expression_label[pa14_acc_expression_label["median acc expression_pao1"] > 10]
+pa14_acc_expression_label[pa14_acc_expression_label["median acc expression_pao1"] > 25]
 
 # ### Summary
 # **About core gene expression**
@@ -738,21 +662,18 @@ pa14_acc_expression_label[pa14_acc_expression_label["median acc expression_pao1"
 #
 # **About accessory gene expression**
 # * PAO1 annotated samples have higher median expression of PAO1-only genes compared to PA14-only genes. And vice versa
-#     * ~97% of PA14 samples have 0 median expression of PAO1-only genes
-#     * ~97% of PAO1 samples have 0 median expression of PA14-only genes
 #
 # This is a nice positive control. This result also shows that we can anticipate a very clear binning of our samples into PAO1 and PA14 if we use mapping rates.
 #
 # **About expression levels**
-# * Overall, most samples have median expression (both core and accessory) < 50 TPM, not sure what the expected range is but this seems low.
 # * PAO1 higher median accessory expression than PA14, maybe PAO1 reference had higher mapping rates. They have similar distributions of total reads mapped and mapping rate. Are there other reasons to explain this?
 #
 # **About samples with along the diagonal**
 # * All samples are from Thoming et. al. publication, where clinical isolates were grown in planktonic and biofilm conditions. At this point I’m not sure what to say about these clinical isolates, but something that would be interesting to look into in the future.
 #
-# * PAO1 samples with high expression (>10 TPM) of PA14 specific genes
+# * PAO1 samples with high expression of PA14 specific genes
 #     * Sample names look like they might be switched: https://www.ncbi.nlm.nih.gov/sra?linkname=bioproject_sra_all&from_uid=517074
-# * PA14 samples with high expression (>10 TPM) of PAO1 specific genes
+# * PA14 samples with high expression of PAO1 specific genes
 #     * PA14 grown in blood: https://www.ncbi.nlm.nih.gov/sra/?term=SRX4326016
 #     * Some are mislabeled after checking publication: https://www.ncbi.nlm.nih.gov/sra/?term=SRX5099522, https://www.ncbi.nlm.nih.gov/sra/?term=SRX5099523, https://www.ncbi.nlm.nih.gov/sra/?term=SRX5099524
 #     * PA14 following treatment with antimicrobial manuka honey: https://www.ncbi.nlm.nih.gov/sra/?term=SRX7423386, https://www.ncbi.nlm.nih.gov/sra/?term=SRX7423388
