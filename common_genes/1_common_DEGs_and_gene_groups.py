@@ -47,6 +47,9 @@ pa14_expression_filename = paths.PA14_COMPENDIUM
 
 pao1_expression = pd.read_csv(pao1_expression_filename, sep="\t", index_col=0, header=0)
 pa14_expression = pd.read_csv(pa14_expression_filename, sep="\t", index_col=0, header=0)
+# -
+
+# Note: Core and accessory annotations are from [BACTOME](https://academic.oup.com/nar/article/47/D1/D716/5112984). Not all core genes are measured by our expression dataset ("my dataset") we're using, so there may be a difference in "Number of PAO1 core genes" (core genes from BACTOME) and "Number of PAO1 core genes in my dataset" (core genes that are found in my expression dataset.
 
 # +
 pao1_annot_filename = paths.GENE_PAO1_ANNOT
@@ -62,7 +65,7 @@ pa14_core = core_acc_dict["core_pa14"]
 pao1_acc = core_acc_dict["acc_pao1"]
 pa14_acc = core_acc_dict["acc_pa14"]
 
-# ### Are common genes mostly core or accessory
+# ### Are common genes mostly core or accessory?
 
 # Get shared gene ids
 shared_acc = common_DEGs.index.intersection(pao1_acc)
