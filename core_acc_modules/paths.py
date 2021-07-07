@@ -54,3 +54,6 @@ ARRAY_METADATA_URL = "https://raw.githubusercontent.com/greenelab/generic-expres
 # module composition between array and RNA-seq
 ARRAY_COMPENDIUM_TO_COMPARE = LOCAL_DATA_DIR / "pao1_array_compendia_tocompare.tsv"
 RNASEQ_COMPENDIUM_TO_COMPARE = LOCAL_DATA_DIR / "pao1_rnaseq_compendia_tocompare.tsv"
+
+# Location of SOPHIE identified common DEGs
+COMMON_DEGS = LOCAL_DATA_DIR / "SOPHIE_GAPE_generic.tsv"
