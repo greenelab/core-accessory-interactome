@@ -307,10 +307,12 @@ plt.title("Size distribution of PA14 mostly core modules")
 
 # Save
 pao1_module_labels.to_csv(
-    os.path.join(paths.LOCAL_DATA_DIR, "pao1_gene_module_labels.tsv"), sep="\t"
+    os.path.join(paths.LOCAL_DATA_DIR, f"pao1_gene_module_labels_{method}.tsv"),
+    sep="\t",
 )
 pa14_module_labels.to_csv(
-    os.path.join(paths.LOCAL_DATA_DIR, "pa14_gene_module_labels.tsv"), sep="\t"
+    os.path.join(paths.LOCAL_DATA_DIR, f"pa14_gene_module_labels_{method}.tsv"),
+    sep="\t",
 )
 
 # +

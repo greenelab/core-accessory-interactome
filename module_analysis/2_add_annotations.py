@@ -44,10 +44,10 @@ method = "affinity"
 # +
 # Import module labels
 pao1_module_label_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, "pao1_gene_module_labels.tsv"
+    paths.LOCAL_DATA_DIR, f"pao1_gene_module_labels_{method}.tsv"
 )
 pa14_module_label_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, "pa14_gene_module_labels.tsv"
+    paths.LOCAL_DATA_DIR, f"pa14_gene_module_labels_{method}.tsv"
 )
 
 pao1_module_labels = pd.read_csv(
@@ -239,8 +239,10 @@ pa14_gene_summary = pa14_gene_summary[~pa14_gene_summary.index.duplicated(keep=F
 
 # Save
 pao1_gene_summary.to_csv(
-    os.path.join(paths.LOCAL_DATA_DIR, "pao1_gene_module_annotated.tsv"), sep="\t"
+    os.path.join(paths.LOCAL_DATA_DIR, f"pao1_gene_module_annotated_{method}.tsv"),
+    sep="\t",
 )
 pa14_gene_summary.to_csv(
-    os.path.join(paths.LOCAL_DATA_DIR, "pa14_gene_module_annotated.tsv"), sep="\t"
+    os.path.join(paths.LOCAL_DATA_DIR, f"pa14_gene_module_annotated_{method}.tsv"),
+    sep="\t",
 )
