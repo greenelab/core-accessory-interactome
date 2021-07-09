@@ -94,8 +94,8 @@ num_acc_gene_in_acc_mod_pa14 = pa14_subset.loc[
     pa14_subset["module label"] == "mostly accessory", "num acc in module"
 ].sum()
 
-lik_pao1_acc = num_acc_gene_in_acc_mod_pao1 / len(pao1_acc)
-lik_pa14_acc = num_acc_gene_in_acc_mod_pa14 / len(pa14_acc)
+lik_pao1_acc = num_acc_gene_in_acc_mod_pao1 / (len(pao1_core) + len(pao1_acc))
+lik_pa14_acc = num_acc_gene_in_acc_mod_pa14 / (len(pa14_core) + len(pa14_acc))
 
 num_acc_gene_in_acc_mod_pao1
 
