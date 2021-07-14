@@ -168,7 +168,7 @@ def label_modules(
         )
 
         # Add 1 to avoid inf
-        observed_contingency_table = observed_contingency_table + 1
+        observed_contingency_table = observed_contingency_table
 
         # H0: The probability that the gene is core is the same
         # whether or not you're in the module or outside
@@ -262,8 +262,6 @@ pa14_module_labels = label_modules(
 
 pao1_module_labels.head()
 
-pao1_module_labels.loc[558]
-
 pa14_module_labels.head()
 
 # Distribution of p-values
@@ -341,5 +339,5 @@ pa14_module_labels.to_csv(
 # -
 
 # **Takeaway:**
-# * Most modules are mixed, some are mostly accessory. Only PA14 compendium have some mostly core modules
+# * Most modules are mixed, some are mostly accessory.
 # * PAO1, PA14 mixed and mostly accessory modules have similar sizes

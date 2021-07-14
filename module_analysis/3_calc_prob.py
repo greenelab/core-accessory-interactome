@@ -21,6 +21,8 @@
 # $$
 # Pr(\text{gene x in an acc module | gene x is acc gene}) = \frac{Pr(\text{gene x in acc module}\cap \text{gene x is acc gene})}{Pr(\text{gene x is acc gene})}
 # $$
+#
+# A similar probability can be calculated for core genes co-expressed with other core genes.
 
 # %load_ext autoreload
 # %autoreload 2
@@ -77,16 +79,16 @@ pa14_acc = core_acc_dict["acc_pa14"]
 # ## Calculate likelihood
 # $Pr(\text{gene x in acc module}\cap \text{gene x is acc gene})$ is the number of accessory genes in accessory modules
 
-# Get "mostly accessory" modules
+# Get subset of df
 pao1_subset = pao1_membership[["module id", "module label", "num acc in module"]]
 pao1_subset = pao1_subset.set_index("module id")
 pao1_subset = pao1_subset.drop_duplicates()
 
-# Get "mostly accessory" modules
 pa14_subset = pa14_membership[["module id", "module label", "num acc in module"]]
 pa14_subset = pa14_subset.set_index("module id")
 pa14_subset = pa14_subset.drop_duplicates()
 
+# Get number of accessory genes in "mostly accessory" modules
 num_acc_gene_in_acc_mod_pao1 = pao1_subset.loc[
     pao1_subset["module label"] == "mostly accessory", "num acc in module"
 ].sum()
@@ -94,8 +96,23 @@ num_acc_gene_in_acc_mod_pa14 = pa14_subset.loc[
     pa14_subset["module label"] == "mostly accessory", "num acc in module"
 ].sum()
 
+# Currently there are no mostly core modules, so this is a placeholder
+# Get number of core genes in "mostly core" modules
+"""num_core_gene_in_core_mod_pao1 = pao1_subset.loc[
+    pao1_subset["module label"] == "mostly core", "num core in module"
+].sum()
+num_core_gene_in_core_mod_pa14 = pa14_subset.loc[
+    pa14_subset["module label"] == "mostly core", "num core in module"
+].sum()"""
+
 lik_pao1_acc = num_acc_gene_in_acc_mod_pao1 / (len(pao1_core) + len(pao1_acc))
 lik_pa14_acc = num_acc_gene_in_acc_mod_pa14 / (len(pa14_core) + len(pa14_acc))
+
+# +
+# Currently there are no mostly core modules, so this is a placeholder
+# lik_pao1_core = num_core_gene_in_core_mod_pao1 / (len(pao1_core) + len(pao1_acc))
+# lik_pa14_core = num_core_gene_in_core_mod_pa14 / (len(pa14_core) + len(pa14_acc))
+# -
 
 num_acc_gene_in_acc_mod_pao1
 
@@ -104,14 +121,28 @@ num_acc_gene_in_acc_mod_pa14
 print(lik_pao1_acc)
 print(lik_pa14_acc)
 
+# +
+# Currently there are no mostly core modules, so this is a placeholder
+# print(lik_pao1_core)
+# print(lik_pa14_core)
+# -
+
 # ### Caclulate prior distribution
 # $Pr(\text{gene x is acc gene})$ is the number of accessory genes divided by the total number of genes
+#
+# Similarly for core genes
 
 pr_pao1_acc = len(pao1_acc) / (len(pao1_core) + len(pao1_acc))
 pr_pa14_acc = len(pa14_acc) / (len(pa14_core) + len(pa14_acc))
 
+pr_pao1_core = len(pao1_core) / (len(pao1_core) + len(pao1_acc))
+pr_pa14_core = len(pa14_core) / (len(pa14_core) + len(pa14_acc))
+
 print(pr_pao1_acc)
 print(pr_pa14_acc)
+
+print(pr_pao1_core)
+print(pr_pa14_core)
 
 # ## Calculate conditional probability
 
@@ -125,3 +156,15 @@ print(
 print(
     f"Probability of accessory gene being co-expressed with another accessory gene in PA14 is {pr_acc2acc_pa14}"
 )
+# -
+
+# Currently there are no mostly core modules, so this is a placeholder
+"""pr_core2core_pao1 = lik_pao1_core / pr_pao1_core
+pr_core2core_pa14 = lik_pa14_core / pr_pa14_core
+
+print(
+    f"Probability of core gene being co-expressed with another core gene in PAO1 is {pr_core2core_pao1}"
+)
+print(
+    f"Probability of core gene being co-expressed with another core gene in PA14 is {pr_core2core_pa14}"
+)"""
