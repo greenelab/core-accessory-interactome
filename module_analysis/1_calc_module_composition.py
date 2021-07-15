@@ -167,7 +167,6 @@ def label_modules(
             ]
         )
 
-        # Add 1 to avoid inf
         observed_contingency_table = observed_contingency_table
 
         # H0: The probability that the gene is core is the same
@@ -223,7 +222,7 @@ def label_modules(
         )
 
         # Add columns
-        out_df["FDR corrected p-value"] = cpva
+        out_df["FDR corrected p-value"] = cpval
         out_df["significant"] = sign
 
         # Label modules
