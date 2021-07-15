@@ -25,6 +25,7 @@
 
 # %load_ext autoreload
 # %autoreload 2
+# %matplotlib inline
 import os
 import pandas as pd
 import plotnine as pn

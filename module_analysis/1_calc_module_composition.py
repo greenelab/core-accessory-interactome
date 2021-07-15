@@ -91,11 +91,25 @@ pa14_module_ids = pa14_membership["module id"].unique()
 
 pao1_gene_group_composition = pd.DataFrame(
     index=pao1_module_ids,
-    columns=["num core", "num acc", "odds ratio", "p-value", "module label"],
+    columns=[
+        "num core in module",
+        "num acc in module",
+        "num core outside module",
+        "num acc outside module",
+        "odds ratio",
+        "p-value",
+    ],
 )
 pa14_gene_group_composition = pd.DataFrame(
     index=pa14_module_ids,
-    columns=["num core", "num acc", "odds ratio", "p-value", "module label"],
+    columns=[
+        "num core in module",
+        "num acc in module",
+        "num core outside module",
+        "num acc outside module",
+        "odds ratio",
+        "p-value",
+    ],
 )
 
 pao1_gene_group_composition.head()
@@ -153,14 +167,15 @@ def label_modules(
             ]
         )
 
-        # Add 1 to avoid inf
-        observed_contingency_table = observed_contingency_table + 1
+        observed_contingency_table = observed_contingency_table
 
         # H0: The probability that the gene is core is the same
         # whether or not you're in the module or outside
         # H1: The probability that a gene is core is higher or lower inside the module
         # than outside the module
-        odds_ratio, pval = scipy.stats.fisher_exact(observed_contingency_table)
+        odds_ratio, pval = scipy.stats.fisher_exact(
+            observed_contingency_table, alternative="two-sided"
+        )
 
         # If using two separate one-sided tests
         # odds_ratio, pval_greater = scipy.stats.fisher_exact(
@@ -207,8 +222,8 @@ def label_modules(
         )
 
         # Add columns
-        out_df["significant"] = sign
         out_df["FDR corrected p-value"] = cpval
+        out_df["significant"] = sign
 
         # Label modules
         out_df["module label"] = "mixed"
@@ -229,7 +244,7 @@ pao1_module_labels = label_modules(
     pao1_membership,
     pao1_core,
     pao1_acc,
-    "fdr",
+    "bonferroni",
     pao1_gene_group_composition,
 )
 
@@ -240,7 +255,7 @@ pa14_module_labels = label_modules(
     pa14_membership,
     pa14_core,
     pa14_acc,
-    "fdr",
+    "bonferroni",
     pa14_gene_group_composition,
 )
 
@@ -307,10 +322,12 @@ plt.title("Size distribution of PA14 mostly core modules")
 
 # Save
 pao1_module_labels.to_csv(
-    os.path.join(paths.LOCAL_DATA_DIR, "pao1_gene_module_labels.tsv"), sep="\t"
+    os.path.join(paths.LOCAL_DATA_DIR, f"pao1_gene_module_labels_{method}.tsv"),
+    sep="\t",
 )
 pa14_module_labels.to_csv(
-    os.path.join(paths.LOCAL_DATA_DIR, "pa14_gene_module_labels.tsv"), sep="\t"
+    os.path.join(paths.LOCAL_DATA_DIR, f"pa14_gene_module_labels_{method}.tsv"),
+    sep="\t",
 )
 
 # +
@@ -321,5 +338,5 @@ pa14_module_labels.to_csv(
 # -
 
 # **Takeaway:**
-# * Most modules are mixed, some are mostly accessory. Only PA14 compendium have some mostly core modules
+# * Most modules are mixed, some are mostly accessory.
 # * PAO1, PA14 mixed and mostly accessory modules have similar sizes

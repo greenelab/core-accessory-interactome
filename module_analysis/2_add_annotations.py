@@ -44,10 +44,10 @@ method = "affinity"
 # +
 # Import module labels
 pao1_module_label_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, "pao1_gene_module_labels.tsv"
+    paths.LOCAL_DATA_DIR, f"pao1_gene_module_labels_{method}.tsv"
 )
 pa14_module_label_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, "pa14_gene_module_labels.tsv"
+    paths.LOCAL_DATA_DIR, f"pa14_gene_module_labels_{method}.tsv"
 )
 
 pao1_module_labels = pd.read_csv(
@@ -105,6 +105,37 @@ print(pao1_gene_module_labels.shape)
 pao1_gene_module_labels.head()
 
 print(pa14_gene_module_labels.shape)
+pa14_gene_module_labels.head()
+
+# ## Add core/accessory annotations
+
+# +
+# Read in expression data
+pao1_expression_filename = paths.PAO1_COMPENDIUM
+pa14_expression_filename = paths.PA14_COMPENDIUM
+
+pao1_expression = pd.read_csv(pao1_expression_filename, sep="\t", index_col=0, header=0)
+pa14_expression = pd.read_csv(pa14_expression_filename, sep="\t", index_col=0, header=0)
+# -
+
+core_acc_dict = utils.get_my_core_acc_genes(
+    pao1_gene_annot_filename, pa14_gene_annot_filename, pao1_expression, pa14_expression
+)
+
+pao1_core = core_acc_dict["core_pao1"]
+pa14_core = core_acc_dict["core_pa14"]
+pao1_acc = core_acc_dict["acc_pao1"]
+pa14_acc = core_acc_dict["acc_pa14"]
+
+pao1_gene_module_labels.loc[pao1_core, "core/acc"] = "core"
+pao1_gene_module_labels.loc[pao1_acc, "core/acc"] = "acc"
+
+pa14_acc_shared = set(pa14_acc).intersection(pa14_gene_module_labels.index)
+pa14_gene_module_labels.loc[pa14_core, "core/acc"] = "core"
+pa14_gene_module_labels.loc[pa14_acc_shared, "core/acc"] = "acc"
+
+pao1_gene_module_labels.head()
+
 pa14_gene_module_labels.head()
 
 # ## Add KEGG pathways
@@ -239,8 +270,10 @@ pa14_gene_summary = pa14_gene_summary[~pa14_gene_summary.index.duplicated(keep=F
 
 # Save
 pao1_gene_summary.to_csv(
-    os.path.join(paths.LOCAL_DATA_DIR, "pao1_gene_module_annotated.tsv"), sep="\t"
+    os.path.join(paths.LOCAL_DATA_DIR, f"pao1_gene_module_annotated_{method}.tsv"),
+    sep="\t",
 )
 pa14_gene_summary.to_csv(
-    os.path.join(paths.LOCAL_DATA_DIR, "pa14_gene_module_annotated.tsv"), sep="\t"
+    os.path.join(paths.LOCAL_DATA_DIR, f"pa14_gene_module_annotated_{method}.tsv"),
+    sep="\t",
 )
