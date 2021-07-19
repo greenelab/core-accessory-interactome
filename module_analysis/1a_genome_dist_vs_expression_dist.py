@@ -160,7 +160,7 @@ def get_relationship_in_genome_space(core_acc_df, offset_max, offset_to_bin):
         .reset_index()
     )
     long_dist["offset"] = f"{offset_to_bin}+"
-    genome_dist_counts = genome_dist_counts.query("offset<=10").append(
+    genome_dist_counts = genome_dist_counts.query("offset<=@offset_to_bin").append(
         long_dist, ignore_index=True
     )
 
@@ -178,6 +178,85 @@ genome_dist_counts_pao1.head()
 
 genome_dist_counts_pa14.head()
 
+# ## Find relationships using expression distance
+
+# Correlation matrix files
+pao1_corr_filename = paths.PAO1_CORR_LOG_SPELL
+pa14_corr_filename = paths.PA14_CORR_LOG_SPELL
+
+# Load correlation data
+pao1_corr = pd.read_csv(pao1_corr_filename, sep="\t", index_col=0, header=0)
+pa14_corr = pd.read_csv(pa14_corr_filename, sep="\t", index_col=0, header=0)
+
+
+def get_relationship_in_expression_space(
+    corr_df, genes_to_consider, gene_mapping_df, offset_max, offset_to_bin
+):
+
+    # Get subset of genes
+    corr_subset = corr_df.loc[genes_to_consider]
+
+    rows = []
+    for gene in corr_subset.index:
+        top_corr_genes = list(corr_subset.loc[gene].nlargest(offset_max).index[1:])
+        top_gene_labels = list(gene_mapping_df.loc[top_corr_genes, "core/acc"].values)
+        rows.append(top_gene_labels)
+
+    expression_dist_counts = pd.DataFrame(rows)
+
+    assert expression_dist_counts.shape == (corr_subset.shape[0], offset_max - 1)
+
+    # Count types of relationships
+    expression_dist_counts_acc = (expression_dist_counts == "acc").sum().to_frame("acc")
+    expression_dist_counts = expression_dist_counts_acc.join(
+        (expression_dist_counts == "core").sum().to_frame("core")
+    )
+
+    # Format counts for plotting
+    expression_dist_counts = expression_dist_counts.melt(
+        var_name="gene type", value_name="total", ignore_index=False
+    )
+    expression_dist_counts = expression_dist_counts.rename_axis("offset").reset_index()
+
+    # Average counts for weaker correlation relationships
+    weak_corr = (
+        expression_dist_counts.query("offset>@offset_to_bin")
+        .groupby("gene type")["total"]
+        .mean()
+        .to_frame()
+    )
+    weak_corr = weak_corr.reset_index()
+    weak_corr["offset"] = f"+{offset_to_bin}"
+
+    expression_dist_counts = expression_dist_counts.query(
+        "offset<=@offset_to_bin"
+    ).append(weak_corr, ignore_index=True)
+
+    return expression_dist_counts
+
+
+expression_dist_counts_pao1_acc = get_relationship_in_expression_space(
+    pao1_corr, pao1_acc, pao1_arr, offset_max, offset_to_bin
+)
+expression_dist_counts_pao1_core = get_relationship_in_expression_space(
+    pao1_corr, pao1_core, pao1_arr, offset_max, offset_to_bin
+)
+
+expression_dist_counts_pa14_acc = get_relationship_in_expression_space(
+    pa14_corr, pa14_acc, pa14_arr, offset_max, offset_to_bin
+)
+expression_dist_counts_pa14_core = get_relationship_in_expression_space(
+    pa14_corr, pa14_core, pa14_arr, offset_max, offset_to_bin
+)
+
+expression_dist_counts_pao1_acc.head()
+
+expression_dist_counts_pao1_core.head()
+
+expression_dist_counts_pa14_acc.head()
+
+expression_dist_counts_pa14_core.head()
+
 # ### Plot
 
 sns.barplot(
@@ -191,6 +270,16 @@ plt.ylabel("Number of genes")
 plt.xlabel("Offset in genome space")
 
 sns.barplot(
+    data=expression_dist_counts_pao1_acc,
+    x="offset",
+    y="total",
+    hue="gene type",
+)
+plt.title("Starting with accessory gene PAO1")
+plt.ylabel("Number of genes")
+plt.xlabel("Offset in expression space")
+
+sns.barplot(
     data=genome_dist_counts_pao1[genome_dist_counts_pao1["gene start"] == "core"],
     x="offset",
     y="total",
@@ -199,6 +288,16 @@ sns.barplot(
 plt.title("Starting with core gene PAO1")
 plt.ylabel("Number of genes")
 plt.xlabel("Offset in genome space")
+
+sns.barplot(
+    data=expression_dist_counts_pao1_core,
+    x="offset",
+    y="total",
+    hue="gene type",
+)
+plt.title("Starting with core gene PAO1")
+plt.ylabel("Number of genes")
+plt.xlabel("Offset in expression space")
 
 sns.barplot(
     data=genome_dist_counts_pa14[genome_dist_counts_pa14["gene start"] == "acc"],
@@ -211,6 +310,16 @@ plt.ylabel("Number of genes")
 plt.xlabel("Offset in genome space")
 
 sns.barplot(
+    data=expression_dist_counts_pa14_acc,
+    x="offset",
+    y="total",
+    hue="gene type",
+)
+plt.title("Starting with accessory gene PA14")
+plt.ylabel("Number of genes")
+plt.xlabel("Offset in expression space")
+
+sns.barplot(
     data=genome_dist_counts_pa14[genome_dist_counts_pa14["gene start"] == "core"],
     x="offset",
     y="total",
@@ -219,6 +328,16 @@ sns.barplot(
 plt.title("Starting with core gene PA14")
 plt.ylabel("Number of genes")
 plt.xlabel("Offset in genome space")
+
+sns.barplot(
+    data=expression_dist_counts_pa14_core,
+    x="offset",
+    y="total",
+    hue="gene type",
+)
+plt.title("Starting with core gene PA14")
+plt.ylabel("Number of genes")
+plt.xlabel("Offset in expression space")
 
 # **Takeaway:**
 # * Accessory genes are clustered together on the genome, which is known.
