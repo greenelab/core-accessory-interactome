@@ -259,86 +259,109 @@ expression_dist_counts_pa14_core.head()
 
 # ### Plot
 
-sns.barplot(
+# +
+# Plot PAO1 trends
+fig, axes = plt.subplots(ncols=2, nrows=2, figsize=(15, 15))
+
+fig = sns.barplot(
     data=genome_dist_counts_pao1[genome_dist_counts_pao1["gene start"] == "acc"],
     x="offset",
     y="total",
     hue="gene compare",
+    ax=axes[0][0],
 )
-plt.title("Starting with accessory gene PAO1")
-plt.ylabel("Number of genes")
-plt.xlabel("Offset in genome space")
+fig.set_title("Starting with accessory gene PAO1")
+fig.set_ylabel("Number of genes")
+fig.set_xlabel("Offset in genome space")
 
-sns.barplot(
-    data=expression_dist_counts_pao1_acc,
-    x="offset",
-    y="total",
-    hue="gene type",
-)
-plt.title("Starting with accessory gene PAO1")
-plt.ylabel("Number of genes")
-plt.xlabel("Offset in expression space")
-
-sns.barplot(
+fig = sns.barplot(
     data=genome_dist_counts_pao1[genome_dist_counts_pao1["gene start"] == "core"],
     x="offset",
     y="total",
     hue="gene compare",
+    ax=axes[1][0],
 )
-plt.title("Starting with core gene PAO1")
-plt.ylabel("Number of genes")
-plt.xlabel("Offset in genome space")
+fig.set_title("Starting with core gene PAO1")
+fig.set_ylabel("Number of genes")
+fig.set_xlabel("Offset in genome space")
 
-sns.barplot(
+fig = sns.barplot(
+    data=expression_dist_counts_pao1_acc,
+    x="offset",
+    y="total",
+    hue="gene type",
+    ax=axes[0][1],
+)
+fig.set_title("Starting with accessory gene PAO1")
+fig.set_ylabel("Number of genes")
+fig.set_xlabel("Rank correlation in expression space")
+
+fig = sns.barplot(
     data=expression_dist_counts_pao1_core,
     x="offset",
     y="total",
     hue="gene type",
+    ax=axes[1][1],
 )
-plt.title("Starting with core gene PAO1")
-plt.ylabel("Number of genes")
-plt.xlabel("Offset in expression space")
+fig.set_title("Starting with core gene PAO1")
+fig.set_ylabel("Number of genes")
+fig.set_xlabel("Rank correlation in expression space")
 
-sns.barplot(
+# +
+# Plot PA14 trends
+fig2, axes2 = plt.subplots(ncols=2, nrows=2, figsize=(15, 15))
+
+fig2 = sns.barplot(
     data=genome_dist_counts_pa14[genome_dist_counts_pa14["gene start"] == "acc"],
     x="offset",
     y="total",
     hue="gene compare",
+    ax=axes2[0][0],
 )
-plt.title("Starting with accessory gene PA14")
-plt.ylabel("Number of genes")
-plt.xlabel("Offset in genome space")
+fig2.set_title("Starting with accessory gene PA14")
+fig2.set_ylabel("Number of genes")
+fig2.set_xlabel("Offset in genome space")
 
-sns.barplot(
+fig2 = sns.barplot(
     data=expression_dist_counts_pa14_acc,
     x="offset",
     y="total",
     hue="gene type",
+    ax=axes2[0][1],
 )
-plt.title("Starting with accessory gene PA14")
-plt.ylabel("Number of genes")
-plt.xlabel("Offset in expression space")
+fig2.set_title("Starting with accessory gene PA14")
+fig2.set_ylabel("Number of genes")
+fig2.set_xlabel("Rank correlation in expression space")
 
-sns.barplot(
+fig2 = sns.barplot(
     data=genome_dist_counts_pa14[genome_dist_counts_pa14["gene start"] == "core"],
     x="offset",
     y="total",
     hue="gene compare",
+    ax=axes2[1][0],
 )
-plt.title("Starting with core gene PA14")
-plt.ylabel("Number of genes")
-plt.xlabel("Offset in genome space")
+fig2.set_title("Starting with core gene PA14")
+fig2.set_ylabel("Number of genes")
+fig2.set_xlabel("Offset in genome space")
 
-sns.barplot(
+fig2 = sns.barplot(
     data=expression_dist_counts_pa14_core,
     x="offset",
     y="total",
     hue="gene type",
+    ax=axes2[1][1],
 )
-plt.title("Starting with core gene PA14")
-plt.ylabel("Number of genes")
-plt.xlabel("Offset in expression space")
+fig2.set_title("Starting with core gene PA14")
+fig2.set_ylabel("Number of genes")
+fig2.set_xlabel("Rank correlation in expression space")
+# -
 
 # **Takeaway:**
-# * Accessory genes are clustered together on the genome, which is known.
-# * Starting with a core gene, at any distance you find many core genes because there are so many core genes
+#
+# In genome space:
+# * Accessory genes are clustered together on the genome (i.e. clustered with other accessory genes compared to core genes), which is known: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3008168/
+# * Starting with a core gene, at any distance you find core genes because there are so many core genes
+#
+# In expression space:
+# * Accessory genes appear to be more highly co-expressed with other accessory genes. But this might be due to the accessory genes clustering together in the genome (i.e. they are found in the same operon).
+# * Core genes are highly correlated with other core genes, again, this may be due to the fact that there are so many more core genes.
