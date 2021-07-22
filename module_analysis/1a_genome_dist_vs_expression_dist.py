@@ -66,6 +66,17 @@ pao1_membership.head()
 
 pa14_membership.head()
 
+# ### Import and format operon data
+
+pao1_operon_filename = paths.PAO1_OPERON
+pa14_operon_filename = paths.PA14_OPERON
+
+pao1_operon = pd.read_csv(pao1_operon_filename, index_col=0, header=0)
+pa14_operon = pd.read_csv(pa14_operon_filename, index_col=0, header=0)
+
+pao1_operon = pao1_operon.set_index("locus_tag")
+pa14_operon = pa14_operon.set_index("locus_tag")
+
 # ### Map core/accessory labels to genes
 
 # +
@@ -198,25 +209,58 @@ pa14_corr = pd.read_csv(pa14_corr_filename, sep="\t", index_col=0, header=0)
 
 
 def get_relationship_in_expression_space(
-    corr_df, genes_to_consider, gene_mapping_df, offset_to_bin, sum_increment=1
+    corr_df,
+    genes_to_consider,
+    gene_mapping_df,
+    offset_to_bin,
+    operon_df=None,
+    sum_increment=1,
 ):
-
     # Get subset of genes
     corr_subset = corr_df.loc[genes_to_consider]
 
-    offset_max = corr_df.shape[1]
-
     rows = []
     for gene in corr_subset.index:
-        # Find operons containing 'gene' and remove those columns from the corr_subset
+
+        if operon_df is not None:
+            # This subset needs to be reset each iteration
+            # since we are dropping columns below
+            corr_subset = corr_df.loc[genes_to_consider]
+
+            # Check if gene is found in an operon
+            if gene in operon_df.index:
+                # Find operons containing 'gene'
+                group_name = operon_df.loc[gene, "operon_name"]
+
+                # Check if there are multiple annotations for this gene
+                # This operon df contains annotations from predicted operons based on DOOR database
+                # predictions which make up the majority of the operons) as well as some that
+                # are curated (i.e. PseudoCAP)
+                # We will use the curated annotation
+                if type(group_name) != str:
+                    group_name = (
+                        operon_df.loc[gene]
+                        .query("source_database=='PseudoCAP'")["operon_name"]
+                        .values[0]
+                    )
+
+                # Dictionary format: pao1_operon_dict[operon_name] = [list of genes]
+                operon_dict = operon_df.groupby("operon_name").groups
+                co_operonic_genes = list(operon_dict[group_name])
+
+                # Remove columns corresponding to co-operonic genes from the corr_subset
+                co_operonic_genes_to_remove = list(
+                    set(corr_subset.columns).intersection(co_operonic_genes)
+                )
+                corr_subset = corr_subset.drop(columns=co_operonic_genes_to_remove)
+
+        offset_max = corr_subset.shape[1]
 
         top_corr_genes = list(corr_subset.loc[gene].nlargest(offset_max).index[1:])
         top_gene_labels = list(gene_mapping_df.loc[top_corr_genes, "core/acc"].values)
         rows.append(top_gene_labels)
 
     expression_dist_counts = pd.DataFrame(rows)
-
-    assert expression_dist_counts.shape == (corr_subset.shape[0], offset_max - 1)
 
     # Count types of relationships
     expression_dist_counts_acc = (expression_dist_counts == "acc").sum().to_frame("acc")
@@ -263,18 +307,26 @@ def get_relationship_in_expression_space(
     return expression_dist_counts
 
 
+# %%time
 expression_dist_counts_pao1_acc = get_relationship_in_expression_space(
-    pao1_corr, pao1_acc, pao1_arr, offset_to_bin
+    pao1_corr, pao1_acc, pao1_arr, offset_to_bin, pao1_operon
 )
 expression_dist_counts_pao1_core = get_relationship_in_expression_space(
-    pao1_corr, pao1_core, pao1_arr, offset_to_bin
+    pao1_corr, pao1_core, pao1_arr, offset_to_bin, pao1_operon
 )
 
+# %%time
 expression_dist_counts_pa14_acc = get_relationship_in_expression_space(
-    pa14_corr, pa14_acc, pa14_arr, offset_to_bin
+    pa14_corr,
+    pa14_acc,
+    pa14_arr,
+    offset_to_bin,
 )
 expression_dist_counts_pa14_core = get_relationship_in_expression_space(
-    pa14_corr, pa14_core, pa14_arr, offset_to_bin
+    pa14_corr,
+    pa14_core,
+    pa14_arr,
+    offset_to_bin,
 )
 
 expression_dist_counts_pao1_acc.head()
