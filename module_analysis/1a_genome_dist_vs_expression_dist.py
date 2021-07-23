@@ -74,8 +74,37 @@ pa14_operon_filename = paths.PA14_OPERON
 pao1_operon = pd.read_csv(pao1_operon_filename, index_col=0, header=0)
 pa14_operon = pd.read_csv(pa14_operon_filename, index_col=0, header=0)
 
+pao1_operon.head()
+
 pao1_operon = pao1_operon.set_index("locus_tag")
 pa14_operon = pa14_operon.set_index("locus_tag")
+
+print(pao1_operon.shape)
+pao1_operon.head()
+
+# +
+# There are 247 PAO1 genes with multiple annotations
+# This operon df contains annotations from predicted operons based on DOOR database
+# predictions which make up the majority of the operons) as well as some that
+# are curated (i.e. PseudoCAP)
+# There are some that have multiple PseudoCAP annotations too
+
+# Here we will keep the last PseudoCAP annotations
+# Note: Do we want to discard these annotations all together
+# or will these need to be carefully curated to determine which to keep?
+# We will use the curated annotation here
+pao1_operon = pao1_operon[~pao1_operon.index.duplicated(keep="last")]
+pa14_operon = pa14_operon[~pa14_operon.index.duplicated(keep="last")]
+# -
+
+pao1_operon.head()
+
+# Only include columns for gene id and operon_name
+pao1_operon = pao1_operon["operon_name"].to_frame()
+pa14_operon = pa14_operon["operon_name"].to_frame()
+
+print(pao1_operon.shape)
+pao1_operon.head()
 
 # ### Map core/accessory labels to genes
 
@@ -112,14 +141,55 @@ pa14_membership.loc[pa14_acc, "core/acc"] = "acc"
 pao1_arr = pao1_membership.drop("module id", axis=1)
 pa14_arr = pa14_membership.drop("module id", axis=1)
 
+# Make sure to sort by gene id
+# NOTE PA14 gene ids don't increment by 1, but by 10 or 20 are we missing some genes?
+pao1_arr = pao1_arr.sort_index()
+pa14_arr = pa14_arr.sort_index()
+
+print(pao1_arr.shape)
 pao1_arr.head()
 
+pao1_arr.tail()
+
+print(pa14_arr.shape)
 pa14_arr.head()
+
+pa14_arr.tail()
+
+# +
+# Fill in index of operon_df to include all genes
+all_pao1_gene_ids = pao1_arr.index
+all_pa14_gene_ids = pa14_arr.index
+
+# Get missing gene ids
+missing_pao1_gene_ids = set(all_pao1_gene_ids).difference(pao1_operon.index)
+missing_pa14_gene_ids = set(all_pa14_gene_ids).difference(pa14_operon.index)
+
+# Make dataframe with missing gene ids with np.nan values for operon_name
+missing_pao1_gene_df = pd.DataFrame(
+    data=np.nan, index=list(missing_pao1_gene_ids), columns=["operon_name"]
+)
+missing_pa14_gene_df = pd.DataFrame(
+    data=np.nan, index=list(missing_pa14_gene_ids), columns=["operon_name"]
+)
+
+pao1_operon_genome_dist = pao1_operon.append(missing_pao1_gene_df)
+pa14_operon_genome_dist = pa14_operon.append(missing_pa14_gene_df)
+
+pao1_operon_genome_dist = pao1_operon_genome_dist.loc[all_pao1_gene_ids]
+pa14_operon_genome_dist = pa14_operon_genome_dist.loc[all_pa14_gene_ids]
+# -
+
+print(pao1_operon_genome_dist.shape)
+pao1_operon_genome_dist.tail()
+
+print(pa14_operon_genome_dist.shape)
+pa14_operon_genome_dist.tail()
 
 
 # ## Find relationships using genome distance
 
-def get_relationship_in_genome_space(core_acc_df, offset_to_bin):
+def get_relationship_in_genome_space(core_acc_df, offset_to_bin, operon_df=None):
     gene_type_start = ["acc", "core"]
     gene_type_compare = ["acc", "core"]
 
@@ -130,40 +200,75 @@ def get_relationship_in_genome_space(core_acc_df, offset_to_bin):
         core_acc_df["core/acc"], offset_max, "constant", constant_values="NA"
     )
 
+    if operon_df is not None:
+        operon_df_pad = np.pad(
+            operon_df["operon_name"], offset_max, "constant", constant_values="NA"
+        )
+
+        assert core_acc_df.shape == operon_df.shape
+
     rows = []
 
     for gene_start in gene_type_start:
         for gene_compare in gene_type_compare:
             for offset in range(1, offset_max + 1):
                 # Print statements to understand what is happening
-                # Here we are comparing our core/....
-                # print(gene_start)
-                # print(gene_compare)
-                # print(pao1_arr_pad[offset_max:pao1_arr_len])
-                # print(pao1_arr_pad[offset_max-offset:pao1_arr_len-offset])
-                counts = (
-                    (
-                        core_acc_df_pad[offset_max : core_acc_df_len + offset_max]
-                        == gene_start
-                    )
-                    & (
-                        core_acc_df_pad[
+                # print("start left", core_acc_df_pad[offset_max : core_acc_df_len + offset_max])
+                # print("compare left", core_acc_df_pad[
+                #             offset_max - offset : core_acc_df_len + offset_max - offset
+                #         ])
+                #
+                # print("start left", operon_df_pad[offset_max : core_acc_df_len + offset_max])
+                # print("compare left", operon_df_pad[
+                #             offset_max - offset : core_acc_df_len + offset_max - offset
+                #         ])
+
+                # Compare left nearest neighbors: Are they core or accessory?
+                core_acc_left = (
+                    core_acc_df_pad[offset_max : core_acc_df_len + offset_max]
+                    == gene_start
+                ) & (
+                    core_acc_df_pad[
+                        offset_max - offset : core_acc_df_len + offset_max - offset
+                    ]
+                    == gene_compare
+                )
+
+                # Compare right nearest neighbors: Are they core or accessory?
+                core_acc_right = (
+                    core_acc_df_pad[offset_max : core_acc_df_len + offset_max]
+                    == gene_start
+                ) & (
+                    core_acc_df_pad[
+                        offset_max + offset : core_acc_df_len + offset_max + offset
+                    ]
+                    == gene_compare
+                )
+
+                if operon_df is not None:
+                    # Compare left operons: Are the genes in the same operon?
+                    operon_left = (
+                        operon_df_pad[offset_max : core_acc_df_len + offset_max]
+                        == operon_df_pad[
                             offset_max - offset : core_acc_df_len + offset_max - offset
                         ]
-                        == gene_compare
                     )
-                ).sum() + (
-                    (
-                        core_acc_df_pad[offset_max : core_acc_df_len + offset_max]
-                        == gene_start
-                    )
-                    & (
-                        core_acc_df_pad[
+
+                    # Compare right operons: Are the genes in the same operon?
+                    operon_right = (
+                        operon_df_pad[offset_max : core_acc_df_len + offset_max]
+                        == operon_df_pad[
                             offset_max + offset : core_acc_df_len + offset_max + offset
                         ]
-                        == gene_compare
                     )
-                ).sum()
+
+                    # Sum all comparisons
+                    counts = (core_acc_left & ~operon_left).sum() + (
+                        core_acc_right & ~operon_right
+                    ).sum()
+                else:
+                    counts = core_aff_left.sum() + core_acc_right.sum()
+
                 rows.append(
                     {
                         "gene start": gene_start,
@@ -190,8 +295,12 @@ def get_relationship_in_genome_space(core_acc_df, offset_to_bin):
     return genome_dist_counts
 
 
-genome_dist_counts_pao1 = get_relationship_in_genome_space(pao1_arr, offset_to_bin)
-genome_dist_counts_pa14 = get_relationship_in_genome_space(pa14_arr, offset_to_bin)
+genome_dist_counts_pao1 = get_relationship_in_genome_space(
+    pao1_arr, offset_to_bin, pao1_operon_genome_dist
+)
+genome_dist_counts_pa14 = get_relationship_in_genome_space(
+    pa14_arr, offset_to_bin, pa14_operon_genome_dist
+)
 
 genome_dist_counts_pao1.head()
 
@@ -231,18 +340,6 @@ def get_relationship_in_expression_space(
             if gene in operon_df.index:
                 # Find operons containing 'gene'
                 group_name = operon_df.loc[gene, "operon_name"]
-
-                # Check if there are multiple annotations for this gene
-                # This operon df contains annotations from predicted operons based on DOOR database
-                # predictions which make up the majority of the operons) as well as some that
-                # are curated (i.e. PseudoCAP)
-                # We will use the curated annotation
-                if type(group_name) != str:
-                    group_name = (
-                        operon_df.loc[gene]
-                        .query("source_database=='PseudoCAP'")["operon_name"]
-                        .values[0]
-                    )
 
                 # Dictionary format: pao1_operon_dict[operon_name] = [list of genes]
                 operon_dict = operon_df.groupby("operon_name").groups
@@ -434,14 +531,28 @@ fig2 = sns.barplot(
 fig2.set_title("Starting with core gene PA14")
 fig2.set_ylabel("Number of genes")
 fig2.set_xlabel("Rank correlation in expression space")
+
+# +
+# TO DO:
+# Save figures using operons
+# Save figures not using operons
+# Save figure with rolling sum and operons
+# Save figure with rolling sum not using operons
 # -
 
 # **Takeaway:**
 #
 # In genome space:
-# * Accessory genes are clustered together on the genome (i.e. clustered with other accessory genes compared to core genes), which is known: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3008168/
-# * Starting with a core gene, at any distance you find core genes because there are so many core genes
+# * The closest non co-operonic neighbor to an accessory gene is a core gene for PAO1, but is an accessory gene for PA14
+# * Including co-operonic genes, accessory genes are clustered together on the genome (i.e. clustered with other accessory genes compared to core genes), which is known: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3008168/
+# * Starting with a core gene, at any distance you find core genes including and not including co-operonic genes.
 #
 # In expression space:
 # * Accessory genes appear to be more highly co-expressed with other accessory genes. But this might be due to the accessory genes clustering together in the genome (i.e. they are found in the same operon).
 # * Core genes are highly correlated with other core genes, again, this may be due to the fact that there are so many more core genes.
+#
+# * Accessory genes seem to have a strong relationship with other accessory genes in PA14, but not PAO1. Why?
+#
+# Some things to note about this analysis that may need to be updated:
+# * There are some operons that have multiple annotations, which one should we choose? Should we drop these from the analysis? Should we curate these to determine which ones?
+# * When we sorted the gene ids, we found that PAO1 incremented by 1 and PA14 incremented by 10 or 20, are we missing genes for PA14? How much will this change our genome dist analysis?
