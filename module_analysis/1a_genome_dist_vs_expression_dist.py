@@ -41,11 +41,23 @@ from statsmodels.stats.multitest import multipletests
 from core_acc_modules import utils, paths
 
 random.seed(1)
-# -
 
+# +
 # User params
 method = "affinity"
 offset_to_bin = 10
+
+use_operon = True
+sum_increment_to_use = 2
+
+# Output filename
+pao1_figure_filename = (
+    "PAO1_genome_expression_relationships_2window_operon_corrected.svg"
+)
+pa14_figure_filename = (
+    "PA14_genome_expression_relationships_2window_operon_corrected.svg"
+)
+# -
 
 # ### Import module memberships
 
@@ -105,6 +117,13 @@ pa14_operon = pa14_operon["operon_name"].to_frame()
 
 print(pao1_operon.shape)
 pao1_operon.head()
+
+if use_operon:
+    pao1_operon_expression_to_use = pao1_operon
+    pa14_operon_expression_to_use = pa14_operon
+else:
+    pao1_operon_expression_to_use = None
+    pa14_operon_expression_to_use = None
 
 # ### Map core/accessory labels to genes
 
@@ -185,6 +204,13 @@ pao1_operon_genome_dist.tail()
 
 print(pa14_operon_genome_dist.shape)
 pa14_operon_genome_dist.tail()
+
+if use_operon:
+    pao1_operon_genome_to_use = pao1_operon_genome_dist
+    pa14_operon_genome_to_use = pa14_operon_genome_dist
+else:
+    pao1_operon_genome_to_use = None
+    pa14_operon_genome_to_use = None
 
 
 # ## Find relationships using genome distance
@@ -267,7 +293,7 @@ def get_relationship_in_genome_space(core_acc_df, offset_to_bin, operon_df=None)
                         core_acc_right & ~operon_right
                     ).sum()
                 else:
-                    counts = core_aff_left.sum() + core_acc_right.sum()
+                    counts = core_acc_left.sum() + core_acc_right.sum()
 
                 rows.append(
                     {
@@ -296,10 +322,10 @@ def get_relationship_in_genome_space(core_acc_df, offset_to_bin, operon_df=None)
 
 
 genome_dist_counts_pao1 = get_relationship_in_genome_space(
-    pao1_arr, offset_to_bin, pao1_operon_genome_dist
+    pao1_arr, offset_to_bin, pao1_operon_genome_to_use
 )
 genome_dist_counts_pa14 = get_relationship_in_genome_space(
-    pa14_arr, offset_to_bin, pa14_operon_genome_dist
+    pa14_arr, offset_to_bin, pa14_operon_genome_to_use
 )
 
 genome_dist_counts_pao1.head()
@@ -406,10 +432,20 @@ def get_relationship_in_expression_space(
 
 # %%time
 expression_dist_counts_pao1_acc = get_relationship_in_expression_space(
-    pao1_corr, pao1_acc, pao1_arr, offset_to_bin, pao1_operon
+    pao1_corr,
+    pao1_acc,
+    pao1_arr,
+    offset_to_bin,
+    pao1_operon_expression_to_use,
+    sum_increment_to_use,
 )
 expression_dist_counts_pao1_core = get_relationship_in_expression_space(
-    pao1_corr, pao1_core, pao1_arr, offset_to_bin, pao1_operon
+    pao1_corr,
+    pao1_core,
+    pao1_arr,
+    offset_to_bin,
+    pao1_operon_expression_to_use,
+    sum_increment_to_use,
 )
 
 # %%time
@@ -418,12 +454,16 @@ expression_dist_counts_pa14_acc = get_relationship_in_expression_space(
     pa14_acc,
     pa14_arr,
     offset_to_bin,
+    pa14_operon_expression_to_use,
+    sum_increment_to_use,
 )
 expression_dist_counts_pa14_core = get_relationship_in_expression_space(
     pa14_corr,
     pa14_core,
     pa14_arr,
     offset_to_bin,
+    pa14_operon_expression_to_use,
+    sum_increment_to_use,
 )
 
 expression_dist_counts_pao1_acc.head()
@@ -446,7 +486,9 @@ fig = sns.barplot(
     y="total",
     hue="gene compare",
     ax=axes[0][0],
+    palette=sns.color_palette("Paired"),
 )
+fig.legend_.remove()
 fig.set_title("Starting with accessory gene PAO1")
 fig.set_ylabel("Number of genes")
 fig.set_xlabel("Offset in genome space")
@@ -457,7 +499,9 @@ fig = sns.barplot(
     y="total",
     hue="gene compare",
     ax=axes[1][0],
+    palette=sns.color_palette("Paired"),
 )
+fig.legend_.remove()
 fig.set_title("Starting with core gene PAO1")
 fig.set_ylabel("Number of genes")
 fig.set_xlabel("Offset in genome space")
@@ -468,7 +512,9 @@ fig = sns.barplot(
     y="total",
     hue="gene type",
     ax=axes[0][1],
+    palette=sns.color_palette("Paired"),
 )
+fig.legend_.remove()
 fig.set_title("Starting with accessory gene PAO1")
 fig.set_ylabel("Number of genes")
 fig.set_xlabel("Rank correlation in expression space")
@@ -479,10 +525,20 @@ fig = sns.barplot(
     y="total",
     hue="gene type",
     ax=axes[1][1],
+    palette=sns.color_palette("Paired"),
 )
+fig.legend_.remove()
 fig.set_title("Starting with core gene PAO1")
 fig.set_ylabel("Number of genes")
 fig.set_xlabel("Rank correlation in expression space")
+
+
+# Note: We are creating a single global legend that apply
+# to all the facets of this figure. To do this using
+# matplotlib, we need to be a little creative here
+# and add the legend to a new location that is applied
+# to the figure and then remove the legend from the facet.
+plt.legend(bbox_to_anchor=(1.05, 1.15), loc=2, borderaxespad=0.0)
 
 # +
 # Plot PA14 trends
@@ -494,7 +550,9 @@ fig2 = sns.barplot(
     y="total",
     hue="gene compare",
     ax=axes2[0][0],
+    palette=sns.color_palette("Paired"),
 )
+fig2.legend_.remove()
 fig2.set_title("Starting with accessory gene PA14")
 fig2.set_ylabel("Number of genes")
 fig2.set_xlabel("Offset in genome space")
@@ -505,7 +563,9 @@ fig2 = sns.barplot(
     y="total",
     hue="gene type",
     ax=axes2[0][1],
+    palette=sns.color_palette("Paired"),
 )
+fig2.legend_.remove()
 fig2.set_title("Starting with accessory gene PA14")
 fig2.set_ylabel("Number of genes")
 fig2.set_xlabel("Rank correlation in expression space")
@@ -516,7 +576,9 @@ fig2 = sns.barplot(
     y="total",
     hue="gene compare",
     ax=axes2[1][0],
+    palette=sns.color_palette("Paired"),
 )
+fig2.legend_.remove()
 fig2.set_title("Starting with core gene PA14")
 fig2.set_ylabel("Number of genes")
 fig2.set_xlabel("Offset in genome space")
@@ -527,17 +589,37 @@ fig2 = sns.barplot(
     y="total",
     hue="gene type",
     ax=axes2[1][1],
+    palette=sns.color_palette("Paired"),
 )
+fig2.legend_.remove()
 fig2.set_title("Starting with core gene PA14")
 fig2.set_ylabel("Number of genes")
 fig2.set_xlabel("Rank correlation in expression space")
 
+plt.legend(bbox_to_anchor=(1.05, 1.15), loc=2, borderaxespad=0.0)
+
 # +
-# TO DO:
-# Save figures using operons
-# Save figures not using operons
+# Save figures using operons*
+# Save figures not using operons*
 # Save figure with rolling sum and operons
 # Save figure with rolling sum not using operons
+fig.figure.savefig(
+    pao1_figure_filename,
+    format="svg",
+    bbox_inches="tight",
+    transparent=True,
+    pad_inches=0,
+    dpi=300,
+)
+
+fig2.figure.savefig(
+    pa14_figure_filename,
+    format="svg",
+    bbox_inches="tight",
+    transparent=True,
+    pad_inches=0,
+    dpi=300,
+)
 # -
 
 # **Takeaway:**
@@ -548,10 +630,12 @@ fig2.set_xlabel("Rank correlation in expression space")
 # * Starting with a core gene, at any distance you find core genes including and not including co-operonic genes.
 #
 # In expression space:
-# * Accessory genes appear to be more highly co-expressed with other accessory genes. But this might be due to the accessory genes clustering together in the genome (i.e. they are found in the same operon).
+# * Accessory genes are more likely to be highly co-expressed with other accessory genes, even accessory genes farther away (some coordination outside of location). This relationship is stronger in PA14 than PAO1 (i.e. accessory genes are more highly correlated with other accessory genes at farther distances in PA14). I wonder why this is.
 # * Core genes are highly correlated with other core genes, again, this may be due to the fact that there are so many more core genes.
 #
-# * Accessory genes seem to have a strong relationship with other accessory genes in PA14, but not PAO1. Why?
+# Note:
+# * The distance calculation in genome space is bi-directional (i.e. it considers genes that are 1-NN to the left and right) so each starting gene has a count of 1-2. Whereas in expression space, we are only looking for the most correlated gene, so each starting gene has a count of 1. This explains why the range for the expression space plots are roughly half of the genome distance plots. To correct for this, there is an option to sum the counts across the 2 most highly correlated genes. The trends are consistent using an increment of 1 vs 2.
+# * There is a drop off in the `10+` column for genome distance. This is because as we consider farther away genes, we lose the ability to consider in both directions and there are fewer genes at that far a distance. Should we adjust for this in our calculation?
 #
 # Some things to note about this analysis that may need to be updated:
 # * There are some operons that have multiple annotations, which one should we choose? Should we drop these from the analysis? Should we curate these to determine which ones?
