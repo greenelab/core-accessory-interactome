@@ -43,7 +43,8 @@ PA14_CORR_LOG_SPELL = LOCAL_DATA_DIR / "pa14_log_spell_mat.tsv"
 
 # Location of metadata
 PAO1_REGULON = META_DIR / "regulons_format.csv"
-PAO1_OPERON = META_DIR / "operons_format.csv"
+PAO1_OPERON = META_DIR / "PAO1-operons-2021-07-19.csv"
+PA14_OPERON = META_DIR / "PA14-operons-2021-07-19.csv"
 
 # Location of PAO1 array compendium metadata file
 ARRAY_DATA_URL = "https://raw.githubusercontent.com/greenelab/adage/master/Data_collection_processing/Pa_compendium_02.22.2014.pcl"
