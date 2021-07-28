@@ -22,6 +22,8 @@
 # %matplotlib inline
 import os
 import pandas as pd
+import matplotlib
+from matplotlib_venn import venn2
 from core_acc_modules import utils, paths
 
 # ### Get common DEGs
@@ -86,6 +88,56 @@ common_DEGs_label = common_DEGs.merge(
 
 common_DEGs_label
 
+# ### Venn diagram
+
+common_DEGs_set = set(common_DEGs.index)
+pao1_core_set = set(pao1_core)
+pao1_acc_set = set(pao1_acc)
+
+# +
+core_common_venn = venn2(
+    [common_DEGs_set, pao1_core_set], set_labels=("common DEGs", "Core genes")
+)
+
+core_common_venn.get_patch_by_id("11").set_color("purple")
+core_common_venn.get_patch_by_id("11").set_edgecolor("none")
+core_common_venn.get_patch_by_id("11").set_alpha(0.3)
+core_common_venn.get_patch_by_id("01").set_color("blue")
+core_common_venn.get_patch_by_id("01").set_edgecolor("none")
+core_common_venn.get_patch_by_id("01").set_alpha(0.3)
+
+matplotlib.pyplot.savefig(
+    "common_core_venn.svg",
+    format="svg",
+    bbox_inches="tight",
+    transparent=True,
+    pad_inches=0,
+    dpi=300,
+)
+
+# +
+acc_common_venn = venn2(
+    [common_DEGs_set, pao1_acc_set], set_labels=("common DEGs", "Accessory genes")
+)
+
+acc_common_venn.get_patch_by_id("11").set_color("purple")
+acc_common_venn.get_patch_by_id("11").set_edgecolor("none")
+acc_common_venn.get_patch_by_id("11").set_alpha(0.3)
+acc_common_venn.get_patch_by_id("01").set_color("blue")
+acc_common_venn.get_patch_by_id("01").set_edgecolor("none")
+acc_common_venn.get_patch_by_id("01").set_alpha(0.3)
+
+matplotlib.pyplot.savefig(
+    "common_acc_venn.svg",
+    format="svg",
+    bbox_inches="tight",
+    transparent=True,
+    pad_inches=0,
+    dpi=300,
+)
+# -
+
+# Save
 common_DEGs_label.to_csv("common_DEGs_gene_group_labeled.tsv", sep="\t")
 
 # **Takeaway:**
