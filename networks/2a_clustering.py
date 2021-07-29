@@ -37,7 +37,7 @@ from core_acc_modules import paths
 
 # Clustering method
 # Choices: {"dbscan", "hierarchal", "affinity"}
-cluster_method = "dbscan"
+cluster_method = "affinity"
 
 # DBSCAN params
 density_threshold = 8

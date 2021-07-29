@@ -38,8 +38,8 @@ PAO1_COMPENDIUM = LOCAL_DATA_DIR / "pao1_compendia.tsv"
 PA14_COMPENDIUM = LOCAL_DATA_DIR / "pa14_compendia.tsv"
 
 # Location of correlation matrices
-PAO1_CORR_LOG_SPELL = LOCAL_DATA_DIR / "pao1_log_spell_mat.tsv"
-PA14_CORR_LOG_SPELL = LOCAL_DATA_DIR / "pa14_log_spell_mat.tsv"
+PAO1_CORR_LOG_SPELL = LOCAL_DATA_DIR / "pao1_core_log_spell_mat.tsv"
+PA14_CORR_LOG_SPELL = LOCAL_DATA_DIR / "pa14_core_log_spell_mat.tsv"
 
 # Location of metadata
 PAO1_REGULON = META_DIR / "regulons_format.csv"

@@ -38,7 +38,7 @@ import numpy as np
 import scipy
 from scipy.spatial.distance import pdist, squareform
 from sklearn.decomposition import PCA
-from core_acc_modules import paths
+from core_acc_modules import paths, utils
 
 # ## Set user parameters
 #
@@ -61,6 +61,34 @@ pao1_compendium.head()
 print(pa14_compendium.shape)
 pa14_compendium.head()
 
+# ## Get core/accessory genes
+#
+# We will subset the correlation matrix to only consider core genes.
+#
+# _Rationale:_ Previously we used all genes (both core and accessory) to create a co-expression network, but due to the large imbalance in the number of core genes compared to accessory genes, no module was found to be "mostly core." Instead we will perform separate analyses of core and accessory genes to examine co-expression patterns.
+
+# +
+# Read in expression data
+pao1_expression_filename = paths.PAO1_COMPENDIUM
+pa14_expression_filename = paths.PA14_COMPENDIUM
+
+pao1_expression = pd.read_csv(pao1_expression_filename, sep="\t", index_col=0, header=0)
+pa14_expression = pd.read_csv(pa14_expression_filename, sep="\t", index_col=0, header=0)
+
+# +
+pao1_annot_filename = paths.GENE_PAO1_ANNOT
+pa14_annot_filename = paths.GENE_PA14_ANNOT
+
+core_acc_dict = utils.get_my_core_acc_genes(
+    pao1_annot_filename, pa14_annot_filename, pao1_expression, pa14_expression
+)
+# -
+
+pao1_core = core_acc_dict["core_pao1"]
+pa14_core = core_acc_dict["core_pa14"]
+pao1_acc = core_acc_dict["acc_pao1"]
+pa14_acc = core_acc_dict["acc_pa14"]
+
 # ## Correlation of raw gene expression data
 #
 # Here is the correlation of the raw data without any malnipulations. This will serve as a reference to compare the correlations below where applied corrections to the correlations to account for the dominant signal described above.
@@ -73,8 +101,7 @@ pao1_corr_original.head()
 
 pa14_corr_original.head()
 
-# +
-# %%time
+"""%%time
 # Plot heatmap
 o1 = sns.clustermap(pao1_corr_original.abs(), cmap="viridis", figsize=(20, 20))
 o1.fig.suptitle("Correlation of raw PAO1 genes", y=1.05)
@@ -83,10 +110,9 @@ o1.fig.suptitle("Correlation of raw PAO1 genes", y=1.05)
 pao1_pearson_filename = os.path.join(
     paths.LOCAL_DATA_DIR, "pao1_pearson_clustermap.png"
 )
-o1.savefig(pao1_pearson_filename, dpi=300)
+o1.savefig(pao1_pearson_filename, dpi=300)"""
 
-# +
-# Plot heatmap
+"""# Plot heatmap
 o2 = sns.clustermap(pa14_corr_original.abs(), cmap="viridis", figsize=(20, 20))
 o2.fig.suptitle("Correlation of raw PA14 genes", y=1.05)
 
@@ -94,8 +120,7 @@ o2.fig.suptitle("Correlation of raw PA14 genes", y=1.05)
 pa14_pearson_filename = os.path.join(
     paths.LOCAL_DATA_DIR, "pa14_pearson_clustermap.png"
 )
-o2.savefig(pa14_pearson_filename, dpi=300)
-# -
+o2.savefig(pa14_pearson_filename, dpi=300)"""
 
 # Save original correlation matrices
 pao1_pearson_mat_filename = os.path.join(paths.LOCAL_DATA_DIR, "pao1_pearson_mat.tsv")
@@ -141,8 +166,7 @@ pao1_U_df.head()
 pao1_corr_spell = pao1_U_df.iloc[:, :num_singular_values].T.corr()
 pa14_corr_spell = pa14_U_df.iloc[:, :num_singular_values].T.corr()
 
-# +
-# Plot heatmap
+"""# Plot heatmap
 h1 = sns.clustermap(pao1_corr_spell.abs(), cmap="viridis", figsize=(20, 20))
 h1.fig.suptitle(
     f"Correlation of PAO1 genes (SPELL corrected using {num_singular_values} vectors)",
@@ -151,10 +175,9 @@ h1.fig.suptitle(
 
 # Save
 pao1_spell_filename = os.path.join(paths.LOCAL_DATA_DIR, "pao1_spell_clustermap.png")
-h1.savefig(pao1_spell_filename, dpi=300)
+h1.savefig(pao1_spell_filename, dpi=300)"""
 
-# +
-h2 = sns.clustermap(pa14_corr_spell.abs(), cmap="viridis", figsize=(20, 20))
+"""h2 = sns.clustermap(pa14_corr_spell.abs(), cmap="viridis", figsize=(20, 20))
 h2.fig.suptitle(
     f"Correlation of PA14 genes (SPELL corrected using {num_singular_values} vectors)",
     y=1.05,
@@ -162,8 +185,7 @@ h2.fig.suptitle(
 
 # Save
 pa14_spell_filename = os.path.join(paths.LOCAL_DATA_DIR, "pa14_spell_clustermap.png")
-h2.savefig(pa14_spell_filename, dpi=300)
-# -
+h2.savefig(pa14_spell_filename, dpi=300)"""
 
 # Save SPELL correlation matrices
 pao1_spell_mat_filename = os.path.join(paths.LOCAL_DATA_DIR, "pao1_spell_mat.tsv")
@@ -197,6 +219,11 @@ pa14_U_df = pd.DataFrame(data=pa14_U, index=pa14_compendium_T.index)
 
 pao1_corr_log_spell = pao1_U_df.iloc[:, :num_singular_values_log].T.corr()
 pa14_corr_log_spell = pa14_U_df.iloc[:, :num_singular_values_log].T.corr()
+# -
+
+# Select subset of genes
+pao1_corr_log_spell = pao1_corr_log_spell.loc[pao1_core, pao1_core]
+pa14_corr_log_spell = pa14_corr_log_spell.loc[pa14_core, pa14_core]
 
 # +
 # Plot heatmap
@@ -208,7 +235,7 @@ h1a.fig.suptitle(
 
 # Save
 pao1_log_spell_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, "pao1_log_spell_clustermap.png"
+    paths.LOCAL_DATA_DIR, "pao1_core_log_spell_clustermap.png"
 )
 h1a.savefig(pao1_log_spell_filename, dpi=300)
 
@@ -221,7 +248,7 @@ h2a.fig.suptitle(
 
 # Save
 pa14_log_spell_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, "pa14_log_spell_clustermap.png"
+    paths.LOCAL_DATA_DIR, "pa14_core_log_spell_clustermap.png"
 )
 h2a.savefig(pa14_log_spell_filename, dpi=300)
 # -
@@ -267,10 +294,10 @@ plt.title("Distribution of pairwise distances for PA14 genes")
 
 # Save log transform + SPELL correlation matrices
 pao1_log_spell_mat_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, "pao1_log_spell_mat.tsv"
+    paths.LOCAL_DATA_DIR, "pao1_core_log_spell_mat.tsv"
 )
 pa14_log_spell_mat_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, "pa14_log_spell_mat.tsv"
+    paths.LOCAL_DATA_DIR, "pa14_core_log_spell_mat.tsv"
 )
 pao1_corr_log_spell.to_csv(pao1_log_spell_mat_filename, sep="\t")
 pa14_corr_log_spell.to_csv(pa14_log_spell_mat_filename, sep="\t")
