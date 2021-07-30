@@ -50,9 +50,19 @@ link_dist = "average"
 # Affinity params
 affinity_damping = 0.6
 
+# Gene subset
+gene_subset = "acc"
+
 # Correlation matrix files
-pao1_corr_filename = paths.PAO1_CORR_LOG_SPELL
-pa14_corr_filename = paths.PA14_CORR_LOG_SPELL
+if gene_subset == "all":
+    pao1_corr_filename = paths.PAO1_CORR_LOG_SPELL
+    pa14_corr_filename = paths.PA14_CORR_LOG_SPELL
+elif gene_subset == "core":
+    pao1_corr_filename = paths.PAO1_CORR_LOG_SPELL_CORE
+    pa14_corr_filename = paths.PA14_CORR_LOG_SPELL_CORE
+elif gene_subset == "acc":
+    pao1_corr_filename = paths.PAO1_CORR_LOG_SPELL_ACC
+    pa14_corr_filename = paths.PA14_CORR_LOG_SPELL_ACC
 # -
 
 # Load correlation data
@@ -141,10 +151,10 @@ pa14_membership_df.head()
 
 # Save membership dataframe
 pao1_membership_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pao1_modules_{cluster_method}.tsv"
+    paths.LOCAL_DATA_DIR, f"pao1_modules_{cluster_method}_{gene_subset}.tsv"
 )
 pa14_membership_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pa14_modules_{cluster_method}.tsv"
+    paths.LOCAL_DATA_DIR, f"pa14_modules_{cluster_method}_{gene_subset}.tsv"
 )
 pao1_membership_df.to_csv(pao1_membership_filename, sep="\t")
 pa14_membership_df.to_csv(pa14_membership_filename, sep="\t")

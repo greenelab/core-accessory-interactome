@@ -32,7 +32,7 @@ np.random.seed(1)
 # +
 # User params
 # Params to examine module size
-clustering_method_list = ["dbscan", "hierarchal", "affinity", "louvain", "infomap"]
+clustering_method_list = ["dbscan", "hierarchal", "affinity"]
 
 # Params for regulon/operon coverage
 # Clustering method to examine regulon/operon coverage
@@ -78,7 +78,7 @@ for method_name in clustering_method_list:
 def plot_dist_modules(clustering_method_list):
 
     # Set up the matplotlib figure
-    fig, axes = plt.subplots(ncols=2, nrows=3, figsize=(15, 15))
+    fig, axes = plt.subplots(ncols=2, nrows=2, figsize=(15, 15))
     axes = axes.ravel()
 
     for i in range(len(clustering_method_list)):
@@ -206,6 +206,8 @@ print(pao1_regulon.shape)
 pao1_regulon.head()
 
 # Convert "Genes" column from str to list
+# TO DO:
+# Operon and Regulon DB is of a different format so will need to update this when I update the coverage analysis
 pao1_operon["Genes"] = pao1_operon["Genes"].str.split(";")
 pao1_regulon["Genes"] = pao1_regulon["Genes"].str.split(";")
 

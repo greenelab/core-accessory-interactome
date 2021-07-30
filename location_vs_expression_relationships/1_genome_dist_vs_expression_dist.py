@@ -59,23 +59,24 @@ pa14_figure_filename = (
 )
 # -
 
-# ### Import module memberships
+# ### Import gene ids
 
 # +
-# Import module memberships
-pao1_membership_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pao1_modules_{method}.tsv"
-)
-pa14_membership_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pa14_modules_{method}.tsv"
-)
+# Import correlation matrix to get gene ids
+pao1_corr_filename = paths.PAO1_CORR_RAW
+pa14_corr_filename = paths.PA14_CORR_RAW
 
-pao1_membership = pd.read_csv(pao1_membership_filename, sep="\t", index_col=0, header=0)
-pa14_membership = pd.read_csv(pa14_membership_filename, sep="\t", index_col=0, header=0)
+pao1_corr = pd.read_csv(pao1_corr_filename, sep="\t", index_col=0, header=0)
+pa14_corr = pd.read_csv(pa14_corr_filename, sep="\t", index_col=0, header=0)
 # -
 
+# Make a dataframe with gene ids
+pao1_membership = pd.DataFrame(data=[], index=pao1_corr.index)
+print(pao1_membership.shape)
 pao1_membership.head()
 
+pa14_membership = pd.DataFrame(data=[], index=pa14_corr.index)
+print(pa14_membership.shape)
 pa14_membership.head()
 
 # ### Import and format operon data
@@ -157,8 +158,8 @@ pa14_membership.loc[pa14_core, "core/acc"] = "core"
 pa14_membership.loc[pa14_acc, "core/acc"] = "acc"
 
 # Drop "module id" column
-pao1_arr = pao1_membership.drop("module id", axis=1)
-pa14_arr = pa14_membership.drop("module id", axis=1)
+pao1_arr = pao1_membership
+pa14_arr = pa14_membership
 
 # Make sure to sort by gene id
 # NOTE PA14 gene ids don't increment by 1, but by 10 or 20 are we missing some genes?
