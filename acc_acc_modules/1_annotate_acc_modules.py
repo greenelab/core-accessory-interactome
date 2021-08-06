@@ -18,7 +18,7 @@
 # This notebook takes the dataframe with information about module composition and their labels and adds additional annotations including:
 #
 # 1. Which gene is contained within the modules (both gene id and gene name)
-# 2. Baseline expression and expression in clinical context
+# 2. Baseline expression and expression in some context of interest
 # 3. How clustered the module is on the genome
 # 4. KEGG pathways that genes are found in
 # 5. GO pathways genes are found in
@@ -65,6 +65,9 @@ pao1_gene_annot = pd.read_csv(pao1_gene_annot_filename, index_col=0, header=0)
 pa14_gene_annot = pd.read_csv(pa14_gene_annot_filename, index_col=0, header=0)
 # -
 
+# Import metadata of samples
+metadata_filename = paths.SAMPLE_METADATA
+
 pao1_gene_annot = pao1_gene_annot["Name"].to_frame("gene name")
 pa14_gene_annot = pa14_gene_annot["Name"].to_frame("gene name")
 
@@ -104,37 +107,42 @@ pao1_median_all.head()
 
 # Select subset of samples and calculate the median expression across that subset of samples
 # TO DO: Move this into utils
-def get_sample_ids(metadata_filename, experiment_id, sample_id_colname):
+def get_sample_ids(
+    metadata_filename, experiment_colname, sample_colname, experiment_id
+):
     """
     Returns sample ids (found in gene expression df) associated with
     a given list of experiment ids (found in the metadata)
 
     Arguments
     ----------
-    experiment_ids_file: str
-        File containing all cleaned experiment ids
-
-    dataset_name: str
-        Name for analysis directory. Either "Human" or "Pseudomonas"
-
-    sample_id_colname: str
+    metadata_filename: str
+        File containing metadata
+    experiment_colname: str
+        Column header that contains experiment id that maps expression data
+        and metadata
+    sample_colname: str
         Column header that contains sample id that maps expression data
         and metadata
+    experiment_id: str
+        Selected experiment id to grab samples from
 
     """
     # Read in metadata
     metadata = pd.read_csv(metadata_filename, header=0)
-    metadata.set_index("gse", inplace=True)
+    metadata.set_index(experiment_colname, inplace=True)
 
     selected_metadata = metadata.loc[experiment_id]
-    sample_ids = list(selected_metadata[sample_id_colname])
+    sample_ids = list(selected_metadata[sample_colname])
 
     return sample_ids
 
 
 # +
-# metadata_filename = ""
-# selected_sample_ids = get_sample_ids(metadata_filename, experiment_id, sample_id_colname)
+# TO DO: Have Deb or Georgia select a study
+# Looks like we removed many of the clinical isolates from this compendium with our strain binning
+# selected_sample_ids = get_sample_ids(
+#    metadata_filename, experiment_colname="SRA_study", sample_colname="Experiment", experiment_id="ERP106536")
 
 # +
 # Subset compendium
@@ -142,8 +150,12 @@ def get_sample_ids(metadata_filename, experiment_id, sample_id_colname):
 # subset_pa14_compendium = pa14_compendium.loc[selected_sample_ids]
 
 # +
-# pao1_median_subset = subset_pao1_compendium.median().to_frame("median clinical expression")
-# pa14_median_subset = subset_pa14_compendium.median().to_frame("median clinical expression")
+# print(subset_pao1_compendium.shape)
+# print(subset_pa14_compendium.shape)
+
+# +
+# pao1_median_subset = subset_pao1_compendium.median().to_frame("median subset expression")
+# pa14_median_subset = subset_pa14_compendium.median().to_frame("median subset expression")
 # -
 
 # Add median expression to gene ids
@@ -154,7 +166,7 @@ pa14_gene_annot = pa14_gene_module_labels.merge(
     pa14_median_all, left_index=True, right_index=True, how="left"
 )
 
-# Add median clinical expression to gene ids
+# Add median subset expression to gene ids
 """pao1_gene_annot = pao1_gene_annot.merge(
     pao1_median_subset, left_index=True, right_index=True, how="left"
 )
@@ -168,73 +180,73 @@ pao1_gene_annot.head()
 print(pa14_gene_annot.shape)
 pa14_gene_annot.head()
 
+
 # ## Genome location information
 #
 # How far are genes from other genes in the same module?
 
 # +
-# %%time
-# TO DO: Make into a function
-# Need to add a condition to split on
-
+# TO DO: Move into scripts
 # For genes in the same module, calculate the pairwise distance from each other
 # Calculate the median pairwise distance to represent how spread the module is
 # across the genome
 # Other metrics?
 
-rows = []
-for grp_name, grp_df in pao1_gene_annot.groupby("module id"):
-    print("module", grp_name)
-    print(grp_df)
-    # Trim off "PA" and convert number to integer
-    ids = grp_df.index
-    print(ids)
-    num_ids = [int(_id.split("PA")[1]) for _id in ids]
-    print(num_ids)
 
-    # TO DO: check if . in id and then round, check if duplicates though
-    abs_dist = []
-    for gene1, gene2 in product(num_ids, num_ids):
-        if gene1 != gene2:
-            dist = float(abs(gene1 - gene2))
-            print(gene1, gene2, dist)
-            abs_dist.append(dist)
+def get_intra_module_dist(annot_df, pa_prefix):
+    rows = []
+    for grp_name, grp_df in annot_df.groupby("module id"):
+        # print("module", grp_name)
 
-    median_module_dist = np.median(abs_dist)
-    min_dist = np.min(abs_dist)
-    max_dist = np.max(abs_dist)
+        # Trim off "PA" and convert number to integer
+        ids = grp_df.index
 
-    for _id in ids:
-        rows.append(
-            {
-                "gene id": _id,
-                "median pairwise dist": median_module_dist,
-                "min pairwise dist": min_dist,
-                "max pairwise dist": max_dist,
-            }
-        )
+        # Convert trailing id numbers to floats
+        num_ids = [float(_id.split(pa_prefix)[1]) for _id in ids]
 
-module_dist = pd.DataFrame(rows)
+        abs_dist = []
+        for gene1, gene2 in product(num_ids, num_ids):
+            if gene1 != gene2:
+                dist = abs(gene1 - gene2)
+                # print(gene1, gene2, dist)
+                abs_dist.append(dist)
+
+        median_module_dist = np.median(abs_dist)
+        min_dist = np.min(abs_dist)
+        max_dist = np.max(abs_dist)
+
+        for _id in ids:
+            rows.append(
+                {
+                    "gene id": _id,
+                    "median pairwise dist": median_module_dist,
+                    "min pairwise dist": min_dist,
+                    "max pairwise dist": max_dist,
+                }
+            )
+
+    module_dist = pd.DataFrame(rows)
+    module_dist = module_dist.set_index("gene id")
+
+    return module_dist
+
+
 # -
 
-module_dist
+pao1_module_dist = get_intra_module_dist(pao1_gene_annot, pa_prefix="PA")
+pa14_module_dist = get_intra_module_dist(pa14_gene_annot, pa_prefix="PA14_")
 
-"""from itertools import product
-gene_set = [1,2,3]
+pao1_module_dist.head(10)
 
-abs_dist = []
-for gene_set_element1, gene_set_element2 in product(gene_set, gene_set):
-    #print(gene_set_element1, gene_set_element2)
-    dist = float(abs(gene_set_element1 - gene_set_element2))
-    print(dist)
-    abs_dist.append(dist)
+pa14_module_dist.head(10)
 
-print(np.median(abs_dist))"""
-
-# +
-# import scipy.spatial
-# scipy.spatial.distance.pdist(np.array([1,1,0]), metric='minkowski', p=1)
-# -
+# Add module distance to gene names
+pao1_gene_annot = pao1_gene_annot.merge(
+    pao1_module_dist, left_index=True, right_index=True, how="left"
+)
+pa14_gene_annot = pa14_gene_annot.merge(
+    pa14_module_dist, left_index=True, right_index=True, how="left"
+)
 
 # ## Add KEGG pathways
 #
@@ -262,8 +274,8 @@ for gene in gene_to_pathways_df.index:
 
 gene_to_pathways_df.head()
 
-# Add gene name to pathway information -- TO DO
-pao1_gene_annot = pao1_gene_module_labels.merge(
+# Add gene name to pathway information
+pao1_gene_annot = pao1_gene_annot.merge(
     gene_to_pathways_df, left_index=True, right_index=True, how="left"
 )
 
@@ -313,8 +325,8 @@ pao1_gene_annot = pao1_gene_annot.merge(
 print(pao1_gene_annot.shape)
 pao1_gene_annot.head()
 
-# For PA14 we only have operon annotations -- TO DO
-pa14_gene_annot = pa14_gene_module_labels.merge(
+# For PA14 we only have operon annotations
+pa14_gene_annot = pa14_gene_annot.merge(
     pa14_operon, left_index=True, right_index=True, how="left"
 )
 
@@ -352,14 +364,8 @@ print(pa14_gene_annot.shape)
 pa14_gene_annot.head()
 
 # Save
-pao1_gene_annot.to_csv(
-    os.path.join(paths.LOCAL_DATA_DIR, f"pao1_acc_gene_module_annotated_{method}.tsv"),
-    sep="\t",
-)
-pa14_gene_annot.to_csv(
-    os.path.join(paths.LOCAL_DATA_DIR, f"pa14_acc_gene_module_annotated_{method}.tsv"),
-    sep="\t",
-)
+pao1_gene_annot.to_csv(f"pao1_acc_gene_module_annotated_{method}.tsv", sep="\t")
+pa14_gene_annot.to_csv(f"pa14_acc_gene_module_annotated_{method}.tsv", sep="\t")
 
 # These annotations will be used to help _P. aeruginosa_ experts, like our collaborators, to determine what accessory-accessory modules to focus on.
 #
