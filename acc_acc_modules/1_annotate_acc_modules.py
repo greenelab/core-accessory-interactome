@@ -142,7 +142,7 @@ def get_sample_ids(
 # TO DO: Have Deb or Georgia select a study
 # Looks like we removed many of the clinical isolates from this compendium with our strain binning
 # selected_sample_ids = get_sample_ids(
-#    metadata_filename, experiment_colname="SRA_study", sample_colname="Experiment", experiment_id="ERP106536")
+#   metadata_filename, experiment_colname="SRA_study", sample_colname="Experiment", experiment_id="SRP063289")
 
 # +
 # Subset compendium
