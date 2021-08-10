@@ -35,13 +35,12 @@ import random
 import scipy
 import pandas as pd
 import numpy as np
-from itertools import product
-from core_acc_modules import paths
+from core_acc_modules import paths, utils, modules
 
 random.seed(1)
 # -
 
-# User param
+# Clustering method used to obtain gene-module assignments
 method = "affinity"
 
 # +
@@ -68,6 +67,8 @@ pa14_gene_annot = pd.read_csv(pa14_gene_annot_filename, index_col=0, header=0)
 # Import metadata of samples
 metadata_filename = paths.SAMPLE_METADATA
 
+# Get df with gene ids as indices and gene names as a column
+# Having the data in a df instead of a series will just allow me to do my merges that are in the notebook
 pao1_gene_annot = pao1_gene_annot["Name"].to_frame("gene name")
 pa14_gene_annot = pa14_gene_annot["Name"].to_frame("gene name")
 
@@ -81,9 +82,11 @@ pa14_gene_module_labels = pa14_membership.merge(
     pa14_gene_annot, left_index=True, right_index=True
 )
 
+# Note: Many gene ids don't have an associated gene name and so are NaNs
 print(pao1_gene_module_labels.shape)
 pao1_gene_module_labels.head()
 
+# Note: Many gene ids don't have an associated gene name and so are NaNs
 print(pa14_gene_module_labels.shape)
 pa14_gene_module_labels.head()
 
@@ -93,6 +96,7 @@ pa14_gene_module_labels.head()
 # 2. What is the expression level of genes in a clinical context (i.e. clinical samples)?
 
 # Read in expression data
+# Data is of the form SRA sample id x gene id
 pao1_compendium = pd.read_csv(paths.PAO1_COMPENDIUM, sep="\t", index_col=0)
 pa14_compendium = pd.read_csv(paths.PA14_COMPENDIUM, sep="\t", index_col=0)
 
@@ -104,44 +108,14 @@ pa14_median_all = pa14_compendium.median().to_frame("median expression")
 
 pao1_median_all.head()
 
-
-# Select subset of samples and calculate the median expression across that subset of samples
-# TO DO: Move this into utils
-def get_sample_ids(
-    metadata_filename, experiment_colname, sample_colname, experiment_id
-):
-    """
-    Returns sample ids (found in gene expression df) associated with
-    a given list of experiment ids (found in the metadata)
-
-    Arguments
-    ----------
-    metadata_filename: str
-        File containing metadata
-    experiment_colname: str
-        Column header that contains experiment id that maps expression data
-        and metadata
-    sample_colname: str
-        Column header that contains sample id that maps expression data
-        and metadata
-    experiment_id: str
-        Selected experiment id to grab samples from
-
-    """
-    # Read in metadata
-    metadata = pd.read_csv(metadata_filename, header=0)
-    metadata.set_index(experiment_colname, inplace=True)
-
-    selected_metadata = metadata.loc[experiment_id]
-    sample_ids = list(selected_metadata[sample_colname])
-
-    return sample_ids
-
-
 # +
 # TO DO: Have Deb or Georgia select a study
-# Looks like we removed many of the clinical isolates from this compendium with our strain binning
-# selected_sample_ids = get_sample_ids(
+# The following code blocks allow me to Select subset of samples and calculate the median
+# expression across that subset of samples.
+# An interesting selection would be what the clinical expression is, however
+# it looks like we removed many of the clinical isolates from this compendium with our strain binning
+# For now I will leave these blocks commented out
+# selected_sample_ids = utils.get_sample_ids(
 #   metadata_filename, experiment_colname="SRA_study", sample_colname="Experiment", experiment_id="SRP063289")
 
 # +
@@ -185,56 +159,8 @@ pa14_gene_annot.head()
 #
 # How far are genes from other genes in the same module?
 
-# +
-# TO DO: Move into scripts
-# For genes in the same module, calculate the pairwise distance from each other
-# Calculate the median pairwise distance to represent how spread the module is
-# across the genome
-# Other metrics?
-
-
-def get_intra_module_dist(annot_df, pa_prefix):
-    rows = []
-    for grp_name, grp_df in annot_df.groupby("module id"):
-        # print("module", grp_name)
-
-        # Trim off "PA" and convert number to integer
-        ids = grp_df.index
-
-        # Convert trailing id numbers to floats
-        num_ids = [float(_id.split(pa_prefix)[1]) for _id in ids]
-
-        abs_dist = []
-        for gene1, gene2 in product(num_ids, num_ids):
-            if gene1 != gene2:
-                dist = abs(gene1 - gene2)
-                # print(gene1, gene2, dist)
-                abs_dist.append(dist)
-
-        median_module_dist = np.median(abs_dist)
-        min_dist = np.min(abs_dist)
-        max_dist = np.max(abs_dist)
-
-        for _id in ids:
-            rows.append(
-                {
-                    "gene id": _id,
-                    "median pairwise dist": median_module_dist,
-                    "min pairwise dist": min_dist,
-                    "max pairwise dist": max_dist,
-                }
-            )
-
-    module_dist = pd.DataFrame(rows)
-    module_dist = module_dist.set_index("gene id")
-
-    return module_dist
-
-
-# -
-
-pao1_module_dist = get_intra_module_dist(pao1_gene_annot, pa_prefix="PA")
-pa14_module_dist = get_intra_module_dist(pa14_gene_annot, pa_prefix="PA14_")
+pao1_module_dist = modules.get_intra_module_dist(pao1_gene_annot, pa_prefix="PA")
+pa14_module_dist = modules.get_intra_module_dist(pa14_gene_annot, pa_prefix="PA14_")
 
 pao1_module_dist.head(10)
 
@@ -287,6 +213,19 @@ pa14_operon_filename = paths.PA14_OPERON
 pao1_operon = pd.read_csv(pao1_operon_filename, index_col=0, header=0)
 pa14_operon = pd.read_csv(pa14_operon_filename, index_col=0, header=0)
 
+# +
+# There are 247 PAO1 genes with multiple annotations
+# This operon df contains annotations from predicted operons based on DOOR database
+# predictions which make up the majority of the operons) as well as some that
+# are curated (i.e. PseudoCAP)
+# There are some that have multiple PseudoCAP annotations too
+
+# Here we will keep the last PseudoCAP annotations
+# To ensure that the PseudoCAP annotations are the last ones, we will sort the values
+pao1_operon = pao1_operon.sort_values(by=["locus_tag", "source_database"])
+pa14_operon = pa14_operon.sort_values(by=["locus_tag", "source_database"])
+# -
+
 pao1_operon = pao1_operon.set_index("locus_tag")
 pa14_operon = pa14_operon.set_index("locus_tag")
 
@@ -296,20 +235,8 @@ pao1_operon.head()
 print(pa14_operon.shape)
 pa14_operon.head()
 
-# +
-# There are 247 PAO1 genes with multiple annotations
-# This operon df contains annotations from predicted operons based on DOOR database
-# predictions which make up the majority of the operons) as well as some that
-# are curated (i.e. PseudoCAP)
-# There are some that have multiple PseudoCAP annotations too
-
-# Here we will keep the last PseudoCAP annotations
-# Note: Do we want to discard these annotations all together
-# or will these need to be carefully curated to determine which to keep?
-# We will use the curated annotation here
 pao1_operon = pao1_operon[~pao1_operon.index.duplicated(keep="last")]
 pa14_operon = pa14_operon[~pa14_operon.index.duplicated(keep="last")]
-# -
 
 # Only include columns for gene id and operon_name
 pao1_operon = pao1_operon["operon_name"].to_frame()
