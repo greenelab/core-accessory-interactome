@@ -301,3 +301,32 @@ def check_sample_ordering(expression_file, metadata_file):
         print("sample ids don't match, going to re-order gene expression samples")
         expression_data = expression_data.loc[metadata_sample_ids]
         expression_data.to_csv(expression_file, sep="\t")
+
+
+def get_sample_ids(metadata_filename, experiment_colname, sample_colname, experiment_id):
+    """
+    Returns sample ids (found in gene expression df) associated with
+    a given list of experiment ids (found in the metadata)
+
+    Arguments
+    ----------
+    metadata_filename: str
+        File containing metadata
+    experiment_colname: str
+        Column header that contains experiment id that maps expression data
+        and metadata
+    sample_colname: str
+        Column header that contains sample id that maps expression data
+        and metadata
+    experiment_id: str
+        Selected experiment id to grab samples from
+
+    """
+    # Read in metadata
+    metadata = pd.read_csv(metadata_filename, header=0)
+    metadata.set_index(experiment_colname, inplace=True)
+
+    selected_metadata = metadata.loc[experiment_id]
+    sample_ids = list(selected_metadata[sample_colname])
+
+    return sample_ids
