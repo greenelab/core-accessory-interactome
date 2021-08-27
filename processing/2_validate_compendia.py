@@ -102,8 +102,12 @@ pao1_acc_pao1_compendium["median acc expression"] = pao1_acc_pao1_compendium.med
 )
 
 # PA14-only genes in PAO1 compendium
+pa14_acc_numeric = pa14_acc.copy()
+pa14_acc_numeric.remove("Strain type")
 pao1_binned_sample_ids = list(pao1_expression.index)
-pa14_acc_pao1_compendium = pa14_expression_prebin.loc[pao1_binned_sample_ids, pa14_acc]
+pa14_acc_pao1_compendium = pa14_expression_prebin.loc[
+    pao1_binned_sample_ids, pa14_acc_numeric
+]
 pa14_acc_pao1_compendium["median acc expression"] = pa14_acc_pao1_compendium.median(
     axis=1
 )
@@ -135,8 +139,12 @@ pa14_acc_pa14_compendium["median acc expression"] = pa14_acc_pa14_compendium.med
 )
 
 # PAO1-only genes in PA14 compendium
+pao1_acc_numeric = pao1_acc.copy()
+pao1_acc_numeric.remove("Strain type")
 pa14_binned_sample_ids = list(pa14_expression.index)
-pao1_acc_pa14_compendium = pao1_expression_prebin.loc[pa14_binned_sample_ids, pao1_acc]
+pao1_acc_pa14_compendium = pao1_expression_prebin.loc[
+    pa14_binned_sample_ids, pao1_acc_numeric
+]
 pao1_acc_pa14_compendium["median acc expression"] = pao1_acc_pa14_compendium.median(
     axis=1
 )
@@ -158,9 +166,16 @@ pao1_pa14_acc_pa14_compendium_label = pa14_acc_pa14_compendium.merge(
 pao1_pa14_acc_pa14_compendium_label.head()
 # -
 
-"Strain type_pao1" in pao1_pa14_acc_pa14_compendium_label.columns
+"Strain type" in pao1_pa14_acc_pa14_compendium_label.columns
 
 # ## Accessory plots
+
+pao1_pa14_acc_pao1_compendium_label[
+    "Strain type"
+] = pao1_pa14_acc_pao1_compendium_label["Strain type"].fillna("NA")
+pao1_pa14_acc_pa14_compendium_label[
+    "Strain type"
+] = pao1_pa14_acc_pa14_compendium_label["Strain type"].fillna("NA")
 
 # +
 # Plot accessory gene expression in PAO1 compendium
@@ -168,7 +183,7 @@ fig1 = pn.ggplot(
     pao1_pa14_acc_pao1_compendium_label,
     pn.aes(x="median acc expression_pao1", y="median acc expression_pa14"),
 )
-fig1 += pn.geom_point(pn.aes(color="Strain type_pao1"), alpha=0.2)
+fig1 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.2)
 fig1 += pn.labs(
     x="median expression of PAO1-only genes",
     y="median expression of PA14-only genes",
@@ -197,7 +212,7 @@ fig2 = pn.ggplot(
     pao1_pa14_acc_pa14_compendium_label,
     pn.aes(x="median acc expression_pao1", y="median acc expression_pa14"),
 )
-fig2 += pn.geom_point(pn.aes(color="Strain type_pa14"), alpha=0.4)
+fig2 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.4)
 fig2 += pn.labs(
     x="median expression of PAO1-only genes",
     y="median expression of PA14-only genes",
@@ -241,12 +256,12 @@ fig2.save(filename=pa14_expression_filename, format="svg", dpi=300)
 # +
 # Get PAO1 samples that are labeled PAO1 and non-PAO1
 pao1_binned_pao1_sra = pao1_pa14_acc_pao1_compendium_label.loc[
-    pao1_pa14_acc_pao1_compendium_label["Strain type_pao1"] == "PAO1",
+    pao1_pa14_acc_pao1_compendium_label["Strain type"] == "PAO1",
     "median acc expression_pao1",
 ]
 
 pao1_binned_non_pao1_sra = pao1_pa14_acc_pao1_compendium_label.loc[
-    pao1_pa14_acc_pao1_compendium_label["Strain type_pao1"] != "PAO1",
+    pao1_pa14_acc_pao1_compendium_label["Strain type"] != "PAO1",
     "median acc expression_pao1",
 ]
 
@@ -254,19 +269,19 @@ pao1_binned_non_pao1_sra = pao1_pa14_acc_pao1_compendium_label.loc[
 f = sns.distplot(pao1_binned_pao1_sra, color="grey", kde=False)
 f = sns.distplot(pao1_binned_non_pao1_sra, color="blue", kde=False)
 if threshold == 0:
-    plt.axvline(5, 0, 100, color="red")
+    plt.axvline(25, 0, 100, color="red")
 
 f.figure.savefig(pao1_dist_filename, format="svg", dpi=300)
 
 # +
 # Get PA14 samples that are labeled PA14 and non-PA14
 pa14_binned_pa14_sra = pao1_pa14_acc_pa14_compendium_label.loc[
-    pao1_pa14_acc_pa14_compendium_label["Strain type_pa14"] == "PA14",
+    pao1_pa14_acc_pa14_compendium_label["Strain type"] == "PA14",
     "median acc expression_pa14",
 ]
 
 pa14_binned_non_pa14_sra = pao1_pa14_acc_pa14_compendium_label.loc[
-    pao1_pa14_acc_pa14_compendium_label["Strain type_pa14"] != "PA14",
+    pao1_pa14_acc_pa14_compendium_label["Strain type"] != "PA14",
     "median acc expression_pa14",
 ]
 
@@ -274,7 +289,7 @@ pa14_binned_non_pa14_sra = pao1_pa14_acc_pa14_compendium_label.loc[
 g = sns.distplot(pa14_binned_pa14_sra, color="grey", kde=False)
 g = sns.distplot(pa14_binned_non_pa14_sra, color="blue", kde=False)
 if threshold == 0:
-    plt.axvline(5, 0, 100, color="red")
+    plt.axvline(25, 0, 100, color="red")
 
 g.figure.savefig(pa14_dist_filename, format="svg", dpi=300)
 # -
@@ -483,6 +498,9 @@ print(fig3)
 
 # +
 # Plot core gene expression in PAO1 reference
+normalized_pao1_core_encoded_df["sra label"] = normalized_pao1_core_encoded_df[
+    "sra label"
+].fillna("NA")
 fig4 = pn.ggplot(normalized_pao1_core_encoded_df, pn.aes(x="1", y="2"))
 fig4 += pn.geom_point(pn.aes(color="sra label"), alpha=0.3)
 fig4 += pn.labs(
@@ -531,6 +549,9 @@ print(fig5)
 
 # +
 # Plot core gene expression in PA14 reference
+normalized_pa14_core_encoded_df["sra label"] = normalized_pa14_core_encoded_df[
+    "sra label"
+].fillna("NA")
 fig6 = pn.ggplot(normalized_pa14_core_encoded_df, pn.aes(x="1", y="2"))
 fig6 += pn.geom_point(pn.aes(color="sra label"), alpha=0.3)
 fig6 += pn.labs(

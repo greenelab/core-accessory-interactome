@@ -27,6 +27,8 @@ Looking at the distribution of the median accessory gene expression for these no
 
 ![pa14_dist_0thresdhold](https://github.com/greenelab/core-accessory-interactome/blob/master/processing/dist_median_acc_expression_pa14_compendium_0threshold.svg)
 
+Note: To generate the above figures, set the params for `same_threshold = 0` and `opp_threshold = 25` in [1_create_compendia](1_create_compendia.ipynb) noetbook. You will also need to comment out the assertion statement: `assert len(shared_pao1_pa14_binned_ids) == 0`. Then run [2_validate_compendia](2_validate_compendia.ipynb).
+
 Using a threshold of 25 we get the following plots that correspond to our final compendia that we will use in our analysis.
 As a check, our PAO1 compendium contains ~900 samples and the PA14 compendium contains ~500 samples.
 These numbers are close to the numbers that SRA annotates as PAO1 and PA14, ~800 and ~500 respectively.
