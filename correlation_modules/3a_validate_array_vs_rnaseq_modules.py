@@ -15,7 +15,9 @@
 
 # # Validate array vs RNA-seq modules
 #
-# The goal of this notebook is to compare the modules found using array data vs RNA-seq data. We would expect the modules to be similar
+# This notebook examines the composition of the modules is a few ways:
+# 1. This notebook compares the modules found using array data vs RNA-seq data. We would expect the modules to be similar
+# 2. This notebook also examines the enrichment of KEGG pathways within the modules
 
 # +
 # %load_ext autoreload
@@ -27,6 +29,7 @@ import scipy.stats as ss
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import matplotlib.pyplot as plt
 from sklearn.cluster import DBSCAN, AgglomerativeClustering, AffinityPropagation
 from core_acc_modules import utils, paths
 
@@ -149,6 +152,8 @@ pao1_rnaseq_membership_df.head()
 # For a given RNA-seq module, find the best fit module in the array compendium using the hypergeometric test?
 #
 # For rna-seq data, `modules id` is the cluster id. We can then look up which array cluster these genes from the rna-seq cluster map to. Here we are looking to see if modules are consistent (i.e. Do genes that cluster together in the RNA-seq compendium also cluster in the array compendium)?
+#
+# To compare the consistency we use the [hypergeometric test](https://alexlenail.medium.com/understanding-and-implementing-the-hypergeometric-test-in-python-a7db688a7458) which will allow us to examine the over-representation of genes from the RNA-seq module within an array module and vice versa.
 
 # +
 # As a baseline make a membership df mapping genes to a shuffled set of module ids
@@ -171,7 +176,7 @@ pao1_array_membership_shuffle_df.head()
 # Array to RNA-seq
 # Given an array module, look for the rnaseq module with the most overlap/significant p-value
 def map_array_to_rnaseq_modules(array_membership_df, rnaseq_membership_df):
-    total_rnaseq_genes = rnaseq_membership_df.shape[0]
+    total_array_genes = array_membership_df.shape[0]
 
     rows = []
     # For each array module
@@ -190,9 +195,9 @@ def map_array_to_rnaseq_modules(array_membership_df, rnaseq_membership_df):
 
             pval = ss.hypergeom.sf(
                 num_shared_genes,
-                total_rnaseq_genes,
-                num_array_genes,
+                total_array_genes,
                 num_rnaseq_genes,
+                num_array_genes,
             )
 
             # rnaseq_mapping[rnaseq_module] = p-value
@@ -232,7 +237,7 @@ array_to_rnaseq_shuffle.head()
 # RNA-seq to array
 # Given a RNA-seq module, look for the array module with the most overlap/significant p-value
 def map_rnaseq_to_array_modules(rnaseq_membership_df, array_membership_df):
-    total_array_genes = array_membership_df.shape[0]
+    total_rnaseq_genes = rnaseq_membership_df.shape[0]
 
     rows = []
     # For each rna-seq module
@@ -251,9 +256,9 @@ def map_rnaseq_to_array_modules(rnaseq_membership_df, array_membership_df):
 
             pval = ss.hypergeom.sf(
                 num_shared_genes,
-                total_array_genes,
-                num_rnaseq_genes,
+                total_rnaseq_genes,
                 num_array_genes,
+                num_rnaseq_genes,
             )
 
             # array_mapping[rnaseq_module] = p-value
@@ -307,24 +312,53 @@ rnaseq_to_array_combined = pd.concat([rnaseq_to_array_true, rnaseq_to_array_shuf
 
 array_to_rnaseq_combined.head()
 
+# +
+# Test: mean p-values using the true module labels vs shuffle module labels is significant
+true_array_to_rnaseq = array_to_rnaseq_combined[
+    array_to_rnaseq_combined["label"] == "true"
+]["p-value"].values
+shuffled_array_to_rnaseq = array_to_rnaseq_combined[
+    array_to_rnaseq_combined["label"] == "shuffle"
+]["p-value"].values
+
+(stats, pvalue) = scipy.stats.ttest_ind(true_array_to_rnaseq, shuffled_array_to_rnaseq)
+print(pvalue)
+# -
+
 f = sns.boxplot(
     x=array_to_rnaseq_combined["label"],
     y=array_to_rnaseq_combined["p-value"],
     palette="Blues",
+    notch=True,
 )
 f.set_title("Array to RNA-seq modules")
+
+# +
+# Test: mean p-values using the true module labels vs shuffle module labels is significant
+true_rnaseq_to_array = rnaseq_to_array_combined[
+    rnaseq_to_array_combined["label"] == "true"
+]["p-value"].values
+shuffled_rnaseq_to_array = rnaseq_to_array_combined[
+    rnaseq_to_array_combined["label"] == "shuffle"
+]["p-value"].values
+
+(stats, pvalue) = scipy.stats.ttest_ind(true_rnaseq_to_array, shuffled_rnaseq_to_array)
+print(pvalue)
+# -
 
 g = sns.boxplot(
     x=rnaseq_to_array_combined["label"],
     y=rnaseq_to_array_combined["p-value"],
     palette="Blues",
+    notch=True,
 )
 g.set_title("RNA-seq to array modules")
 
-# **Observation:**
+# **Takeaway:**
 #
-# * Comparing how RNA-seq modules map to array modules, looks like most modules have very low p-values, meaning they map well.
-# * In contrast, random modules have slightly higher p-values, indicating that the modules don't map as well.
+# * Comparing how RNA-seq modules map to array modules, looks like most modules have very low p-values, meaning they map well between RNA-seq and array.
+# * In contrast, random modules have slightly higher p-values, indicating that the modules don't map as well, though the p-values are still very low.
+# * Using t-test, there is a signficant difference in the distribution of p-values using the true module labels versus the shuffled module labels.
 
 # ## Enrichment of modules in KEGG pathways
 
@@ -385,26 +419,45 @@ def map_rnaseq_to_KEGG(rnaseq_membership_df, kegg_df):
 
 # %%time
 rnaseq_kegg_true = map_rnaseq_to_KEGG(pao1_rnaseq_membership_df, pao1_pathways)
+rnaseq_kegg_true.head()
 
 # %%time
 rnaseq_kegg_shuffle = map_rnaseq_to_KEGG(
     pao1_rnaseq_membership_shuffle_df, pao1_pathways
 )
+rnaseq_kegg_shuffle.head()
+
+rnaseq_kegg_true.describe()
+
+rnaseq_kegg_shuffle.describe()
 
 # +
 rnaseq_kegg_true["label"] = "true"
 rnaseq_kegg_shuffle["label"] = "shuffle"
 
 rnaseq_kegg_combined = pd.concat([rnaseq_kegg_true, rnaseq_kegg_shuffle])
+
+# +
+# Test: mean p-values using the true module labels vs shuffle module labels is significant
+true_rnaseq_to_kegg = rnaseq_kegg_combined[rnaseq_kegg_combined["label"] == "true"][
+    "p-value"
+].values
+shuffled_rnaseq_to_kegg = rnaseq_kegg_combined[
+    rnaseq_kegg_combined["label"] == "shuffle"
+]["p-value"].values
+
+(stats, pvalue) = scipy.stats.ttest_ind(true_rnaseq_to_kegg, shuffled_rnaseq_to_kegg)
+print(pvalue)
 # -
 
 h = sns.boxplot(
     x=rnaseq_kegg_combined["label"],
     y=rnaseq_kegg_combined["p-value"],
     palette="Blues",
+    notch=True,
 )
 h.set_title("KEGG enrichment in RNA-seq modules")
 
-# https://alexlenail.medium.com/understanding-and-implementing-the-hypergeometric-test-in-python-a7db688a7458
+# **Takeaway:**
 #
-# Add description of hypergeometric test
+# * The p-values that correspond to the over-representation of KEGG pathways within modules is low using both the true module labels and the shuffled module labels. But the shuffled p-values are lower in this case, I'm not sure why.
