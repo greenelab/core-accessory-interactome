@@ -91,8 +91,14 @@ print(len(shared_samples))
 shared_samples
 
 # Who are these samples?
-# * https://www.ncbi.nlm.nih.gov/sra/?term=ERX2813655
-# * https://www.ncbi.nlm.nih.gov/sra/?term=SRX1096902
-# * in vitro and in vivo...
-# * 4 samples co-cultured with Aspergillus fumigatus: https://www.ncbi.nlm.nih.gov/sra/?term=SRX5000026
+# * 'ERX2813655' Negative control of RpoS synthesis, which is involved in QS: https://www.ncbi.nlm.nih.gov/sra/?term=ERX2813655
+# * 2 samples ('SRX1096902', 'SRX1097013') from a study testing effect of antibiotic treatment. 'SRX1096902' is 0m after treatment, 'SRX1097013' is 30m after treatment: https://www.ncbi.nlm.nih.gov/sra/?term=SRX1096902; https://www.ncbi.nlm.nih.gov/sra/?term=SRX1097013
+# * 'SRX1127442' sRNA content of P. aeruginosa OMVs compared to whole cells: https://www.ncbi.nlm.nih.gov/sra/?term=SRX1127442
+# * 2 samples ('SRX1491235', 'SRX1491236') testing transcriptomic response of PAO1 under Elevated Temperature: https://www.ncbi.nlm.nih.gov/sra/?term=SRX1491235
+# * Sample ('SRX1516058') from a study reports the RNA-Seq analysis of bacteriophage PAK_P3 infecting PAK strain of P. aeruginosa: https://www.ncbi.nlm.nih.gov/sra/?term=SRX1516058
+# * Sample ('SRX1747042') characterzing the in vitro and in vivo transcriptome of PAO1
+# * Sample ('SRX2662725', 'SRX2662726', 'SRX2662727', 'SRX2662728') characterizing the transcriptional patterns of PAO1 under different culture conditions: https://www.ncbi.nlm.nih.gov/bioproject/PRJNA360055
+# * 4 samples ('SRX5000019', 'SRX5000020', 'SRX5000025', 'SRX5000026') co-cultured with Aspergillus fumigatus: https://www.ncbi.nlm.nih.gov/sra/?term=SRX5000026
 # * SRX6981195, SRX389628, grown in a murine chronic wound infection: https://www.ncbi.nlm.nih.gov/sra/?term=SRX69811951
+#
+# Looks like there are some samples that are isolated from wounds and others that are related to specific culturing or stress conditions like antibiotic treatment, temperature, co-culture with a fungus.
