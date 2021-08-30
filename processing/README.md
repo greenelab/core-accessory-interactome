@@ -12,9 +12,9 @@ Each point is a sample.
 A sample is considered PAO1 if the median gene expression of PA14 accessory genes is 0 and PAO1 accessory genes in > 5.
 Similarlty, a sample is considered PA14 if the median gene expression of PA14 accessory genes is > 5 and PAO1 accessory genes in 0.
 
-A threshold of 5 TPM is used based on our analysis in [0_decide_threshold.ipynb](0_decide_threshold.ipynb). The goal of this notebook was to  define a threshold to determine if a sample if PAO1 or not (likewise, if a sample is PA14 or not). We used known labels from SRA to do this. Specifically, we examined the distribution of PAO1 samples (grey) vs non-PAO1 samples (blue). We define the threshold to be one that separated between the two distributions. We use this threshold in [1_create_compendia.ipynb](1_create_compendia.ipynb) to partition gene expression data into PAO1 and PA14 compendia.because we found that using a threshold of 0 TPM included some other SRA-labeled strains.
+A threshold of 25 MR normalized estimated counts is used based on our analysis in [0_decide_threshold.ipynb](0_decide_threshold.ipynb). The goal of this notebook was to  define a threshold to determine if a sample if PAO1 or not (likewise, if a sample is PA14 or not). We used known labels from SRA to do this. Specifically, we examined the distribution of PAO1 samples (grey) vs non-PAO1 samples (blue). We define the threshold to be one that separated between the two distributions. We use this threshold in [1_create_compendia.ipynb](1_create_compendia.ipynb) to partition gene expression data into PAO1 and PA14 compendia.because we found that using a threshold of 0 MR normalized estimated counts included some other SRA-labeled strains.
 
-Using a threshold of 0 TPM, within the PAO1 binned compendium there are samples that SRA labeled as PAK or Clinical).
+Using a threshold of 0 MR normalized estimated counts, within the PAO1 binned compendium there are samples that SRA labeled as PAK or Clinical).
 ![pao1_compendium_0thresdhold](https://github.com/greenelab/core-accessory-interactome/blob/master/processing/MR_median_acc_expression_pao1_compendium_0threshold.svg)
 
 
@@ -26,6 +26,8 @@ Looking at the distribution of the median accessory gene expression for these no
 ![pao1_dist_0thresdhold](https://github.com/greenelab/core-accessory-interactome/blob/master/processing/dist_median_acc_expression_pao1_compendium_0threshold.svg)
 
 ![pa14_dist_0thresdhold](https://github.com/greenelab/core-accessory-interactome/blob/master/processing/dist_median_acc_expression_pa14_compendium_0threshold.svg)
+
+Note: To generate the above figures, set the params for `same_threshold = 0` and `opp_threshold = 25` in [1_create_compendia](1_create_compendia.ipynb) noetbook. You will also need to comment out the assertion statement: `assert len(shared_pao1_pa14_binned_ids) == 0`. Then run [2_validate_compendia](2_validate_compendia.ipynb).
 
 Using a threshold of 25 we get the following plots that correspond to our final compendia that we will use in our analysis.
 As a check, our PAO1 compendium contains ~900 samples and the PA14 compendium contains ~500 samples.
