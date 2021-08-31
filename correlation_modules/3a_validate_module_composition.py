@@ -133,6 +133,17 @@ pao1_array_membership_df["module id"].value_counts()
 
 pao1_array_membership_df.head()
 
+pao1_array_membership_df["module id"].nunique()
+
+# Wondering if the size of the modules is affecting the p-values
+# Let's try removing the largest size modules
+module_ids = pao1_array_membership_df["module id"].value_counts()
+module_ids_toexclude = module_ids[module_ids > 20].index
+
+# +
+# pao1_array_membership_df["module id"] in module_ids_toexclude
+# -
+
 # ### Load RNA-seq module membership
 #
 # The modules for the RNA-seq compendium were generated using the same procedure as we just performed using the array compendium. The code for performing this module detection can be found in the previous 1_ and 2_ notebooks in this directory.

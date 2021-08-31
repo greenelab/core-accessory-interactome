@@ -49,6 +49,9 @@ module_size_threshold = 1000
 # Seed to use to randomly sample a matched-sized set of genes
 # to compare against regulon/operon composition
 sample_seed = 1
+
+# Gene subset
+gene_subset = "all"
 # -
 
 # ## Examine size of modules
@@ -58,10 +61,10 @@ sample_seed = 1
 for method_name in clustering_method_list:
     print(f"Modules using clustering method: {method_name}")
     pao1_membership_filename = os.path.join(
-        paths.LOCAL_DATA_DIR, f"pao1_modules_{method_name}.tsv"
+        paths.LOCAL_DATA_DIR, f"pao1_modules_{method_name}_{gene_subset}.tsv"
     )
     pa14_membership_filename = os.path.join(
-        paths.LOCAL_DATA_DIR, f"pa14_modules_{method_name}.tsv"
+        paths.LOCAL_DATA_DIR, f"pa14_modules_{method_name}_{gene_subset}.tsv"
     )
 
     pao1_membership = pd.read_csv(
@@ -342,6 +345,11 @@ fig.suptitle(
     "Histogram of size of operons/regulons after filtering by membership",
     fontsize=12,
 )
+axes[0].set_title("PAO1 operon size")
+axes[1].set_title("PA14 operon size")
+axes[2].set_title("PAO1 regulon size")
+axes[3].set_title("PA14 regulon size")
+
 axes[2].set_xlabel("")
 axes[3].set_xlabel("")
 
@@ -369,6 +377,8 @@ def coverage_of_genesets(module_df, genesets_df, geneset_type):
 
         # Pr(x,y in operon/regulon A)
         if geneset_type == "operon":
+            # Dictionary of probabilities for a given module mapped to all operons
+            operon_probs = {}
             for operon_id, operon_df in genesets_df.groupby("operon_name"):
                 num_geneset = operon_df.shape[0]
                 pr_denom = (num_geneset / total_genes) ** 2
@@ -380,15 +390,22 @@ def coverage_of_genesets(module_df, genesets_df, geneset_type):
                 pr_joint = (len(shared_genes) / total_genes) ** 2
                 pr_final = pr_joint / pr_denom
 
-                rows.append(
-                    {
-                        "module id": module_id,
-                        "operon id": operon_id,
-                        "pr(x,y in module|x,y in operon)": pr_final,
-                    }
-                )
+                operon_probs[operon_id] = pr_final
+
+            # Save only the best matched operon-module based on the p-value
+            (best_operon_id, best_prob) = max(operon_probs.items(), key=lambda k: k[1])
+
+            rows.append(
+                {
+                    "module id": module_id,
+                    "operon id": best_operon_id,
+                    "pr(x,y in module|x,y in operon)": best_prob,
+                }
+            )
 
         else:
+            # Dictionary of probabilities for a given module mapped to all operons
+            regulon_probs = {}
             for regulon_id in genesets_df.index:
                 num_geneset = genesets_df.loc[regulon_id, "size"]
                 pr_denom = (num_geneset / total_genes) ** 2
@@ -400,13 +417,20 @@ def coverage_of_genesets(module_df, genesets_df, geneset_type):
                 pr_joint = (len(shared_genes) / total_genes) ** 2
                 pr_final = (pr_joint) / pr_denom
 
-                rows.append(
-                    {
-                        "module id": module_id,
-                        "regulon id": regulon_id,
-                        "pr(x,y in module|x,y in regulon)": pr_final,
-                    }
-                )
+            regulon_probs[regulon_id] = pr_final
+
+            # Save only the best matched operon-module based on the p-value
+            (best_regulon_id, best_prob) = max(
+                regulon_probs.items(), key=lambda k: k[1]
+            )
+
+            rows.append(
+                {
+                    "module id": module_id,
+                    "regulon id": best_regulon_id,
+                    "pr(x,y in module|x,y in regulon)": best_prob,
+                }
+            )
     out_df = pd.DataFrame(rows)
     if geneset_type == "operon":
         assert (out_df["pr(x,y in module|x,y in operon)"] > 1).sum() == 0
@@ -526,6 +550,36 @@ legend = axes[0].legend()
 legend = axes[1].legend()
 # -
 
+pao1_operon_prob[pao1_operon_prob["pr(x,y in module|x,y in operon)"] < 0.5]
+
+# What are these operons that have a low prbabilities
+# Why are some operons not likely to be within the same module?
+# Based on the describe statistics, there doesn't appear to be a clear reasoning
+# Overall, it is good that most operons have a high probability of being found in the same module
+low_pao1_prob_operons = pao1_operon_prob[
+    pao1_operon_prob["pr(x,y in module|x,y in operon)"] < 0.5
+]["operon id"]
+high_pao1_prob_operons = pao1_operon_prob[
+    pao1_operon_prob["pr(x,y in module|x,y in operon)"] >= 0.5
+]["operon id"]
+pao1_operon_tmp = pao1_operon.set_index("operon_name")
+
+pao1_operon_tmp.loc[low_pao1_prob_operons].describe()
+
+pao1_operon_tmp.loc[high_pao1_prob_operons].describe()
+
+low_pa14_prob_operons = pa14_operon_prob[
+    pa14_operon_prob["pr(x,y in module|x,y in operon)"] < 0.5
+]["operon id"]
+high_pa14_prob_operons = pa14_operon_prob[
+    pa14_operon_prob["pr(x,y in module|x,y in operon)"] >= 0.5
+]["operon id"]
+pa14_operon_tmp = pa14_operon.set_index("operon_name")
+
+pa14_operon_tmp.loc[low_pa14_prob_operons].sort_values(by="size")
+
+pa14_operon_tmp.loc[high_pa14_prob_operons].sort_values(by="size")
+
 pao1_operon_prob.describe()
 
 pao1_operon_shuffle_prob.describe()
@@ -579,6 +633,6 @@ pa14_regulon_prob.describe()
 pa14_regulon_shuffle_prob.describe()
 
 # **Takeaway:**
-# There is a higher probability that given pair of genes that are from the same operon, that they are also from the same module, compared to a randomly shuffled set of module assignments.
+# There is a higher probability that given pair of genes that are from the same operon, that they are also from the same module, compared to a randomly shuffled set of module assignments. Although there are some operons with low probabilties, overall genes in most operons have a high probability of being found in the same module.
 #
 # We don't see as drastic of a skewing for the regulons, though the mean using the true module labels is slightly higher compared to the shuffle module labels. Perhaps this is because regulons are not as tightly co-regulated.
