@@ -30,6 +30,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import statsmodels.stats.multitest
 from sklearn.cluster import DBSCAN, AgglomerativeClustering, AffinityPropagation
 from core_acc_modules import utils, paths
 
@@ -133,17 +134,6 @@ pao1_array_membership_df["module id"].value_counts()
 
 pao1_array_membership_df.head()
 
-pao1_array_membership_df["module id"].nunique()
-
-# Wondering if the size of the modules is affecting the p-values
-# Let's try removing the largest size modules
-module_ids = pao1_array_membership_df["module id"].value_counts()
-module_ids_toexclude = module_ids[module_ids > 20].index
-
-# +
-# pao1_array_membership_df["module id"] in module_ids_toexclude
-# -
-
 # ### Load RNA-seq module membership
 #
 # The modules for the RNA-seq compendium were generated using the same procedure as we just performed using the array compendium. The code for performing this module detection can be found in the previous 1_ and 2_ notebooks in this directory.
@@ -195,7 +185,6 @@ def map_array_to_rnaseq_modules(array_membership_df, rnaseq_membership_df):
         num_array_genes = array_df_group.shape[0]
 
         # Find the RNA-seq module with the best overlap
-        rnaseq_mapping = {}
         for rnaseq_group_name, rnaseq_df_group in rnaseq_membership_df.groupby(
             "module id"
         ):
@@ -204,30 +193,72 @@ def map_array_to_rnaseq_modules(array_membership_df, rnaseq_membership_df):
             shared_genes = set(array_df_group.index).intersection(rnaseq_df_group.index)
             num_shared_genes = len(shared_genes)
 
+            # Equivalent to performing a Fisher's exact test with
+            #                      | in array module | not in array module
+            # -------------------------------------------------------------
+            # in RNA-seq module    |              |
+            # --------------------------------------------------------------
+            # not in RNA-seq module|              |
+            # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.fisher_exact.html
             pval = ss.hypergeom.sf(
-                num_shared_genes,
+                num_shared_genes - 1,
                 total_array_genes,
-                num_rnaseq_genes,
                 num_array_genes,
+                num_rnaseq_genes,
             )
 
-            # rnaseq_mapping[rnaseq_module] = p-value
-            rnaseq_mapping[rnaseq_group_name] = pval
+            # Try Fisher's exact test too
+            # Looks like the results are the same
+            # rnaseq_only =  len(set(rnaseq_df_group.index).difference(array_df_group.index))
+            # array_only = len(set(array_df_group.index).difference(rnaseq_df_group.index))
+            # neither_1 = set(array_membership_df.index).difference(array_df_group.index)
+            # neither = len(set(neither_1).difference(rnaseq_df_group.index))
+            # observed_contingency_table = np.array(
+            #    [
+            #        [num_shared_genes, rnaseq_only],
+            #        [array_only, neither],
+            #    ]
+            # )
 
-        # Find the module with the best mapping (i.e. lowest p-value)
-        best_rnaseq_module = min(rnaseq_mapping, key=rnaseq_mapping.get)
-
-        rows.append(
-            {
-                "array module id": array_group_name,
-                "best rnaseq module id": best_rnaseq_module,
-                "p-value": min(rnaseq_mapping.values()),
-            }
-        )
+            # H0: The probability that the gene is core is the same
+            # whether or not you're in the module or outside
+            # H1: The probability that a gene is core is higher or lower inside the module
+            # than outside the module
+            # odds_ratio, pval = scipy.stats.fisher_exact(
+            #    observed_contingency_table, alternative="greater"
+            # )
+            rows.append(
+                {
+                    "array module id": array_group_name,
+                    "rnaseq module id": rnaseq_group_name,
+                    "p-value": pval,
+                    "num shared genes": num_shared_genes,
+                    "size array module": num_array_genes,
+                    "size rnaseq module": num_rnaseq_genes,
+                }
+            )
 
     array_to_rnaseq_df = pd.DataFrame(rows)
 
-    return array_to_rnaseq_df
+    # Get corrected pvalues
+    (
+        reject_,
+        pvals_corrected_,
+        alphacSidak,
+        alphacBonf,
+    ) = statsmodels.stats.multitest.multipletests(
+        array_to_rnaseq_df["p-value"].values,
+        alpha=0.05,
+        method="fdr_bh",
+        is_sorted=False,
+    )
+
+    array_to_rnaseq_df["corrected p-value"] = pvals_corrected_
+
+    # Select best module mapping
+    best_array_to_rnaseq_df = array_to_rnaseq_df.groupby("array module id").min()
+
+    return best_array_to_rnaseq_df
 
 
 # %%time
@@ -235,6 +266,7 @@ array_to_rnaseq_true = map_array_to_rnaseq_modules(
     pao1_array_membership_df, pao1_rnaseq_membership_df
 )
 
+print(array_to_rnaseq_true.shape)
 array_to_rnaseq_true.head()
 
 # %%time
@@ -242,6 +274,7 @@ array_to_rnaseq_shuffle = map_array_to_rnaseq_modules(
     pao1_array_membership_df, pao1_rnaseq_membership_shuffle_df
 )
 
+print(array_to_rnaseq_shuffle.shape)
 array_to_rnaseq_shuffle.head()
 
 
@@ -256,7 +289,6 @@ def map_rnaseq_to_array_modules(rnaseq_membership_df, array_membership_df):
         num_rnaseq_genes = rnaseq_df_group.shape[0]
 
         # Find the array module with the best overlap
-        array_mapping = {}
         for array_group_name, array_df_group in array_membership_df.groupby(
             "module id"
         ):
@@ -266,43 +298,63 @@ def map_rnaseq_to_array_modules(rnaseq_membership_df, array_membership_df):
             num_shared_genes = len(shared_genes)
 
             pval = ss.hypergeom.sf(
-                num_shared_genes,
+                num_shared_genes - 1,
                 total_rnaseq_genes,
-                num_array_genes,
                 num_rnaseq_genes,
+                num_array_genes,
             )
-
-            # array_mapping[rnaseq_module] = p-value
-            array_mapping[array_group_name] = pval
-
-        # Find the module with the best mapping (i.e. lowest p-value)
-        best_array_module = min(array_mapping, key=array_mapping.get)
-
-        rows.append(
-            {
-                "RNA-seq module id": rnaseq_group_name,
-                "best array module id": best_array_module,
-                "p-value": min(array_mapping.values()),
-            }
-        )
+            rows.append(
+                {
+                    "rnaseq module id": rnaseq_group_name,
+                    "array module id": array_group_name,
+                    "p-value": pval,
+                    "num shared genes": num_shared_genes,
+                    "size rnaseq module": num_rnaseq_genes,
+                    "size array module": num_array_genes,
+                }
+            )
 
     rnaseq_to_array_df = pd.DataFrame(rows)
 
-    return rnaseq_to_array_df
+    # Get corrected pvalues
+    (
+        reject_,
+        pvals_corrected_,
+        alphacSidak,
+        alphacBonf,
+    ) = statsmodels.stats.multitest.multipletests(
+        rnaseq_to_array_df["p-value"].values,
+        alpha=0.05,
+        method="fdr_bh",
+        is_sorted=False,
+    )
+
+    rnaseq_to_array_df["corrected p-value"] = pvals_corrected_
+
+    # Select best module mapping
+    best_rnaseq_to_array_df = rnaseq_to_array_df.groupby("rnaseq module id").min()
+
+    return best_rnaseq_to_array_df, rnaseq_to_array_df
 
 
 # %%time
-rnaseq_to_array_true = map_rnaseq_to_array_modules(
+rnaseq_to_array_true, rnaseq_to_array_true_all = map_rnaseq_to_array_modules(
     pao1_rnaseq_membership_df, pao1_array_membership_df
 )
 
+print(rnaseq_to_array_true.shape)
 rnaseq_to_array_true.head()
 
+rnaseq_to_array_true[rnaseq_to_array_true["num shared genes"] > 0]
+
+rnaseq_to_array_true_all[rnaseq_to_array_true_all["num shared genes"] > 0]
+
 # %%time
-rnaseq_to_array_shuffle = map_rnaseq_to_array_modules(
+rnaseq_to_array_shuffle, rnaseq_to_array_shuffle_all = map_rnaseq_to_array_modules(
     pao1_rnaseq_membership_df, pao1_array_membership_shuffle_df
 )
 
+print(rnaseq_to_array_shuffle.shape)
 rnaseq_to_array_shuffle.head()
 
 # ## Plot
@@ -327,10 +379,10 @@ array_to_rnaseq_combined.head()
 # Test: mean p-values using the true module labels vs shuffle module labels is significant
 true_array_to_rnaseq = array_to_rnaseq_combined[
     array_to_rnaseq_combined["label"] == "true"
-]["p-value"].values
+]["corrected p-value"].values
 shuffled_array_to_rnaseq = array_to_rnaseq_combined[
     array_to_rnaseq_combined["label"] == "shuffle"
-]["p-value"].values
+]["corrected p-value"].values
 
 (stats, pvalue) = scipy.stats.ttest_ind(true_array_to_rnaseq, shuffled_array_to_rnaseq)
 print(pvalue)
@@ -338,7 +390,7 @@ print(pvalue)
 
 f = sns.boxplot(
     x=array_to_rnaseq_combined["label"],
-    y=array_to_rnaseq_combined["p-value"],
+    y=array_to_rnaseq_combined["corrected p-value"],
     palette="Blues",
     notch=True,
 )
@@ -348,10 +400,10 @@ f.set_title("Array to RNA-seq modules")
 # Test: mean p-values using the true module labels vs shuffle module labels is significant
 true_rnaseq_to_array = rnaseq_to_array_combined[
     rnaseq_to_array_combined["label"] == "true"
-]["p-value"].values
+]["corrected p-value"].values
 shuffled_rnaseq_to_array = rnaseq_to_array_combined[
     rnaseq_to_array_combined["label"] == "shuffle"
-]["p-value"].values
+]["corrected p-value"].values
 
 (stats, pvalue) = scipy.stats.ttest_ind(true_rnaseq_to_array, shuffled_rnaseq_to_array)
 print(pvalue)
@@ -359,7 +411,7 @@ print(pvalue)
 
 g = sns.boxplot(
     x=rnaseq_to_array_combined["label"],
-    y=rnaseq_to_array_combined["p-value"],
+    y=rnaseq_to_array_combined["corrected p-value"],
     palette="Blues",
     notch=True,
 )
@@ -367,8 +419,8 @@ g.set_title("RNA-seq to array modules")
 
 # **Takeaway:**
 #
-# * Comparing how RNA-seq modules map to array modules, looks like most modules have very low p-values, meaning they map well between RNA-seq and array.
-# * In contrast, random modules have slightly higher p-values, indicating that the modules don't map as well, though the p-values are still very low.
+# * Comparing how RNA-seq modules map to array modules, looks like most modules have very low p-values, meaning they map well between RNA-seq and array. However, if we examine the overlap between modules, all of the best mapping based on corrected p-value scores, are 0. Perhaps this is not the best test**
+# * In contrast, random modules have high p-values, indicating that the modules don't map as well
 # * Using t-test, there is a signficant difference in the distribution of p-values using the true module labels versus the shuffled module labels.
 
 # ## Enrichment of modules in KEGG pathways
@@ -394,7 +446,6 @@ def map_rnaseq_to_KEGG(rnaseq_membership_df, kegg_df):
         num_rnaseq_genes = rnaseq_df_group.shape[0]
 
         # Find the KEGG pathway with the best overlap
-        kegg_mapping = {}
         for kegg_name in kegg_df.index:
             num_kegg_genes = kegg_df.loc[kegg_name, 1]
             kegg_genes = list(kegg_df.loc[kegg_name, 2])
@@ -403,34 +454,51 @@ def map_rnaseq_to_KEGG(rnaseq_membership_df, kegg_df):
             num_shared_genes = len(shared_genes)
 
             pval = ss.hypergeom.sf(
-                num_shared_genes,
+                num_shared_genes - 1,
                 total_rnaseq_genes,
                 num_kegg_genes,
                 num_rnaseq_genes,
             )
 
-            # array_mapping[rnaseq_module] = p-value
-            kegg_mapping[kegg_name] = pval
-
-        # Find the module with the best mapping (i.e. lowest p-value)
-        best_kegg_pathway = min(kegg_mapping, key=kegg_mapping.get)
-
-        rows.append(
-            {
-                "RNA-seq module id": rnaseq_group_name,
-                "best array module id": best_kegg_pathway,
-                "p-value": min(kegg_mapping.values()),
-            }
-        )
+            rows.append(
+                {
+                    "rnaseq module id": rnaseq_group_name,
+                    "KEGG name": kegg_name,
+                    "p-value": pval,
+                    "num shared genes": num_shared_genes,
+                    "size rnaseq module": num_rnaseq_genes,
+                    "size KEGG pathway": num_kegg_genes,
+                }
+            )
 
     rnaseq_to_kegg_df = pd.DataFrame(rows)
 
-    return rnaseq_to_kegg_df
+    # Get corrected pvalues
+    (
+        reject_,
+        pvals_corrected_,
+        alphacSidak,
+        alphacBonf,
+    ) = statsmodels.stats.multitest.multipletests(
+        rnaseq_to_kegg_df["p-value"].values,
+        alpha=0.05,
+        method="fdr_bh",
+        is_sorted=False,
+    )
+
+    rnaseq_to_kegg_df["corrected p-value"] = pvals_corrected_
+
+    # Select best module mapping
+    best_rnaseq_to_kegg_df = rnaseq_to_kegg_df.groupby("rnaseq module id").min()
+
+    return best_rnaseq_to_kegg_df
 
 
 # %%time
 rnaseq_kegg_true = map_rnaseq_to_KEGG(pao1_rnaseq_membership_df, pao1_pathways)
 rnaseq_kegg_true.head()
+
+rnaseq_kegg_true[rnaseq_kegg_true["num shared genes"] > 0]
 
 # %%time
 rnaseq_kegg_shuffle = map_rnaseq_to_KEGG(
@@ -451,11 +519,11 @@ rnaseq_kegg_combined = pd.concat([rnaseq_kegg_true, rnaseq_kegg_shuffle])
 # +
 # Test: mean p-values using the true module labels vs shuffle module labels is significant
 true_rnaseq_to_kegg = rnaseq_kegg_combined[rnaseq_kegg_combined["label"] == "true"][
-    "p-value"
+    "corrected p-value"
 ].values
 shuffled_rnaseq_to_kegg = rnaseq_kegg_combined[
     rnaseq_kegg_combined["label"] == "shuffle"
-]["p-value"].values
+]["corrected p-value"].values
 
 (stats, pvalue) = scipy.stats.ttest_ind(true_rnaseq_to_kegg, shuffled_rnaseq_to_kegg)
 print(pvalue)
@@ -463,7 +531,7 @@ print(pvalue)
 
 h = sns.boxplot(
     x=rnaseq_kegg_combined["label"],
-    y=rnaseq_kegg_combined["p-value"],
+    y=rnaseq_kegg_combined["corrected p-value"],
     palette="Blues",
     notch=True,
 )
