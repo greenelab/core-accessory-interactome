@@ -13,7 +13,11 @@
 #     name: conda-env-core_acc-py
 # ---
 
-# ## Quick validation of network modules
+# ## Validation of network modules
+#
+# This notebook performs a couple of analyses to validate the co-expression modules generated:
+# 1. We examine the size of modules
+# 2. We examine how co-operonic/co-regulonic genes are clustered into a few modules
 
 # +
 # %load_ext autoreload
@@ -45,6 +49,9 @@ module_size_threshold = 1000
 # Seed to use to randomly sample a matched-sized set of genes
 # to compare against regulon/operon composition
 sample_seed = 1
+
+# Gene subset
+gene_subset = "all"
 # -
 
 # ## Examine size of modules
@@ -54,10 +61,10 @@ sample_seed = 1
 for method_name in clustering_method_list:
     print(f"Modules using clustering method: {method_name}")
     pao1_membership_filename = os.path.join(
-        paths.LOCAL_DATA_DIR, f"pao1_modules_{method_name}.tsv"
+        paths.LOCAL_DATA_DIR, f"pao1_modules_{method_name}_{gene_subset}.tsv"
     )
     pa14_membership_filename = os.path.join(
-        paths.LOCAL_DATA_DIR, f"pa14_modules_{method_name}.tsv"
+        paths.LOCAL_DATA_DIR, f"pa14_modules_{method_name}_{gene_subset}.tsv"
     )
 
     pao1_membership = pd.read_csv(
@@ -128,13 +135,13 @@ plot_dist_modules(clustering_method_list)
 # * Figure 7 in [Harty et al. paper](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6531624/)
 # * Figure 2 in [Doing et al. paper](https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1008783)
 #
-# What did we find? Which method follows our expectation? This is the one we will move forward.
+# What did we find? Which method follows our expectation?
 # * Looks like there is one large modules using DBSCAN clustering
 # * There are more even sized modules using hierarchal clustering and affinity propogation so we will probably use one of these 2 methods.
 
 # ## Examine composition of modules
 #
-# This is a negative control. We expect that genes within the same operon or regulon will cluster together (i.e. be within the same module). To test this we will compare the distribution of the number of modules that contain genes within the same regulon vs the number of modules that contain random genes
+# This is a negative control. We expect that genes within the same operon or regulon will cluster together (i.e. be within the same module). To test this we will calculate the probability that a pair of genes will be from the same module, given that they are both from the same regulon or operon. We will calculate this probability for each (module, regulon/operon) combination.
 #
 # _Some definitions:_
 #
@@ -143,8 +150,11 @@ plot_dist_modules(clustering_method_list)
 # [Regulons](https://en.wikipedia.org/wiki/Regulon) are a group of genes that are regulated by the same regulatory protein. A regulon can be composed of multiple operons.
 
 # +
-# Load PAO1 regulon and operon file
+# Load PAO1 regulon file
 pao1_regulon_filename = paths.PAO1_REGULON
+
+# Load operon files
+pa14_operon_filename = paths.PA14_OPERON
 pao1_operon_filename = paths.PAO1_OPERON
 
 # Load membership for specific clustering method
@@ -196,94 +206,71 @@ pao1_membership = pao1_membership.drop(genes_todrop)
 # +
 # Read file
 pao1_operon = pd.read_csv(pao1_operon_filename, index_col=0, header=0)
+pa14_operon = pd.read_csv(pa14_operon_filename, index_col=0, header=0)
+
 pao1_regulon = pd.read_csv(pao1_regulon_filename, index_col=0, header=0)
 
 print(pao1_operon.shape)
 pao1_operon.head()
 # -
 
+print(pa14_operon.shape)
+pa14_operon.head()
+
 print(pao1_regulon.shape)
 pao1_regulon.head()
 
-# Convert "Genes" column from str to list
-# TO DO:
-# Operon and Regulon DB is of a different format so will need to update this when I update the coverage analysis
-pao1_operon["Genes"] = pao1_operon["Genes"].str.split(";")
+# Convert "Genes" column from str to list for regulon dataset
 pao1_regulon["Genes"] = pao1_regulon["Genes"].str.split(";")
 
 # Check if genes within operon/regulon have membership information
 # Only keep genes that are found in "pao1_membership"
-pao1_operon["Genes_processed"] = pao1_operon["Genes"].apply(
-    lambda list_genes: [
-        gene_id for gene_id in list_genes if gene_id in pao1_membership.index
-    ]
-)
 pao1_regulon["Genes_processed"] = pao1_regulon["Genes"].apply(
     lambda list_genes: [
         gene_id for gene_id in list_genes if gene_id in pao1_membership.index
     ]
 )
 
-# Update length based on filtered gene list ("Genes_processed" column)
-pao1_operon["Length_processed"] = pao1_operon["Genes_processed"].str.len()
-pao1_regulon["Length_processed"] = pao1_regulon["Genes_processed"].str.len()
-
-# +
-# Quick look at distribution of size of regulons and operons
-# Update length based on filtered gene list ("Genes_processed" column)
-
-fig, axes = plt.subplots(ncols=2, nrows=1)
-
-fig = sns.distplot(
-    pao1_operon["Length_processed"],
-    label="PAO1 operon size",
-    color="red",
-    kde=False,
-    ax=axes[0],
+# Add size of the operons
+pao1_operon["size"] = pao1_operon["operon_name"].map(
+    pao1_operon.groupby("operon_name")["locus_tag"].count()
 )
-
-fig = sns.distplot(
-    pao1_regulon["Length_processed"],
-    label="PAO1 regulon size",
-    color="blue",
-    kde=False,
-    ax=axes[1],
-)
-
-fig.set_title(
-    "Histogram of size of operons/regulons after filtering by membership",
-    fontsize=12,
-)
-
-# +
-# If number genes in operon are 1 then remove
-# Drop operons and regulons that have 0 genes due to no module filtering
-pao1_operon = pao1_operon.drop(pao1_operon.query("Length_processed<=1").index)
-pao1_regulon = pao1_regulon.drop(pao1_regulon.query("Length_processed<=1").index)
-
-print(pao1_operon.shape)
-print(pao1_regulon.shape)
-# -
-
-# For each regulon/operon, select a random set of genes that are the same size at the regulon/operon
-pao1_operon["Random_Genes"] = pao1_operon["Length_processed"].apply(
-    lambda num_genes: pao1_membership.sample(
-        num_genes, random_state=sample_seed
-    ).index.values
-)
-pao1_regulon["Random_Genes"] = pao1_regulon["Length_processed"].apply(
-    lambda num_genes: pao1_membership.sample(
-        num_genes, random_state=sample_seed
-    ).index.values
+pa14_operon["size"] = pa14_operon["operon_name"].map(
+    pa14_operon.groupby("operon_name")["locus_tag"].count()
 )
 
 pao1_operon.head()
 
+pa14_operon.head()
+
+pao1_operon_len = []
+for grp_name, grp_df in pao1_operon.groupby("operon_name"):
+    pao1_operon_len.append(grp_df.shape[0])
+
+pa14_operon_len = []
+for grp_name, grp_df in pa14_operon.groupby("operon_name"):
+    pa14_operon_len.append(grp_df.shape[0])
+
+# Update length based on filtered gene list ("Genes_processed" column)
+pao1_regulon["size"] = pao1_regulon["Genes_processed"].str.len()
+
+# If number genes in operon are 1 then remove
+# Drop operons and regulons that have 0 genes due to no module filtering
+pao1_operon = pao1_operon.drop(pao1_operon.query("size<=1").index)
+pa14_operon = pa14_operon.drop(pa14_operon.query("size<=1").index)
+pao1_regulon = pao1_regulon.drop(pao1_regulon.query("size<=1").index)
+
+print(pao1_operon.shape)
+pao1_operon.head()
+
+print(pa14_operon.shape)
+pa14_operon.head()
+
+print(pao1_regulon.shape)
 pao1_regulon.head()
 
 # ### Get operon/regulon information using PA14 ids
 
-pa14_operon = pao1_operon.copy()
 pa14_regulon = pao1_regulon.copy()
 
 # Get mapping between PAO1 and PA14 genes using PAO1 reference
@@ -291,24 +278,15 @@ gene_annot_file = paths.GENE_PAO1_ANNOT
 gene_mapping_pao1 = utils.get_pao1_pa14_gene_map(gene_annot_file, "pao1")
 gene_mapping_pao1.head()
 
-pa14_operon["Genes_processed"] = pa14_operon["Genes_processed"].apply(
-    lambda pao1_gene_list: gene_mapping_pao1.loc[pao1_gene_list, "PA14_ID"].values
-)
 pa14_regulon["Genes_processed"] = pa14_regulon["Genes_processed"].apply(
     lambda pao1_gene_list: gene_mapping_pao1.loc[pao1_gene_list, "PA14_ID"].values
 )
 
 # Update length based on filtered gene list ("Genes_processed" column)
-pa14_operon["Length_processed"] = pa14_operon["Genes_processed"].str.len()
-pa14_regulon["Length_processed"] = pa14_regulon["Genes_processed"].str.len()
+pa14_regulon["size"] = pa14_regulon["Genes_processed"].str.len()
 
 # +
 # If genes didn't map then drop operon/regulon
-pa14_operon = pa14_operon.drop(
-    pa14_operon[
-        pa14_operon["Genes_processed"].apply(lambda gene_list: pd.isna(gene_list).any())
-    ].index
-)
 pa14_regulon = pa14_regulon.drop(
     pa14_regulon[
         pa14_regulon["Genes_processed"].apply(
@@ -317,258 +295,344 @@ pa14_regulon = pa14_regulon.drop(
     ].index
 )
 
-print(pa14_operon.shape)
-print(pa14_regulon.shape)
-
-# +
-# If number genes in operon are 1 then remove
-# Drop operons and regulons that have 0 genes due to no module filtering
-pa14_operon = pa14_operon.drop(pa14_operon.query("Length_processed<=1").index)
-pa14_regulon = pa14_regulon.drop(pa14_regulon.query("Length_processed<=1").index)
-
-print(pa14_operon.shape)
 print(pa14_regulon.shape)
 # -
 
-# For each regulon/operon, select a random set of genes that are the same size at the regulon/operon
-pa14_operon["Random_Genes"] = pa14_operon["Length_processed"].apply(
-    lambda num_genes: pa14_membership.sample(num_genes).index.values
-)
-pa14_regulon["Random_Genes"] = pa14_regulon["Length_processed"].apply(
-    lambda num_genes: pa14_membership.sample(num_genes).index.values
-)
-
-pao1_operon.head()
-
-pa14_operon.head()
-
-# ### Calculate the distribution
-
-# For each regulon/operon get the number of modules that regulon/operon genes are found in, number of modules
-# that random genes are found in
-pao1_operon["Num_operon_modules"] = pao1_operon["Genes_processed"].apply(
-    lambda list_genes: pao1_membership.loc[list_genes]["module id"].nunique()
-)
-pao1_operon["Num_random_modules"] = pao1_operon["Random_Genes"].apply(
-    lambda list_genes: pao1_membership.loc[list_genes]["module id"].nunique()
-)
-
-# For PA14
-pa14_operon["Num_operon_modules"] = pa14_operon["Genes_processed"].apply(
-    lambda list_genes: pa14_membership.loc[list_genes]["module id"].nunique()
-)
-pa14_operon["Num_random_modules"] = pa14_operon["Random_Genes"].apply(
-    lambda list_genes: pa14_membership.loc[list_genes]["module id"].nunique()
-)
-
-# For PAO1 regulons
-pao1_regulon["Num_regulon_modules"] = pao1_regulon["Genes_processed"].apply(
-    lambda list_genes: pao1_membership.loc[list_genes]["module id"].nunique()
-)
-pao1_regulon["Num_random_modules"] = pao1_regulon["Random_Genes"].apply(
-    lambda list_genes: pao1_membership.loc[list_genes]["module id"].nunique()
-)
-
-# For PA14 regulons
-pa14_regulon["Num_regulon_modules"] = pa14_regulon["Genes_processed"].apply(
-    lambda list_genes: pa14_membership.loc[list_genes]["module id"].nunique()
-)
-pa14_regulon["Num_random_modules"] = pa14_regulon["Random_Genes"].apply(
-    lambda list_genes: pa14_membership.loc[list_genes]["module id"].nunique()
-)
-
-print(pao1_operon.shape)
-pao1_operon.head()
-
-print(pa14_operon.shape)
-pa14_operon.head()
-
-print(pao1_regulon.shape)
-pao1_regulon.head()
+# If number genes in operon are 1 then remove
+# Drop operons and regulons that have 0 genes due to no module filtering
+pa14_regulon = pa14_regulon.drop(pa14_regulon.query("size<=1").index)
 
 print(pa14_regulon.shape)
 pa14_regulon.head()
 
 # +
-# Format df for plotting using displot
-pao1_operon_toplot = pd.melt(
-    pao1_operon, value_vars=["Num_operon_modules", "Num_random_modules"]
-)
-pao1_regulon_toplot = pd.melt(
-    pao1_regulon, value_vars=["Num_regulon_modules", "Num_random_modules"]
+# Quick look at distribution of size of regulons and operons
+fig, axes = plt.subplots(ncols=4, nrows=1, figsize=(12, 5))
+
+sns.distplot(
+    pao1_operon_len,
+    label="PAO1 operon size",
+    color="red",
+    kde=False,
+    ax=axes[0],
 )
 
-pao1_operon_toplot.tail()
-
-# +
-pa14_operon_toplot = pd.melt(
-    pa14_operon, value_vars=["Num_operon_modules", "Num_random_modules"]
-)
-pa14_regulon_toplot = pd.melt(
-    pa14_regulon, value_vars=["Num_regulon_modules", "Num_random_modules"]
+sns.distplot(
+    pa14_operon_len,
+    label="PA14 operon size",
+    color="red",
+    kde=False,
+    ax=axes[1],
 )
 
-pa14_operon_toplot.tail()
+sns.distplot(
+    pao1_regulon["size"],
+    label="PAO1 regulon size",
+    color="blue",
+    kde=False,
+    ax=axes[2],
+)
+
+sns.distplot(
+    pa14_regulon["size"],
+    label="PA14 regulon size",
+    color="blue",
+    kde=False,
+    ax=axes[3],
+)
+
+fig.suptitle(
+    "Histogram of size of operons/regulons after filtering by membership",
+    fontsize=12,
+)
+axes[0].set_title("PAO1 operon size")
+axes[1].set_title("PA14 operon size")
+axes[2].set_title("PAO1 regulon size")
+axes[3].set_title("PA14 regulon size")
+
+axes[2].set_xlabel("")
+axes[3].set_xlabel("")
+
+fig.text(0.5, 0.04, "Module size", ha="center")
+axes[0].set_ylabel("count")
 
 
 # -
 
-def cumulative_distribution(
-    data,
-    scaled=False,
-    survival=False,
-    label="Cumulative",
-    fill=False,
-    flip=False,
-    preserve_ends=0,
-    **kwargs,
-):
-    """
-    plots cumulative (or survival) step distribution
-    adapted from https://github.com/MarvinT/morphs/blob/master/morphs/plot/utils.py
-    """
-    data = np.sort(data)
-    if survival:
-        data = data[::-1]
-    y = np.arange(data.size + 1, dtype=float)
-    if scaled:
-        y /= y[-1]
-    x = np.concatenate([data, data[[-1]]])
-    plt.step(x, y, label=label, **kwargs)
-    if fill:
-        plt.fill_between(x, y, alpha=0.5, step="pre", **kwargs)
-
-
-# +
-cumulative_distribution(
-    pao1_operon["Num_operon_modules"],
-    label="Number of modules containing operon genes",
-    color="red",
-)
-cumulative_distribution(
-    pao1_operon["Num_random_modules"],
-    label="Number of modules containing random genes",
-    color="blue",
-)
-_ = plt.legend()
-plt.title("Cumulative distribution of PAO1 module counts (operon vs random genes)")
-plt.ylabel("Number of operons/random groups")
-plt.xlabel("The number of modules that operons/random genes are contained in")
-
-scipy.stats.ks_2samp(
-    pao1_operon["Num_operon_modules"], pao1_operon["Num_random_modules"]
-)
-# -
-
-fig = sns.displot(
-    pao1_operon_toplot,
-    x="value",
-    hue="variable",
-)
-plt.title("PMF distribution of module counts (operon vs random genes)")
-
-# +
-cumulative_distribution(
-    pa14_operon["Num_operon_modules"],
-    label="Number of modules containing operon genes",
-    color="red",
-)
-cumulative_distribution(
-    pa14_operon["Num_random_modules"],
-    label="Number of modules containing random genes",
-    color="blue",
-)
-_ = plt.legend()
-plt.title("Cumulative distribution of PA14 module counts (operon vs random genes)")
-plt.ylabel("Number of operons/random groups")
-plt.xlabel("The number of modules that operons/random genes are contained in")
-
-scipy.stats.ks_2samp(
-    pa14_operon["Num_operon_modules"], pa14_operon["Num_random_modules"]
-)
-
-# +
-cumulative_distribution(
-    pao1_regulon["Num_regulon_modules"],
-    label="Number of modules containing regulon genes",
-    color="red",
-)
-cumulative_distribution(
-    pao1_regulon["Num_random_modules"],
-    label="Number of modules containing random genes",
-    color="blue",
-)
-_ = plt.legend()
-plt.title("Cumulative distribution of PAO1 module counts (regulon vs random genes)")
-plt.ylabel("Number of regulons/random groups")
-plt.xlabel("The number of modules that regulons/random genes are contained in")
-
-scipy.stats.ks_2samp(
-    pao1_regulon["Num_regulon_modules"], pao1_regulon["Num_random_modules"]
-)
-# -
-
-fig = sns.displot(
-    pao1_regulon_toplot,
-    x="value",
-    hue="variable",
-)
-plt.title("PMF distribution of module counts (regulon vs random genes)")
-
-# +
-cumulative_distribution(
-    pa14_regulon["Num_regulon_modules"],
-    label="Number of modules containing regulon genes",
-    color="red",
-)
-cumulative_distribution(
-    pa14_regulon["Num_random_modules"],
-    label="Number of modules containing random genes",
-    color="blue",
-)
-_ = plt.legend()
-plt.title("Cumulative distribution of PA14 module counts (regulon vs random genes)")
-plt.ylabel("Number of regulons/random groups")
-plt.xlabel("The number of modules that regulons/random genes are contained in")
-
-scipy.stats.ks_2samp(
-    pa14_regulon["Num_regulon_modules"], pa14_regulon["Num_random_modules"]
-)
-# -
-
-# ### Check what size the modules are that regulon/operon/random genes are found in
-
-pao1_operon["operon_module_ids"] = pao1_operon["Genes_processed"].apply(
-    lambda list_genes: pao1_membership.loc[list_genes]["module id"].unique()
-)
-pao1_operon["random_module_ids"] = pao1_operon["Random_Genes"].apply(
-    lambda list_genes: pao1_membership.loc[list_genes]["module id"].unique()
-)
-pao1_operon.head()
-
-pao1_membership["module id"].value_counts()
-
-pao1_regulon["regulon_module_ids"] = pao1_regulon["Genes_processed"].apply(
-    lambda list_genes: pao1_membership.loc[list_genes]["module id"].unique()
-)
-pao1_regulon["random_module_ids"] = pao1_regulon["Random_Genes"].apply(
-    lambda list_genes: pao1_membership.loc[list_genes]["module id"].unique()
-)
-pao1_regulon.head()
-
-# _About cumulative distribution plots:_
-# * The axis cumulative distribution plots are:
-#     * y-axis = The number of operon/regulon (red) or random (blue) groups.
-#     * x-axis = The number of modules that operon/regulon/random genes are contained in
+# ### Calculate the probabilities
 #
-# * Looking at the regulon plot, the value at "1" on the x-axis says that there is 1 regulon found in exactly 1 module, and there are 0 random groups found in exactly 1 module
-#     * Then the increase at "2" on the x-axis is the number of regulons or random genes that are spread across 2 or 1 different modules (this is the cumulative part). In other words, a random set (size matched with the operon) where the genes in that set are found in 2 modules.
-#     * There are 3 regulons that are found in either 1 or 2 modules. There are 2 random groups that are found in either 1 or 2 modules.
-#     * Then if you compare the blue and the red curves, the vertical distance between the two curves tells you how much of a shift there is between the distributions.
-# * These distribution plots are summing counts as you move from left to right, so a shift in the curves corresponds to a shift in the distribution (i.e. a curve shifted to the right means that the distribution is shifted to the right)
+# What is the probability that gene x and y are in the same module given that they are both from the same regulon/operon?
 #
+# Given: regulon A and module B
+# $$
+# Pr(x,y \in B|x,y \in A) = \frac{Pr(x,y \in B \cap x,y \in A)}{Pr(x,y \in A)}
+# $$
+
+def coverage_of_genesets(module_df, genesets_df, geneset_type):
+
+    total_genes = module_df.shape[0]
+    rows = []
+
+    for module_id, module_genes_df in module_df.groupby("module id"):
+
+        # Pr(x,y in operon/regulon A)
+        if geneset_type == "operon":
+            # Dictionary of probabilities for a given module mapped to all operons
+            operon_probs = {}
+            for operon_id, operon_df in genesets_df.groupby("operon_name"):
+                num_geneset = operon_df.shape[0]
+                pr_denom = (num_geneset / total_genes) ** 2
+
+                # Pr(x,y in module B | x,y in operon A)
+                operon_df = operon_df.set_index("locus_tag")
+                shared_genes = set(operon_df.index).intersection(module_genes_df.index)
+
+                pr_joint = (len(shared_genes) / total_genes) ** 2
+                pr_final = pr_joint / pr_denom
+
+                operon_probs[operon_id] = pr_final
+
+            # Save only the best matched operon-module based on the p-value
+            (best_operon_id, best_prob) = max(operon_probs.items(), key=lambda k: k[1])
+
+            rows.append(
+                {
+                    "module id": module_id,
+                    "operon id": best_operon_id,
+                    "pr(x,y in module|x,y in operon)": best_prob,
+                }
+            )
+
+        else:
+            # Dictionary of probabilities for a given module mapped to all operons
+            regulon_probs = {}
+            for regulon_id in genesets_df.index:
+                num_geneset = genesets_df.loc[regulon_id, "size"]
+                pr_denom = (num_geneset / total_genes) ** 2
+
+                # Pr(x,y in module B | x,y in operon A)
+                shared_genes = set(
+                    genesets_df.loc[regulon_id, "Genes_processed"]
+                ).intersection(module_genes_df.index)
+                pr_joint = (len(shared_genes) / total_genes) ** 2
+                pr_final = (pr_joint) / pr_denom
+
+            regulon_probs[regulon_id] = pr_final
+
+            # Save only the best matched operon-module based on the p-value
+            (best_regulon_id, best_prob) = max(
+                regulon_probs.items(), key=lambda k: k[1]
+            )
+
+            rows.append(
+                {
+                    "module id": module_id,
+                    "regulon id": best_regulon_id,
+                    "pr(x,y in module|x,y in regulon)": best_prob,
+                }
+            )
+    out_df = pd.DataFrame(rows)
+    if geneset_type == "operon":
+        assert (out_df["pr(x,y in module|x,y in operon)"] > 1).sum() == 0
+    else:
+        assert (out_df["pr(x,y in module|x,y in regulon)"] > 1).sum() == 0
+    return out_df
+
+
+# %%time
+pao1_operon_prob = coverage_of_genesets(pao1_membership, pao1_operon, "operon")
+pao1_operon_prob.head()
+
+# %%time
+pa14_operon_prob = coverage_of_genesets(pa14_membership, pa14_operon, "operon")
+pa14_operon_prob.head()
+
+# %%time
+pao1_regulon_prob = coverage_of_genesets(pao1_membership, pao1_regulon, "regulon")
+pao1_regulon_prob.head()
+
+# %%time
+pa14_regulon_prob = coverage_of_genesets(pa14_membership, pa14_regulon, "regulon")
+pa14_regulon_prob.head()
+
+# +
+# As a baseline make a membership df mapping genes to a shuffled set of module ids
+pao1_membership_shuffle = pao1_membership.copy()
+pao1_membership_shuffle["module id"] = np.random.permutation(
+    pao1_membership_shuffle["module id"].values
+)
+
+pa14_membership_shuffle = pa14_membership.copy()
+pa14_membership_shuffle["module id"] = np.random.permutation(
+    pa14_membership_shuffle["module id"].values
+)
+# -
+
+# %%time
+pao1_operon_shuffle_prob = coverage_of_genesets(
+    pao1_membership_shuffle, pao1_operon, "operon"
+)
+pao1_operon_shuffle_prob.head()
+
+# %%time
+pa14_operon_shuffle_prob = coverage_of_genesets(
+    pa14_membership_shuffle, pao1_operon, "operon"
+)
+pa14_operon_shuffle_prob.head()
+
+# %%time
+pao1_regulon_shuffle_prob = coverage_of_genesets(
+    pao1_membership_shuffle, pao1_regulon, "regulon"
+)
+pao1_regulon_shuffle_prob.head()
+
+# %%time
+pa14_regulon_shuffle_prob = coverage_of_genesets(
+    pa14_membership_shuffle, pa14_regulon, "regulon"
+)
+pa14_regulon_shuffle_prob.head()
+
+# ## Plot distribution of probabilities
+#
+# Can we identify those operons, regulons that have high probability of being in the same module
+
+# +
+# Plot operon coverage
+# Note: We are only plotting the probabilities greater than 0 since there were many operons that had
+# a 0 probability, likely due to the small size of the operons
+# All probabilities for PA14 shuffled data is 0 which is why the plot is blank
+fig_operon, axes = plt.subplots(ncols=2, nrows=1, figsize=(10, 5))
+bins_shared = np.linspace(0, 1)
+
+fig_operon = sns.histplot(
+    pao1_operon_prob.loc[
+        pao1_operon_prob["pr(x,y in module|x,y in operon)"] > 0,
+        "pr(x,y in module|x,y in operon)",
+    ],
+    bins=bins_shared,
+    ax=axes[0],
+    label="true",
+)
+fig_operon = sns.histplot(
+    pa14_operon_prob.loc[
+        pa14_operon_prob["pr(x,y in module|x,y in operon)"] > 0,
+        "pr(x,y in module|x,y in operon)",
+    ],
+    bins=bins_shared,
+    ax=axes[1],
+    label="true",
+)
+fig_operon = sns.histplot(
+    pao1_operon_shuffle_prob.loc[
+        pao1_operon_shuffle_prob["pr(x,y in module|x,y in operon)"] > 0,
+        "pr(x,y in module|x,y in operon)",
+    ],
+    bins=bins_shared,
+    color="grey",
+    ax=axes[0],
+    label="shuffle",
+)
+fig_operon = sns.histplot(
+    pa14_operon_shuffle_prob.loc[
+        pa14_operon_shuffle_prob["pr(x,y in module|x,y in operon)"] > 0,
+        "pr(x,y in module|x,y in operon)",
+    ],
+    bins=bins_shared,
+    color="grey",
+    ax=axes[1],
+    label="shuffle",
+)
+
+axes[0].set_title("PAO1 operon coverage")
+axes[1].set_title("PA14 operon coverage")
+
+legend = axes[0].legend()
+legend = axes[1].legend()
+# -
+
+pao1_operon_prob[pao1_operon_prob["pr(x,y in module|x,y in operon)"] < 0.5]
+
+# What are these operons that have a low prbabilities
+# Why are some operons not likely to be within the same module?
+# Based on the describe statistics, there doesn't appear to be a clear reasoning
+# Overall, it is good that most operons have a high probability of being found in the same module
+low_pao1_prob_operons = pao1_operon_prob[
+    pao1_operon_prob["pr(x,y in module|x,y in operon)"] < 0.5
+]["operon id"]
+high_pao1_prob_operons = pao1_operon_prob[
+    pao1_operon_prob["pr(x,y in module|x,y in operon)"] >= 0.5
+]["operon id"]
+pao1_operon_tmp = pao1_operon.set_index("operon_name")
+
+pao1_operon_tmp.loc[low_pao1_prob_operons].describe()
+
+pao1_operon_tmp.loc[high_pao1_prob_operons].describe()
+
+low_pa14_prob_operons = pa14_operon_prob[
+    pa14_operon_prob["pr(x,y in module|x,y in operon)"] < 0.5
+]["operon id"]
+high_pa14_prob_operons = pa14_operon_prob[
+    pa14_operon_prob["pr(x,y in module|x,y in operon)"] >= 0.5
+]["operon id"]
+pa14_operon_tmp = pa14_operon.set_index("operon_name")
+
+pa14_operon_tmp.loc[low_pa14_prob_operons].sort_values(by="size")
+
+pa14_operon_tmp.loc[high_pa14_prob_operons].sort_values(by="size")
+
+pao1_operon_prob.describe()
+
+pao1_operon_shuffle_prob.describe()
+
+pa14_operon_prob.describe()
+
+pa14_operon_shuffle_prob.describe()
+
+# +
+# Plot regulon coverage
+fig_regulon, axes = plt.subplots(ncols=2, nrows=1, figsize=(10, 5))
+bins_shared = np.linspace(0, 1)
+
+fig_regulon = sns.histplot(
+    pao1_regulon_prob["pr(x,y in module|x,y in regulon)"],
+    bins=bins_shared,
+    ax=axes[0],
+    label="true",
+)
+fig_regulon = sns.histplot(
+    pa14_regulon_prob["pr(x,y in module|x,y in regulon)"],
+    bins=bins_shared,
+    ax=axes[1],
+)
+fig_regulon = sns.histplot(
+    pao1_regulon_shuffle_prob["pr(x,y in module|x,y in regulon)"],
+    bins=bins_shared,
+    color="grey",
+    ax=axes[0],
+    label="shuffle",
+)
+fig_regulon = sns.histplot(
+    pa14_regulon_shuffle_prob["pr(x,y in module|x,y in regulon)"],
+    bins=bins_shared,
+    color="grey",
+    ax=axes[1],
+)
+
+axes[0].set_title("PAO1 regulon coverage")
+axes[1].set_title("PA14 regulon coverage")
+
+legend = axes[0].legend()
+# -
+
+pao1_regulon_prob.describe()
+
+pao1_regulon_shuffle_prob.describe()
+
+pa14_regulon_prob.describe()
+
+pa14_regulon_shuffle_prob.describe()
+
 # **Takeaway:**
-# * We can perform [Kolmogorov-Smirnov test](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test) to compare the distribution of module counts for genes in regulons/operons versus random genes. The KS test will quantify the difference in the cumulative distribution curves.
+# There is a higher probability that given pair of genes that are from the same operon, that they are also from the same module, compared to a randomly shuffled set of module assignments. Although there are some operons with low probabilties, overall genes in most operons have a high probability of being found in the same module.
 #
-# * Based on the KS test, there is a significant difference (across thresholds) between the operon and random distribution, as we would expect.
-#     * There is only a significant difference between the regulon and random distributions. The lack of significance is likely due to the small sample size (i.e. 6 or 10 regulons have genes that are contained in modules with fewer than 1000 genes)
+# We don't see as drastic of a skewing for the regulons, though the mean using the true module labels is slightly higher compared to the shuffle module labels. Perhaps this is because regulons are not as tightly co-regulated.
