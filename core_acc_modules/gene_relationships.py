@@ -36,11 +36,10 @@ def get_relationship_in_genome_space(core_acc_df, offset_to_bin, operon_df=None)
 	core_acc_df_pad = np.pad(
 		core_acc_df["core/acc"], offset_max, "constant", constant_values="NA"
 		)
-
-	if operon_df is not None:
+    if operon_df is not None:
         operon_df_pad = np.pad(
             operon_df["operon_name"], offset_max, "constant", constant_values="NA"
-            )
+        )
 
 	assert core_acc_df.shape == operon_df.shape
 
