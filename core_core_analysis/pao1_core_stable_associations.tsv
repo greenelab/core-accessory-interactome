@@ -1,0 +1,683 @@
+gene id	pathways present	label
+PA4112	[]	most stable
+PA4414	['KEGG-Pathway-pae00471: D-Glutamine and D-glutamate metabolism', 'KEGG-Pathway-pae00550: Peptidoglycan biosynthesis']	most stable
+PA4481	[]	most stable
+PA3449	['KEGG-Pathway-pae00920: Sulfur metabolism', 'KEGG-Module-M00436: Sulfonate transport system']	most stable
+PA4563	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA5154	['KEGG-Module-M00236: Putative polar amino acid transport system']	most stable
+PA1808	['KEGG-Module-M00349: Microcin C transport system']	most stable
+PA4415	['KEGG-Pathway-pae00550: Peptidoglycan biosynthesis']	most stable
+PA2614	[]	most stable
+PA4942	[]	most stable
+PA4925	[]	most stable
+PA1716	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00332: Type III secretion system']	most stable
+PA0628	[]	most stable
+PA0392	[]	most stable
+PA4253	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA0588	[]	most stable
+PA5323	['KEGG-Pathway-pae01210: 2-Oxocarboxylic acid metabolism', 'KEGG-Pathway-pae00330: Arginine and proline metabolism', 'KEGG-Module-M00028: Ornithine biosynthesis, glutamate => ornithine']	most stable
+PA1768	[]	most stable
+PA4719	[]	most stable
+PA1717	['KEGG-Module-M00332: Type III secretion system']	most stable
+PA1589	['KEGG-Pathway-pae00660: C5-Branched dibasic acid metabolism', 'KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae00640: Propanoate metabolism', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00011: Citrate cycle, second carbon oxidation, 2-oxoglutarate => oxaloacetate']	most stable
+PA0626	[]	most stable
+PA0579	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA2585	['KEGG-Pathway-pae03420: Nucleotide excision repair']	most stable
+PA2988	[]	most stable
+PA1074	['KEGG-Module-M00237: Branched-chain amino acid transport system']	most stable
+PA0619	[]	most stable
+PA4292	[]	most stable
+PA4742	[]	most stable
+PA5554	['KEGG-Pathway-pae00190: Oxidative phosphorylation', 'KEGG-Module-M00157: F-type ATPase, prokaryotes and chloroplasts']	most stable
+PA0578	[]	most stable
+PA4256	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA4115	[]	most stable
+PA1715	[]	most stable
+PA5077	[]	most stable
+PA0586	[]	most stable
+PA4469	[]	most stable
+PA0008	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	most stable
+PA2815	['KEGG-Pathway-pae00071: Fatty acid degradation', 'KEGG-Pathway-pae01212: Fatty acid metabolism', 'KEGG-Module-M00087: beta-Oxidation']	most stable
+PA1695	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00332: Type III secretion system']	most stable
+PA0088	['KEGG-Module-M00334: Type VI secretion system']	most stable
+PA2025	['KEGG-Pathway-pae00480: Glutathione metabolism']	most stable
+PA4465	[]	most stable
+PA4317	[]	most stable
+PA3818	['KEGG-Pathway-pae00562: Inositol phosphate metabolism', 'KEGG-Pathway-pae00521: Streptomycin biosynthesis']	most stable
+PA1276	['KEGG-Pathway-pae00860: Porphyrin and chlorophyll metabolism', 'KEGG-Module-M00122: Cobalamin biosynthesis, cobinamide => cobalamin']	most stable
+PA3477	['KEGG-Module-M00644: Multidrug resistance, efflux pump MexHI-OprD']	most stable
+PA4352	[]	most stable
+PA5441	[]	most stable
+PA1794	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	most stable
+PA3495	['KEGG-Pathway-pae03410: Base excision repair']	most stable
+PA1707	[]	most stable
+PA5239	['KEGG-Pathway-pae03018: RNA degradation']	most stable
+PA5136	[]	most stable
+PA2176	[]	most stable
+PA1708	[]	most stable
+PA4277	[]	most stable
+PA5113	[]	most stable
+PA1073	['KEGG-Module-M00237: Branched-chain amino acid transport system']	most stable
+PA4302	[]	most stable
+PA3729	[]	most stable
+PA2970	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA4568	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA2034	[]	most stable
+PA0515	[]	most stable
+PA1694	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00332: Type III secretion system']	most stable
+PA2071	[]	most stable
+PA5544	[]	most stable
+PA5456	[]	most stable
+PA1072	['KEGG-Module-M00237: Branched-chain amino acid transport system']	most stable
+PA0836	['KEGG-Pathway-pae00620: Pyruvate metabolism', 'KEGG-Pathway-pae00430: Taurine and hypotaurine metabolism', 'KEGG-Pathway-pae00680: Methane metabolism', 'KEGG-Pathway-pae00640: Propanoate metabolism']	most stable
+PA3982	[]	most stable
+PA0625	[]	most stable
+PA0638	[]	most stable
+PA0835	['KEGG-Pathway-pae00620: Pyruvate metabolism', 'KEGG-Pathway-pae00430: Taurine and hypotaurine metabolism', 'KEGG-Pathway-pae00680: Methane metabolism', 'KEGG-Pathway-pae00640: Propanoate metabolism']	most stable
+PA2604	[]	most stable
+PA3987	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	most stable
+PA2616	['KEGG-Pathway-pae00450: Selenocompound metabolism', 'KEGG-Pathway-pae00240: Pyrimidine metabolism']	most stable
+PA2180	[]	most stable
+PA2162	['KEGG-Pathway-pae00500: Starch and sucrose metabolism']	most stable
+PA3440	[]	most stable
+PA2851	[]	most stable
+PA5118	['KEGG-Pathway-pae04122: Sulfur relay system', 'KEGG-Pathway-pae00730: Thiamine metabolism']	most stable
+PA3909	[]	most stable
+PA1730	[]	most stable
+PA0594	[]	most stable
+PA1720	[]	most stable
+PA4997	[]	most stable
+PA3743	[]	most stable
+PA1279	['KEGG-Pathway-pae00860: Porphyrin and chlorophyll metabolism', 'KEGG-Module-M00122: Cobalamin biosynthesis, cobinamide => cobalamin']	most stable
+PA0525	[]	most stable
+PA0165	[]	most stable
+PA3700	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	most stable
+PA0428	['KEGG-Pathway-pae03018: RNA degradation']	most stable
+PA2620	[]	most stable
+PA3980	[]	most stable
+PA4489	[]	most stable
+PA0280	['KEGG-Pathway-pae00920: Sulfur metabolism', 'KEGG-Module-M00185: Sulfate transport system', 'KEGG-Module-M00616: Sulfate-sulfur assimilation']	most stable
+PA1712	[]	most stable
+PA3650	['KEGG-Pathway-pae00900: Terpenoid backbone biosynthesis']	most stable
+PA4267	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA1596	[]	most stable
+PA2840	['KEGG-Pathway-pae03018: RNA degradation']	most stable
+PA4483	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis']	most stable
+PA4275	[]	most stable
+PA3643	['KEGG-Pathway-pae00540: Lipopolysaccharide biosynthesis']	most stable
+PA2361	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00334: Type VI secretion system']	most stable
+PA5078	[]	most stable
+PA3460	[]	most stable
+PA3981	[]	most stable
+PA4234	['KEGG-Pathway-pae03420: Nucleotide excision repair']	most stable
+PA4433	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA4740	['KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Pathway-pae03018: RNA degradation', 'KEGG-Pathway-pae00240: Pyrimidine metabolism']	most stable
+PA5556	['KEGG-Pathway-pae00190: Oxidative phosphorylation', 'KEGG-Module-M00157: F-type ATPase, prokaryotes and chloroplasts']	most stable
+PA4284	['KEGG-Pathway-pae03440: Homologous recombination']	most stable
+PA0548	['KEGG-Pathway-pae00030: Pentose phosphate pathway']	most stable
+PA4241	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA1301	[]	most stable
+PA4859	['KEGG-Module-M00323: Urea transport system']	most stable
+PA0077	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00334: Type VI secretion system']	most stable
+PA4266	[]	most stable
+PA4255	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA4922	[]	most stable
+PA3687	['KEGG-Pathway-pae00620: Pyruvate metabolism', 'KEGG-Pathway-pae00680: Methane metabolism']	most stable
+PA1584	['KEGG-Pathway-pae00190: Oxidative phosphorylation', 'KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae00650: Butanoate metabolism', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00011: Citrate cycle, second carbon oxidation, 2-oxoglutarate => oxaloacetate']	most stable
+PA4665	[]	most stable
+PA1585	['KEGG-Pathway-pae00380: Tryptophan metabolism', 'KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae00310: Lysine degradation', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00011: Citrate cycle, second carbon oxidation, 2-oxoglutarate => oxaloacetate']	most stable
+PA3445	['KEGG-Pathway-pae00920: Sulfur metabolism', 'KEGG-Module-M00436: Sulfonate transport system']	most stable
+PA1586	['KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae00310: Lysine degradation', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00011: Citrate cycle, second carbon oxidation, 2-oxoglutarate => oxaloacetate']	most stable
+PA4409	[]	most stable
+PA1719	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00332: Type III secretion system']	most stable
+PA5322	['KEGG-Pathway-pae00051: Fructose and mannose metabolism', 'KEGG-Pathway-pae00052: Galactose metabolism', 'KEGG-Pathway-pae00521: Streptomycin biosynthesis', 'KEGG-Pathway-pae00500: Starch and sucrose metabolism', 'KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Pathway-pae00030: Pentose phosphate pathway', 'KEGG-Pathway-pae00520: Amino sugar and nucleotide sugar metabolism', 'KEGG-Pathway-pae00010: Glycolysis / Gluconeogenesis']	most stable
+PA4268	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA3450	[]	most stable
+PA2365	['KEGG-Module-M00334: Type VI secretion system']	most stable
+PA3086	[]	most stable
+PA4934	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA4385	['KEGG-Pathway-pae03018: RNA degradation']	most stable
+PA3337	['KEGG-Pathway-pae00540: Lipopolysaccharide biosynthesis']	most stable
+PA0576	[]	most stable
+PA3309	[]	most stable
+PA0282	['KEGG-Pathway-pae00920: Sulfur metabolism', 'KEGG-Module-M00185: Sulfate transport system', 'KEGG-Module-M00616: Sulfate-sulfur assimilation']	most stable
+PA5065	['KEGG-Pathway-pae00130: Ubiquinone and other terpenoid-quinone biosynthesis']	most stable
+PA5224	[]	most stable
+PA1408	[]	most stable
+PA4246	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA1658	['KEGG-Module-M00334: Type VI secretion system']	most stable
+PA4966	[]	most stable
+PA4423	[]	most stable
+PA0059	[]	most stable
+PA0085	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00334: Type VI secretion system']	most stable
+PA4432	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA4411	['KEGG-Pathway-pae00471: D-Glutamine and D-glutamate metabolism', 'KEGG-Pathway-pae00550: Peptidoglycan biosynthesis']	most stable
+PA5559	['KEGG-Pathway-pae00190: Oxidative phosphorylation', 'KEGG-Module-M00157: F-type ATPase, prokaryotes and chloroplasts']	most stable
+PA0959	[]	most stable
+PA4560	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	most stable
+PA5458	[]	most stable
+PA4320	[]	most stable
+PA3656	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA0678	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00331: Type II general secretion pathway']	most stable
+PA1789	[]	most stable
+PA4858	['KEGG-Module-M00323: Urea transport system']	most stable
+PA0044	[]	most stable
+PA3692	[]	most stable
+PA5268	[]	most stable
+PA4252	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA0091	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00334: Type VI secretion system']	most stable
+PA0511	[]	most stable
+PA4720	[]	most stable
+PA3801	[]	most stable
+PA2165	['KEGG-Pathway-pae00500: Starch and sucrose metabolism']	most stable
+PA5025	['KEGG-Pathway-pae00270: Cysteine and methionine metabolism']	most stable
+PA5117	[]	most stable
+PA3891	[]	most stable
+PA3296	['KEGG-Pathway-pae00627: Aminobenzoate degradation', 'KEGG-Pathway-pae00790: Folate biosynthesis', 'KEGG-Module-M00126: Tetrahydrofolate biosynthesis, GTP => THF']	most stable
+PA2998	[]	most stable
+PA1011	[]	most stable
+PA2163	['KEGG-Pathway-pae00500: Starch and sucrose metabolism']	most stable
+PA1804	[]	most stable
+PA5493	['KEGG-Pathway-pae03440: Homologous recombination', 'KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Pathway-pae03410: Base excision repair', 'KEGG-Pathway-pae00240: Pyrimidine metabolism', 'KEGG-Pathway-pae03030: DNA replication', 'KEGG-Pathway-pae03420: Nucleotide excision repair']	most stable
+PA3019	[]	most stable
+PA2164	['KEGG-Pathway-pae00500: Starch and sucrose metabolism']	most stable
+PA0281	['KEGG-Pathway-pae00920: Sulfur metabolism', 'KEGG-Module-M00185: Sulfate transport system', 'KEGG-Module-M00616: Sulfate-sulfur assimilation']	most stable
+PA2612	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	most stable
+PA4244	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA3799	[]	most stable
+PA4265	[]	most stable
+PA3763	['KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Module-M00048: Inosine monophosphate biosynthesis, PRPP + glutamine => IMP']	most stable
+PA5555	['KEGG-Pathway-pae00190: Oxidative phosphorylation', 'KEGG-Module-M00157: F-type ATPase, prokaryotes and chloroplasts']	most stable
+PA3728	[]	most stable
+PA4274	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA5346	[]	most stable
+PA0097	[]	most stable
+PA5231	[]	most stable
+PA4239	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA3168	[]	most stable
+PA0357	['KEGG-Pathway-pae03410: Base excision repair']	most stable
+PA0381	['KEGG-Pathway-pae00730: Thiamine metabolism']	most stable
+PA1703	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00332: Type III secretion system']	most stable
+PA2621	[]	most stable
+PA0629	[]	most stable
+PA4319	[]	most stable
+PA0762	[]	most stable
+PA4701	[]	most stable
+PA5244	[]	most stable
+PA0004	[]	most stable
+PA0623	[]	most stable
+PA0618	[]	most stable
+PA1681	['KEGG-Pathway-pae00400: Phenylalanine, tyrosine and tryptophan biosynthesis']	most stable
+PA4578	[]	most stable
+PA5027	[]	most stable
+PA3179	[]	most stable
+PA4746	[]	most stable
+PA4748	['KEGG-Pathway-pae00562: Inositol phosphate metabolism', 'KEGG-Pathway-pae00051: Fructose and mannose metabolism', 'KEGG-Pathway-pae00010: Glycolysis / Gluconeogenesis', 'KEGG-Module-M00002: Glycolysis, core module involving three-carbon compounds']	most stable
+PA1807	['KEGG-Module-M00349: Microcin C transport system']	most stable
+PA2467	[]	most stable
+PA0300	['KEGG-Module-M00300: Putrescine transport system']	most stable
+PA4283	['KEGG-Pathway-pae03440: Homologous recombination']	most stable
+PA4251	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA5345	['KEGG-Pathway-pae03440: Homologous recombination']	most stable
+PA4273	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA4240	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA0509	[]	most stable
+PA4946	['KEGG-Pathway-pae03430: Mismatch repair']	most stable
+PA3936	['KEGG-Pathway-pae00920: Sulfur metabolism']	most stable
+PA1714	[]	most stable
+PA4965	[]	most stable
+PA5531	[]	most stable
+PA4967	[]	most stable
+PA1767	[]	most stable
+PA1721	[]	most stable
+PA3353	[]	most stable
+PA0083	['KEGG-Module-M00334: Type VI secretion system']	most stable
+PA2153	['KEGG-Pathway-pae00500: Starch and sucrose metabolism']	most stable
+PA3827	[]	most stable
+PA0074	['KEGG-Pathway-pae03070: Bacterial secretion system']	most stable
+PA0956	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	most stable
+PA4488	[]	most stable
+PA4056	['KEGG-Pathway-pae00740: Riboflavin metabolism', 'KEGG-Module-M00125: Riboflavin biosynthesis, GTP => riboflavin/FMN/FAD']	most stable
+PA3938	['KEGG-Pathway-pae00920: Sulfur metabolism']	most stable
+PA4852	[]	most stable
+PA4304	[]	most stable
+PA1696	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00332: Type III secretion system']	most stable
+PA3691	[]	most stable
+PA4723	[]	most stable
+PA5296	[]	most stable
+PA3937	['KEGG-Pathway-pae00920: Sulfur metabolism']	most stable
+PA5560	['KEGG-Pathway-pae00190: Oxidative phosphorylation', 'KEGG-Module-M00157: F-type ATPase, prokaryotes and chloroplasts']	most stable
+PA0624	[]	most stable
+PA2393	[]	most stable
+PA5004	[]	most stable
+PA0514	[]	most stable
+PA2392	[]	most stable
+PA5536	[]	most stable
+PA5022	[]	most stable
+PA4321	[]	most stable
+PA4756	['KEGG-Pathway-pae00240: Pyrimidine metabolism', 'KEGG-Pathway-pae00250: Alanine, aspartate and glutamate metabolism']	most stable
+PA4247	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA3922	[]	most stable
+PA1706	[]	most stable
+PA4744	[]	most stable
+PA5495	['KEGG-Pathway-pae00260: Glycine, serine and threonine metabolism', 'KEGG-Module-M00018: Threonine biosynthesis, aspartate => homoserine => threonine']	most stable
+PA0283	['KEGG-Pathway-pae00920: Sulfur metabolism', 'KEGG-Module-M00185: Sulfate transport system', 'KEGG-Module-M00616: Sulfate-sulfur assimilation']	most stable
+PA4851	[]	most stable
+PA3839	[]	most stable
+PA2394	[]	most stable
+PA4262	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA4608	[]	most stable
+PA4476	[]	most stable
+PA1992	[]	most stable
+PA5427	['KEGG-Pathway-pae00071: Fatty acid degradation', 'KEGG-Pathway-pae00350: Tyrosine metabolism', 'KEGG-Pathway-pae00625: Chloroalkane and chloroalkene degradation', 'KEGG-Pathway-pae01220: Degradation of aromatic compounds', 'KEGG-Pathway-pae00010: Glycolysis / Gluconeogenesis']	most stable
+PA5473	[]	most stable
+PA0543	[]	most stable
+PA4751	[]	most stable
+PA0932	['KEGG-Pathway-pae00270: Cysteine and methionine metabolism', 'KEGG-Pathway-pae00920: Sulfur metabolism', 'KEGG-Module-M00021: Cysteine biosynthesis, serine => cysteine']	most stable
+PA2194	['KEGG-Pathway-pae00460: Cyanoamino acid metabolism']	most stable
+PA0631	[]	most stable
+PA1443	['KEGG-Pathway-pae02040: Flagellar assembly', 'KEGG-Pathway-pae02030: Bacterial chemotaxis']	most stable
+PA0080	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00334: Type VI secretion system']	most stable
+PA0355	[]	most stable
+PA0055	[]	most stable
+PA0622	[]	most stable
+PA1673	[]	most stable
+PA4258	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA5178	[]	most stable
+PA4260	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA1709	[]	most stable
+PA0236	[]	most stable
+PA2613	[]	most stable
+PA1723	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00332: Type III secretion system']	most stable
+PA1791	[]	most stable
+PA3444	['KEGG-Pathway-pae00920: Sulfur metabolism']	most stable
+PA3834	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	most stable
+PA4545	[]	most stable
+PA4269	['KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Pathway-pae00240: Pyrimidine metabolism']	most stable
+PA3667	[]	most stable
+PA5226	[]	most stable
+PA5561	[]	most stable
+PA0518	['KEGG-Pathway-pae00920: Sulfur metabolism']	most stable
+PA2395	[]	most stable
+PA1582	['KEGG-Pathway-pae00190: Oxidative phosphorylation', 'KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae00650: Butanoate metabolism', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00011: Citrate cycle, second carbon oxidation, 2-oxoglutarate => oxaloacetate']	most stable
+PA4375	['KEGG-Pathway-pae00312: beta-Lactam resistance', 'KEGG-Module-M00647: Multidrug resistance, efflux pump MexAB-OprM/SmeDEF/AcrAB-TolC']	most stable
+PA0587	[]	most stable
+PA5257	[]	most stable
+PA4429	['KEGG-Pathway-pae00190: Oxidative phosphorylation']	most stable
+PA5261	[]	most stable
+PA1587	['KEGG-Pathway-pae00260: Glycine, serine and threonine metabolism', 'KEGG-Pathway-pae00280: Valine, leucine and isoleucine degradation', 'KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae00620: Pyruvate metabolism', 'KEGG-Pathway-pae00010: Glycolysis / Gluconeogenesis', 'KEGG-Module-M00307: Pyruvate oxidation, pyruvate => acetyl-CoA', 'KEGG-Module-M00036: Leucine degradation, leucine => acetoacetate + acetyl-CoA', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00011: Citrate cycle, second carbon oxidation, 2-oxoglutarate => oxaloacetate']	most stable
+PA0516	[]	most stable
+PA4002	[]	most stable
+PA3097	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00331: Type II general secretion pathway']	most stable
+PA2127	[]	most stable
+PA3417	['KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae00620: Pyruvate metabolism', 'KEGG-Pathway-pae00010: Glycolysis / Gluconeogenesis', 'KEGG-Module-M00307: Pyruvate oxidation, pyruvate => acetyl-CoA']	most stable
+PA4044	['KEGG-Pathway-pae00900: Terpenoid backbone biosynthesis', 'KEGG-Pathway-pae00730: Thiamine metabolism']	most stable
+PA5557	['KEGG-Pathway-pae00190: Oxidative phosphorylation', 'KEGG-Module-M00157: F-type ATPase, prokaryotes and chloroplasts']	most stable
+PA2793	[]	most stable
+PA3383	['KEGG-Module-M00223: Phosphonate transport system']	most stable
+PA5483	[]	most stable
+PA4749	['KEGG-Pathway-pae00520: Amino sugar and nucleotide sugar metabolism']	most stable
+PA0078	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00334: Type VI secretion system']	most stable
+PA0002	['KEGG-Pathway-pae03440: Homologous recombination', 'KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Pathway-pae00240: Pyrimidine metabolism', 'KEGG-Pathway-pae03030: DNA replication', 'KEGG-Pathway-pae03430: Mismatch repair', 'KEGG-Module-M00260: DNA polymerase III complex, bacteria']	most stable
+PA3492	[]	most stable
+PA1705	[]	most stable
+PA4261	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA4491	[]	most stable
+PA5487	[]	most stable
+PA2581	[]	most stable
+PA4566	[]	most stable
+PA4249	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA3491	[]	most stable
+PA2195	['KEGG-Pathway-pae00460: Cyanoamino acid metabolism']	most stable
+PA2167	[]	most stable
+PA4487	[]	most stable
+PA4430	['KEGG-Pathway-pae00190: Oxidative phosphorylation']	most stable
+PA3821	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Pathway-pae03060: Protein export', 'KEGG-Module-M00335: Sec (secretion) system']	most stable
+PA4856	[]	most stable
+PA1124	['KEGG-Pathway-pae00230: Purine metabolism']	most stable
+PA0617	[]	most stable
+PA5070	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Pathway-pae03060: Protein export']	most stable
+PA5475	[]	most stable
+PA4474	[]	most stable
+PA2177	[]	most stable
+PA4750	['KEGG-Pathway-pae00790: Folate biosynthesis', 'KEGG-Module-M00126: Tetrahydrofolate biosynthesis, GTP => THF']	most stable
+PA4686	[]	most stable
+PA4745	[]	most stable
+PA0616	[]	most stable
+PA2684	[]	most stable
+PA4484	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis']	most stable
+PA3527	['KEGG-Pathway-pae00240: Pyrimidine metabolism']	most stable
+PA4450	['KEGG-Pathway-pae00520: Amino sugar and nucleotide sugar metabolism', 'KEGG-Pathway-pae00550: Peptidoglycan biosynthesis']	most stable
+PA2741	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA4248	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA3311	[]	most stable
+PA0075	['KEGG-Pathway-pae03070: Bacterial secretion system']	most stable
+PA0945	['KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Module-M00048: Inosine monophosphate biosynthesis, PRPP + glutamine => IMP']	most stable
+PA1699	[]	most stable
+PA0284	[]	most stable
+PA0084	['KEGG-Module-M00334: Type VI secretion system']	most stable
+PA0462	[]	most stable
+PA2366	['KEGG-Module-M00334: Type VI secretion system']	most stable
+PA0471	[]	most stable
+PA0429	[]	most stable
+PA5343	[]	most stable
+PA5212	[]	most stable
+PA4416	['KEGG-Pathway-pae00550: Peptidoglycan biosynthesis', 'KEGG-Pathway-pae00300: Lysine biosynthesis']	most stable
+PA4245	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA0903	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	most stable
+PA5114	[]	most stable
+PA1324	[]	most stable
+PA5008	[]	most stable
+PA0079	['KEGG-Module-M00334: Type VI secretion system']	most stable
+PA3737	[]	most stable
+PA4348	[]	most stable
+PA3083	['KEGG-Pathway-pae00480: Glutathione metabolism']	most stable
+PA4318	[]	most stable
+PA3975	['KEGG-Pathway-pae00730: Thiamine metabolism']	most stable
+PA5317	[]	most stable
+PA1069	[]	most stable
+PA2753	[]	most stable
+PA2023	['KEGG-Pathway-pae00040: Pentose and glucuronate interconversions', 'KEGG-Pathway-pae00052: Galactose metabolism', 'KEGG-Pathway-pae00500: Starch and sucrose metabolism', 'KEGG-Pathway-pae00520: Amino sugar and nucleotide sugar metabolism']	most stable
+PA4559	['KEGG-Pathway-pae03060: Protein export']	most stable
+PA0595	[]	most stable
+PA2152	['KEGG-Pathway-pae00500: Starch and sucrose metabolism']	most stable
+PA0086	[]	most stable
+PA1483	[]	most stable
+PA4243	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Pathway-pae03060: Protein export', 'KEGG-Module-M00335: Sec (secretion) system']	most stable
+PA2072	[]	most stable
+PA2032	[]	most stable
+PA0076	[]	most stable
+PA2624	['KEGG-Pathway-pae00480: Glutathione metabolism', 'KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae01210: 2-Oxocarboxylic acid metabolism', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00010: Citrate cycle, first carbon oxidation, oxaloacetate => 2-oxoglutarate']	most stable
+PA3167	['KEGG-Pathway-pae00260: Glycine, serine and threonine metabolism', 'KEGG-Pathway-pae00750: Vitamin B6 metabolism', 'KEGG-Pathway-pae00680: Methane metabolism', 'KEGG-Module-M00124: Pyridoxal biosynthesis, erythrose-4P => pyridoxal-5P']	most stable
+PA3648	[]	most stable
+PA1810	['KEGG-Module-M00349: Microcin C transport system']	most stable
+PA3764	[]	most stable
+PA2169	[]	most stable
+PA1429	[]	most stable
+PA4257	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA4542	[]	most stable
+PA0770	[]	most stable
+PA3382	['KEGG-Module-M00223: Phosphonate transport system']	most stable
+PA4305	[]	most stable
+PA0764	[]	most stable
+PA1465	[]	most stable
+PA2425	[]	most stable
+PA4328	[]	most stable
+PA1802	[]	most stable
+PA5047	[]	most stable
+PA2986	[]	most stable
+PA4259	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA4204	[]	most stable
+PA4237	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA0087	['KEGG-Module-M00334: Type VI secretion system']	most stable
+PA4667	[]	most stable
+PA0090	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00334: Type VI secretion system']	most stable
+PA0093	[]	most stable
+PA3647	[]	most stable
+PA0955	[]	most stable
+PA4937	['KEGG-Pathway-pae03018: RNA degradation']	most stable
+PA3820	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Pathway-pae03060: Protein export', 'KEGG-Module-M00335: Sec (secretion) system']	most stable
+PA1697	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00332: Type III secretion system']	most stable
+PA1722	['KEGG-Module-M00332: Type III secretion system']	most stable
+PA0337	['KEGG-Pathway-pae02060: Phosphotransferase system (PTS)']	most stable
+PA4003	['KEGG-Pathway-pae00312: beta-Lactam resistance', 'KEGG-Pathway-pae00550: Peptidoglycan biosynthesis']	most stable
+PA0070	[]	most stable
+PA4263	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA2151	['KEGG-Pathway-pae00500: Starch and sucrose metabolism']	most stable
+PA2687	[]	most stable
+PA3484	[]	most stable
+PA1770	['KEGG-Pathway-pae00620: Pyruvate metabolism', 'KEGG-Pathway-pae00680: Methane metabolism']	most stable
+PA5568	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Pathway-pae03060: Protein export', 'KEGG-Module-M00335: Sec (secretion) system']	most stable
+PA4361	[]	most stable
+PA1277	['KEGG-Pathway-pae00860: Porphyrin and chlorophyll metabolism', 'KEGG-Module-M00122: Cobalamin biosynthesis, cobinamide => cobalamin']	most stable
+PA3043	['KEGG-Pathway-pae00230: Purine metabolism']	most stable
+PA0009	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	most stable
+PA5063	['KEGG-Pathway-pae00130: Ubiquinone and other terpenoid-quinone biosynthesis']	most stable
+PA1847	[]	most stable
+PA3744	[]	most stable
+PA3742	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA3107	['KEGG-Pathway-pae00270: Cysteine and methionine metabolism', 'KEGG-Pathway-pae00920: Sulfur metabolism']	most stable
+PA4854	['KEGG-Pathway-pae00670: One carbon pool by folate', 'KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Module-M00048: Inosine monophosphate biosynthesis, PRPP + glutamine => IMP']	most stable
+PA0072	['KEGG-Module-M00258: Putative ABC transport system']	most stable
+PA1787	['KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae01210: 2-Oxocarboxylic acid metabolism', 'KEGG-Pathway-pae00630: Glyoxylate and dicarboxylate metabolism', 'KEGG-Pathway-pae00640: Propanoate metabolism', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00010: Citrate cycle, first carbon oxidation, oxaloacetate => 2-oxoglutarate']	most stable
+PA2424	[]	most stable
+PA3446	['KEGG-Pathway-pae00920: Sulfur metabolism', 'KEGG-Pathway-pae00740: Riboflavin metabolism']	most stable
+PA3162	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA1562	['KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae01210: 2-Oxocarboxylic acid metabolism', 'KEGG-Pathway-pae00630: Glyoxylate and dicarboxylate metabolism', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00010: Citrate cycle, first carbon oxidation, oxaloacetate => 2-oxoglutarate']	most stable
+PA4272	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA3836	[]	most stable
+PA1588	['KEGG-Pathway-pae00660: C5-Branched dibasic acid metabolism', 'KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae00640: Propanoate metabolism', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00011: Citrate cycle, second carbon oxidation, 2-oxoglutarate => oxaloacetate']	most stable
+PA2572	[]	most stable
+PA0519	['KEGG-Pathway-pae00910: Nitrogen metabolism', 'KEGG-Module-M00529: Denitrification, nitrate => nitrogen']	most stable
+PA3828	[]	most stable
+PA1838	['KEGG-Pathway-pae00920: Sulfur metabolism', 'KEGG-Module-M00616: Sulfate-sulfur assimilation', 'KEGG-Module-M00176: Assimilatory sulfate reduction, sulfate => H2S']	most stable
+PA5484	[]	most stable
+PA2996	[]	most stable
+PA4276	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Pathway-pae03060: Protein export', 'KEGG-Module-M00335: Sec (secretion) system']	most stable
+PA2710	[]	most stable
+PA3999	['KEGG-Pathway-pae00550: Peptidoglycan biosynthesis']	most stable
+PA3800	[]	most stable
+PA3803	['KEGG-Pathway-pae00900: Terpenoid backbone biosynthesis']	most stable
+PA0089	['KEGG-Module-M00334: Type VI secretion system']	most stable
+PA3297	[]	most stable
+PA1698	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00332: Type III secretion system']	most stable
+PA4670	['KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Pathway-pae00030: Pentose phosphate pathway']	most stable
+PA2402	[]	most stable
+PA3746	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Pathway-pae03060: Protein export', 'KEGG-Module-M00335: Sec (secretion) system']	most stable
+PA4238	['KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Pathway-pae00240: Pyrimidine metabolism']	most stable
+PA4421	[]	most stable
+PA1583	['KEGG-Pathway-pae00190: Oxidative phosphorylation', 'KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae00650: Butanoate metabolism', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00011: Citrate cycle, second carbon oxidation, 2-oxoglutarate => oxaloacetate']	most stable
+PA2573	['KEGG-Pathway-pae02030: Bacterial chemotaxis']	most stable
+PA0524	['KEGG-Pathway-pae00910: Nitrogen metabolism', 'KEGG-Module-M00529: Denitrification, nitrate => nitrogen']	most stable
+PA4935	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	most stable
+PA3028	[]	most stable
+PA5170	[]	most stable
+PA2629	['KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Pathway-pae00250: Alanine, aspartate and glutamate metabolism', 'KEGG-Module-M00048: Inosine monophosphate biosynthesis, PRPP + glutamine => IMP', 'KEGG-Module-M00049: Adenine ribonucleotide biosynthesis, IMP => ADP,ATP']	most stable
+PA3613	[]	most stable
+PA3655	[]	most stable
+PA0620	[]	most stable
+PA0073	['KEGG-Module-M00258: Putative ABC transport system']	most stable
+PA4735	[]	most stable
+PA2171	[]	most stable
+PA0850	[]	least stable
+PA2283	[]	least stable
+PA0346	[]	least stable
+PA1633	[]	least stable
+PA1195	[]	least stable
+PA3223	[]	least stable
+PA4092	['KEGG-Pathway-pae00350: Tyrosine metabolism', 'KEGG-Pathway-pae01220: Degradation of aromatic compounds']	least stable
+PA0728	[]	least stable
+PA2490	[]	least stable
+PA4779	[]	least stable
+PA3994	[]	least stable
+PA0321	[]	least stable
+PA1334	[]	least stable
+PA2933	[]	least stable
+PA4033	[]	least stable
+PA5083	[]	least stable
+PA0673	[]	least stable
+PA4110	['KEGG-Pathway-pae00312: beta-Lactam resistance']	least stable
+PA2497	[]	least stable
+PA2099	[]	least stable
+PA2064	[]	least stable
+PA0480	['KEGG-Pathway-pae00362: Benzoate degradation', 'KEGG-Pathway-pae01220: Degradation of aromatic compounds', 'KEGG-Module-M00568: Catechol ortho-cleavage, catechol => 3-oxoadipate']	least stable
+PA1244	[]	least stable
+PA0348	[]	least stable
+PA1210	[]	least stable
+PA0605	['KEGG-Module-M00193: Putative spermidine/putrescine transport system']	least stable
+PA2520	[]	least stable
+PA1637	[]	least stable
+PA1434	[]	least stable
+PA2065	[]	least stable
+PA2019	['KEGG-Pathway-pae00312: beta-Lactam resistance']	least stable
+PA2478	[]	least stable
+PA3325	[]	least stable
+PA2693	[]	least stable
+PA0721	[]	least stable
+PA0709	[]	least stable
+PA1850	[]	least stable
+PA2913	['KEGG-Module-M00240: Iron complex transport system']	least stable
+PA0987	[]	least stable
+PA2018	['KEGG-Pathway-pae00312: beta-Lactam resistance']	least stable
+PA0878	['KEGG-Pathway-pae00660: C5-Branched dibasic acid metabolism']	least stable
+PA3281	[]	least stable
+PA3867	[]	least stable
+PA1419	[]	least stable
+PA1026	[]	least stable
+PA2558	[]	least stable
+PA1379	[]	least stable
+PA3282	[]	least stable
+PA5530	[]	least stable
+PA3316	['KEGG-Module-M00223: Phosphonate transport system']	least stable
+PA0561	[]	least stable
+PA1972	[]	least stable
+PA0740	[]	least stable
+PA0478	[]	least stable
+PA0574	[]	least stable
+PA4715	[]	least stable
+PA1028	[]	least stable
+PA0820	[]	least stable
+PA1962	[]	least stable
+PA4580	[]	least stable
+PA1380	[]	least stable
+PA1492	[]	least stable
+PA3577	[]	least stable
+PA0864	[]	least stable
+PA3574	['KEGG-Pathway-pae00312: beta-Lactam resistance']	least stable
+PA1015	[]	least stable
+PA2505	[]	least stable
+PA2521	[]	least stable
+PA2839	[]	least stable
+PA2723	[]	least stable
+PA0978	[]	least stable
+PA4799	[]	least stable
+PA0320	[]	least stable
+PA1240	[]	least stable
+PA4685	[]	least stable
+PA0367	[]	least stable
+PA4111	[]	least stable
+PA3991	[]	least stable
+PA1027	['KEGG-Pathway-pae00071: Fatty acid degradation', 'KEGG-Pathway-pae00903: Limonene and pinene degradation', 'KEGG-Pathway-pae00380: Tryptophan metabolism', 'KEGG-Pathway-pae00040: Pentose and glucuronate interconversions', 'KEGG-Pathway-pae00561: Glycerolipid metabolism', 'KEGG-Pathway-pae00280: Valine, leucine and isoleucine degradation', 'KEGG-Pathway-pae00330: Arginine and proline metabolism', 'KEGG-Pathway-pae00620: Pyruvate metabolism', 'KEGG-Pathway-pae00625: Chloroalkane and chloroalkene degradation', 'KEGG-Pathway-pae00340: Histidine metabolism', 'KEGG-Pathway-pae00310: Lysine degradation', 'KEGG-Pathway-pae00410: beta-Alanine metabolism', 'KEGG-Pathway-pae00010: Glycolysis / Gluconeogenesis']	least stable
+PA0159	[]	least stable
+PA0708	[]	least stable
+PA0446	[]	least stable
+PA0154	['KEGG-Pathway-pae00362: Benzoate degradation', 'KEGG-Pathway-pae01220: Degradation of aromatic compounds']	least stable
+PA1153	[]	least stable
+PA0565	[]	least stable
+PA2496	[]	least stable
+PA2470	['KEGG-Pathway-pae00350: Tyrosine metabolism']	least stable
+PA3897	[]	least stable
+PA5082	['KEGG-Module-M00230: Glutamate/aspartate transport system']	least stable
+PA4951	[]	least stable
+PA1255	[]	least stable
+PA1985	[]	least stable
+PA3077	[]	least stable
+PA3681	[]	least stable
+PA3146	[]	least stable
+PA0259	[]	least stable
+PA0364	[]	least stable
+PA3431	[]	least stable
+PA2297	[]	least stable
+PA1144	[]	least stable
+PA1201	[]	least stable
+PA4586	[]	least stable
+PA0982	[]	least stable
+PA2356	['KEGG-Pathway-pae00920: Sulfur metabolism']	least stable
+PA3318	[]	least stable
+PA3240	[]	least stable
+PA5266	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00334: Type VI secretion system']	least stable
+PA0825	[]	least stable
+PA4073	['KEGG-Pathway-pae00360: Phenylalanine metabolism', 'KEGG-Pathway-pae00643: Styrene degradation']	least stable
+PA0465	[]	least stable
+PA2457	[]	least stable
+PA0711	[]	least stable
+PA4100	[]	least stable
+PA2522	[]	least stable
+PA1653	[]	least stable
+PA1466	['KEGG-Pathway-pae00480: Glutathione metabolism']	least stable
+PA2764	[]	least stable
+PA1634	[]	least stable
+PA4531	[]	least stable
+PA1499	['KEGG-Pathway-pae00260: Glycine, serine and threonine metabolism', 'KEGG-Pathway-pae00630: Glyoxylate and dicarboxylate metabolism']	least stable
+PA4973	['KEGG-Pathway-pae00730: Thiamine metabolism']	least stable
+PA3432	[]	least stable
+PA3835	[]	least stable
+PA2317	['KEGG-Pathway-pae00330: Arginine and proline metabolism']	least stable
+PA2722	[]	least stable
+PA2226	[]	least stable
+PA4196	[]	least stable
+PA1435	[]	least stable
+PA4507	[]	least stable
+PA2222	[]	least stable
+PA2458	[]	least stable
+PA1470	['KEGG-Pathway-pae00780: Biotin metabolism', 'KEGG-Pathway-pae01040: Biosynthesis of unsaturated fatty acids', 'KEGG-Pathway-pae01212: Fatty acid metabolism', 'KEGG-Pathway-pae00061: Fatty acid biosynthesis', 'KEGG-Module-M00083: Fatty acid biosynthesis, elongation', 'KEGG-Module-M00572: Pimeloyl-ACP biosynthesis, BioC-BioH pathway, malonyl-ACP => pimeloyl-ACP']	least stable
+PA0251	[]	least stable
+PA4508	[]	least stable
+PA2382	['KEGG-Pathway-pae00620: Pyruvate metabolism']	least stable
+PA2783	[]	least stable
+PA0806	[]	least stable
+PA3868	[]	least stable
+PA4518	[]	least stable
+PA2940	['KEGG-Pathway-pae00071: Fatty acid degradation', 'KEGG-Pathway-pae00362: Benzoate degradation', 'KEGG-Pathway-pae00280: Valine, leucine and isoleucine degradation', 'KEGG-Pathway-pae00281: Geraniol degradation', 'KEGG-Pathway-pae01212: Fatty acid metabolism', 'KEGG-Module-M00087: beta-Oxidation']	least stable
+PA2037	[]	least stable
+PA2593	[]	least stable
+PA2118	[]	least stable
+PA2299	[]	least stable
+PA2455	[]	least stable
+PA0603	['KEGG-Module-M00193: Putative spermidine/putrescine transport system']	least stable
+PA0495	[]	least stable
+PA1298	[]	least stable
+PA0710	['KEGG-Pathway-pae00620: Pyruvate metabolism']	least stable
+PA4200	[]	least stable
+PA3507	[]	least stable
+PA1939	[]	least stable
+PA3964	[]	least stable
+PA0885	[]	least stable
+PA4138	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	least stable
+PA3593	[]	least stable
+PA2808	[]	least stable
+PA3759	[]	least stable
+PA2680	[]	least stable
+PA3283	[]	least stable
+PA1498	['KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Pathway-pae00620: Pyruvate metabolism', 'KEGG-Pathway-pae00010: Glycolysis / Gluconeogenesis', 'KEGG-Module-M00049: Adenine ribonucleotide biosynthesis, IMP => ADP,ATP', 'KEGG-Module-M00050: Guanine ribonucleotide biosynthesis IMP => GDP,GTP', 'KEGG-Module-M00002: Glycolysis, core module involving three-carbon compounds']	least stable
+PA1537	[]	least stable
+PA1183	[]	least stable
+PA5084	['KEGG-Pathway-pae00360: Phenylalanine metabolism']	least stable
+PA1631	['KEGG-Pathway-pae00930: Caprolactam degradation']	least stable
+PA3145	[]	least stable
+PA5383	[]	least stable
+PA3206	[]	least stable
+PA1635	[]	least stable
+PA5269	[]	least stable
+PA2934	[]	least stable
+PA2479	[]	least stable
+PA0048	[]	least stable
+PA0669	[]	least stable
+PA0719	[]	least stable
+PA0986	[]	least stable
+PA4990	[]	least stable
+PA1436	[]	least stable
+PA1607	[]	least stable
+PA2772	[]	least stable
+PA1254	['KEGG-Pathway-pae00300: Lysine biosynthesis', 'KEGG-Module-M00016: Lysine biosynthesis, succinyl-DAP pathway, aspartate => lysine']	least stable
+PA0670	[]	least stable
+PA0182	['KEGG-Pathway-pae00780: Biotin metabolism', 'KEGG-Pathway-pae01040: Biosynthesis of unsaturated fatty acids', 'KEGG-Pathway-pae01212: Fatty acid metabolism', 'KEGG-Pathway-pae00061: Fatty acid biosynthesis', 'KEGG-Module-M00083: Fatty acid biosynthesis, elongation', 'KEGG-Module-M00572: Pimeloyl-ACP biosynthesis, BioC-BioH pathway, malonyl-ACP => pimeloyl-ACP']	least stable
+PA1928	[]	least stable
+PA4597	[]	least stable
+PA3412	[]	least stable
+PA2917	[]	least stable
+PA2929	[]	least stable
+PA0130	['KEGG-Pathway-pae00562: Inositol phosphate metabolism', 'KEGG-Pathway-pae00280: Valine, leucine and isoleucine degradation', 'KEGG-Pathway-pae00640: Propanoate metabolism', 'KEGG-Pathway-pae00410: beta-Alanine metabolism']	least stable
+PA2794	[]	least stable
+PA0882	['KEGG-Pathway-pae00660: C5-Branched dibasic acid metabolism']	least stable
+PA1933	['KEGG-Pathway-pae00230: Purine metabolism']	least stable
+PA0918	[]	least stable
+PA4096	[]	least stable
+PA2211	[]	least stable
+PA1864	[]	least stable
+PA4598	[]	least stable
+PA2807	[]	least stable
+PA3561	['KEGG-Pathway-pae00051: Fructose and mannose metabolism']	least stable
+PA3866	[]	least stable
+PA2235	[]	least stable
+PA1367	[]	least stable
