@@ -149,9 +149,9 @@ common_DEGs_label.to_csv("common_DEGs_gene_group_labeled.tsv", sep="\t")
 
 # ## Enrichment test
 #
-# The [Fisher's exact test](https://en.wikipedia.org/wiki/Fisher%27s_exact_test) to determine whether there is a significant association between two categorical variables in a contingency table (i.e two classifications of the data). Here we will use the Fisher’s exact test to determine if there is an association between the two classifications: common vs uncommon and core vs accessory. In other words, we want to determine if there is a statistically significant association between gene group and if a gene is common DEG. To do this we compare the ratio of core vs accessory genes that are common DEGs are significantly different to the ratio of core vs accessory that are not common DEGs.
+# The [Fisher's exact test](https://en.wikipedia.org/wiki/Fisher%27s_exact_test) determines whether there is a significant association between two categorical variables in a contingency table (i.e two classifications of the data). Here we used use the Fisher’s exact test to determine if there is an association between the two classifications: common vs uncommon and core vs accessory. In other words, we want to determine if there is a statistically significant association between gene group and if a gene is common DEG. To do this we compare the ratio of core vs accessory genes that are common DEGs are significantly different to the ratio of core vs accessory that are not common DEGs.
 #
-# Since the numbers are large, we will use the $\chi^2$ test as an alternative to the Fisher's exact test.
+# Since the numbers are large, we also applied the $\chi^2$ test as an alternative to the Fisher's exact test.
 
 # +
 # Make contingency table
@@ -206,11 +206,6 @@ f.figure.savefig(
 )
 
 # +
-# H0: The probability that the gene is core is the same
-# whether or not you're in the module or outside
-# H1: The probability that a gene is core is higher or lower inside the module
-# than outside the module
-
 # The two-sided p-value is the probability that, under the null hypothesis,
 # a random table would have a probability equal to or less than the probability of the input table.
 # The probability that we would observe this or an even more imbalanced ratio by chance is about ~61%
@@ -234,6 +229,6 @@ expected_counts
 
 # **Takeaway:**
 #
-# * Looks like most common DEGs are core, as expected. It is thought that these core genes encode essential functions shared by all strains and so it would make sense that these core genes are also those commonly DEGs.
-# * Based on the Fisher's exact test, there is an odds ratio >1 indicating that there is a positive relationship between common DEGs and a gene being core. However the p-value is not significant. The $\chi^2$ test also finds that there is not a significant association between common DEGs and gene group.
-# * This [paper](https://www.d.umn.edu/~tpederse/Pubs/scsug96.pdf) talks about the p-values obtained from the Fisher's exact tests are reliable compared to asymptotic test results when dealing with skewed/unbalanced datasets. Furthermore, [this blog](https://courses.lumenlearning.com/boundless-statistics/chapter/the-chi-squared-test/) suggests that while a $\chi^2$ test is recommended for large datasets, like what we have, in the case where the dataset is skewed/unbalanced the p-values for the Fisher's exact test are more reliable.
+# * Based on the venn diagrams, it looks like most common DEGs are core, as expected. Since it is thought that these core genes encode essential functions shared by all strains, it would make sense that these core genes are also those commonly DEGs.
+# * Based on the Fisher's exact test, there is an odds ratio >1 indicating that there is a positive relationship between a gene being common DEGs and a gene being core vs accessory. However the p-value is not significant. The $\chi^2$ test also finds that there is not a significant association between common DEGs and gene group.
+#     * This [paper](https://www.d.umn.edu/~tpederse/Pubs/scsug96.pdf) talks about the p-values obtained from the Fisher's exact tests are reliable compared to asymptotic test results when dealing with skewed/unbalanced datasets. Furthermore, [this blog](https://courses.lumenlearning.com/boundless-statistics/chapter/the-chi-squared-test/) suggests that while a $\chi^2$ test is recommended for large datasets, like what we have, in the case where the dataset is skewed/unbalanced the p-values for the Fisher's exact test are more reliable.
