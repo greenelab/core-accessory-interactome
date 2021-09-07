@@ -176,6 +176,8 @@ pa14_gene_annot = pa14_gene_annot.merge(
     pa14_module_dist, left_index=True, right_index=True, how="left"
 )
 
+pao1_gene_annot.head()
+
 # ## Add KEGG pathway enrichment analysis
 #
 # For each pathway, find significant association of pathways in accessory-accessory modules. This information is only available for PAO1.
@@ -202,6 +204,7 @@ def KEGG_enrichment(acc_membership_df, kegg_df):
     all_genes = set(acc_membership_df.index)
 
     rows = []
+    best_rows = []
     # For each accessory-accessory module
     for module_name, module_df_group in acc_membership_df.groupby("module id"):
         num_module_genes = module_df_group.shape[0]
@@ -229,7 +232,6 @@ def KEGG_enrichment(acc_membership_df, kegg_df):
                     [len(module_not_kegg_genes), len(not_module_not_kegg_genes)],
                 ]
             )
-            # print(observed_contingency_table)
 
             # Fisher's exact test
             oddsr, pval = scipy.stats.fisher_exact(
@@ -270,19 +272,64 @@ def KEGG_enrichment(acc_membership_df, kegg_df):
     enrichment_df["corrected p-value"] = pvals_corrected_
 
     # Select best module mapping
-    best_enrichment_df = enrichment_df.groupby("module id").min()
+    for grp, grp_df in enrichment_df.groupby("module id"):
+        # Find if any pathways is significant
+        any_significant = (grp_df["corrected p-value"] < 0.05).any()
+        if any_significant:
+            best_kegg = grp_df[grp_df["corrected p-value"] < 0.05][
+                "enriched KEGG pathway"
+            ]
+            best_pval = grp_df[grp_df["corrected p-value"] < 0.05]["p-value"].values[0]
+            best_shared = grp_df[grp_df["corrected p-value"] < 0.05][
+                "num shared genes"
+            ].values[0]
+            best_module_size = grp_df[grp_df["corrected p-value"] < 0.05][
+                "size module"
+            ].values[0]
+            best_kegg_size = grp_df[grp_df["corrected p-value"] < 0.05][
+                "size KEGG pathway"
+            ].values[0]
+            best_corrected_pval = grp_df[grp_df["corrected p-value"] < 0.05][
+                "corrected p-value"
+            ].values[0]
+            best_rows.append(
+                {
+                    "module id": grp,
+                    "enriched KEGG pathway": best_kegg,
+                    "p-value": best_pval,
+                    "num shared genes": best_shared,
+                    "size module": best_module_size,
+                    "size KEGG pathway": best_kegg_size,
+                    "corrected p-value": best_corrected_pval,
+                }
+            )
+        else:
+            best_rows.append(
+                {
+                    "module id": grp,
+                    "enriched KEGG pathway": "NA",
+                    "p-value": "NA",
+                    "num shared genes": "NA",
+                    "size module": "NA",
+                    "size KEGG pathway": "NA",
+                    "corrected p-value": "NA",
+                }
+            )
+    best_enrichment_df = pd.DataFrame(best_rows).set_index("module id")
 
     return best_enrichment_df
 
 
 pao1_enrichment_df = KEGG_enrichment(pao1_membership, pao1_pathways)
 
-pao1_enrichment_df.head()
+pao1_enrichment_df.head(20)
 
 # Add pathway enrichment information
 pao1_gene_annot = pao1_gene_annot.merge(
     pao1_enrichment_df, left_on="module id", right_index=True, how="left"
 )
+
+pao1_gene_annot.head()
 
 # ## Import and format operon
 
