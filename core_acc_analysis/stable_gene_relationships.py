@@ -14,8 +14,9 @@
 #     name: conda-env-core_acc-py
 # ---
 
-# # Relationships using genome distance vs expression distance
+# # Relationships using expression distance
 #
+# ### TO DO: Update text here
 # In our attempt to label modules as "mostly core", "mostly accessory" or "mixed". We found that most modules were "mixed" and some were "mostly accessory". We noticed that there were many modules that had only core genes, yet were not found to be signficanlty "mostly core" based on our Fisher's exact test due to the small size of the modules as well as the large imbalance in the number of core:accessory genes.
 #
 # These small modules, which are due to operons, is biologically sensible but hard for us to apply statistics. We want to try to tease apart the co-expression relationships that are due to locations (i.e. being in the same operon) versus other functional reasons.
@@ -52,10 +53,10 @@ sum_increment_to_use = 2
 
 # Output filename
 pao1_figure_filename = (
-    "PAO1_genome_expression_relationships_2window_operon_corrected.svg"
+    "PAO1_stablility_expression_relationships_2window_operon_corrected.svg"
 )
 pa14_figure_filename = (
-    "PA14_genome_expression_relationships_2window_operon_corrected.svg"
+    "PA14_stability_expression_relationships_2window_operon_corrected.svg"
 )
 # -
 
@@ -402,21 +403,5 @@ fig2.figure.savefig(
 
 # **Takeaway:**
 #
-# In genome space:
-# * The closest non co-operonic neighbor to an accessory gene is a core gene for PAO1, but is an accessory gene for PA14
-# * Including co-operonic genes, accessory genes are clustered together on the genome (i.e. clustered with other accessory genes compared to core genes), which is known: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3008168/
-# * Starting with a core gene, at any distance you find core genes including and not including co-operonic genes.
-# * The x-axis indicates (left panel of plots) is the number of nearest neighbors (NN), determined based on the gene id that is sorted.
-#
-# In expression space:
-# * Accessory genes are more likely to be highly co-expressed with other accessory genes, even accessory genes farther away (some coordination outside of location). This relationship is stronger in PA14 than PAO1 (i.e. accessory genes are more highly correlated with other accessory genes at farther distances in PA14). I wonder why this is.
-# * Core genes are highly correlated with other core genes, again, this may be due to the fact that there are so many more core genes.
-# * The x-axis(right panels of plots) is the number of correlated genes (i.e. 1=top most correlated gene, 2 =2nd most correlated gene)
-#
-# Note:
-# * The distance calculation in genome space is bi-directional (i.e. it considers genes that are 1-NN to the left and right) so each starting gene has a count of 1-2. Whereas in expression space, we are only looking for the most correlated gene, so each starting gene has a count of 1. This explains why the range for the expression space plots are roughly half of the genome distance plots. To correct for this, there is an option to sum the counts across the 2 most highly correlated genes. The trends are consistent using an increment of 1 vs 2.
-# * There is a drop off in the `10+` column for genome distance. This is because as we consider farther away genes, we lose the ability to consider in both directions and there are fewer genes at that far a distance. Should we adjust for this in our calculation?
-#
-# Some things to note about this analysis that may need to be updated:
-# * There are some operons that have multiple annotations, which one should we choose? Should we drop these from the analysis? Should we curate these to determine which ones?
-# * When we sorted the gene ids, we found that PAO1 incremented by 1 and PA14 incremented by 10 or 20, are we missing genes for PA14? How much will this change our genome dist analysis?
+# Update text:
+# * Unstable core genes are more likely related to accessory genes compare to stable core genes, who are related to only core genes.
