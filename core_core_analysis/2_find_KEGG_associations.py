@@ -87,7 +87,7 @@ def get_associated_pathways(genes_):
         ]
         found_pathways = list(pao1_pathways[pathway_bool].index)
         rows.append({"gene id": gene_id, "pathways present": found_pathways})
-    return pd.DataFrame(rows)
+    return pd.DataFrame(rows).set_index("gene id")
 
 
 most_stable_associations = get_associated_pathways(most_stable_genes)
@@ -96,14 +96,9 @@ most_stable_associations.head()
 least_stable_associations = get_associated_pathways(least_stable_genes)
 least_stable_associations.head()
 
-# Add label for most and least stable core genes
-most_stable_associations["label"] = "most stable"
-least_stable_associations["label"] = "least stable"
-
 # +
 # Concatenate dataframes
 pao1_all_associations = pd.concat([most_stable_associations, least_stable_associations])
-pao1_all_associations.set_index("gene id", inplace=True)
 pao1_all_associations.head()
 
 # TO DO: Rename index col
@@ -116,6 +111,24 @@ pa14_all_associations = pao1_all_associations.merge(
 pa14_all_associations.set_index("PA14_ID", inplace=True)
 pa14_all_associations.head()
 
+# Merge KEGG associations with transcriptional similarity information
+pao1_all_associations = pao1_all_associations.merge(
+    pao1_similarity_scores, left_index=True, right_index=True, how="left"
+)
+pa14_all_associations = pa14_all_associations.merge(
+    pa14_similarity_scores, left_index=True, right_index=True, how="left"
+)
+
+pao1_all_associations.head()
+
 # Save
 pao1_all_associations.to_csv(pao1_core_stable_similarity_filename, sep="\t")
 pa14_all_associations.to_csv(pa14_core_stable_similarity_filename, sep="\t")
+
+# **Takeaway:**
+#
+# Based on the pathways associated with the most and least stable core genes, we find that the most stable core genes tend to be associated with pathways related to cellular maintenance including: protein transport systems, ribosomes, metabolism, type III, IV secretion system which mediates virulence.
+#
+# There are far fewer KEGG pathways that least stable core genes are found to be associated with. The least stable core genes are mostly associated with different types of metabolism.
+#
+# A google doc containing the most and least stable core genes and some information about them is [here](https://docs.google.com/spreadsheets/d/1SqEyBvutfbsOTo4afg9GiEzP32ZKplkN1a6MpAQBvZI/edit?usp=sharing).
