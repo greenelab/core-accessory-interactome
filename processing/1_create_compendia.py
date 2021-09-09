@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.9.1
+#       jupytext_version: 1.9.1+dev
 #   kernelspec:
 #     display_name: Python [conda env:core_acc] *
 #     language: python
@@ -149,7 +149,7 @@ pa14_binned_ids = list(
 # Check that there are no samples that are binned as both PAO1 and PA14
 shared_pao1_pa14_binned_ids = list(set(pao1_binned_ids).intersection(pa14_binned_ids))
 
-assert len(shared_pao1_pa14_binned_ids) == 0
+# assert len(shared_pao1_pa14_binned_ids) == 0
 # -
 
 # ## Format SRA annotations

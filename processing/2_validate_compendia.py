@@ -179,24 +179,34 @@ pao1_pa14_acc_pa14_compendium_label[
 
 # +
 # Plot accessory gene expression in PAO1 compendium
+# Note: commented out code is for plotting figure for Georgia's manuscript
+colors = {
+    "Clinical Isolate": "#89A45E",
+    "PA14": "#895881",
+    "PAK": "#EF8B46",
+    "PAO1": "#C6A9B5",
+    "NA": "#D8DAEB",
+}
 fig1 = pn.ggplot(
     pao1_pa14_acc_pao1_compendium_label,
     pn.aes(x="median acc expression_pao1", y="median acc expression_pa14"),
 )
+# fig1 += pn.scale_color_manual(values=colors)
 fig1 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.2)
 fig1 += pn.labs(
     x="median expression of PAO1-only genes",
     y="median expression of PA14-only genes",
     title="MR normalized accessory gene expression in PAO1 compendium",
+    # title="Accessory gene expression in PAO1 compendium",
 )
 fig1 += pn.theme_bw()
 fig1 += pn.theme(
     legend_title_align="center",
     plot_background=pn.element_rect(fill="white"),
     legend_key=pn.element_rect(fill="white", colour="white"),
-    legend_title=pn.element_text(family="sans-serif", size=15),
-    legend_text=pn.element_text(family="sans-serif", size=12),
-    plot_title=pn.element_text(family="sans-serif", size=15),
+    legend_title=pn.element_text(family="sans-serif", size=12),
+    legend_text=pn.element_text(family="sans-serif", size=10),
+    plot_title=pn.element_text(family="sans-serif", size=14),
     axis_text=pn.element_text(family="sans-serif", size=10),
     axis_title=pn.element_text(family="sans-serif", size=12),
 )
@@ -212,20 +222,22 @@ fig2 = pn.ggplot(
     pao1_pa14_acc_pa14_compendium_label,
     pn.aes(x="median acc expression_pao1", y="median acc expression_pa14"),
 )
+# fig2 += pn.scale_color_manual(values=colors)
 fig2 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.4)
 fig2 += pn.labs(
     x="median expression of PAO1-only genes",
     y="median expression of PA14-only genes",
     title="MR normalized accessory gene expression in PA14 compendium",
+    # title="Accessory gene expression in PA14 compendium",
 )
 fig2 += pn.theme_bw()
 fig2 += pn.theme(
     legend_title_align="center",
     plot_background=pn.element_rect(fill="white"),
     legend_key=pn.element_rect(fill="white", colour="white"),
-    legend_title=pn.element_text(family="sans-serif", size=15),
-    legend_text=pn.element_text(family="sans-serif", size=12),
-    plot_title=pn.element_text(family="sans-serif", size=15),
+    legend_title=pn.element_text(family="sans-serif", size=12),
+    legend_text=pn.element_text(family="sans-serif", size=10),
+    plot_title=pn.element_text(family="sans-serif", size=14),
     axis_text=pn.element_text(family="sans-serif", size=10),
     axis_title=pn.element_text(family="sans-serif", size=12),
 )
@@ -266,8 +278,12 @@ pao1_binned_non_pao1_sra = pao1_pa14_acc_pao1_compendium_label.loc[
 ]
 
 # +
-f = sns.distplot(pao1_binned_pao1_sra, color="grey", kde=False)
-f = sns.distplot(pao1_binned_non_pao1_sra, color="blue", kde=False)
+f = sns.distplot(
+    pao1_binned_pao1_sra, color="#C6A9B5", kde=False, hist_kws={"alpha": 0.7}
+)
+f = sns.distplot(
+    pao1_binned_non_pao1_sra, color="grey", kde=False, hist_kws={"alpha": 0.7}
+)
 if threshold == 0:
     plt.axvline(25, 0, 100, color="red")
 
@@ -286,8 +302,12 @@ pa14_binned_non_pa14_sra = pao1_pa14_acc_pa14_compendium_label.loc[
 ]
 
 # +
-g = sns.distplot(pa14_binned_pa14_sra, color="grey", kde=False)
-g = sns.distplot(pa14_binned_non_pa14_sra, color="blue", kde=False)
+g = sns.distplot(
+    pa14_binned_pa14_sra, color="#895881", kde=False, hist_kws={"alpha": 0.7}
+)
+g = sns.distplot(
+    pa14_binned_non_pa14_sra, color="grey", kde=False, hist_kws={"alpha": 0.7}
+)
 if threshold == 0:
     plt.axvline(25, 0, 100, color="red")
 
