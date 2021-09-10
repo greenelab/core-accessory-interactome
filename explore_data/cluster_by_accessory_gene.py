@@ -511,15 +511,29 @@ print(fig2)
 
 # +
 # Plot
+# Note: commented out code is for plotting figure for Georgia's manuscript
+colors = {
+    "Clinical Isolate": "#89A45E",
+    "PA14": "#895881",
+    "PAK": "#EF8B46",
+    "PAO1": "#C6A9B5",
+    "NA": "#D8DAEB",
+}
+
 fig3 = pn.ggplot(
     pao1_pa14_acc_expression_label,
     pn.aes(x="median acc expression_pao1", y="median acc expression_pa14"),
 )
-fig3 += pn.geom_point(pn.aes(color="Strain type_pao1"), alpha=0.4)
+fig3 += pn.geom_point(
+    pn.aes(color="Strain type_pao1"),
+    alpha=0.3,
+)
+# fig3 += pn.scale_color_manual(values=colors)
 fig3 += pn.labs(
     x="median expression of PAO1-only genes",
     y="median expression of PA14-only genes",
     title="MR normalized estimated counts of accessory genes",
+    # title="Estimated counts of accessory genes",
     width=10,
 )
 fig3 += pn.theme_bw()
@@ -527,17 +541,20 @@ fig3 += pn.theme(
     legend_title_align="center",
     plot_background=pn.element_rect(fill="white"),
     legend_key=pn.element_rect(fill="white", colour="white"),
-    legend_title=pn.element_text(family="sans-serif", size=15),
-    legend_text=pn.element_text(family="sans-serif", size=12),
-    plot_title=pn.element_text(family="sans-serif", size=15),
+    legend_title=pn.element_text(family="sans-serif", size=12),
+    legend_text=pn.element_text(family="sans-serif", size=10),
+    plot_title=pn.element_text(family="sans-serif", size=14),
     axis_text=pn.element_text(family="sans-serif", size=10),
     axis_title=pn.element_text(family="sans-serif", size=12),
 )
-fig3 += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
+fig3 += pn.guides(
+    colour=pn.guide_legend(title="Strain type", override_aes={"alpha": 1})
+)
 
 print(fig3)
 
 fig3.save("Expression_accessory_genes_all_samples.svg", format="svg", dpi=300)
+# fig3.save("Expression_accessory_genes_all_samples_Georgia.svg", format="svg", dpi=300)
 
 # +
 # Plot log-scaled
