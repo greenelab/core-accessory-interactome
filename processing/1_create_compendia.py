@@ -235,6 +235,10 @@ pa14_expression_prebin = pd.read_csv(
 )
 # -
 
+# he two expression prebins are because the same samples were mapped to 2 different references (PAO1 and a PA14 reference.
+# This assertion is to make sure that the number of samples is the same in both, which it is.
+# This assertion is also testing that when we added information about our accessory gene expression
+# and labels we retained the same number of samples, which we did.
 assert (
     pao1_expression_prebin.shape[0]
     == pa14_expression_prebin.shape[0]
