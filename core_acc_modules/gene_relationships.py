@@ -202,6 +202,8 @@ def get_relationship_in_expression_space(
 
         offset_max = corr_subset.shape[1]
 
+        # Note: we are removing genes that are co-operonic first
+        # and then finding the most co-expressed genes
         top_corr_genes = list(corr_subset.loc[gene].nlargest(offset_max).index[1:])
         top_gene_labels = list(gene_mapping_df.loc[top_corr_genes, "core/acc"].values)
         rows.append(top_gene_labels)

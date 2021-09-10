@@ -16,16 +16,9 @@
 
 # # Relationships using expression distance
 #
-# ### TO DO: Update text here
-# In our attempt to label modules as "mostly core", "mostly accessory" or "mixed". We found that most modules were "mixed" and some were "mostly accessory". We noticed that there were many modules that had only core genes, yet were not found to be signficanlty "mostly core" based on our Fisher's exact test due to the small size of the modules as well as the large imbalance in the number of core:accessory genes.
+# This notebook is performing the same analysis as seen in [all_gene_relationships.ipynb](all_gene_relationships.ipynb), where we are examining who is related to who. Previously we started with an accessory gene and asked: is the highest correlated gene another accessory gene or a core gene? For this analysis, we are starting with the most stable core genes and asking the same question: is the highest correlated gene core or accessory?
 #
-# These small modules, which are due to operons, is biologically sensible but hard for us to apply statistics. We want to try to tease apart the co-expression relationships that are due to locations (i.e. being in the same operon) versus other functional reasons.
-#
-# Our strategy is the following:
-# * For each accessory gene, is the 1-NN/2-NN/3-NN core or accessory? Same for core genes
-# * For each accessory gene, is the highest correlated/2nd-highest correlated/3rd highest correlated gene core or accessory? Same for core genes.
-#
-# Then we can compare the trends seen in both
+# Note: We do not have the genome location metric here because this would require a significant effort to figure out how to modify the existing code to only focus on a subset of genes.
 
 # +
 # %load_ext autoreload
@@ -49,15 +42,11 @@ method = "affinity"
 offset_to_bin = 10
 
 use_operon = True
-sum_increment_to_use = 2
+sum_increment_to_use = 1
 
 # Output filename
-pao1_figure_filename = (
-    "PAO1_stablility_expression_relationships_2window_operon_corrected.svg"
-)
-pa14_figure_filename = (
-    "PA14_stability_expression_relationships_2window_operon_corrected.svg"
-)
+pao1_figure_filename = "PAO1_stablility_expression_relationships_operon_corrected.svg"
+pa14_figure_filename = "PA14_stability_expression_relationships_operon_corrected.svg"
 # -
 
 # ### Import gene ids
@@ -377,13 +366,13 @@ fig2.set_ylabel("Number of genes")
 fig2.set_xlabel("Rank correlation in expression space")
 
 plt.legend(bbox_to_anchor=(1.05, 1.15), loc=2, borderaxespad=0.0)
-# -
 
+# +
 # Save figures using operons*
 # Save figures not using operons*
 # Save figure with rolling sum and operons
 # Save figure with rolling sum not using operons
-"""fig.figure.savefig(
+fig.figure.savefig(
     pao1_figure_filename,
     format="svg",
     bbox_inches="tight",
@@ -399,9 +388,10 @@ fig2.figure.savefig(
     transparent=True,
     pad_inches=0,
     dpi=300,
-)"""
+)
+# -
 
 # **Takeaway:**
 #
-# Update text:
-# * Unstable core genes are more likely related to accessory genes compare to stable core genes, who are related to only core genes.
+# * Least stable core genes have more accessory gene neighbors compared to most stable core genes
+# * Maybe these least stable genes are late core genes (i.e. acquired recently)? Maybe these least stable core genes transcriptional behavior is modified by the accessory genes.

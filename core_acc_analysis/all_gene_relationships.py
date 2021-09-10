@@ -247,6 +247,8 @@ expression_dist_counts_pao1_acc = (
         sum_increment_to_use,
     )
 )
+
+# %%time
 expression_dist_counts_pao1_core = (
     gene_relationships.get_relationship_in_expression_space(
         pao1_corr,
@@ -269,6 +271,8 @@ expression_dist_counts_pa14_acc = (
         sum_increment_to_use,
     )
 )
+
+# %%time
 expression_dist_counts_pa14_core = (
     gene_relationships.get_relationship_in_expression_space(
         pa14_corr,
@@ -411,13 +415,13 @@ fig2.set_ylabel("Number of genes")
 fig2.set_xlabel("Rank correlation in expression space")
 
 plt.legend(bbox_to_anchor=(1.05, 1.15), loc=2, borderaxespad=0.0)
-# -
 
+# +
 # Save figures using operons*
 # Save figures not using operons*
 # Save figure with rolling sum and operons
 # Save figure with rolling sum not using operons
-"""fig.figure.savefig(
+fig.figure.savefig(
     pao1_figure_filename,
     format="svg",
     bbox_inches="tight",
@@ -433,7 +437,8 @@ fig2.figure.savefig(
     transparent=True,
     pad_inches=0,
     dpi=300,
-)"""
+)
+# -
 
 # **Takeaway:**
 #
