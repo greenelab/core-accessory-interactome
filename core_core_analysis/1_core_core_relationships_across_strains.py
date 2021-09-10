@@ -39,16 +39,20 @@ import matplotlib.pyplot as plt
 from core_acc_modules import utils, paths
 
 random.seed(1)
+# -
+
+# Params
+high_threshold = 0.5
+low_threshold = 0.2
 
 # +
 # Output filenames
 pao1_similarity_dist_filename = "pao1_similarity_scores_dist.svg"
 pa14_similarity_dist_filename = "pa14_similarity_scores_dist.svg"
 
-pao1_high_corr_filename = "pao1_high_corr_core_genes.tsv"
-pao1_low_corr_filename = "pao1_low_corr_core_genes.tsv"
-pa14_high_corr_filename = "pa14_high_corr_core_genes.tsv"
-pa14_low_corr_filename = "pa14_low_corr_core_genes.tsv"
+# Files containing genes with highest and lowest transcriptional similarity scores high and low
+pao1_similarity_scores_filename = "pao1_similarity_scores.tsv"
+pa14_similarity_scores_filename = "pa14_similarity_scores.tsv"
 
 # +
 # Import correlation matrix
@@ -238,24 +242,62 @@ pa14_corr_df.head()
 
 # ## Plots
 
+# +
+# Add label for most and least stable genes
+pao1_corr_df["label"] = ""
+pa14_corr_df["label"] = ""
+pao1_corr_df.loc[
+    pao1_corr_df["Transcriptional similarity across strains"] > high_threshold, "label"
+] = "most stable"
+pao1_corr_df.loc[
+    pao1_corr_df["Transcriptional similarity across strains"] < low_threshold, "label"
+] = "least stable"
+
+pa14_corr_df.loc[
+    pa14_corr_df["Transcriptional similarity across strains"] > high_threshold, "label"
+] = "most stable"
+pa14_corr_df.loc[
+    pa14_corr_df["Transcriptional similarity across strains"] < low_threshold, "label"
+] = "least stable"
+
+# +
 # Plot distribution of correlation scores
 # This scores indicate how transcriptionally similar genes are across PAO1 and PA14 strains
-fig_pao1 = sns.displot(pao1_corr_df["Transcriptional similarity across strains"])
-plt.title("Similarity of core-core modules PAO1 to PA14")
+fig_pao1 = sns.displot(
+    data=pao1_corr_df,
+    x="Transcriptional similarity across strains",
+    hue="label",
+    bins=np.linspace(0, 0.7, 36),
+)
+# TO DO
+# Select certain colors
+# Remove empty legend
 
-fig_pa14 = sns.displot(pa14_corr_df["Transcriptional similarity across strains"])
+plt.title("Similarity of core-core modules PAO1 to PA14")
+# -
+
+fig_pa14 = sns.displot(
+    data=pa14_corr_df,
+    x="Transcriptional similarity across strains",
+    hue="label",
+    bins=np.linspace(0, 0.7, 36),
+)
 plt.title("Similarity of core-core modules PA14 to PAO1")
 
 # Select genes that are on the high and low end to examine, map gene names
 high_pao1 = pao1_corr_df[
-    pao1_corr_df["Transcriptional similarity across strains"] > 0.5
+    pao1_corr_df["Transcriptional similarity across strains"] > high_threshold
 ]
-low_pao1 = pao1_corr_df[pao1_corr_df["Transcriptional similarity across strains"] < 0.2]
+low_pao1 = pao1_corr_df[
+    pao1_corr_df["Transcriptional similarity across strains"] < low_threshold
+]
 
 high_pa14 = pa14_corr_df[
-    pa14_corr_df["Transcriptional similarity across strains"] > 0.5
+    pa14_corr_df["Transcriptional similarity across strains"] > high_threshold
 ]
-low_pa14 = pa14_corr_df[pa14_corr_df["Transcriptional similarity across strains"] < 0.2]
+low_pa14 = pa14_corr_df[
+    pa14_corr_df["Transcriptional similarity across strains"] < low_threshold
+]
 
 high_pao1.head()
 
@@ -305,12 +347,11 @@ fig_pa14.savefig(
     pad_inches=0,
     dpi=300,
 )
-
-high_pao1.to_csv(pao1_high_corr_filename, sep="\t")
-low_pao1.to_csv(pao1_low_corr_filename, sep="\t")
-high_pa14.to_csv(pa14_high_corr_filename, sep="\t")
-low_pa14.to_csv(pa14_low_corr_filename, sep="\t")
 # -
+
+# Save transcriptional similarity df
+pao1_corr_df.to_csv(pao1_similarity_scores_filename, sep="\t")
+pa14_corr_df.to_csv(pa14_similarity_scores_filename, sep="\t")
 
 # **Takeaways:**
 # The distribution plots are the distribution of correlation scores, which represent how correlated a core gene was with its homolog. As an example, say we have core gene PA0001, we can get its correlation profile (i.e. the row of the correlation matrix) that tells us which core genes PA0001 is highly and lowly correlated with. Then we can map PA0001 to its homolog in PA14 and get its correlation profile. Finally we can take the correlation of those correlation profile to determine how consistent PA0001's relationships are across strains. Genes with a high correlation score (right tail of the distribution) represent genes that are stable and are core genes that are related to the same set of core genes in PAO1 and PA14. While genes with a low correlation score (left tail of the distribution) represent genes that are unstable and are core genes that are not related to the same set of core genes in PAO1 and PA14.

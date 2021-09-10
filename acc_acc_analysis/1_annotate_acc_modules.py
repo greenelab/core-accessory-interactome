@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ---
 # jupyter:
 #   jupytext:
@@ -32,7 +33,8 @@
 # %matplotlib inline
 import os
 import random
-import scipy
+import scipy.stats
+import statsmodels.stats.multitest
 import pandas as pd
 import numpy as np
 from core_acc_modules import paths, utils, modules
@@ -174,9 +176,15 @@ pa14_gene_annot = pa14_gene_annot.merge(
     pa14_module_dist, left_index=True, right_index=True, how="left"
 )
 
-# ## Add KEGG pathways
+pao1_gene_annot.head()
+
+# ## Add KEGG pathway enrichment analysis
 #
-# For each pathway, what genes are contained in it. This information is only available for PAO1.
+# For each pathway, find significant association of pathways in accessory-accessory modules. This information is only available for PAO1.
+#
+# The [Fisher's exact test](https://en.wikipedia.org/wiki/Fisher%27s_exact_test) determines whether there is a significant association between two categorical variables in a contingency table (i.e two classifications of the data). Here we used use the Fisher’s exact test to determine if there is an association between the two classifications: in kegg pathway or not and in accessory-accessory module or not. In other words, we want to determine if there is a statistically significant association between genes found in a given accessory-accessory moudle and the genes involved in a given KEGG pathway. To do this we compare the ratio of genes found in the kegg pathway that are in the accessory-accessory module to the ratio of kegg pathway genes that are not found in the accessory-accessory module.
+#
+# Since the numbers are large, we also applied the $\chi^2$ test as an alternative to the Fisher's exact test.
 
 # +
 pao1_pathway_filename = "https://raw.githubusercontent.com/greenelab/adage/7a4eda39d360b224268921dc1f2c14b32788ab16/Node_interpretation/pseudomonas_KEGG_terms.txt"
@@ -188,22 +196,140 @@ pao1_pathways[2] = pao1_pathways[2].str.split(";").apply(set)
 pao1_pathways.index = pao1_pathways.index.str.split(" - ").str[0]
 pao1_pathways.head()
 
-gene_to_pathways_df = pd.DataFrame(
-    index=pao1_gene_module_labels.index, columns=list(pao1_pathways.index)
-)
+pao1_gene_annot.head()
 
-# %%time
-for gene in gene_to_pathways_df.index:
-    gene_to_pathways_df.loc[gene] = [
-        gene in pao1_pathways.loc[pathway, 2] for pathway in pao1_pathways.index
-    ]
 
-gene_to_pathways_df.head()
+# Given an accessory-accessory module, look for the array module with the most overlap/significant p-value
+def KEGG_enrichment(acc_membership_df, kegg_df):
+    all_genes = set(acc_membership_df.index)
 
-# Add gene name to pathway information
+    rows = []
+    best_rows = []
+    # For each accessory-accessory module
+    for module_name, module_df_group in acc_membership_df.groupby("module id"):
+        num_module_genes = module_df_group.shape[0]
+        module_genes = set(module_df_group.index)
+        not_module_genes = all_genes.difference(module_genes)
+
+        # Find the KEGG pathway with the best overlap
+        for kegg_name in kegg_df.index:
+            num_kegg_genes = kegg_df.loc[kegg_name, 1]
+            kegg_genes = set(kegg_df.loc[kegg_name, 2])
+            not_kegg_genes = all_genes.difference(kegg_genes)
+
+            # Make contingency table
+            # -----------------|accessory module |not accessory module
+            # kegg pathway     | # genes         | # genes
+            # not kegg pathway | # genes         | # genes
+            module_kegg_genes = module_genes.intersection(kegg_genes)
+            not_module_kegg_genes = not_module_genes.intersection(kegg_genes)
+            module_not_kegg_genes = module_genes.intersection(not_kegg_genes)
+            not_module_not_kegg_genes = not_module_genes.intersection(not_kegg_genes)
+
+            observed_contingency_table = np.array(
+                [
+                    [len(module_kegg_genes), len(not_module_kegg_genes)],
+                    [len(module_not_kegg_genes), len(not_module_not_kegg_genes)],
+                ]
+            )
+
+            # Fisher's exact test
+            oddsr, pval = scipy.stats.fisher_exact(
+                observed_contingency_table, alternative="greater"
+            )
+            # chi2 test will not accept 0 counts for the contingency table
+            # chi2, pval, dof, expected_counts = scipy.stats.chi2_contingency(
+            #    observed_contingency_table
+            # )
+            # print(oddsr, pval)
+
+            rows.append(
+                {
+                    "module id": module_name,
+                    "enriched KEGG pathway": kegg_name,
+                    "p-value": pval,
+                    "num shared genes": len(module_kegg_genes),
+                    "size module": num_module_genes,
+                    "size KEGG pathway": num_kegg_genes,
+                }
+            )
+
+    enrichment_df = pd.DataFrame(rows)
+
+    # Get corrected pvalues
+    (
+        reject_,
+        pvals_corrected_,
+        alphacSidak,
+        alphacBonf,
+    ) = statsmodels.stats.multitest.multipletests(
+        enrichment_df["p-value"].values,
+        alpha=0.05,
+        method="fdr_bh",
+        is_sorted=False,
+    )
+
+    enrichment_df["corrected p-value"] = pvals_corrected_
+
+    # Select best module mapping
+    for grp, grp_df in enrichment_df.groupby("module id"):
+        # Find if any pathways is significant
+        any_significant = (grp_df["corrected p-value"] < 0.05).any()
+        if any_significant:
+            best_kegg = grp_df[grp_df["corrected p-value"] < 0.05][
+                "enriched KEGG pathway"
+            ]
+            best_pval = grp_df[grp_df["corrected p-value"] < 0.05]["p-value"].values[0]
+            best_shared = grp_df[grp_df["corrected p-value"] < 0.05][
+                "num shared genes"
+            ].values[0]
+            best_module_size = grp_df[grp_df["corrected p-value"] < 0.05][
+                "size module"
+            ].values[0]
+            best_kegg_size = grp_df[grp_df["corrected p-value"] < 0.05][
+                "size KEGG pathway"
+            ].values[0]
+            best_corrected_pval = grp_df[grp_df["corrected p-value"] < 0.05][
+                "corrected p-value"
+            ].values[0]
+            best_rows.append(
+                {
+                    "module id": grp,
+                    "enriched KEGG pathway": best_kegg,
+                    "p-value": best_pval,
+                    "num shared genes": best_shared,
+                    "size module": best_module_size,
+                    "size KEGG pathway": best_kegg_size,
+                    "corrected p-value": best_corrected_pval,
+                }
+            )
+        else:
+            best_rows.append(
+                {
+                    "module id": grp,
+                    "enriched KEGG pathway": "NA",
+                    "p-value": "NA",
+                    "num shared genes": "NA",
+                    "size module": "NA",
+                    "size KEGG pathway": "NA",
+                    "corrected p-value": "NA",
+                }
+            )
+    best_enrichment_df = pd.DataFrame(best_rows).set_index("module id")
+
+    return best_enrichment_df
+
+
+pao1_enrichment_df = KEGG_enrichment(pao1_membership, pao1_pathways)
+
+pao1_enrichment_df.head(20)
+
+# Add pathway enrichment information
 pao1_gene_annot = pao1_gene_annot.merge(
-    gene_to_pathways_df, left_index=True, right_index=True, how="left"
+    pao1_enrichment_df, left_on="module id", right_index=True, how="left"
 )
+
+pao1_gene_annot.head()
 
 # ## Import and format operon
 

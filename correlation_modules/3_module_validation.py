@@ -51,7 +51,7 @@ module_size_threshold = 1000
 sample_seed = 1
 
 # Gene subset
-gene_subset = "all"
+gene_subset = "core"
 # -
 
 # ## Examine size of modules
@@ -82,7 +82,7 @@ for method_name in clustering_method_list:
 
 
 # plotting function
-def plot_dist_modules(clustering_method_list):
+def plot_dist_modules(clustering_method_list, gene_subset):
 
     # Set up the matplotlib figure
     fig, axes = plt.subplots(ncols=2, nrows=2, figsize=(15, 15))
@@ -90,10 +90,12 @@ def plot_dist_modules(clustering_method_list):
 
     for i in range(len(clustering_method_list)):
         pao1_membership_filename = os.path.join(
-            paths.LOCAL_DATA_DIR, f"pao1_modules_{clustering_method_list[i]}.tsv"
+            paths.LOCAL_DATA_DIR,
+            f"pao1_modules_{clustering_method_list[i]}_{gene_subset}.tsv",
         )
         pa14_membership_filename = os.path.join(
-            paths.LOCAL_DATA_DIR, f"pa14_modules_{clustering_method_list[i]}.tsv"
+            paths.LOCAL_DATA_DIR,
+            f"pa14_modules_{clustering_method_list[i]}_{gene_subset}.tsv",
         )
 
         pao1_membership = pd.read_csv(
@@ -127,7 +129,7 @@ def plot_dist_modules(clustering_method_list):
 
 
 # Plot distribution of modules per clustering method
-plot_dist_modules(clustering_method_list)
+plot_dist_modules(clustering_method_list, gene_subset)
 
 # **Takeaway:**
 # Our expectation on size of modules would be 2-50 genes. Most operons have fewer than 10 genes and most regulons have fewer than 100 genes. Some examples that demonstrate the size of co-expression networks can be found in papers using ADAGE signatures to define modules:
