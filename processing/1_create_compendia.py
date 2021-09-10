@@ -149,7 +149,7 @@ pa14_binned_ids = list(
 # Check that there are no samples that are binned as both PAO1 and PA14
 shared_pao1_pa14_binned_ids = list(set(pao1_binned_ids).intersection(pa14_binned_ids))
 
-# assert len(shared_pao1_pa14_binned_ids) == 0
+assert len(shared_pao1_pa14_binned_ids) == 0
 # -
 
 # ## Format SRA annotations
@@ -190,6 +190,61 @@ sample_to_strain_table = sample_to_strain_table_full_processed["Strain type"].to
 
 sample_to_strain_table.head()
 # -
+
+# ## Save pre-binned data with median accessory expression
+# This dataset will be used for Georgia's manuscript, which describes how we generated these compendia
+
+# +
+# Select columns with median accessory expression
+pao1_pa14_acc_expression_select = pao1_pa14_acc_expression[
+    ["median_acc_expression_pao1", "median_acc_expression_pa14"]
+]
+
+pao1_pa14_acc_expression_select.head()
+
+# +
+# Add SRA strain type
+pao1_pa14_acc_expression_label = pao1_pa14_acc_expression_select.merge(
+    sample_to_strain_table, left_index=True, right_index=True
+)
+# Rename column
+pao1_pa14_acc_expression_label = pao1_pa14_acc_expression_label.rename(
+    {"Strain type": "SRA label"}, axis=1
+)
+
+pao1_pa14_acc_expression_label.head()
+
+# +
+# Add our binned label
+pao1_pa14_acc_expression_label["Our label"] = "NA"
+pao1_pa14_acc_expression_label.loc[pao1_binned_ids, "Our label"] = "PAO1-like"
+pao1_pa14_acc_expression_label.loc[pa14_binned_ids, "Our label"] = "PA14-like"
+
+pao1_pa14_acc_expression_label.head()
+
+# +
+# Confirm dimensions
+pao1_expression_prebin_filename = paths.PAO1_PREBIN_COMPENDIUM
+pa14_expression_prebin_filename = paths.PA14_PREBIN_COMPENDIUM
+
+pao1_expression_prebin = pd.read_csv(
+    pao1_expression_prebin_filename, sep="\t", index_col=0, header=0
+)
+pa14_expression_prebin = pd.read_csv(
+    pa14_expression_prebin_filename, sep="\t", index_col=0, header=0
+)
+# -
+
+assert (
+    pao1_expression_prebin.shape[0]
+    == pa14_expression_prebin.shape[0]
+    == pao1_pa14_acc_expression_label.shape[0]
+)
+
+# Save
+pao1_pa14_acc_expression_label.to_csv(
+    "prebinned_compendia_acc_expression.tsv", sep="\t"
+)
 
 # ## Create compendia
 #
