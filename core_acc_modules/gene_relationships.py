@@ -253,3 +253,94 @@ def get_relationship_in_expression_space(
     # total_counts = expression_dist_counts.groupby("offset")["total"].sum()[1]
     # expression_dist_counts["proportion"] = expression_dist_counts["total"]/total_counts
     return expression_dist_counts
+
+
+def find_related_acc_genes(
+    corr_df,
+    genes_to_consider,
+    gene_mapping_df,
+    num_top_genes,
+    operon_df=None,
+
+):
+
+    """For each gene in `genes_to_consider`, is the highest correlated, 2nd-highest correlated, 3rd
+    highest correlated gene, etc core or accessory? This function
+    finds the accessory genes that are highest correlated,
+    next highest correlated, third highest correlated, etc.
+    This function returns a dataframe with `genes_to_consider` as the index and the list
+    of accessory genes that they are most correlated with.
+
+    Arguments:
+    ----------
+    corr_df: pandas df
+        Dataframe containing the correlation matrix. The matrix is a gene x gene
+        dataframe containing values that correspond to how correlated each pair of
+        genes is
+    genes_to_consider: list
+        List of gene ids that will be used as starting genes
+    gene_mapping_df: pandas df
+        Dataframe with gene ids on the index and core/acc label as a column
+    num_top_genes: int
+        The number of correlated accessory genes to return
+    operon_df: pandas df
+        Dataframe with gene ids on the index and operon name as a column.
+        If this argument is provided, then genes within the same operon
+        will not be included in the counts.
+    """
+    # Get subset of genes
+    corr_subset = corr_df.loc[genes_to_consider]
+
+    # Note: PA14 contains duplicate rows so we will drop those here
+    corr_subset = corr_subset.drop_duplicates()
+
+    rows = []
+    for gene in corr_subset.index:
+        if operon_df is not None:
+            # This subset needs to be reset each iteration
+            # since we are dropping columns below
+            corr_subset = corr_df.loc[genes_to_consider]
+
+            # Note: PA14 contains duplicate rows so we will drop those here
+            corr_subset = corr_subset.drop_duplicates()
+
+            # Check if gene is found in an operon
+            if gene in operon_df.index:
+                # Find operons containing 'gene'
+                group_name = operon_df.loc[gene, "operon_name"]
+
+                # Dictionary format: pao1_operon_dict[operon_name] = [list of genes]
+                operon_dict = operon_df.groupby("operon_name").groups
+                co_operonic_genes = list(operon_dict[group_name])
+
+                # Remove columns corresponding to co-operonic genes from the corr_subset
+                co_operonic_genes_to_remove = list(
+                    set(corr_subset.columns).intersection(co_operonic_genes)
+                )
+                corr_subset = corr_subset.drop(columns=co_operonic_genes_to_remove)
+
+        # Note: we are removing genes that are co-operonic first
+        # and then finding the most co-expressed genes
+        top_corr_genes = list(corr_subset.loc[gene].nlargest(num_top_genes).index[1:])
+        top_gene_labels_df = gene_mapping_df.loc[top_corr_genes, "core/acc"].to_frame()
+
+        # Get list of accessory genes
+        top_gene_labels_df = top_gene_labels_df[top_gene_labels_df["core/acc"] == "acc"]
+
+        if top_gene_labels_df.empty:
+            top_gene_labels = "No accessory genes"
+        else:
+            top_gene_labels = list(top_gene_labels_df.index)
+
+        rows.append(
+            {
+                "gene id": gene,
+                "Related acc genes": top_gene_labels
+            }
+            )
+
+    associated_acc_genes = pd.DataFrame(rows)
+    # Set index to gene id
+    associated_acc_genes = associated_acc_genes.set_index("gene id")
+
+    return associated_acc_genes
