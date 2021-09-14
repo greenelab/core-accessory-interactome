@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ---
 # jupyter:
 #   jupytext:
@@ -25,6 +26,8 @@ import os
 import random
 import scipy
 import pandas as pd
+import seaborn as sns
+import numpy as np
 from core_acc_modules import utils, paths, gene_relationships
 
 random.seed(1)
@@ -156,6 +159,80 @@ else:
     pao1_operon_expression_to_use = None
     pa14_operon_expression_to_use = None
 
+# ### Find all accessory genes co-expressed lasR gene
+#
+# Our collaborator shared an experiment comparing the transcriptome of WT vs lasR mutant strains and found genes in PA14-only genes that were significant. So we were curious to see if any of these PA14-only DEGs (genes highlighted in red that were provided) were co-regulated by lasR according to our analysis.
+
+pa14_lasR_acc_relationships = gene_relationships.find_related_acc_genes(
+    pa14_corr,
+    ["PA14_45960"],
+    pa14_arr,
+    40,
+    pa14_operon_expression_to_use,
+)
+
+print(pa14_lasR_acc_relationships.shape)
+pa14_lasR_acc_relationships.head()
+
+# Read in PA14-only lasR genes
+pa14_lasR_genes_Deb_filename = os.path.join(
+    paths.LOCAL_DATA_DIR, "lasR regulated PA14 genes for Alex.csv"
+)
+
+pa14_lasR_genes_Deb = pd.read_csv(pa14_lasR_genes_Deb_filename, index_col=0, header=1)
+
+print(pa14_lasR_genes_Deb.shape)
+pa14_lasR_genes_Deb.head()
+
+print(len(list(pa14_lasR_genes_Deb.index)))
+shared_genes = set(pa14_lasR_genes_Deb.index).intersection(pa14_corr.index)
+print(len(shared_genes))
+
+
+# Format df for plotting
+lasR_corr = pa14_corr.loc["PA14_45960"].to_frame("values")
+lasR_corr["label"] = ""
+lasR_corr.loc[pa14_acc, "label"] = "acc"
+lasR_corr.loc[shared_genes, "label"] = "experiment DEGs"
+
+lasR_corr.head()
+
+# Plot distribution of correlation scores
+fig_pao1 = sns.displot(
+    data=lasR_corr,
+    x="values",
+    hue="label",
+    alpha=0.3,
+    bins=np.linspace(-0.4, 1.0, 50),
+)
+
+# Let's try looking at genes within the same module as lasR
+cluster_method = "affinity"
+gene_subset = "all"
+pa14_membership_filename = os.path.join(
+    paths.LOCAL_DATA_DIR, f"pa14_modules_{cluster_method}_{gene_subset}.tsv"
+)
+
+pa14_membership = pd.read_csv(pa14_membership_filename, sep="\t", index_col=0, header=0)
+
+pa14_membership.head()
+
+lasR_module_id = pa14_membership.loc["PA14_45960"].values[0]
+print(lasR_module_id)
+
+# Get genes in the same module as lasR
+lasR_coexpression_module_genes = pa14_membership[
+    pa14_membership["module id"] == lasR_module_id
+].index
+
+# Compare gene lists
+set(pa14_lasR_genes_Deb.index).intersection(lasR_coexpression_module_genes)
+
+# If we look at the distribution of co-expression scores for lasR vs all genes, accessory genes, Deb’s genes, the correlation scores range from (-0.2, 0.2), which is lower compared to other core genes. The lasR accessory (PA14-only) genes are found starting in the top 40 genes.
+#
+# If we cluster correlation matrix that includes all genes (core and accessory), there are 0 genes that are within the lasR cluster and found in Deb’s genes (highlighted ones only ~80).
+#
+
 # ### Find all accessory genes co-expressed with least stable core genes
 
 # %%time
@@ -208,6 +285,8 @@ pa14_all_associations = pa14_all_associations.merge(
 print(pao1_all_associations.shape)
 print(pa14_all_associations.shape)
 
+pao1_all_associations.head()
+
 # +
 # Reorder columns
 pao1_all_associations = pao1_all_associations[
@@ -240,5 +319,10 @@ pao1_all_associations.sort_values(by="label").head()
 pa14_all_associations.sort_values(by="label").head()
 
 # Save
-pao1_all_associations.to_csv(pao1_core_stable_similarity_filename, sep="\t")
-pa14_all_associations.to_csv(pa14_core_stable_similarity_filename, sep="\t")
+pao1_all_associations.to_csv("pao1_core_stable_associations_final.tsv", sep="\t")
+pa14_all_associations.to_csv("pa14_core_stable_associations_final.tsv", sep="\t")
+
+# Based on the results, there are some accessory genes that are shared by 4-5 core genes, most of these are uncharacterized by uniprot: one is integrase catalytic domain, GGDEF domain proteins.
+#
+# What threshold makes sense for looking at the top # co-expressed accessory genes?
+#
