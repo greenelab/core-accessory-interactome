@@ -86,4 +86,4 @@ f.fig.suptitle(f"Correlation of modules {select_modules}", y=1.05)
 
 # These two accessory modules were of interest to our collaborators. She was interested in how they were related. To get at this, I plotted the heatmap of the correlation matrix, subsetting only for those gene ids that belong to these two modules of interest.
 #
-# Based on this heatmap, the genes within each module are more closely co-expressed with each other, as expected. There doesn't look to be too many genes that cross over.
+# Based on this heatmap, the genes within each module are more closely co-expressed with each other, as expected. There doesn't look to be cross over between the modules.

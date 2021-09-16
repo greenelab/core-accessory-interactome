@@ -150,11 +150,13 @@ def get_relationship_in_expression_space(
     Arguments:
     ----------
     corr_df: pandas df
-        Dataframe containing the correlation matrix. The matrix is a gene x gene
-        dataframe containing values that correspond to how correlated each pair of
-        genes is
+        Dataframe containing the correlation matrix, generated in `correlation_modules/correlation_analysis.py`.
+        The gene x gene matrix contains values that correspond to how correlated each pair of
+        genes is based on their transcriptional profiles.
     genes_to_consider: list
-        List of gene ids that will be used as starting genes
+        List of gene ids that will be used as starting genes.
+        This can be the list of accessory or core genes, obtained
+        from the function `get_my_core_acc_genes()` in utils.py
     gene_mapping_df: pandas df
         Dataframe with gene ids on the index and core/acc label as a column
     offset_to_bin: int
@@ -274,11 +276,15 @@ def find_related_acc_genes(
     Arguments:
     ----------
     corr_df: pandas df
-        Dataframe containing the correlation matrix. The matrix is a gene x gene
-        dataframe containing values that correspond to how correlated each pair of
-        genes is
+        Dataframe containing the correlation matrix, generated in `correlation_modules/correlation_analysis.py`.
+        The gene x gene matrix contains values that correspond to how correlated each pair of
+        genes is based on their transcriptional profiles.
     genes_to_consider: list
-        List of gene ids that will be used as starting genes
+        List of gene ids that will be used as starting genes.
+        This can be the list of most or least stable core genes (i.e. genes that were found
+        to have consistent transcriptional relationships across strains or genes that had
+        inconsistent relationships), obtained
+        from the analysis in `core_core_analysis/1_core_core_relationships_across_strains.ipynb`
     gene_mapping_df: pandas df
         Dataframe with gene ids on the index and core/acc label as a column
     num_top_genes: int
