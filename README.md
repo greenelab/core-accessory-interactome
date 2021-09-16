@@ -6,24 +6,30 @@
 
 **University of Pennsylvania**
 
-_Background_:
+_Pseudomonas aeruginosa_ (or _P. aeruginosa_) is a gram negative bacteria. _P. aeruginosa_ is the most common gram-negative pathogen causing nosocomial pneumonia in the United States, and it is frequently implicated in other hospital-acquired infections like urinary tract and bloodstream infections
+ ([ National Nosocomial Infections Surveillance System](https://academic.oup.com/cid/article/41/6/848/2022258)).
+ In addition to its prevalence, _P. aeruginosa_ is able to develop resistance to antibiotics, which is the standard of care for these infections.
+ These infections are a major concern to hospitalized patients, as they are found to be correlated with poor prognosis. Overall the predilection for _P. aeruginosa_ to cause infections in immunocompromised individuals, its extreme versatility (cause infection across different tissues) and antibiotic resistance make Pa a major health concern.
 
-Pseudomonas aeruginosa (or _P. aeruginosa_) is a gram negative bacteria. _P. aeruginosa_ is the most common gram-negative pathogen causing nosocomial (NO SO comial) pneumonia in the United States, and it is frequently implicated in other hospital-acquired infections like urinary tract and bloodstream infections ([ National Nosocomial Infections Surveillance System](https://academic.oup.com/cid/article/41/6/848/2022258)). In additional to its prevalence, _P. aeruginosa_ is able to develop resistance to antibiotics, which is the standard of care for these infections. Overall the predilection for _P. aeruginosa_ to cause infections in immunocompromised individuals, its extreme versatility (cause infection across different tissues) and antibiotic resistance makes _P. aeruginosa_ a major health concern.
+To combat these _P. aeruginosa_ infections, there have been numerous transcriptomic studies trying to understand how Pseudomonas aeruginosa genes influence traits like virulence and pathogenicity.
+The hope is that these studies will help us to develop better treatment options. These contributing genes can be classified into two groups: core and accessory.
+Core genes are those genes that are present in all strains.
+While accessory genes are those that are present in at least one strain.
 
-Over the years, there have been are many studies trying to understand the genetic mechanisms that drive _P. aeruginosa_ infections. Some of these studies revealed that the Pa genome was comprised of two components: core genome and an accessory genome. Core genes are those genes that are present in all strains
-While accessory genes are those that are present in at least one strain. The current paradigm is that the core genes encode essential functions shared by all strains while accessory genes encode niche-based adaptations
+Given that different groups of genes both contribute to these traits of interest, it is important to understand how these gene groups are coordinated.
 
-In general, genomic analyses of pseudomonas usually separate between core genes and accessory genes. However, in general, there is evidence that both core and accessory gene expression can contribute to phenotypes. One example is Pa virulence ([Lee et. al. 2014](https://pubmed.ncbi.nlm.nih.gov/25249263/), [Fink-Barbancon et. al. 1997](https://pubmed.ncbi.nlm.nih.gov/9302017/))
-
-_Central question_: How is the expression of these gene groups coordinated to drive phenotypes of interest?
-
-To answer this central question we first need to examine the relationship between genes and function, as an intermediate step before we get to phenotype. So for this project we will focus on first answering the question: **How are functions carried out in the context of core and accessory genes?**
-
-_Hypothesis_: A common subset of core genes that will copt with accessory genes across strains
-
-_Expected Outcome_: The composition of network modules in the context of core, accessory
-
-_Significance_: If we know the composition of modules this can inform how we study functions. For example, we can build models to combine different gene groups and use these models to study phenotypes, which may reveal novel combinations of genes
+## Directory Structure
+| Folder | Description |
+| --- | --- |
+| [acc_acc_analysis](acc_acc_analysis) | This folder contains analysis notebooks to examine accessory-accessory gene modules.|
+| [common_genes](common_genes) | This folder contains analysis notebooks to compare common DEGs found in [prior work](https://github.com/greenelab/generic-expression-patterns/blob/master/pseudomonas_analysis/2_identify_generic_genes_pathways.ipynb) to core and accessory genes|
+| [core_acc_analysis](core_acc_analysis) | This folder contains analysis notebooks to examine the relationship between core genes and accessory genes.|
+| [core_acc_modules](core_acc_modules) | This folder contains supporting functions that other notebooks in this repository will use.|
+| [core_core_analysis](core_core_analysis) | This folder contains analysis notebooks to examine the stability of core genes across strains.|
+| [correlation_modules](correlation_modules) | This folder contains analysis notebooks to detect gene co-expression modules starting with gene expression data, applying Pearson correlation and then clustering on this correlation matrix to obtain gene modules.|
+| [data](data) | This folder contains metadata used for different analyses.|
+| [explore_data](explore_data) | This folder contains analysis notebooks to visualize the expression data to get a sense for the variation contained.|
+| [processing](processing) | This folder contains analysis notebooks to determine what threshold to use to partition the gene expression data into PAO1 and PA14 compendia.|
 
 
 ## Usage
