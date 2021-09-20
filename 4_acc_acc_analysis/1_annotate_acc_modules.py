@@ -37,7 +37,7 @@ import scipy.stats
 import statsmodels.stats.multitest
 import pandas as pd
 import numpy as np
-from scripts import paths, utils, modules
+from scripts import paths, utils, modules, annotations
 
 random.seed(1)
 # -
@@ -189,11 +189,12 @@ pao1_gene_annot.head()
 # +
 pao1_pathway_filename = "https://raw.githubusercontent.com/greenelab/adage/7a4eda39d360b224268921dc1f2c14b32788ab16/Node_interpretation/pseudomonas_KEGG_terms.txt"
 
-pao1_pathways = pd.read_csv(pao1_pathway_filename, sep="\t", index_col=0, header=None)
+# pao1_pathways = pd.read_csv(pao1_pathway_filename, sep="\t", index_col=0, header=None)
 # -
 
-pao1_pathways[2] = pao1_pathways[2].str.split(";").apply(set)
-pao1_pathways.index = pao1_pathways.index.str.split(" - ").str[0]
+# pao1_pathways[2] = pao1_pathways[2].str.split(";").apply(set)
+# pao1_pathways.index = pao1_pathways.index.str.split(" - ").str[0]
+pao1_pathways = annotations.load_format_KEGG(pao1_pathway_filename)
 pao1_pathways.head()
 
 pao1_gene_annot.head()
@@ -336,8 +337,9 @@ pao1_gene_annot.head()
 pao1_operon_filename = paths.PAO1_OPERON
 pa14_operon_filename = paths.PA14_OPERON
 
-pao1_operon = pd.read_csv(pao1_operon_filename, index_col=0, header=0)
-pa14_operon = pd.read_csv(pa14_operon_filename, index_col=0, header=0)
+# +
+# pao1_operon = pd.read_csv(pao1_operon_filename, index_col=0, header=0)
+# pa14_operon = pd.read_csv(pa14_operon_filename, index_col=0, header=0)
 
 # +
 # There are 247 PAO1 genes with multiple annotations
@@ -348,25 +350,38 @@ pa14_operon = pd.read_csv(pa14_operon_filename, index_col=0, header=0)
 
 # Here we will keep the last PseudoCAP annotations
 # To ensure that the PseudoCAP annotations are the last ones, we will sort the values
-pao1_operon = pao1_operon.sort_values(by=["locus_tag", "source_database"])
-pa14_operon = pa14_operon.sort_values(by=["locus_tag", "source_database"])
-# -
+# pao1_operon = pao1_operon.sort_values(by=["locus_tag", "source_database"])
+# pa14_operon = pa14_operon.sort_values(by=["locus_tag", "source_database"])
 
-pao1_operon = pao1_operon.set_index("locus_tag")
-pa14_operon = pa14_operon.set_index("locus_tag")
+# +
+# pao1_operon = pao1_operon.set_index("locus_tag")
+# pa14_operon = pa14_operon.set_index("locus_tag")
 
-print(pao1_operon.shape)
-pao1_operon.head()
+# +
+# print(pao1_operon.shape)
+# pao1_operon.head()
 
-print(pa14_operon.shape)
-pa14_operon.head()
+# +
+# print(pa14_operon.shape)
+# pa14_operon.head()
 
-pao1_operon = pao1_operon[~pao1_operon.index.duplicated(keep="last")]
-pa14_operon = pa14_operon[~pa14_operon.index.duplicated(keep="last")]
+# +
+# pao1_operon = pao1_operon[~pao1_operon.index.duplicated(keep="last")]
+# pa14_operon = pa14_operon[~pa14_operon.index.duplicated(keep="last")]
 
+# +
 # Only include columns for gene id and operon_name
-pao1_operon = pao1_operon["operon_name"].to_frame()
-pa14_operon = pa14_operon["operon_name"].to_frame()
+# pao1_operon = pao1_operon["operon_name"].to_frame()
+# pa14_operon = pa14_operon["operon_name"].to_frame()
+
+# +
+pao1_operon = annotations.load_format_operons(pao1_operon_filename)
+pa14_operon = annotations.load_format_operons(pa14_operon_filename)
+
+# TO DO:
+# Check that the dim
+# Check the saved output
+# -
 
 pao1_operon.head()
 

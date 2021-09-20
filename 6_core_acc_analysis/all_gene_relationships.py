@@ -38,7 +38,7 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from statsmodels.stats.multitest import multipletests
-from scripts import utils, paths, gene_relationships
+from scripts import utils, paths, gene_relationships, annotations
 
 random.seed(1)
 
@@ -84,16 +84,20 @@ pa14_membership.head()
 pao1_operon_filename = paths.PAO1_OPERON
 pa14_operon_filename = paths.PA14_OPERON
 
-pao1_operon = pd.read_csv(pao1_operon_filename, index_col=0, header=0)
-pa14_operon = pd.read_csv(pa14_operon_filename, index_col=0, header=0)
+# +
+# pao1_operon = pd.read_csv(pao1_operon_filename, index_col=0, header=0)
+# pa14_operon = pd.read_csv(pa14_operon_filename, index_col=0, header=0)
 
-pao1_operon.head()
+# +
+# pao1_operon.head()
 
-pao1_operon = pao1_operon.set_index("locus_tag")
-pa14_operon = pa14_operon.set_index("locus_tag")
+# +
+# pao1_operon = pao1_operon.set_index("locus_tag")
+# pa14_operon = pa14_operon.set_index("locus_tag")
 
-print(pao1_operon.shape)
-pao1_operon.head()
+# +
+# print(pao1_operon.shape)
+# pao1_operon.head()
 
 # +
 # There are 247 PAO1 genes with multiple annotations
@@ -106,15 +110,20 @@ pao1_operon.head()
 # Note: Do we want to discard these annotations all together
 # or will these need to be carefully curated to determine which to keep?
 # We will use the curated annotation here
-pao1_operon = pao1_operon[~pao1_operon.index.duplicated(keep="last")]
-pa14_operon = pa14_operon[~pa14_operon.index.duplicated(keep="last")]
+# pao1_operon = pao1_operon[~pao1_operon.index.duplicated(keep="last")]
+# pa14_operon = pa14_operon[~pa14_operon.index.duplicated(keep="last")]
+
+# +
+# pao1_operon.head()
+
+# +
+# Only include columns for gene id and operon_name
+# pao1_operon = pao1_operon["operon_name"].to_frame()
+# pa14_operon = pa14_operon["operon_name"].to_frame()
 # -
 
-pao1_operon.head()
-
-# Only include columns for gene id and operon_name
-pao1_operon = pao1_operon["operon_name"].to_frame()
-pa14_operon = pa14_operon["operon_name"].to_frame()
+pao1_operon = annotations.load_format_operons(pao1_operon_filename)
+pa14_operon = annotations.load_format_operons(pa14_operon_filename)
 
 print(pao1_operon.shape)
 pao1_operon.head()
@@ -133,38 +142,53 @@ else:
 pao1_expression_filename = paths.PAO1_COMPENDIUM
 pa14_expression_filename = paths.PA14_COMPENDIUM
 
-pao1_expression = pd.read_csv(pao1_expression_filename, sep="\t", index_col=0, header=0)
-pa14_expression = pd.read_csv(pa14_expression_filename, sep="\t", index_col=0, header=0)
+# pao1_expression = pd.read_csv(pao1_expression_filename, sep="\t", index_col=0, header=0)
+# pa14_expression = pd.read_csv(pa14_expression_filename, sep="\t", index_col=0, header=0)
 
 # +
 pao1_annot_filename = paths.GENE_PAO1_ANNOT
 pa14_annot_filename = paths.GENE_PA14_ANNOT
 
-core_acc_dict = utils.get_my_core_acc_genes(
-    pao1_annot_filename, pa14_annot_filename, pao1_expression, pa14_expression
-)
+# core_acc_dict = utils.get_my_core_acc_genes(
+#    pao1_annot_filename, pa14_annot_filename, pao1_expression, pa14_expression
+# )
+
+# +
+# pao1_core = core_acc_dict["core_pao1"]
+# pa14_core = core_acc_dict["core_pa14"]
+# pao1_acc = core_acc_dict["acc_pao1"]
+# pa14_acc = core_acc_dict["acc_pa14"]
+
+# +
+# pao1_membership.loc[pao1_core, "core/acc"] = "core"
+# pao1_membership.loc[pao1_acc, "core/acc"] = "acc"
+
+# +
+# pa14_acc_shared = set(pa14_acc).intersection(pa14_gene_module_labels.index)
+# pa14_membership.loc[pa14_core, "core/acc"] = "core"
+# pa14_membership.loc[pa14_acc, "core/acc"] = "acc"
 # -
 
-pao1_core = core_acc_dict["core_pao1"]
-pa14_core = core_acc_dict["core_pa14"]
-pao1_acc = core_acc_dict["acc_pao1"]
-pa14_acc = core_acc_dict["acc_pa14"]
+pao1_membership, pa14_membership = annotations.map_core_acc_annot(
+    pao1_membership,
+    pa14_membership,
+    pao1_expression_filename,
+    pa14_expression_filename,
+    pao1_annot_filename,
+    pa14_annot_filename,
+)
 
-pao1_membership.loc[pao1_core, "core/acc"] = "core"
-pao1_membership.loc[pao1_acc, "core/acc"] = "acc"
-
-# pa14_acc_shared = set(pa14_acc).intersection(pa14_gene_module_labels.index)
-pa14_membership.loc[pa14_core, "core/acc"] = "core"
-pa14_membership.loc[pa14_acc, "core/acc"] = "acc"
-
+# +
 # Drop "module id" column
-pao1_arr = pao1_membership
-pa14_arr = pa14_membership
+# pao1_arr = pao1_membership
+# pa14_arr = pa14_membership
 
+# +
 # Make sure to sort by gene id
 # NOTE PA14 gene ids don't increment by 1, but by 10 or 20 are we missing some genes?
-pao1_arr = pao1_arr.sort_index()
-pa14_arr = pa14_arr.sort_index()
+# pao1_arr = pao1_arr.sort_index()
+# pa14_arr = pa14_arr.sort_index()
+# -
 
 print(pao1_arr.shape)
 pao1_arr.head()

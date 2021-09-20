@@ -35,7 +35,7 @@ def get_relationship_in_genome_space(core_acc_df, offset_to_bin, operon_df=None)
 
     core_acc_df_pad = np.pad(
         core_acc_df["core/acc"], offset_max, "constant", constant_values="NA"
-        )
+    )
     if operon_df is not None:
         operon_df_pad = np.pad(
             operon_df["operon_name"], offset_max, "constant", constant_values="NA"
@@ -62,38 +62,38 @@ def get_relationship_in_genome_space(core_acc_df, offset_to_bin, operon_df=None)
                 core_acc_left = (
                     core_acc_df_pad[offset_max : core_acc_df_len + offset_max]
                     == gene_start
-                    ) & (
-                        core_acc_df_pad[
-                            offset_max - offset : core_acc_df_len + offset_max - offset
-                            ]
-                            == gene_compare
-                            )
+                ) & (
+                    core_acc_df_pad[
+                        offset_max - offset : core_acc_df_len + offset_max - offset
+                    ]
+                    == gene_compare
+                )
 
                 # Compare right nearest neighbors: Are they core or accessory?
                 core_acc_right = (
-                    core_acc_df_pad[offset_max: core_acc_df_len + offset_max]
+                    core_acc_df_pad[offset_max : core_acc_df_len + offset_max]
                     == gene_start
-                    ) & (
-                        core_acc_df_pad[
-                            offset_max + offset: core_acc_df_len + offset_max + offset
-                            ]
-                            == gene_compare
-                            )
+                ) & (
+                    core_acc_df_pad[
+                        offset_max + offset : core_acc_df_len + offset_max + offset
+                    ]
+                    == gene_compare
+                )
 
                 if operon_df is not None:
                     # Compare left operons: Are the genes in the same operon?
                     operon_left = (
-                        operon_df_pad[offset_max: core_acc_df_len + offset_max]
+                        operon_df_pad[offset_max : core_acc_df_len + offset_max]
                         == operon_df_pad[
-                            offset_max - offset: core_acc_df_len + offset_max - offset
+                            offset_max - offset : core_acc_df_len + offset_max - offset
                         ]
                     )
 
                     # Compare right operons: Are the genes in the same operon?
                     operon_right = (
-                        operon_df_pad[offset_max: core_acc_df_len + offset_max]
+                        operon_df_pad[offset_max : core_acc_df_len + offset_max]
                         == operon_df_pad[
-                            offset_max + offset: core_acc_df_len + offset_max + offset
+                            offset_max + offset : core_acc_df_len + offset_max + offset
                         ]
                     )
 
@@ -175,7 +175,7 @@ def get_relationship_in_expression_space(
     corr_subset = corr_df.loc[genes_to_consider]
 
     # Note: PA14 contains duplicate rows so we will drop those here
-    corr_subset = corr_subset.drop_duplicates()
+    # corr_subset = corr_subset.drop_duplicates()
 
     rows = []
     for gene in corr_subset.index:
@@ -247,7 +247,7 @@ def get_relationship_in_expression_space(
 
     expression_dist_counts = expression_dist_counts.query(
         "offset<=@offset_to_bin"
-        ).append(weak_corr, ignore_index=True)
+    ).append(weak_corr, ignore_index=True)
 
     # Add proportion - How should we calculate proportion
     # Of all 1-NN, %accessory, %core
@@ -263,7 +263,6 @@ def find_related_acc_genes(
     gene_mapping_df,
     num_top_genes,
     operon_df=None,
-
 ):
 
     """For each gene in `genes_to_consider`, is the highest correlated, 2nd-highest correlated, 3rd
@@ -338,12 +337,7 @@ def find_related_acc_genes(
         else:
             top_gene_labels = list(top_gene_labels_df.index)
 
-        rows.append(
-            {
-                "gene id": gene,
-                "Related acc genes": top_gene_labels
-            }
-            )
+        rows.append({"gene id": gene, "Related acc genes": top_gene_labels})
 
     associated_acc_genes = pd.DataFrame(rows)
     # Set index to gene id

@@ -187,6 +187,10 @@ elif subset_genes == "acc":
     pao1_corr_log_spell = pao1_corr_log_spell.loc[pao1_acc, pao1_acc]
     pa14_corr_log_spell = pa14_corr_log_spell.loc[pa14_acc, pa14_acc]
 
+# TO DO
+# Drop any duplicate rows and columns
+pao1_corr_log_spell[pao1_corr_log_spell.duplicated()]
+
 # +
 # Plot heatmap
 h1a = sns.clustermap(pao1_corr_log_spell.abs(), cmap="viridis", figsize=(20, 20))
