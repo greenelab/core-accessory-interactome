@@ -174,9 +174,6 @@ def get_relationship_in_expression_space(
     # Get subset of genes
     corr_subset = corr_df.loc[genes_to_consider]
 
-    # Note: PA14 contains duplicate rows so we will drop those here
-    # corr_subset = corr_subset.drop_duplicates()
-
     rows = []
     for gene in corr_subset.index:
         if operon_df is not None:

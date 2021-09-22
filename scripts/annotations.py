@@ -5,7 +5,7 @@ Date Created: 20 September 2021
 Scripts to annotate genes
 """
 import pandas as pd
-import utils
+from . import utils
 
 
 def load_format_operons(operon_filename):
@@ -42,7 +42,7 @@ def load_format_KEGG(kegg_filename):
     genes as the column values.
     """
 
-    kegg_df = pd.read_csv(kegg_filename, index_col=0, header=None)
+    kegg_df = pd.read_csv(kegg_filename, sep="\t", index_col=0, header=None)
 
     kegg_df[2] = kegg_df[2].str.split(";").apply(set)
     kegg_df.index = kegg_df.index.str.split(" - ").str[0]
@@ -88,4 +88,12 @@ def map_core_acc_annot(
     pao1_arr = pao1_membership_df.sort_index()
     pa14_arr = pa14_membership_df.sort_index()
 
-    return pao1_arr, pa14_arr
+    return (
+        pao1_arr,
+        pa14_arr,
+        pao1_core,
+        pao1_acc,
+        pa14_core,
+        pa14_acc,
+    )
+
