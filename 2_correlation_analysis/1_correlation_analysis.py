@@ -50,7 +50,7 @@ num_singular_values = 300
 num_singular_values_log = 100
 
 # Which subset of genes to consider: core, acc, all
-subset_genes = "all"
+subset_genes = "acc"
 # -
 
 # Load expression data
@@ -187,9 +187,13 @@ elif subset_genes == "acc":
     pao1_corr_log_spell = pao1_corr_log_spell.loc[pao1_acc, pao1_acc]
     pa14_corr_log_spell = pa14_corr_log_spell.loc[pa14_acc, pa14_acc]
 
-# TO DO
-# Drop any duplicate rows and columns
-pao1_corr_log_spell[pao1_corr_log_spell.duplicated()]
+# Check for duplicates indices
+assert pao1_corr_log_spell.index.duplicated().sum() == 0
+assert pa14_corr_log_spell.index.duplicated().sum() == 0
+
+# Check for duplicate rows
+assert pao1_corr_log_spell[pao1_corr_log_spell.duplicated(keep=False)].shape[0] == 0
+assert pa14_corr_log_spell[pa14_corr_log_spell.duplicated(keep=False)].shape[0] == 0
 
 # +
 # Plot heatmap
