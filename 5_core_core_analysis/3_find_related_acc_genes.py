@@ -28,7 +28,7 @@ import scipy
 import pandas as pd
 import seaborn as sns
 import numpy as np
-from scripts import utils, paths, gene_relationships
+from scripts import utils, paths, gene_relationships, annotations
 
 random.seed(1)
 # -
@@ -127,30 +127,8 @@ pa14_arr = pa14_arr.sort_index()
 pao1_operon_filename = paths.PAO1_OPERON
 pa14_operon_filename = paths.PA14_OPERON
 
-pao1_operon = pd.read_csv(pao1_operon_filename, index_col=0, header=0)
-pa14_operon = pd.read_csv(pa14_operon_filename, index_col=0, header=0)
-
-pao1_operon = pao1_operon.set_index("locus_tag")
-pa14_operon = pa14_operon.set_index("locus_tag")
-
-# +
-# There are 247 PAO1 genes with multiple annotations
-# This operon df contains annotations from predicted operons based on DOOR database
-# predictions which make up the majority of the operons) as well as some that
-# are curated (i.e. PseudoCAP)
-# There are some that have multiple PseudoCAP annotations too
-
-# Here we will keep the last PseudoCAP annotations
-# Note: Do we want to discard these annotations all together
-# or will these need to be carefully curated to determine which to keep?
-# We will use the curated annotation here
-pao1_operon = pao1_operon[~pao1_operon.index.duplicated(keep="last")]
-pa14_operon = pa14_operon[~pa14_operon.index.duplicated(keep="last")]
-# -
-
-# Only include columns for gene id and operon_name
-pao1_operon = pao1_operon["operon_name"].to_frame()
-pa14_operon = pa14_operon["operon_name"].to_frame()
+pao1_operon = annotations.load_format_operons(pao1_operon_filename)
+pa14_operon = annotations.load_format_operons(pa14_operon_filename)
 
 if use_operon:
     pao1_operon_expression_to_use = pao1_operon

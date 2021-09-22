@@ -48,15 +48,9 @@ pa14_similarity_scores = pd.read_csv(
 
 pao1_similarity_scores.head()
 
-# +
 # Load KEGG pathway data
 pao1_pathway_filename = "https://raw.githubusercontent.com/greenelab/adage/7a4eda39d360b224268921dc1f2c14b32788ab16/Node_interpretation/pseudomonas_KEGG_terms.txt"
 
-# pao1_pathways = pd.read_csv(pao1_pathway_filename, sep="\t", index_col=0, header=None)
-# -
-
-# pao1_pathways[2] = pao1_pathways[2].str.split(";").apply(set)
-# pao1_pathways.index = pao1_pathways.index.str.split(" - ").str[0]
 pao1_pathways = annotations.load_format_KEGG(pao1_pathway_filename)
 pao1_pathways.head()
 
