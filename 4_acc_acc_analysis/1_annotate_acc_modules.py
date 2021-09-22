@@ -337,51 +337,8 @@ pao1_gene_annot.head()
 pao1_operon_filename = paths.PAO1_OPERON
 pa14_operon_filename = paths.PA14_OPERON
 
-# +
-# pao1_operon = pd.read_csv(pao1_operon_filename, index_col=0, header=0)
-# pa14_operon = pd.read_csv(pa14_operon_filename, index_col=0, header=0)
-
-# +
-# There are 247 PAO1 genes with multiple annotations
-# This operon df contains annotations from predicted operons based on DOOR database
-# predictions which make up the majority of the operons) as well as some that
-# are curated (i.e. PseudoCAP)
-# There are some that have multiple PseudoCAP annotations too
-
-# Here we will keep the last PseudoCAP annotations
-# To ensure that the PseudoCAP annotations are the last ones, we will sort the values
-# pao1_operon = pao1_operon.sort_values(by=["locus_tag", "source_database"])
-# pa14_operon = pa14_operon.sort_values(by=["locus_tag", "source_database"])
-
-# +
-# pao1_operon = pao1_operon.set_index("locus_tag")
-# pa14_operon = pa14_operon.set_index("locus_tag")
-
-# +
-# print(pao1_operon.shape)
-# pao1_operon.head()
-
-# +
-# print(pa14_operon.shape)
-# pa14_operon.head()
-
-# +
-# pao1_operon = pao1_operon[~pao1_operon.index.duplicated(keep="last")]
-# pa14_operon = pa14_operon[~pa14_operon.index.duplicated(keep="last")]
-
-# +
-# Only include columns for gene id and operon_name
-# pao1_operon = pao1_operon["operon_name"].to_frame()
-# pa14_operon = pa14_operon["operon_name"].to_frame()
-
-# +
 pao1_operon = annotations.load_format_operons(pao1_operon_filename)
 pa14_operon = annotations.load_format_operons(pa14_operon_filename)
-
-# TO DO:
-# Check that the dim
-# Check the saved output
-# -
 
 pao1_operon.head()
 
