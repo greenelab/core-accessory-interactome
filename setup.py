@@ -8,7 +8,7 @@ HERE = pathlib.Path(__file__).parent
 README = (HERE / "README.md").read_text()
 
 setup(
-    name="core_acc_modules",
+    name="scripts",
     version="0.1",
     description="Install functions to run analysis to examine relationship between core and accessory gene expression",
     long_description=README,
@@ -17,6 +17,6 @@ setup(
     author="Alexandra Lee",
     author_email="alexjlee.21@gmail.com",
     license="BSD 3-Clause",
-    packages=["core_acc_modules"],
+    packages=["scripts"],
     zip_safe=False,
 )

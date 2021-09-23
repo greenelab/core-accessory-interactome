@@ -1,0 +1,683 @@
+	Name	PAO1 homolog id	pathways present	Transcriptional similarity across strains	P-value	label	Related acc genes
+PA14_00020	dnaN	PA0002	['KEGG-Pathway-pae03440: Homologous recombination', 'KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Pathway-pae00240: Pyrimidine metabolism', 'KEGG-Pathway-pae03030: DNA replication', 'KEGG-Pathway-pae03430: Mismatch repair', 'KEGG-Module-M00260: DNA polymerase III complex, bacteria']	0.5251925197083271	0.0	most stable
+PA14_00050	gyrB	PA0004	[]	0.5373333955263381	0.0	most stable
+PA14_00090	glyS	PA0008	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	0.5188998562478951	0.0	most stable
+PA14_00100	glyQ	PA0009	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	0.558834523183892	0.0	most stable
+PA14_00560	exoT	PA0044	[]	0.5057166240666348	0.0	most stable
+PA14_00600		PA0048	[]	0.1874460217499081	1.6198609598353524e-43	least stable	No accessory genes
+PA14_00670		PA0055	[]	0.5086467504534156	0.0	most stable
+PA14_00710	osmC	PA0059	[]	0.5639390724375983	0.0	most stable
+PA14_00820	tagQ1	PA0070	[]	0.6219950673547691	0.0	most stable
+PA14_00850	tagS1	PA0072	['KEGG-Module-M00258: Putative ABC transport system']	0.5387078409817853	0.0	most stable
+PA14_00860	tagT1	PA0073	['KEGG-Module-M00258: Putative ABC transport system']	0.5569334576675941	0.0	most stable
+PA14_00875	ppkA	PA0074	['KEGG-Pathway-pae03070: Bacterial secretion system']	0.6551918382452326	0.0	most stable
+PA14_00890	pppA	PA0075	['KEGG-Pathway-pae03070: Bacterial secretion system']	0.5289547058786556	0.0	most stable
+PA14_00900	tagF1	PA0076	[]	0.5134596249543788	0.0	most stable
+PA14_00910	icmF1	PA0077	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00334: Type VI secretion system']	0.6173944967337224	0.0	most stable
+PA14_00925	tssL1	PA0078	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00334: Type VI secretion system']	0.5951925499364774	0.0	most stable
+PA14_00940	tssK1	PA0079	['KEGG-Module-M00334: Type VI secretion system']	0.5992752320086328	0.0	most stable
+PA14_00960	tssJ1	PA0080	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00334: Type VI secretion system']	0.5367150969973692	0.0	most stable
+PA14_01010	tssB1	PA0083	['KEGG-Module-M00334: Type VI secretion system']	0.6369041686742037	0.0	most stable
+PA14_01020	tssC1	PA0084	['KEGG-Module-M00334: Type VI secretion system']	0.694473689492182	0.0	most stable
+PA14_01030	hcp1	PA0085	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00334: Type VI secretion system']	0.6678146073791654	0.0	most stable
+PA14_01040	tagJ1	PA0086	[]	0.6047484454993293	0.0	most stable
+PA14_01060	tssE1	PA0087	['KEGG-Module-M00334: Type VI secretion system']	0.6225092526390846	0.0	most stable
+PA14_01070	tssF1	PA0088	['KEGG-Module-M00334: Type VI secretion system']	0.6569676564842193	0.0	most stable
+PA14_01080	tssG1	PA0089	['KEGG-Module-M00334: Type VI secretion system']	0.6255063318320276	0.0	most stable
+PA14_01100	clpV1	PA0090	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00334: Type VI secretion system']	0.6420746719853537	0.0	most stable
+PA14_01110	vgrG1	PA0091	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00334: Type VI secretion system']	0.5744950213018875	0.0	most stable
+PA14_01140	tse6	PA0093	[]	0.5085782952852228	0.0	most stable
+PA14_01180		PA0097	[]	0.5390417693417304	0.0	most stable
+PA14_01600	bauC	PA0130	['KEGG-Pathway-pae00562: Inositol phosphate metabolism', 'KEGG-Pathway-pae00280: Valine, leucine and isoleucine degradation', 'KEGG-Pathway-pae00640: Propanoate metabolism', 'KEGG-Pathway-pae00410: beta-Alanine metabolism']	0.16943653179870335	9.244762295791014e-36	least stable	['PA14_30950', 'PA14_44230', 'PA14_30870']
+PA14_01910	pcaG	PA0154	['KEGG-Pathway-pae00362: Benzoate degradation', 'KEGG-Pathway-pae01220: Degradation of aromatic compounds']	0.1865339350680842	4.18989462608562e-43	least stable	No accessory genes
+PA14_01980		PA0159	[]	0.1936667335903801	2.1746652022370567e-46	least stable	No accessory genes
+PA14_02060		PA0165	[]	0.5107612703596207	0.0	most stable
+PA14_02300		PA0182	['KEGG-Pathway-pae00780: Biotin metabolism', 'KEGG-Pathway-pae01040: Biosynthesis of unsaturated fatty acids', 'KEGG-Pathway-pae01212: Fatty acid metabolism', 'KEGG-Pathway-pae00061: Fatty acid biosynthesis', 'KEGG-Module-M00083: Fatty acid biosynthesis, elongation', 'KEGG-Module-M00572: Pimeloyl-ACP biosynthesis, BioC-BioH pathway, malonyl-ACP => pimeloyl-ACP']	0.19008208758220088	1.0106625148710489e-44	least stable	No accessory genes
+PA14_02910		PA0236	[]	0.5059980369597051	0.0	most stable
+PA14_03100		PA0251	[]	0.1551998819398585	3.2985331859625294e-30	least stable	['PA14_31340', 'PA14_55030']
+PA14_03170		PA0987	[]	0.16852549275660944	2.1697851049702238e-35	least stable	['PA14_51550', 'PA14_03320']
+PA14_03180		PA0986	[]	0.17767884979536164	3.2995256518067984e-39	least stable	['PA14_55070', 'PA14_03350', 'PA14_10080', 'PA14_03320']
+PA14_03190	tli3	PA0259	[]	0.13605826792354342	1.5572252443671238e-23	least stable	['PA14_43100', 'PA14_69520', 'PA14_69510', 'PA14_69540', 'PA14_43090', 'PA14_49540', 'PA14_10970']
+PA14_03650	cysA	PA0280	['KEGG-Pathway-pae00920: Sulfur metabolism', 'KEGG-Module-M00185: Sulfate transport system', 'KEGG-Module-M00616: Sulfate-sulfur assimilation']	0.5117958921497174	0.0	most stable
+PA14_03670	cysW	PA0281	['KEGG-Pathway-pae00920: Sulfur metabolism', 'KEGG-Module-M00185: Sulfate transport system', 'KEGG-Module-M00616: Sulfate-sulfur assimilation']	0.5316553459522753	0.0	most stable
+PA14_03680	cysT	PA0282	['KEGG-Pathway-pae00920: Sulfur metabolism', 'KEGG-Module-M00185: Sulfate transport system', 'KEGG-Module-M00616: Sulfate-sulfur assimilation']	0.5064253233332162	0.0	most stable
+PA14_03700	sbp	PA0283	['KEGG-Pathway-pae00920: Sulfur metabolism', 'KEGG-Module-M00185: Sulfate transport system', 'KEGG-Module-M00616: Sulfate-sulfur assimilation']	0.5375844251386532	0.0	most stable
+PA14_03710		PA0284	[]	0.5194162325101701	0.0	most stable
+PA14_03920	spuD	PA0300	['KEGG-Module-M00300: Putrescine transport system']	0.53633488804838	0.0	most stable
+PA14_04180	carO	PA0320	[]	0.17588646061975982	1.917693809938576e-38	least stable	No accessory genes
+PA14_04190		PA0321	[]	0.18647270316769046	4.465132771403939e-43	least stable	No accessory genes
+PA14_04410	ptsP	PA0337	['KEGG-Pathway-pae02060: Phosphotransferase system (PTS)']	0.5392844126054067	0.0	most stable
+PA14_04530		PA0346	[]	0.1894035458664005	2.0723325015683457e-44	least stable	['PA14_21560']
+PA14_04560		PA0348	[]	0.13906805817427528	1.5939218147947179e-24	least stable	No accessory genes
+PA14_04650	pfpI	PA0355	[]	0.5080506453897179	0.0	most stable
+PA14_04670	mutM	PA0357	['KEGG-Pathway-pae03410: Base excision repair']	0.5396644725680829	0.0	most stable
+PA14_04780		PA0364	[]	0.198886551325285	7.080857887038555e-49	least stable	No accessory genes
+PA14_04820		PA0367	[]	0.1517840452452167	5.962682792459626e-29	least stable	['PA14_43250']
+PA14_04980	thiG	PA0381	['KEGG-Pathway-pae00730: Thiamine metabolism']	0.5323794934133872	0.0	most stable
+PA14_05130		PA0392	[]	0.5051014638830132	0.0	most stable
+PA14_05560		PA0428	['KEGG-Pathway-pae03018: RNA degradation']	0.5171149064419435	0.0	most stable
+PA14_05580		PA0429	[]	0.5088576662979648	0.0	most stable
+PA14_05820		PA0446	[]	0.16247216011040716	5.5637879903882566e-33	least stable	No accessory genes
+PA14_06040		PA0462	[]	0.56747372346679	0.0	most stable
+PA14_06080	creD	PA0465	[]	0.14992020161552128	2.8132957614496645e-28	least stable	['PA14_59290', 'PA14_43100', 'PA14_10970']
+PA14_06170	fiuR	PA0471	[]	0.5064500213884061	0.0	most stable
+PA14_06250		PA0478	[]	0.06207210989861611	5.510410080651394e-06	least stable	No accessory genes
+PA14_06270		PA0480	['KEGG-Pathway-pae00362: Benzoate degradation', 'KEGG-Pathway-pae01220: Degradation of aromatic compounds', 'KEGG-Module-M00568: Catechol ortho-cleavage, catechol => 3-oxoadipate']	0.1677141282791057	4.619994393366463e-35	least stable	No accessory genes
+PA14_06460		PA0495	[]	0.18128409359976505	9.043049945211948e-41	least stable	No accessory genes
+PA14_06650	nirN	PA0509	[]	0.5236501549572422	0.0	most stable
+PA14_06670	nirJ	PA0511	[]	0.5644323395521625	0.0	most stable
+PA14_06700	nirL	PA0514	[]	0.5117231688576367	0.0	most stable
+PA14_06710		PA0515	[]	0.538843608210158	0.0	most stable
+PA14_06720	nirF	PA0516	[]	0.5255274550892364	0.0	most stable
+PA14_06740	nirM	PA0518	['KEGG-Pathway-pae00920: Sulfur metabolism']	0.5074513104071622	0.0	most stable
+PA14_06750	nirS	PA0519	['KEGG-Pathway-pae00910: Nitrogen metabolism', 'KEGG-Module-M00529: Denitrification, nitrate => nitrogen']	0.5079110236910547	0.0	most stable
+PA14_06830	norB	PA0524	['KEGG-Pathway-pae00910: Nitrogen metabolism', 'KEGG-Module-M00529: Denitrification, nitrate => nitrogen']	0.5106828611431695	0.0	most stable
+PA14_06840		PA0525	[]	0.5408873959211125	0.0	most stable
+PA14_07050		PA0543	[]	0.5002867319746442	0.0	most stable
+PA14_07130	tktA	PA0548	['KEGG-Pathway-pae00030: Pentose phosphate pathway']	0.5003052338805501	0.0	most stable
+PA14_07300		PA0561	[]	0.17202216169288065	7.996903538145979e-37	least stable	['PA14_28820', 'PA14_03380', 'PA14_28840', 'PA14_55050', 'PA14_28830']
+PA14_07355		PA0565	[]	0.19793565750954487	2.0345931532609754e-48	least stable	['PA14_04010', 'PA14_22280']
+PA14_07450		PA0574	[]	0.19040906318541626	7.143422380213028e-45	least stable	['PA14_69520', 'PA14_69510', 'PA14_49540', 'PA14_43100', 'PA14_51560', 'PA14_10980', 'PA14_10960']
+PA14_07520	rpoD	PA0576	[]	0.5347785143797661	0.0	most stable
+PA14_07550		PA0578	[]	0.5494116794047517	0.0	most stable
+PA14_07560	rpsU	PA0579	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5075250598616262	0.0	most stable
+PA14_07650		PA0586	[]	0.5425834185524963	0.0	most stable
+PA14_07660		PA0587	[]	0.5058122252279154	0.0	most stable
+PA14_07680		PA0588	[]	0.5484703432143776	0.0	most stable
+PA14_07760	surA	PA0594	[]	0.5140659431783714	0.0	most stable
+PA14_07770	lptD	PA0595	[]	0.5003455162675966	0.0	most stable
+PA14_07860	agtA	PA0603	['KEGG-Module-M00193: Putative spermidine/putrescine transport system']	0.1970399432030369	5.47160936447579e-48	least stable	No accessory genes
+PA14_07890	agtC	PA0605	['KEGG-Module-M00193: Putative spermidine/putrescine transport system']	0.19081030493654613	4.662307718112135e-45	least stable	No accessory genes
+PA14_08010		PA0616	[]	0.5267619647592446	0.0	most stable
+PA14_08020		PA0617	[]	0.5897274749343783	0.0	most stable
+PA14_08030		PA0618	[]	0.557563313994263	0.0	most stable
+PA14_08040		PA0619	[]	0.5505766066706604	0.0	most stable
+PA14_08050		PA0620	[]	0.5450205660219243	0.0	most stable
+PA14_08070		PA0622	[]	0.549083502422695	0.0	most stable
+PA14_08090		PA0623	[]	0.5498276191365171	0.0	most stable
+PA14_08100		PA0624	[]	0.5642049927795562	0.0	most stable
+PA14_08120		PA0625	[]	0.547340448681509	0.0	most stable
+PA14_08130		PA0626	[]	0.5051661325482613	0.0	most stable
+PA14_08150		PA0628	[]	0.5512127460037793	0.0	most stable
+PA14_08160		PA0629	[]	0.5148897074130653	0.0	most stable
+PA14_08190		PA0631	[]	0.5093108266103714	0.0	most stable
+PA14_08260		PA0638	[]	0.5048723797402157	0.0	most stable
+PA14_08680	tufB	PA4277	[]	0.5691117610576345	0.0	most stable
+PA14_08695	secE	PA4276	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Pathway-pae03060: Protein export', 'KEGG-Module-M00335: Sec (secretion) system']	0.5277516175557863	0.0	most stable
+PA14_08710	nusG	PA4275	[]	0.503857482330054	0.0	most stable
+PA14_08720	rplK	PA4274	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.58201372227713	0.0	most stable
+PA14_08730	rplA	PA4273	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5609021923233309	0.0	most stable
+PA14_08740	rplJ	PA4272	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.554591954312562	0.0	most stable
+PA14_08780	rpoC	PA4269	['KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Pathway-pae00240: Pyrimidine metabolism']	0.5428701865268155	0.0	most stable
+PA14_08790	rpsL	PA4268	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5276205037261903	0.0	most stable
+PA14_08810	rpsG	PA4267	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5396008152647216	0.0	most stable
+PA14_08820	fusA1	PA4266	[]	0.6272129504499935	0.0	most stable
+PA14_08830	tufA	PA4265	[]	0.5796437184487384	0.0	most stable
+PA14_08850	rplC	PA4263	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5283771574718061	0.0	most stable
+PA14_08860	rplD	PA4262	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.6368934864459126	0.0	most stable
+PA14_08870	rplW	PA4261	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5667174462678926	0.0	most stable
+PA14_08880	rplB	PA4260	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5870505295427885	0.0	most stable
+PA14_08890	rpsS	PA4259	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5521727328775039	0.0	most stable
+PA14_08900	rplV	PA4258	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5411274609577839	0.0	most stable
+PA14_08910	rpsC	PA4257	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5598297829727225	0.0	most stable
+PA14_08920	rplP	PA4256	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5661870068946789	0.0	most stable
+PA14_08930	rpmC	PA4255	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5154225266647116	0.0	most stable
+PA14_08950	rplN	PA4253	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5374901644555451	0.0	most stable
+PA14_08960	rplX	PA4252	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5269168911332196	0.0	most stable
+PA14_08970	rplE	PA4251	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5269108547464162	0.0	most stable
+PA14_08990	rpsH	PA4249	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5408242136335798	0.0	most stable
+PA14_09000	rplF	PA4248	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.6099382767110622	0.0	most stable
+PA14_09010	rplR	PA4247	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.585376486188537	0.0	most stable
+PA14_09020	rpsE	PA4246	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5656570730184685	0.0	most stable
+PA14_09030	rpmD	PA4245	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.515192526705164	0.0	most stable
+PA14_09040	rplO	PA4244	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5582683350775743	0.0	most stable
+PA14_09050	secY	PA4243	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Pathway-pae03060: Protein export', 'KEGG-Module-M00335: Sec (secretion) system']	0.5942951567699986	0.0	most stable
+PA14_09080	rpsM	PA4241	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5354361583697692	0.0	most stable
+PA14_09090	rpsK	PA4240	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5103532785380495	0.0	most stable
+PA14_09100	rpsD	PA4239	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.6364228281746562	0.0	most stable
+PA14_09115	rpoA	PA4238	['KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Pathway-pae00240: Pyrimidine metabolism']	0.5941057599836869	0.0	most stable
+PA14_09130	rplQ	PA4237	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5880247002210284	0.0	most stable
+PA14_09180	uvrA	PA4234	['KEGG-Pathway-pae03420: Nucleotide excision repair']	0.5136378444443849	0.0	most stable
+PA14_09550	ppgL	PA4204	[]	0.5920618251914015	0.0	most stable
+PA14_09610		PA4200	[]	0.13136786239263304	4.909429600372077e-22	least stable	No accessory genes
+PA14_09690	bfiR	PA4196	[]	0.17440303231345078	8.11318927547319e-38	least stable	No accessory genes
+PA14_10420	tyrS	PA4138	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	0.18698228412653425	2.6277818907384998e-43	least stable	['PA14_27630']
+PA14_10730		PA4115	[]	0.5123336312665566	0.0	most stable
+PA14_10770		PA4112	[]	0.5425742821847127	0.0	most stable
+PA14_10780		PA4111	[]	0.1959886630634572	1.7366354355160254e-47	least stable	['PA14_55240']
+PA14_10790	ampC	PA4110	['KEGG-Pathway-pae00312: beta-Lactam resistance']	0.124007455292393	8.618491597181753e-20	least stable	No accessory genes
+PA14_10840		PA3507	[]	0.023861324896799117	0.08090267376959223	least stable	['PA14_56970']
+PA14_10850		PA4100	[]	0.14316713043122062	6.587879090230855e-26	least stable	No accessory genes
+PA14_10910		PA4096	[]	0.1467824483629165	3.6656185203103035e-27	least stable	No accessory genes
+PA14_10990	hpaC	PA4092	['KEGG-Pathway-pae00350: Tyrosine metabolism', 'KEGG-Pathway-pae01220: Degradation of aromatic compounds']	0.1999776200112466	2.09515330689905e-49	least stable	No accessory genes
+PA14_11190		PA4073	['KEGG-Pathway-pae00360: Phenylalanine metabolism', 'KEGG-Pathway-pae00643: Styrene degradation']	0.13898916723060695	1.693149461452351e-24	least stable	No accessory genes
+PA14_11400	ribD	PA4056	['KEGG-Pathway-pae00740: Riboflavin metabolism', 'KEGG-Module-M00125: Riboflavin biosynthesis, GTP => riboflavin/FMN/FAD']	0.5298984815686933	0.0	most stable
+PA14_11550	dxs	PA4044	['KEGG-Pathway-pae00900: Terpenoid backbone biosynthesis', 'KEGG-Pathway-pae00730: Thiamine metabolism']	0.5077209491701712	0.0	most stable
+PA14_11670	mucE	PA4033	[]	0.17909766508408506	8.084178771882519e-40	least stable	['PA14_58980']
+PA14_12060	pbpA	PA4003	['KEGG-Pathway-pae00312: beta-Lactam resistance', 'KEGG-Pathway-pae00550: Peptidoglycan biosynthesis']	0.5688479756744897	0.0	most stable
+PA14_12070	rodA	PA4002	[]	0.5276690108307424	0.0	most stable
+PA14_12100	dacC	PA3999	['KEGG-Pathway-pae00550: Peptidoglycan biosynthesis']	0.5404874633425405	0.0	most stable
+PA14_12150		PA3994	[]	0.18447751668325169	3.506787973423846e-42	least stable	No accessory genes
+PA14_12170		PA3991	[]	0.14953296922955714	3.8736697471772778e-28	least stable	['PA14_48900', 'PA14_28750', 'PA14_39910', 'PA14_64260']
+PA14_12230	leuS	PA3987	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	0.5002898506992479	0.0	most stable
+PA14_12310		PA3982	[]	0.5173961751646359	0.0	most stable
+PA14_12330		PA3981	[]	0.5765847660331181	0.0	most stable
+PA14_12350		PA3980	[]	0.5137052964039371	0.0	most stable
+PA14_12410	thiD	PA3975	['KEGG-Pathway-pae00730: Thiamine metabolism']	0.5026492952236103	0.0	most stable
+PA14_12590		PA3964	[]	0.19338796381144824	2.939272287722146e-46	least stable	No accessory genes
+PA14_12920		PA3938	['KEGG-Pathway-pae00920: Sulfur metabolism']	0.5569443424779709	0.0	most stable
+PA14_12940		PA3937	['KEGG-Pathway-pae00920: Sulfur metabolism']	0.5547357009715265	0.0	most stable
+PA14_12960		PA3936	['KEGG-Pathway-pae00920: Sulfur metabolism']	0.5237723527448014	0.0	most stable
+PA14_13140		PA3922	[]	0.5053588590678846	0.0	most stable
+PA14_13340	eddB	PA3909	[]	0.5172250356343865	0.0	most stable
+PA14_13490		PA3897	[]	0.17409680375393252	1.09096144027286e-37	least stable	No accessory genes
+PA14_13580	opuCA	PA3891	[]	0.5024725429346156	0.0	most stable
+PA14_13890		PA3868	[]	0.1940515008346346	1.4337113832755155e-46	least stable	['PA14_15650', 'PA14_03320', 'PA14_03330', 'PA14_15620', 'PA14_01130', 'PA14_55070', 'PA14_03310']
+PA14_13940		PA3866	[]	0.15558855134547228	2.362911420752305e-30	least stable	['PA14_69510', 'PA14_46460', 'PA14_49520', 'PA14_13920', 'PA14_69520']
+PA14_14360		PA3839	[]	0.5261316233957629	0.0	most stable
+PA14_14390		PA3836	[]	0.5592863363494313	0.0	most stable
+PA14_14430		PA3835	[]	0.1263528876562048	1.7156961637757968e-20	least stable	['PA14_14400', 'PA14_22540', 'PA14_46560']
+PA14_14440	valS	PA3834	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	0.5057143029402902	0.0	most stable
+PA14_14500	lptF	PA3828	[]	0.5269081285898362	0.0	most stable
+PA14_14510	lptG	PA3827	[]	0.5806909798201539	0.0	most stable
+PA14_14630	secD	PA3821	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Pathway-pae03060: Protein export', 'KEGG-Module-M00335: Sec (secretion) system']	0.5959598910189277	0.0	most stable
+PA14_14650	secF	PA3820	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Pathway-pae03060: Protein export', 'KEGG-Module-M00335: Sec (secretion) system']	0.6229810351197566	0.0	most stable
+PA14_14680		PA3818	['KEGG-Pathway-pae00562: Inositol phosphate metabolism', 'KEGG-Pathway-pae00521: Streptomycin biosynthesis']	0.5730389601974442	0.0	most stable
+PA14_14880	gcpE	PA3803	['KEGG-Pathway-pae00900: Terpenoid backbone biosynthesis']	0.5278414788539314	0.0	most stable
+PA14_14900		PA3801	[]	0.5130599006292105	0.0	most stable
+PA14_14910		PA3800	[]	0.5490524546107902	0.0	most stable
+PA14_14930		PA3799	[]	0.5013205212205624	0.0	most stable
+PA14_15430		PA3867	[]	0.03425032385241767	0.012217011095077276	least stable	['PA14_15435', 'PA14_15460', 'PA14_15475', 'PA14_15470', 'PA14_15480', 'PA14_15610', 'PA14_15450', 'PA14_15400', 'PA14_15520']
+PA14_15720		PA3764	[]	0.5528500961715006	0.0	most stable
+PA14_15740	purL	PA3763	['KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Module-M00048: Inosine monophosphate biosynthesis, PRPP + glutamine => IMP']	0.5816103812025918	0.0	most stable
+PA14_15810		PA3759	[]	0.1971624710067822	4.780428228482756e-48	least stable	No accessory genes
+PA14_15960	ffh	PA3746	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Pathway-pae03060: Protein export', 'KEGG-Module-M00335: Sec (secretion) system']	0.5178141292195053	0.0	most stable
+PA14_15980	rimM	PA3744	[]	0.5336741159859547	0.0	most stable
+PA14_15990	trmD	PA3743	[]	0.5502075144982421	0.0	most stable
+PA14_16000	rplS	PA3742	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5349391388614063	0.0	most stable
+PA14_16050	dsbC	PA3737	[]	0.5351756114858707	0.0	most stable
+PA14_16180		PA3729	[]	0.5658010504539165	0.0	most stable
+PA14_16190		PA3728	[]	0.5612609929676822	0.0	most stable
+PA14_16530	lysS	PA3700	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	0.6327595809438518	0.0	most stable
+PA14_16630	lptF	PA3692	[]	0.5669651087408493	0.0	most stable
+PA14_16640		PA3691	[]	0.5449329986771023	0.0	most stable
+PA14_16690	ppc	PA3687	['KEGG-Pathway-pae00620: Pyruvate metabolism', 'KEGG-Pathway-pae00680: Methane metabolism']	0.5183653503389558	0.0	most stable
+PA14_16750		PA3681	[]	0.16915129319225305	1.208168344167483e-35	least stable	No accessory genes
+PA14_16930		PA3667	[]	0.5136518128466809	0.0	most stable
+PA14_17060	rpsB	PA3656	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5910204325943963	0.0	most stable
+PA14_17070	tsf	PA3655	[]	0.5795256649113371	0.0	most stable
+PA14_17130	dxr	PA3650	['KEGG-Pathway-pae00900: Terpenoid backbone biosynthesis']	0.5426934207212432	0.0	most stable
+PA14_17150	opr86	PA3648	[]	0.546215730146595	0.0	most stable
+PA14_17170		PA3647	[]	0.5168864305482453	0.0	most stable
+PA14_17220	lpxB	PA3643	['KEGG-Pathway-pae00540: Lipopolysaccharide biosynthesis']	0.5268776366621791	0.0	most stable
+PA14_17580		PA3613	[]	0.6214841466949111	0.0	most stable
+PA14_17810		PA3593	[]	0.1888002274248488	3.915109194370796e-44	least stable	['PA14_58900']
+PA14_18040		PA3577	[]	0.1954161782390494	3.248242120917845e-47	least stable	No accessory genes
+PA14_18080	nalD	PA3574	['KEGG-Pathway-pae00312: beta-Lactam resistance']	0.19547431034900511	3.0484109350123767e-47	least stable	['PA14_18070']
+PA14_18260	fruK	PA3561	['KEGG-Pathway-pae00051: Fructose and mannose metabolism']	0.16644360921947526	1.497218880686624e-34	least stable	No accessory genes
+PA14_18710	pyrC	PA3527	['KEGG-Pathway-pae00240: Pyrimidine metabolism']	0.5481673475200405	0.0	most stable
+PA14_18880	nth	PA3495	['KEGG-Pathway-pae03410: Base excision repair']	0.5067718041794731	0.0	most stable
+PA14_18910		PA3492	[]	0.5049925922482631	0.0	most stable
+PA14_18920		PA3491	[]	0.5280308348242411	0.0	most stable
+PA14_19020	tse3	PA3484	[]	0.5478755581529611	0.0	most stable
+PA14_19120	rhlR	PA3477	['KEGG-Module-M00644: Multidrug resistance, efflux pump MexHI-OprD']	0.5153810091385499	0.0	most stable
+PA14_19360		PA3460	[]	0.5265464433336429	0.0	most stable
+PA14_19490	lsfA	PA3450	[]	0.5347234343730821	0.0	most stable
+PA14_19500		PA3449	['KEGG-Pathway-pae00920: Sulfur metabolism', 'KEGG-Module-M00436: Sulfonate transport system']	0.5022810214331896	0.0	most stable
+PA14_19530		PA3446	['KEGG-Pathway-pae00920: Sulfur metabolism', 'KEGG-Pathway-pae00740: Riboflavin metabolism']	0.5079025923246031	0.0	most stable
+PA14_19540		PA3445	['KEGG-Pathway-pae00920: Sulfur metabolism', 'KEGG-Module-M00436: Sulfonate transport system']	0.5272621582092311	0.0	most stable
+PA14_19560		PA3444	['KEGG-Pathway-pae00920: Sulfur metabolism']	0.5709915739537985	0.0	most stable
+PA14_19610		PA3440	[]	0.5427611059647771	0.0	most stable
+PA14_19680		PA3432	[]	0.19977946067474991	2.6151693427958157e-49	least stable	['PA14_28460']
+PA14_19690		PA3431	[]	0.19699017292854004	5.779983677087901e-48	least stable	['PA14_28470']
+PA14_19900		PA3417	['KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae00620: Pyruvate metabolism', 'KEGG-Pathway-pae00010: Glycolysis / Gluconeogenesis', 'KEGG-Module-M00307: Pyruvate oxidation, pyruvate => acetyl-CoA']	0.5010387608478929	0.0	most stable
+PA14_19960		PA3412	[]	0.16938201108207326	9.730344199087547e-36	least stable	No accessory genes
+PA14_20320		PA3383	['KEGG-Module-M00223: Phosphonate transport system']	0.5516125628988052	0.0	most stable
+PA14_20330	phnE	PA3382	['KEGG-Module-M00223: Phosphonate transport system']	0.5409089379940901	0.0	most stable
+PA14_20510		PA2457	[]	0.1952356003600106	3.955936319885369e-47	least stable	['PA14_58760', 'PA14_51590', 'PA14_67210']
+PA14_20700		PA3353	[]	0.5355882739603102	0.0	most stable
+PA14_20890	rfaD	PA3337	['KEGG-Pathway-pae00540: Lipopolysaccharide biosynthesis']	0.5462325158824909	0.0	most stable
+PA14_21040		PA3325	[]	0.16863187395049348	1.9645318532522485e-35	least stable	['PA14_22500', 'PA14_52120']
+PA14_21120		PA3318	[]	0.1973696502819791	3.8037413308199433e-48	least stable	['PA14_27630', 'PA14_27675', 'PA14_27660', 'PA14_27640', 'PA14_27680', 'PA14_27650', 'PA14_27690', 'PA14_27700']
+PA14_21140		PA3316	['KEGG-Module-M00223: Phosphonate transport system']	0.19081305458335165	4.6486797825722434e-45	least stable	No accessory genes
+PA14_21190	nbdA	PA3311	[]	0.5194851399564219	0.0	most stable
+PA14_21220		PA3309	[]	0.5537793382660949	0.0	most stable
+PA14_21400		PA3297	[]	0.5084045535722533	0.0	most stable
+PA14_21410	phoA	PA3296	['KEGG-Pathway-pae00627: Aminobenzoate degradation', 'KEGG-Pathway-pae00790: Folate biosynthesis', 'KEGG-Module-M00126: Tetrahydrofolate biosynthesis, GTP => THF']	0.5005523297916827	0.0	most stable
+PA14_21580		PA3283	[]	0.19787894681468515	2.1664133307890836e-48	least stable	No accessory genes
+PA14_21590		PA3282	[]	0.17013504543931673	4.790636775120403e-36	least stable	No accessory genes
+PA14_21600		PA3281	[]	0.1660675617491107	2.1166438147741103e-34	least stable	No accessory genes
+PA14_22075		PA3240	[]	0.14210827085793454	1.513990321176884e-25	least stable	['PA14_22080', 'PA14_22120', 'PA14_22180', 'PA14_22190', 'PA14_22270']
+PA14_22490	azoR3	PA3223	[]	0.1519071882246098	5.378034652072829e-29	least stable	['PA14_22280', 'PA14_61180', 'PA14_51580']
+PA14_22730		PA3206	[]	0.1888397199614928	3.7556689048219404e-44	least stable	No accessory genes
+PA14_23110		PA3179	[]	0.5386473349291837	0.0	most stable
+PA14_23260	gyrA	PA3168	[]	0.5404536773009481	0.0	most stable
+PA14_23270	serC	PA3167	['KEGG-Pathway-pae00260: Glycine, serine and threonine metabolism', 'KEGG-Pathway-pae00750: Vitamin B6 metabolism', 'KEGG-Pathway-pae00680: Methane metabolism', 'KEGG-Module-M00124: Pyridoxal biosynthesis, erythrose-4P => pyridoxal-5P']	0.5177216070461427	0.0	most stable
+PA14_23330	rpsA	PA3162	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5267542441343841	0.0	most stable
+PA14_23450	wbpK	PA3146	[]	0.1896716645346581	1.5609023898809716e-44	least stable	['PA14_23420', 'PA14_23380', 'PA14_23390', 'PA14_23410', 'PA14_23400', 'PA14_28800']
+PA14_23460	wbpL	PA3145	[]	0.1491221121883009	5.4337536692087165e-28	least stable	['PA14_23430', 'PA14_23440', 'PA14_23420', 'PA14_23410', 'PA14_23390', 'PA14_23380']
+PA14_23930	metZ	PA3107	['KEGG-Pathway-pae00270: Cysteine and methionine metabolism', 'KEGG-Pathway-pae00920: Sulfur metabolism']	0.5222209315091924	0.0	most stable
+PA14_24070	xcpX	PA3097	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00331: Type II general secretion pathway']	0.5194186096018226	0.0	most stable
+PA14_24240		PA3086	[]	0.5054577833012073	0.0	most stable
+PA14_24270	pepN	PA3083	['KEGG-Pathway-pae00480: Glutathione metabolism']	0.5337592233208438	0.0	most stable
+PA14_24350	cprR	PA3077	[]	0.11184854429755704	2.2793094301563944e-16	least stable	No accessory genes
+PA14_24730		PA3043	['KEGG-Pathway-pae00230: Purine metabolism']	0.5166839851405276	0.0	most stable
+PA14_24910	moeA2	PA3028	[]	0.5263977267757567	0.0	most stable
+PA14_25020		PA3019	[]	0.515933088248131	0.0	most stable
+PA14_25305	nqrB	PA2998	[]	0.5272169346741425	0.0	most stable
+PA14_25330	nqrD	PA2996	[]	0.5376014575756711	0.0	most stable
+PA14_25430	lolE	PA2988	[]	0.5290759152607515	0.0	most stable
+PA14_25450	lolC	PA2986	[]	0.5157428383320218	0.0	most stable
+PA14_25630	rpmF	PA2970	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5127214050727045	0.0	most stable
+PA14_26010		PA2940	['KEGG-Pathway-pae00071: Fatty acid degradation', 'KEGG-Pathway-pae00362: Benzoate degradation', 'KEGG-Pathway-pae00280: Valine, leucine and isoleucine degradation', 'KEGG-Pathway-pae00281: Geraniol degradation', 'KEGG-Pathway-pae01212: Fatty acid metabolism', 'KEGG-Module-M00087: beta-Oxidation']	0.1858530867275898	8.48982019922689e-43	least stable	['PA14_22280']
+PA14_26090	cif	PA2934	[]	0.1857910998212555	9.052364846443974e-43	least stable	No accessory genes
+PA14_26110		PA2933	[]	0.18896251442685089	3.3000320585365516e-44	least stable	No accessory genes
+PA14_26160		PA2929	[]	0.1537821139040751	1.1056215580182913e-29	least stable	No accessory genes
+PA14_26330		PA2917	[]	0.19336980497253306	2.9974788812542718e-46	least stable	No accessory genes
+PA14_26390		PA2913	['KEGG-Module-M00240: Iron complex transport system']	0.19622643841392826	1.3381696663649508e-47	least stable	No accessory genes
+PA14_27210	efp	PA2851	[]	0.5058551447860463	0.0	most stable
+PA14_27370		PA2840	['KEGG-Pathway-pae03018: RNA degradation']	0.5971098658820814	0.0	most stable
+PA14_27390		PA2839	[]	0.1917325892576853	1.742153420810995e-45	least stable	['PA14_27630', 'PA14_61180']
+PA14_27730		PA2815	['KEGG-Pathway-pae00071: Fatty acid degradation', 'KEGG-Pathway-pae01212: Fatty acid metabolism', 'KEGG-Module-M00087: beta-Oxidation']	0.5843802298480693	0.0	most stable
+PA14_27830	ptrA	PA2808	[]	0.19713272641536345	4.939781348793304e-48	least stable	['PA14_31930']
+PA14_27840		PA2807	[]	0.1238343752977768	9.696958689984912e-20	least stable	No accessory genes
+PA14_27990		PA2794	[]	0.19022144197675506	8.717918866005948e-45	least stable	['PA14_10090', 'PA14_51580', 'PA14_28780', 'PA14_10110']
+PA14_28000		PA2793	[]	0.5181212131191201	0.0	most stable
+PA14_28100	mep72	PA2783	[]	0.1076312023573197	2.9003793967212106e-15	least stable	No accessory genes
+PA14_28240		PA2772	[]	0.16326644279943042	2.7196704132421838e-33	least stable	['PA14_28230', 'PA14_44090', 'PA14_35730', 'PA14_16110']
+PA14_28350		PA2764	[]	0.17605672435457326	1.6237695941361356e-38	least stable	['PA14_22550']
+PA14_28500		PA2753	[]	0.5099645726992506	0.0	most stable
+PA14_28680	rplT	PA2741	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.512644276791003	0.0	most stable
+PA14_28940		PA2723	[]	0.16546409101324586	3.6830167396354597e-34	least stable	['PA14_59820', 'PA14_40740']
+PA14_28950		PA2722	[]	0.11661013676515608	1.1473541546840302e-17	least stable	No accessory genes
+PA14_29100		PA2710	[]	0.5174511646789396	0.0	most stable
+PA14_29290		PA2693	[]	0.1822200341771467	3.5103965560513913e-41	least stable	No accessory genes
+PA14_29360	pfeS	PA2687	[]	0.5151948862169984	0.0	most stable
+PA14_29400	tse5	PA2684	[]	0.5140464845862746	0.0	most stable
+PA14_29460		PA2680	[]	0.18067319476473745	1.6724221985305589e-40	least stable	No accessory genes
+PA14_30110	purB	PA2629	['KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Pathway-pae00250: Alanine, aspartate and glutamate metabolism', 'KEGG-Module-M00048: Inosine monophosphate biosynthesis, PRPP + glutamine => IMP', 'KEGG-Module-M00049: Adenine ribonucleotide biosynthesis, IMP => ADP,ATP']	0.5171053795547662	0.0	most stable
+PA14_30180	idh	PA2624	['KEGG-Pathway-pae00480: Glutathione metabolism', 'KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae01210: 2-Oxocarboxylic acid metabolism', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00010: Citrate cycle, first carbon oxidation, oxaloacetate => 2-oxoglutarate']	0.5282073834124038	0.0	most stable
+PA14_30210	clpS	PA2621	[]	0.5279937771625153	0.0	most stable
+PA14_30230	clpA	PA2620	[]	0.5557038086567153	0.0	most stable
+PA14_30280	trxB1	PA2616	['KEGG-Pathway-pae00450: Selenocompound metabolism', 'KEGG-Pathway-pae00240: Pyrimidine metabolism']	0.5172624892132008	0.0	most stable
+PA14_30310	lolA	PA2614	[]	0.5119097464592752	0.0	most stable
+PA14_30320		PA2613	[]	0.5296674606107503	0.0	most stable
+PA14_30330	serS	PA2612	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	0.5182934242064979	0.0	most stable
+PA14_30410		PA2604	[]	0.5033546164495064	0.0	most stable
+PA14_30560	qteE	PA2593	[]	0.15939663499188178	8.593245856868872e-32	least stable	No accessory genes
+PA14_30660	uvrC	PA2585	['KEGG-Pathway-pae03420: Nucleotide excision repair']	0.5086801479725055	0.0	most stable
+PA14_30730		PA2581	[]	0.5055074250126801	0.0	most stable
+PA14_30820		PA2573	['KEGG-Pathway-pae02030: Bacterial chemotaxis']	0.5288109246273609	0.0	most stable
+PA14_30830		PA2572	[]	0.5019041054231507	0.0	most stable
+PA14_31010	czcA	PA2520	[]	0.10346416003362263	3.2546350180210407e-14	least stable	['PA14_31060', 'PA14_30970', 'PA14_46590', 'PA14_31240']
+PA14_31460		PA2558	[]	0.1996022554175988	3.187979952526126e-49	least stable	['PA14_31040', 'PA14_31050']
+PA14_31970	czcC	PA2522	[]	0.1953490864170236	3.49512245174365e-47	least stable	['PA14_31930']
+PA14_31990	czcB	PA2521	[]	0.17249704344646954	5.07995296756965e-37	least stable	['PA14_31930', 'PA14_31100']
+PA14_32270	opdT	PA2505	[]	0.08544635355059163	3.824611440661112e-10	least stable	No accessory genes
+PA14_32360		PA2497	[]	0.19806959066944652	1.754105793391629e-48	least stable	No accessory genes
+PA14_32370		PA2496	[]	0.1520701820833579	4.6907687496763727e-29	least stable	No accessory genes
+PA14_32440		PA2490	[]	0.19950250788725046	3.5636674222645026e-49	least stable	No accessory genes
+PA14_32580		PA2479	[]	0.10068964010463767	1.5448597953373335e-13	least stable	['PA14_30970', 'PA14_10970', 'PA14_55240', 'PA14_69520', 'PA14_31060']
+PA14_32590		PA2478	[]	0.19023196186114627	8.621142515530422e-45	least stable	['PA14_31270', 'PA14_31280', 'PA14_30970', 'PA14_31240']
+PA14_32690	gtdA	PA2470	['KEGG-Pathway-pae00350: Tyrosine metabolism']	0.1936077848518048	2.317812080207941e-46	least stable	['PA14_31070']
+PA14_32720	foxR	PA2467	[]	0.5156309822789229	0.0	most stable
+PA14_32830		PA2458	[]	0.09445180917880057	4.399540099366781e-12	least stable	['PA14_31060']
+PA14_32860		PA2455	[]	0.16606985496755358	2.1121848085031054e-34	least stable	['PA14_32840', 'PA14_32850']
+PA14_33270	pvdG	PA2425	[]	0.5259291736511139	0.0	most stable
+PA14_33280	pvdL	PA2424	[]	0.5695229901035864	0.0	most stable
+PA14_33610		PA2402	[]	0.5313621764841631	0.0	most stable
+PA14_33710	pvdO	PA2395	[]	0.515219933325062	0.0	most stable
+PA14_33720	pvdN	PA2394	[]	0.5163104989968281	0.0	most stable
+PA14_33730		PA2393	[]	0.5107346756489568	0.0	most stable
+PA14_33740	pvdP	PA2392	[]	0.5266830298381098	0.0	most stable
+PA14_33860	lldA	PA2382	['KEGG-Pathway-pae00620: Pyruvate metabolism']	0.1499709714609027	2.697589749797353e-28	least stable	No accessory genes
+PA14_34050	hsiC3	PA2366	['KEGG-Module-M00334: Type VI secretion system']	0.545882589097302	0.0	most stable
+PA14_34070	hsiB3	PA2365	['KEGG-Module-M00334: Type VI secretion system']	0.5132537140483793	0.0	most stable
+PA14_34130	icmF3	PA2361	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00334: Type VI secretion system']	0.5225417181271413	0.0	most stable
+PA14_34190	msuD	PA2356	['KEGG-Pathway-pae00920: Sulfur metabolism']	0.18984193696054166	1.3035075037615722e-44	least stable	No accessory genes
+PA14_34680		PA2317	['KEGG-Pathway-pae00330: Arginine and proline metabolism']	0.1375305974061084	5.1390045237053375e-24	least stable	No accessory genes
+PA14_34880		PA2299	[]	0.19271505596197744	6.070946385104094e-46	least stable	No accessory genes
+PA14_34920		PA2297	[]	0.1914085313318584	2.463486729452629e-45	least stable	['PA14_35800']
+PA14_35050		PA2283	[]	0.1740844428450322	1.1040686261566459e-37	least stable	No accessory genes
+PA14_35690	pslE	PA2235	[]	0.17533683858556226	3.277333482398588e-38	least stable	['PA14_31070', 'PA14_10120', 'PA14_33970', 'PA14_20520']
+PA14_36110		PA2211	[]	0.1991049112716656	5.552513226705278e-49	least stable	['PA14_35940']
+PA14_36310	hcnC	PA2195	['KEGG-Pathway-pae00460: Cyanoamino acid metabolism']	0.5103412959624161	0.0	most stable
+PA14_36320	hcnB	PA2194	['KEGG-Pathway-pae00460: Cyanoamino acid metabolism']	0.5097341440198953	0.0	most stable
+PA14_36375		PA2180	[]	0.5817773105963331	0.0	most stable
+PA14_36420		PA2177	[]	0.5238222186097393	0.0	most stable
+PA14_36450		PA2176	[]	0.5334419728055321	0.0	most stable
+PA14_36520		PA2171	[]	0.5252670501946037	0.0	most stable
+PA14_36530		PA2169	[]	0.5385374637277277	0.0	most stable
+PA14_36550		PA2167	[]	0.5694712159664139	0.0	most stable
+PA14_36570		PA2165	['KEGG-Pathway-pae00500: Starch and sucrose metabolism']	0.532907452476213	0.0	most stable
+PA14_36580		PA2164	['KEGG-Pathway-pae00500: Starch and sucrose metabolism']	0.5425517941246165	0.0	most stable
+PA14_36590		PA2163	['KEGG-Pathway-pae00500: Starch and sucrose metabolism']	0.6054335451152356	0.0	most stable
+PA14_36605		PA2162	['KEGG-Pathway-pae00500: Starch and sucrose metabolism']	0.5523213076162549	0.0	most stable
+PA14_36710	glgB	PA2153	['KEGG-Pathway-pae00500: Starch and sucrose metabolism']	0.5807790184127629	0.0	most stable
+PA14_36730		PA2152	['KEGG-Pathway-pae00500: Starch and sucrose metabolism']	0.5393732032353784	0.0	most stable
+PA14_36740		PA2151	['KEGG-Pathway-pae00500: Starch and sucrose metabolism']	0.563397960222469	0.0	most stable
+PA14_37070	cgrA	PA2127	[]	0.5177412610355726	0.0	most stable
+PA14_37190	ada	PA2118	[]	0.15698856168964226	7.0549815255736685e-31	least stable	['PA14_37170', 'PA14_35920']
+PA14_37360		PA2099	[]	0.19802686071050965	1.839136449507184e-48	least stable	['PA14_35940']
+PA14_37690		PA2072	[]	0.5375427409801947	0.0	most stable
+PA14_37710	fusA2	PA2071	[]	0.5312822741483508	0.0	most stable
+PA14_37790	pcoA	PA2065	[]	0.10307870367924148	4.050956933033794e-14	least stable	No accessory genes
+PA14_37810	pcoB	PA2064	[]	0.1759804966400194	1.749372408591407e-38	least stable	No accessory genes
+PA14_38180		PA2037	[]	0.12885453255010365	2.965754584642006e-21	least stable	['PA14_35840', 'PA14_35850', 'PA14_35830', 'PA14_43100', 'PA14_49520']
+PA14_38210		PA2034	[]	0.5398768036791022	0.0	most stable
+PA14_38250		PA2032	[]	0.5285304849387886	0.0	most stable
+PA14_38330	gor	PA2025	['KEGG-Pathway-pae00480: Glutathione metabolism']	0.5626158130954856	0.0	most stable
+PA14_38350	galU	PA2023	['KEGG-Pathway-pae00040: Pentose and glucuronate interconversions', 'KEGG-Pathway-pae00052: Galactose metabolism', 'KEGG-Pathway-pae00500: Starch and sucrose metabolism', 'KEGG-Pathway-pae00520: Amino sugar and nucleotide sugar metabolism']	0.5696303758620556	0.0	most stable
+PA14_38395	mexX	PA2019	['KEGG-Pathway-pae00312: beta-Lactam resistance']	0.1850059982159294	2.036187009819464e-42	least stable	['PA14_35880']
+PA14_38410	mexY	PA2018	['KEGG-Pathway-pae00312: beta-Lactam resistance']	0.17895343100676572	9.331773678701893e-40	least stable	['PA14_36010', 'PA14_36020', 'PA14_35890', 'PA14_36030']
+PA14_38740	ercS	PA1992	[]	0.5263184494482268	0.0	most stable
+PA14_38825	pqqA	PA1985	[]	0.19471766630711707	6.955054676502081e-47	least stable	['PA14_13960', 'PA14_28330']
+PA14_39020		PA1972	[]	0.17451381879575567	7.287895366374174e-38	least stable	No accessory genes
+PA14_39150	azoR2	PA1962	[]	0.17125456004095155	1.6605416263414282e-36	least stable	['PA14_27630', 'PA14_27660']
+PA14_39520		PA1933	['KEGG-Pathway-pae00230: Purine metabolism']	0.1974697433322842	3.405792538514294e-48	least stable	No accessory genes
+PA14_39580	rimJ	PA1928	[]	0.19682396636263647	6.940614314311039e-48	least stable	No accessory genes
+PA14_40380		PA1864	[]	0.19382158941778974	1.8391622740748047e-46	least stable	No accessory genes
+PA14_40600		PA1850	[]	0.1995254403435039	3.473571934732637e-49	least stable	No accessory genes
+PA14_40630	nfuA	PA1847	[]	0.5001166414827689	0.0	most stable
+PA14_40770	cysI	PA1838	['KEGG-Pathway-pae00920: Sulfur metabolism', 'KEGG-Module-M00616: Sulfate-sulfur assimilation', 'KEGG-Module-M00176: Assimilatory sulfate reduction, sulfate => H2S']	0.5036259663233821	0.0	most stable
+PA14_41130	nppA2	PA1810	['KEGG-Module-M00349: Microcin C transport system']	0.5722015453913047	0.0	most stable
+PA14_41150	nppC	PA1808	['KEGG-Module-M00349: Microcin C transport system']	0.5511139374598824	0.0	most stable
+PA14_41160	nppD	PA1807	['KEGG-Module-M00349: Microcin C transport system']	0.537730190064256	0.0	most stable
+PA14_41210	hupB	PA1804	[]	0.5258691629103126	0.0	most stable
+PA14_41230	clpX	PA1802	[]	0.5143867599532489	0.0	most stable
+PA14_41380	glnS	PA1794	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	0.5347192996933409	0.0	most stable
+PA14_41420		PA1791	[]	0.5024945314562431	0.0	most stable
+PA14_41440		PA1789	[]	0.5442492606434669	0.0	most stable
+PA14_41470	acnB	PA1787	['KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae01210: 2-Oxocarboxylic acid metabolism', 'KEGG-Pathway-pae00630: Glyoxylate and dicarboxylate metabolism', 'KEGG-Pathway-pae00640: Propanoate metabolism', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00010: Citrate cycle, first carbon oxidation, oxaloacetate => 2-oxoglutarate']	0.5351843204910476	0.0	most stable
+PA14_41670	ppsA	PA1770	['KEGG-Pathway-pae00620: Pyruvate metabolism', 'KEGG-Pathway-pae00680: Methane metabolism']	0.5673535158088514	0.0	most stable
+PA14_41690		PA1768	[]	0.5220115668260465	0.0	most stable
+PA14_41710		PA1767	[]	0.5354813250656132	0.0	most stable
+PA14_42160		PA1730	[]	0.5012150390294771	0.0	most stable
+PA14_42270	pscJ	PA1723	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00332: Type III secretion system']	0.527388880237442	0.0	most stable
+PA14_42280	pscI	PA1722	['KEGG-Module-M00332: Type III secretion system']	0.5507344952399632	0.0	most stable
+PA14_42290	pscH	PA1721	[]	0.5218056929828088	0.0	most stable
+PA14_42300	pscG	PA1720	[]	0.5414558868241851	0.0	most stable
+PA14_42310	pscF	PA1719	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00332: Type III secretion system']	0.5855136429880495	0.0	most stable
+PA14_42340	pscD	PA1717	['KEGG-Module-M00332: Type III secretion system']	0.5112083948200481	0.0	most stable
+PA14_42350	pscC	PA1716	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00332: Type III secretion system']	0.6093227325764201	0.0	most stable
+PA14_42360	pscB	PA1715	[]	0.5422827775864871	0.0	most stable
+PA14_42380	exsD	PA1714	[]	0.5761429936205049	0.0	most stable
+PA14_42400	exsB	PA1712	[]	0.5078144877418361	0.0	most stable
+PA14_42440	popD	PA1709	[]	0.5497945040551211	0.0	most stable
+PA14_42450	popB	PA1708	[]	0.54094307099407	0.0	most stable
+PA14_42460	pcrH	PA1707	[]	0.5277943624635083	0.0	most stable
+PA14_42470	pcrV	PA1706	[]	0.5645560320887941	0.0	most stable
+PA14_42480	pcrG	PA1705	[]	0.534022376182126	0.0	most stable
+PA14_42500	pcrD	PA1703	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00332: Type III secretion system']	0.549070305621439	0.0	most stable
+PA14_42540	pcr1	PA1699	[]	0.5562744708855816	0.0	most stable
+PA14_42550	popN	PA1698	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00332: Type III secretion system']	0.5650151953028311	0.0	most stable
+PA14_42570		PA1697	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00332: Type III secretion system']	0.5317931169816794	0.0	most stable
+PA14_42580	pscO	PA1696	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00332: Type III secretion system']	0.5585447000445171	0.0	most stable
+PA14_42600	pscP	PA1695	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00332: Type III secretion system']	0.5337710681003678	0.0	most stable
+PA14_42610	pscQ	PA1694	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00332: Type III secretion system']	0.5455197823653218	0.0	most stable
+PA14_42760	aroC	PA1681	['KEGG-Pathway-pae00400: Phenylalanine, tyrosine and tryptophan biosynthesis']	0.5242096475335654	0.0	most stable
+PA14_42860		PA1673	[]	0.5135657458956067	0.0	most stable
+PA14_43030	hsiC2	PA1658	['KEGG-Module-M00334: Type VI secretion system']	0.5471821682650868	0.0	most stable
+PA14_43140		PA1653	[]	0.15910279351090242	1.1130158674847167e-31	least stable	['PA0263.2']
+PA14_43340	kdpE	PA1637	[]	0.168599870027427	2.0241640169673322e-35	least stable	['PA14_55240']
+PA14_43370	kdpC	PA1635	[]	0.1625588215131627	5.146725787471695e-33	least stable	No accessory genes
+PA14_43380	kdpB	PA1634	[]	0.14766062730606488	1.7970063966371265e-27	least stable	No accessory genes
+PA14_43400	kdpA	PA1633	[]	0.18449305539765132	3.451262685965618e-42	least stable	No accessory genes
+PA14_43420		PA1631	['KEGG-Pathway-pae00930: Caprolactam degradation']	0.13086038179273468	7.079141158505258e-22	least stable	No accessory genes
+PA14_43720		PA1607	[]	0.15088286354812766	1.2655740279119242e-28	least stable	No accessory genes
+PA14_43850	htpG	PA1596	[]	0.5311711607697354	0.0	most stable
+PA14_43940	sucD	PA1589	['KEGG-Pathway-pae00660: C5-Branched dibasic acid metabolism', 'KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae00640: Propanoate metabolism', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00011: Citrate cycle, second carbon oxidation, 2-oxoglutarate => oxaloacetate']	0.5679862406562681	0.0	most stable
+PA14_43950	sucC	PA1588	['KEGG-Pathway-pae00660: C5-Branched dibasic acid metabolism', 'KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae00640: Propanoate metabolism', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00011: Citrate cycle, second carbon oxidation, 2-oxoglutarate => oxaloacetate']	0.5769981545575931	0.0	most stable
+PA14_43970	lpd	PA1587	['KEGG-Pathway-pae00260: Glycine, serine and threonine metabolism', 'KEGG-Pathway-pae00280: Valine, leucine and isoleucine degradation', 'KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae00620: Pyruvate metabolism', 'KEGG-Pathway-pae00010: Glycolysis / Gluconeogenesis', 'KEGG-Module-M00307: Pyruvate oxidation, pyruvate => acetyl-CoA', 'KEGG-Module-M00036: Leucine degradation, leucine => acetoacetate + acetyl-CoA', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00011: Citrate cycle, second carbon oxidation, 2-oxoglutarate => oxaloacetate']	0.5320706347965879	0.0	most stable
+PA14_44000	sucB	PA1586	['KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae00310: Lysine degradation', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00011: Citrate cycle, second carbon oxidation, 2-oxoglutarate => oxaloacetate']	0.552625388771246	0.0	most stable
+PA14_44010	sucA	PA1585	['KEGG-Pathway-pae00380: Tryptophan metabolism', 'KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae00310: Lysine degradation', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00011: Citrate cycle, second carbon oxidation, 2-oxoglutarate => oxaloacetate']	0.5816623609460432	0.0	most stable
+PA14_44020	sdhB	PA1584	['KEGG-Pathway-pae00190: Oxidative phosphorylation', 'KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae00650: Butanoate metabolism', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00011: Citrate cycle, second carbon oxidation, 2-oxoglutarate => oxaloacetate']	0.5513895339789929	0.0	most stable
+PA14_44030	sdhA	PA1583	['KEGG-Pathway-pae00190: Oxidative phosphorylation', 'KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae00650: Butanoate metabolism', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00011: Citrate cycle, second carbon oxidation, 2-oxoglutarate => oxaloacetate']	0.6043401765132923	0.0	most stable
+PA14_44050	sdhD	PA1582	['KEGG-Pathway-pae00190: Oxidative phosphorylation', 'KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae00650: Butanoate metabolism', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00011: Citrate cycle, second carbon oxidation, 2-oxoglutarate => oxaloacetate']	0.5642448153652314	0.0	most stable
+PA14_44290	acnA	PA1562	['KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)', 'KEGG-Pathway-pae01210: 2-Oxocarboxylic acid metabolism', 'KEGG-Pathway-pae00630: Glyoxylate and dicarboxylate metabolism', 'KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)', 'KEGG-Module-M00010: Citrate cycle, first carbon oxidation, oxaloacetate => 2-oxoglutarate']	0.5294791916749186	0.0	most stable
+PA14_44570		PA1537	[]	0.19291926524918274	4.872830433173234e-46	least stable	['PA14_22280']
+PA14_45030		PA1499	['KEGG-Pathway-pae00260: Glycine, serine and threonine metabolism', 'KEGG-Pathway-pae00630: Glyoxylate and dicarboxylate metabolism']	0.1562893197208687	1.2920938297866731e-30	least stable	No accessory genes
+PA14_45050	pykF	PA1498	['KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Pathway-pae00620: Pyruvate metabolism', 'KEGG-Pathway-pae00010: Glycolysis / Gluconeogenesis', 'KEGG-Module-M00049: Adenine ribonucleotide biosynthesis, IMP => ADP,ATP', 'KEGG-Module-M00050: Guanine ribonucleotide biosynthesis IMP => GDP,GTP', 'KEGG-Module-M00002: Glycolysis, core module involving three-carbon compounds']	0.17730434019223248	4.7734011375669747e-39	least stable	No accessory genes
+PA14_45120		PA1492	[]	0.14124099811243576	2.9789871852953866e-25	least stable	No accessory genes
+PA14_45280	cycH	PA1483	[]	0.5198889694643302	0.0	most stable
+PA14_45430		PA1470	['KEGG-Pathway-pae00780: Biotin metabolism', 'KEGG-Pathway-pae01040: Biosynthesis of unsaturated fatty acids', 'KEGG-Pathway-pae01212: Fatty acid metabolism', 'KEGG-Pathway-pae00061: Fatty acid biosynthesis', 'KEGG-Module-M00083: Fatty acid biosynthesis, elongation', 'KEGG-Module-M00572: Pimeloyl-ACP biosynthesis, BioC-BioH pathway, malonyl-ACP => pimeloyl-ACP']	0.17763453983652244	3.4470293348251674e-39	least stable	No accessory genes
+PA14_45470		PA1466	['KEGG-Pathway-pae00480: Glutathione metabolism']	0.16318507216650271	2.927078928305013e-33	least stable	['PA14_28750']
+PA14_45480		PA1465	[]	0.5112973093332913	0.0	most stable
+PA14_45800	fliM	PA1443	['KEGG-Pathway-pae02040: Flagellar assembly', 'KEGG-Pathway-pae02030: Bacterial chemotaxis']	0.5132653739261512	0.0	most stable
+PA14_45890		PA1436	[]	0.1864572121049803	4.537569493466327e-43	least stable	No accessory genes
+PA14_45910		PA1435	[]	0.14054354452478646	5.1182570323456055e-25	least stable	No accessory genes
+PA14_45920		PA1434	[]	0.1987441374284329	8.29637841289507e-49	least stable	No accessory genes
+PA14_45970		PA1429	[]	0.5338123014601008	0.0	most stable
+PA14_46100		PA1419	[]	0.1842507626051351	4.425774984369642e-42	least stable	['PA14_35990']
+PA14_46240		PA1408	[]	0.5079407363004614	0.0	most stable
+PA14_46400		PA1380	[]	0.09727480121048868	9.919193235779734e-13	least stable	['PA14_46590', 'PA14_46600', 'PA14_46570', 'PA14_48500', 'PA14_30900']
+PA14_46420		PA1379	[]	0.08355205869174143	9.256679999665051e-10	least stable	['PA14_46590', 'PA14_48490', 'PA14_48450', 'PA14_46600', 'PA14_46560']
+PA14_46630		PA1367	[]	0.18656923888682625	4.0389423620115365e-43	least stable	No accessory genes
+PA14_47000		PA1334	[]	0.16861959450147068	1.987202673174997e-35	least stable	['PA14_43100', 'PA14_69520']
+PA14_47120		PA1324	[]	0.5021956820985548	0.0	most stable
+PA14_47390		PA1301	[]	0.5113476404546028	0.0	most stable
+PA14_47420		PA1298	[]	0.16863425913583618	1.9601581188516846e-35	least stable	No accessory genes
+PA14_47670	cobU	PA1279	['KEGG-Pathway-pae00860: Porphyrin and chlorophyll metabolism', 'KEGG-Module-M00122: Cobalamin biosynthesis, cobinamide => cobalamin']	0.5621799516179055	0.0	most stable
+PA14_47690	cobQ	PA1277	['KEGG-Pathway-pae00860: Porphyrin and chlorophyll metabolism', 'KEGG-Module-M00122: Cobalamin biosynthesis, cobinamide => cobalamin']	0.5065504781751443	0.0	most stable
+PA14_47720	cobC	PA1276	['KEGG-Pathway-pae00860: Porphyrin and chlorophyll metabolism', 'KEGG-Module-M00122: Cobalamin biosynthesis, cobinamide => cobalamin']	0.505406788948044	0.0	most stable
+PA14_47970	lhpK	PA1255	[]	0.15075654611023515	1.4058557282153904e-28	least stable	No accessory genes
+PA14_48000	lhpC	PA1254	['KEGG-Pathway-pae00300: Lysine biosynthesis', 'KEGG-Module-M00016: Lysine biosynthesis, succinyl-DAP pathway, aspartate => lysine']	0.16172584715767013	1.0864604412005946e-32	least stable	No accessory genes
+PA14_48150		PA1244	[]	0.15778202025189558	3.5384733608209448e-31	least stable	['PA14_22280']
+PA14_48200		PA1240	[]	0.16927290780930918	1.0779431224345523e-35	least stable	['PA14_48470', 'PA14_48460', 'PA14_48490', 'PA14_48450']
+PA14_48650		PA1210	[]	0.13490266455331107	3.685980865022832e-23	least stable	['PA14_22280', 'PA14_54900']
+PA14_48770		PA1201	[]	0.1821944091643156	3.602778569107285e-41	least stable	No accessory genes
+PA14_48840	ddaH	PA1195	[]	0.15694247126242922	7.342696663186318e-31	least stable	['PA14_46590', 'PA14_31220']
+PA14_48880		PA0728	[]	0.13854018472761906	2.3860299162294257e-24	least stable	['PA14_49020', 'PA14_22120', 'PA14_49010', 'PA14_22080', 'PA14_22270']
+PA14_48960		PA0721	[]	0.09123699639078896	2.2771510552512888e-11	least stable	['PA14_48900', 'PA14_28330', 'PA14_31250', 'PA14_49010', 'PA14_48230', 'PA14_35930']
+PA14_48980		PA0719	[]	0.17778492292264028	2.971412664123347e-39	least stable	['PA14_48900', 'PA14_48450']
+PA14_49130	dctA	PA1183	[]	0.1967720699271728	7.348477279787852e-48	least stable	No accessory genes
+PA14_49500		PA1153	[]	0.04907652424963987	0.00032861023224935567	least stable	['PA14_22530']
+PA14_49610		PA1144	[]	0.1631161789330823	3.1149085350625356e-33	least stable	No accessory genes
+PA14_49840	dgt	PA1124	['KEGG-Pathway-pae00230: Purine metabolism']	0.5170872127514263	0.0	most stable
+PA14_50520	braC	PA1074	['KEGG-Module-M00237: Branched-chain amino acid transport system']	0.5152587611550861	0.0	most stable
+PA14_50530	braD	PA1073	['KEGG-Module-M00237: Branched-chain amino acid transport system']	0.5202091593588656	0.0	most stable
+PA14_50540	braE	PA1072	['KEGG-Module-M00237: Branched-chain amino acid transport system']	0.545571866834666	0.0	most stable
+PA14_50570		PA1069	[]	0.5043254432818621	0.0	most stable
+PA14_51040	amaA	PA1028	[]	0.1649167746975388	6.075547374126847e-34	least stable	['PA14_22510']
+PA14_51050	amaB	PA1027	['KEGG-Pathway-pae00071: Fatty acid degradation', 'KEGG-Pathway-pae00903: Limonene and pinene degradation', 'KEGG-Pathway-pae00380: Tryptophan metabolism', 'KEGG-Pathway-pae00040: Pentose and glucuronate interconversions', 'KEGG-Pathway-pae00561: Glycerolipid metabolism', 'KEGG-Pathway-pae00280: Valine, leucine and isoleucine degradation', 'KEGG-Pathway-pae00330: Arginine and proline metabolism', 'KEGG-Pathway-pae00620: Pyruvate metabolism', 'KEGG-Pathway-pae00625: Chloroalkane and chloroalkene degradation', 'KEGG-Pathway-pae00340: Histidine metabolism', 'KEGG-Pathway-pae00310: Lysine degradation', 'KEGG-Pathway-pae00410: beta-Alanine metabolism', 'KEGG-Pathway-pae00010: Glycolysis / Gluconeogenesis']	0.1921252623832294	1.1439314411191762e-45	least stable	['PA14_59350']
+PA14_51060		PA1026	[]	0.18291318274902268	1.7360462016580103e-41	least stable	['PA14_72830']
+PA14_51205		PA1015	[]	0.1917657167673366	1.681471934300473e-45	least stable	No accessory genes
+PA14_51260		PA1011	[]	0.5050373043667713	0.0	most stable
+PA14_51630		PA0978	[]	0.11329025820832846	9.342667645704878e-17	least stable	No accessory genes
+PA14_51860		PA0959	[]	0.5143984208604734	0.0	most stable
+PA14_51900	proS	PA0956	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	0.5808368509118388	0.0	most stable
+PA14_51910		PA0955	[]	0.5630099004141063	0.0	most stable
+PA14_52040	purM	PA0945	['KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Module-M00048: Inosine monophosphate biosynthesis, PRPP + glutamine => IMP']	0.5618315332877616	0.0	most stable
+PA14_52210	cysM	PA0932	['KEGG-Pathway-pae00270: Cysteine and methionine metabolism', 'KEGG-Pathway-pae00920: Sulfur metabolism', 'KEGG-Module-M00021: Cysteine biosynthesis, serine => cysteine']	0.5011238166914636	0.0	most stable
+PA14_52380		PA0918	[]	0.1857308761870096	9.634375265300686e-43	least stable	No accessory genes
+PA14_52600	alaS	PA0903	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	0.5054904707022474	0.0	most stable
+PA14_52820		PA0885	[]	0.17688984857706966	7.176461127187448e-39	least stable	['PA14_28760']
+PA14_52870		PA0882	['KEGG-Pathway-pae00660: C5-Branched dibasic acid metabolism']	0.145573305710131	9.712263618942156e-27	least stable	No accessory genes
+PA14_52910		PA0878	['KEGG-Pathway-pae00660: C5-Branched dibasic acid metabolism']	0.15201949108664764	4.894609799884378e-29	least stable	['PA14_28460', 'PA14_65870']
+PA14_53090		PA0864	[]	0.08883170389545893	7.512676042380408e-11	least stable	No accessory genes
+PA14_53270		PA0850	[]	0.19105435221039588	3.5949209397092247e-45	least stable	No accessory genes
+PA14_53470	ackA	PA0836	['KEGG-Pathway-pae00620: Pyruvate metabolism', 'KEGG-Pathway-pae00430: Taurine and hypotaurine metabolism', 'KEGG-Pathway-pae00680: Methane metabolism', 'KEGG-Pathway-pae00640: Propanoate metabolism']	0.5639530763102871	0.0	most stable
+PA14_53480	pta	PA0835	['KEGG-Pathway-pae00620: Pyruvate metabolism', 'KEGG-Pathway-pae00430: Taurine and hypotaurine metabolism', 'KEGG-Pathway-pae00680: Methane metabolism', 'KEGG-Pathway-pae00640: Propanoate metabolism']	0.5001408438545835	0.0	most stable
+PA14_53630		PA0825	[]	0.14797556891074987	1.3901318824551588e-27	least stable	['PA14_58910', 'PA14_03390']
+PA14_53670		PA0820	[]	0.11790579806553853	4.978540105394994e-18	least stable	['PA14_07480', 'PA14_63450', 'PA14_63440', 'PA14_10080', 'PA14_54850', 'PA14_35730']
+PA14_53830		PA0806	[]	0.15470051115399105	5.0571660412347885e-30	least stable	No accessory genes
+PA14_54330	rnc	PA0770	[]	0.5061503048518997	0.0	most stable
+PA14_54410	mucB	PA0764	[]	0.5162085012066746	0.0	most stable
+PA14_54430	algU	PA0762	[]	0.5798447559503715	0.0	most stable
+PA14_54700	sdsA1	PA0740	[]	0.12712012233708492	1.0052037239915532e-20	least stable	No accessory genes
+PA14_55117		PA0711	[]	0.09183709150008444	1.6824819311013855e-11	least stable	['PA14_07460']
+PA14_55130	gloA2	PA0710	['KEGG-Pathway-pae00620: Pyruvate metabolism']	0.05969963899859836	1.2404968011707325e-05	least stable	No accessory genes
+PA14_55140		PA0709	[]	0.12265227735148128	2.1598435847280991e-19	least stable	No accessory genes
+PA14_55150		PA0708	[]	0.19711596360626715	5.031903473124697e-48	least stable	['PA14_10830']
+PA14_55520	hxcU	PA0678	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00331: Type II general secretion pathway']	0.5089304006015332	0.0	most stable
+PA14_55570		PA0673	[]	0.17253222317913336	4.911774823128499e-37	least stable	No accessory genes
+PA14_55600		PA0670	[]	0.16447546386693587	9.084840432910232e-34	least stable	No accessory genes
+PA14_55610		PA0669	[]	0.13796975431591285	3.683372341062681e-24	least stable	No accessory genes
+PA14_55660	recD	PA4283	['KEGG-Pathway-pae03440: Homologous recombination']	0.5606297601313351	0.0	most stable
+PA14_55670	recB	PA4284	['KEGG-Pathway-pae03440: Homologous recombination']	0.5122037124719998	0.0	most stable
+PA14_55770		PA4292	[]	0.5415543230608137	0.0	most stable
+PA14_55890	tadA	PA4302	[]	0.5059636973010758	0.0	most stable
+PA14_55920	rcpA	PA4304	[]	0.504705126641117	0.0	most stable
+PA14_55930	rcpC	PA4305	[]	0.5186236882693364	0.0	most stable
+PA14_56090		PA4317	[]	0.5000390841033605	0.0	most stable
+PA14_56100		PA4318	[]	0.5210400270061233	0.0	most stable
+PA14_56110		PA4319	[]	0.5385889478907143	0.0	most stable
+PA14_56130		PA4320	[]	0.5571252454881181	0.0	most stable
+PA14_56140		PA4321	[]	0.5770924786798673	0.0	most stable
+PA14_56220		PA4328	[]	0.5514295054404633	0.0	most stable
+PA14_56540		PA4348	[]	0.544582753174323	0.0	most stable
+PA14_56590		PA4352	[]	0.5507780856441159	0.0	most stable
+PA14_56720		PA4361	[]	0.506433231978996	0.0	most stable
+PA14_56890	mexW	PA4375	['KEGG-Pathway-pae00312: beta-Lactam resistance', 'KEGG-Module-M00647: Multidrug resistance, efflux pump MexAB-OprM/SmeDEF/AcrAB-TolC']	0.5262360921525969	0.0	most stable
+PA14_57010	groEL	PA4385	['KEGG-Pathway-pae03018: RNA degradation']	0.5186085659287893	0.0	most stable
+PA14_57300	ftsQ	PA4409	[]	0.5197830973975129	0.0	most stable
+PA14_57330	murC	PA4411	['KEGG-Pathway-pae00471: D-Glutamine and D-glutamate metabolism', 'KEGG-Pathway-pae00550: Peptidoglycan biosynthesis']	0.5246518272779421	0.0	most stable
+PA14_57370	murD	PA4414	['KEGG-Pathway-pae00471: D-Glutamine and D-glutamate metabolism', 'KEGG-Pathway-pae00550: Peptidoglycan biosynthesis']	0.5233762730344265	0.0	most stable
+PA14_57380	mraY	PA4415	['KEGG-Pathway-pae00550: Peptidoglycan biosynthesis']	0.5223565110612115	0.0	most stable
+PA14_57390	murF	PA4416	['KEGG-Pathway-pae00550: Peptidoglycan biosynthesis', 'KEGG-Pathway-pae00300: Lysine biosynthesis']	0.5148360324385796	0.0	most stable
+PA14_57460		PA4421	[]	0.5054128348464542	0.0	most stable
+PA14_57480		PA4423	[]	0.5429939262459248	0.0	most stable
+PA14_57540		PA4429	['KEGG-Pathway-pae00190: Oxidative phosphorylation']	0.5215994351613402	0.0	most stable
+PA14_57560		PA4430	['KEGG-Pathway-pae00190: Oxidative phosphorylation']	0.5168274685714206	0.0	most stable
+PA14_57580	rpsI	PA4432	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5734379487052126	0.0	most stable
+PA14_57590	rplM	PA4433	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.6142996996581424	0.0	most stable
+PA14_57810	murA	PA4450	['KEGG-Pathway-pae00520: Amino sugar and nucleotide sugar metabolism', 'KEGG-Pathway-pae00550: Peptidoglycan biosynthesis']	0.5054458524038297	0.0	most stable
+PA14_57970		PA4465	[]	0.5280084504823052	0.0	most stable
+PA14_58010		PA4469	[]	0.5033098744677076	0.0	most stable
+PA14_58070		PA4474	[]	0.5114450620354121	0.0	most stable
+PA14_58090		PA4476	[]	0.5456633846652174	0.0	most stable
+PA14_58150	mreB	PA4481	[]	0.5047437786485575	0.0	most stable
+PA14_58180	gatA	PA4483	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis']	0.5614400066192939	0.0	most stable
+PA14_58190	gatB	PA4484	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis']	0.5951196920608167	0.0	most stable
+PA14_58230	magF	PA4487	[]	0.5506631408640452	0.0	most stable
+PA14_58240	magE	PA4488	[]	0.5273907539500141	0.0	most stable
+PA14_58250	magD	PA4489	[]	0.6118182304598414	0.0	most stable
+PA14_58270	magB	PA4491	[]	0.5642476544707561	0.0	most stable
+PA14_58500		PA4507	[]	0.1835687320947421	8.896583479686682e-42	least stable	No accessory genes
+PA14_58510		PA4508	[]	0.1828172960766897	1.913976580013041e-41	least stable	No accessory genes
+PA14_58620		PA4518	[]	0.1569482533985996	7.305973070487346e-31	least stable	No accessory genes
+PA14_58800		PA4531	[]	0.16770382026723804	4.6644532181741243e-35	least stable	No accessory genes
+PA14_58930	qsrO	PA2226	[]	0.1479330772271812	1.4391726392962023e-27	least stable	['PA14_59000', 'PA14_59990', 'PA14_59350', 'PA14_59130', 'PA14_59010', 'PA14_59320', 'PA14_59930', 'PA14_59150', 'PA14_59280']
+PA14_59620		PA2222	[]	0.07690381051383438	1.7698918180741256e-08	least stable	['PA14_59590', 'PA14_59190', 'PA14_60110', 'PA14_60080', 'PA14_59580', 'PA14_60120', 'PA14_59550', 'PA14_60090', 'PA14_60100']
+PA14_59960		PA0982	[]	0.13593589174779422	1.7066030456816123e-23	least stable	['PA14_59350', 'PA14_59830', 'PA14_59060', 'PA14_60020', 'PA14_59650', 'PA14_59210']
+PA14_60070		PA1939	[]	0.1921580133441155	1.1044472981351655e-45	least stable	['PA14_60120', 'PA14_60110', 'PA14_59780', 'PA14_59170', 'PA14_59610', 'PA14_59790', 'PA14_59580', 'PA14_59770', 'PA14_59550']
+PA14_60190	clpB	PA4542	[]	0.5027880684447171	0.0	most stable
+PA14_60230	comL	PA4545	[]	0.5074121907862338	0.0	most stable
+PA14_60360	lspA	PA4559	['KEGG-Pathway-pae03060: Protein export']	0.50387434692718	0.0	most stable
+PA14_60370	ileS	PA4560	['KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis', 'KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes']	0.5924970713679727	0.0	most stable
+PA14_60400	rpsT	PA4563	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5288020846051626	0.0	most stable
+PA14_60445	obg	PA4566	[]	0.5022097076513101	0.0	most stable
+PA14_60460	rplU	PA4568	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5001281473738995	0.0	most stable
+PA14_60570		PA4578	[]	0.526289915888476	0.0	most stable
+PA14_60590		PA4580	[]	0.13920259855912595	1.4378127283568856e-24	least stable	No accessory genes
+PA14_60690		PA4586	[]	0.10760630728035704	2.943406262192908e-15	least stable	No accessory genes
+PA14_60820	oprJ	PA4597	[]	0.15737957814866693	5.023532644167942e-31	least stable	['PA14_58920', 'PA14_59270', 'PA14_59690']
+PA14_60830	mexD	PA4598	[]	0.15699699590521213	7.003556043378945e-31	least stable	['PA14_36030', 'PA14_36020', 'PA14_36010']
+PA14_60970		PA4608	[]	0.5109858061837399	0.0	most stable
+PA14_61700	prfA	PA4665	[]	0.5189672487906692	0.0	most stable
+PA14_61720		PA4667	[]	0.5078023761474547	0.0	most stable
+PA14_61770	prs	PA4670	['KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Pathway-pae00030: Pentose phosphate pathway']	0.5774766074279489	0.0	most stable
+PA14_61980		PA4685	[]	0.0654058755092302	1.676713054600947e-06	least stable	No accessory genes
+PA14_61990		PA4686	[]	0.5400331946181832	0.0	most stable
+PA14_62230		PA4701	[]	0.5120360504630048	0.0	most stable
+PA14_62400		PA4715	[]	0.19473959268428767	6.791107178281759e-47	least stable	['PA14_20600']
+PA14_62440		PA4719	[]	0.5619292288966782	0.0	most stable
+PA14_62450	trmA	PA4720	[]	0.5171877311578154	0.0	most stable
+PA14_62490	dksA	PA4723	[]	0.5149261196638765	0.0	most stable
+PA14_62650		PA4735	[]	0.502247914844767	0.0	most stable
+PA14_62710	pnp	PA4740	['KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Pathway-pae03018: RNA degradation', 'KEGG-Pathway-pae00240: Pyrimidine metabolism']	0.5722538522046505	0.0	most stable
+PA14_62730	truB	PA4742	[]	0.5111717426898934	0.0	most stable
+PA14_62760	infB	PA4744	[]	0.6032877889237273	0.0	most stable
+PA14_62770	nusA	PA4745	[]	0.6305867686626683	0.0	most stable
+PA14_62780		PA4746	[]	0.5767740990106017	0.0	most stable
+PA14_62830	tpiA	PA4748	['KEGG-Pathway-pae00562: Inositol phosphate metabolism', 'KEGG-Pathway-pae00051: Fructose and mannose metabolism', 'KEGG-Pathway-pae00010: Glycolysis / Gluconeogenesis', 'KEGG-Module-M00002: Glycolysis, core module involving three-carbon compounds']	0.5378758330527545	0.0	most stable
+PA14_62840	glmM	PA4749	['KEGG-Pathway-pae00520: Amino sugar and nucleotide sugar metabolism']	0.5080194177827773	0.0	most stable
+PA14_62850	folP	PA4750	['KEGG-Pathway-pae00790: Folate biosynthesis', 'KEGG-Module-M00126: Tetrahydrofolate biosynthesis, GTP => THF']	0.5557893126323722	0.0	most stable
+PA14_62860	ftsH	PA4751	[]	0.5128680465012609	0.0	most stable
+PA14_62910	carB	PA4756	['KEGG-Pathway-pae00240: Pyrimidine metabolism', 'KEGG-Pathway-pae00250: Alanine, aspartate and glutamate metabolism']	0.5351761526867674	0.0	most stable
+PA14_63190		PA4779	[]	0.16316124912372734	2.99072196713676e-33	least stable	No accessory genes
+PA14_63390		PA4799	[]	0.1945255620884385	8.5706602198171e-47	least stable	No accessory genes
+PA14_64170		PA4851	[]	0.5102205761307461	0.0	most stable
+PA14_64180		PA4852	[]	0.5373251645557491	0.0	most stable
+PA14_64200	purH	PA4854	['KEGG-Pathway-pae00670: One carbon pool by folate', 'KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Module-M00048: Inosine monophosphate biosynthesis, PRPP + glutamine => IMP']	0.5457783880887435	0.0	most stable
+PA14_64230	retS	PA4856	[]	0.5667744994105923	0.0	most stable
+PA14_64270		PA4858	['KEGG-Module-M00323: Urea transport system']	0.5315407764511053	0.0	most stable
+PA14_64280		PA4859	['KEGG-Module-M00323: Urea transport system']	0.5046128873655081	0.0	most stable
+PA14_65000	azu	PA4922	[]	0.5365632174437369	0.0	most stable
+PA14_65040		PA4925	[]	0.5256416534104246	0.0	most stable
+PA14_65170	rpsR	PA4934	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.508263419673363	0.0	most stable
+PA14_65180	rpsF	PA4935	['KEGG-Pathway-pae03010: Ribosome', 'KEGG-Module-M00178: Ribosome, bacteria']	0.5989654379887417	0.0	most stable
+PA14_65200	rnr	PA4937	['KEGG-Pathway-pae03018: RNA degradation']	0.5831621586790463	0.0	most stable
+PA14_65280	hflK	PA4942	[]	0.5223085295368078	0.0	most stable
+PA14_65350	mutL	PA4946	['KEGG-Pathway-pae03430: Mismatch repair']	0.5878245252677838	0.0	most stable
+PA14_65410	orn	PA4951	[]	0.08963698957683616	5.0551939596518046e-11	least stable	No accessory genes
+PA14_65630		PA4965	[]	0.5048585727612633	0.0	most stable
+PA14_65640		PA4966	[]	0.5578067955310622	0.0	most stable
+PA14_65660	parE	PA4967	[]	0.5499208576821949	0.0	most stable
+PA14_65740	thiC	PA4973	['KEGG-Pathway-pae00730: Thiamine metabolism']	0.13978819574819076	9.169500557194982e-25	least stable	No accessory genes
+PA14_65990		PA4990	[]	0.19037175851428206	7.43213562254044e-45	least stable	['PA14_28970', 'PA14_39910', 'PA14_10110', 'PA14_35930']
+PA14_66080	msbA	PA4997	[]	0.5149446998754237	0.0	most stable
+PA14_66160	wapH	PA5004	[]	0.5515609033692329	0.0	most stable
+PA14_66210	wapP	PA5008	[]	0.5156603455444692	0.0	most stable
+PA14_66400		PA5022	[]	0.5949949044830751	0.0	most stable
+PA14_66440	metY	PA5025	['KEGG-Pathway-pae00270: Cysteine and methionine metabolism']	0.5198240446665318	0.0	most stable
+PA14_66460		PA5027	[]	0.534951306108823	0.0	most stable
+PA14_66690		PA5047	[]	0.5370485965458685	0.0	most stable
+PA14_66900	ubiE	PA5063	['KEGG-Pathway-pae00130: Ubiquinone and other terpenoid-quinone biosynthesis']	0.5103407342902951	0.0	most stable
+PA14_66920	ubiB	PA5065	['KEGG-Pathway-pae00130: Ubiquinone and other terpenoid-quinone biosynthesis']	0.5538757508525785	0.0	most stable
+PA14_66980	tatC	PA5070	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Pathway-pae03060: Protein export']	0.5348001771513096	0.0	most stable
+PA14_67065	opgH	PA5077	[]	0.6127840154712062	0.0	most stable
+PA14_67090	opgG	PA5078	[]	0.5263118993258927	0.0	most stable
+PA14_67130	dguC	PA5082	['KEGG-Module-M00230: Glutamate/aspartate transport system']	0.16028371424458332	3.9236981465717455e-32	least stable	No accessory genes
+PA14_67140	dguB	PA5083	[]	0.09100765313401216	2.5550750924466922e-11	least stable	['PA14_41290']
+PA14_67150	dguA	PA5084	['KEGG-Pathway-pae00360: Phenylalanine metabolism']	0.1424040512076974	1.2007508014588764e-25	least stable	No accessory genes
+PA14_67520		PA5113	[]	0.582429659974854	0.0	most stable
+PA14_67530		PA5114	[]	0.597387175124612	0.0	most stable
+PA14_67560	typA	PA5117	[]	0.5534218861128282	0.0	most stable
+PA14_67580	thiI	PA5118	['KEGG-Pathway-pae04122: Sulfur relay system', 'KEGG-Pathway-pae00730: Thiamine metabolism']	0.5631567012143832	0.0	most stable
+PA14_67830		PA5136	[]	0.5101871294718271	0.0	most stable
+PA14_68080		PA5154	['KEGG-Module-M00236: Putative polar amino acid transport system']	0.5046968106517601	0.0	most stable
+PA14_68300	arcD	PA5170	[]	0.5353328356677176	0.0	most stable
+PA14_68400		PA5178	[]	0.5276502804483761	0.0	most stable
+PA14_68840		PA5212	[]	0.5226367007450589	0.0	most stable
+PA14_69000	pepP	PA5224	[]	0.5152742608652761	0.0	most stable
+PA14_69020		PA5226	[]	0.5112745280780617	0.0	most stable
+PA14_69070		PA5231	[]	0.5007167062337741	0.0	most stable
+PA14_69190	rho	PA5239	['KEGG-Pathway-pae03018: RNA degradation']	0.5431413655515088	0.0	most stable
+PA14_69250		PA5244	[]	0.504642279699641	0.0	most stable
+PA14_69420		PA5257	[]	0.5208873411217884	0.0	most stable
+PA14_69470	algR	PA5261	[]	0.585434543833406	0.0	most stable
+PA14_69550	vgrG6	PA5266	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Module-M00334: Type VI secretion system']	0.14869016668160812	7.747695170563803e-28	least stable	['PA0263.2', 'PA0263.3']
+PA14_69570	corA	PA5268	[]	0.5616920883231361	0.0	most stable
+PA14_69580		PA5269	[]	0.19639932765014928	1.106908461008188e-47	least stable	No accessory genes
+PA14_69910	rep	PA5296	[]	0.5086223620659088	0.0	most stable
+PA14_70200	dppA5	PA5317	[]	0.5257326149148357	0.0	most stable
+PA14_70270	algC	PA5322	['KEGG-Pathway-pae00051: Fructose and mannose metabolism', 'KEGG-Pathway-pae00052: Galactose metabolism', 'KEGG-Pathway-pae00521: Streptomycin biosynthesis', 'KEGG-Pathway-pae00500: Starch and sucrose metabolism', 'KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Pathway-pae00030: Pentose phosphate pathway', 'KEGG-Pathway-pae00520: Amino sugar and nucleotide sugar metabolism', 'KEGG-Pathway-pae00010: Glycolysis / Gluconeogenesis']	0.5193458295989608	0.0	most stable
+PA14_70280	argB	PA5323	['KEGG-Pathway-pae01210: 2-Oxocarboxylic acid metabolism', 'KEGG-Pathway-pae00330: Arginine and proline metabolism', 'KEGG-Module-M00028: Ornithine biosynthesis, glutamate => ornithine']	0.5260545874817173	0.0	most stable
+PA14_70550		PA5343	[]	0.5428423332840089	0.0	most stable
+PA14_70570	recG	PA5345	['KEGG-Pathway-pae03440: Homologous recombination']	0.5070680564306453	0.0	most stable
+PA14_70580	sadB	PA5346	[]	0.5031741300510725	0.0	most stable
+PA14_71100		PA5383	[]	0.06590373231643247	1.3967801715378548e-06	least stable	No accessory genes
+PA14_71630	adhA	PA5427	['KEGG-Pathway-pae00071: Fatty acid degradation', 'KEGG-Pathway-pae00350: Tyrosine metabolism', 'KEGG-Pathway-pae00625: Chloroalkane and chloroalkene degradation', 'KEGG-Pathway-pae01220: Degradation of aromatic compounds', 'KEGG-Pathway-pae00010: Glycolysis / Gluconeogenesis']	0.5028429052320943	0.0	most stable
+PA14_71840		PA5441	[]	0.5595845456366381	0.0	most stable
+PA14_72020		PA5456	[]	0.5216457357038781	0.0	most stable
+PA14_72040		PA5458	[]	0.5000942667071028	0.0	most stable
+PA14_72230		PA5473	[]	0.5741098825977772	0.0	most stable
+PA14_72260		PA5475	[]	0.5597606120464245	0.0	most stable
+PA14_72380	algB	PA5483	[]	0.5596017262282112	0.0	most stable
+PA14_72390	kinB	PA5484	[]	0.5460641350138362	0.0	most stable
+PA14_72420		PA5487	[]	0.5195033713462922	0.0	most stable
+PA14_72490	polA	PA5493	['KEGG-Pathway-pae03440: Homologous recombination', 'KEGG-Pathway-pae00230: Purine metabolism', 'KEGG-Pathway-pae03410: Base excision repair', 'KEGG-Pathway-pae00240: Pyrimidine metabolism', 'KEGG-Pathway-pae03030: DNA replication', 'KEGG-Pathway-pae03420: Nucleotide excision repair']	0.5126651337105814	0.0	most stable
+PA14_72510	thrB	PA5495	['KEGG-Pathway-pae00260: Glycine, serine and threonine metabolism', 'KEGG-Module-M00018: Threonine biosynthesis, aspartate => homoserine => threonine']	0.510275318224895	0.0	most stable
+PA14_72960		PA5530	[]	0.1670291279354563	8.718844385231787e-35	least stable	No accessory genes
+PA14_72970	tonB1	PA5531	[]	0.5159360150559797	0.0	most stable
+PA14_73020	dksA2	PA5536	[]	0.5044142229598454	0.0	most stable
+PA14_73110		PA5544	[]	0.5233828291680879	0.0	most stable
+PA14_73240	atpD	PA5554	['KEGG-Pathway-pae00190: Oxidative phosphorylation', 'KEGG-Module-M00157: F-type ATPase, prokaryotes and chloroplasts']	0.560945429573057	0.0	most stable
+PA14_73250	atpG	PA5555	['KEGG-Pathway-pae00190: Oxidative phosphorylation', 'KEGG-Module-M00157: F-type ATPase, prokaryotes and chloroplasts']	0.540052212464989	0.0	most stable
+PA14_73260	atpA	PA5556	['KEGG-Pathway-pae00190: Oxidative phosphorylation', 'KEGG-Module-M00157: F-type ATPase, prokaryotes and chloroplasts']	0.5468135330256529	0.0	most stable
+PA14_73280	atpH	PA5557	['KEGG-Pathway-pae00190: Oxidative phosphorylation', 'KEGG-Module-M00157: F-type ATPase, prokaryotes and chloroplasts']	0.5531169313891207	0.0	most stable
+PA14_73300	atpE	PA5559	['KEGG-Pathway-pae00190: Oxidative phosphorylation', 'KEGG-Module-M00157: F-type ATPase, prokaryotes and chloroplasts']	0.5547154638765299	0.0	most stable
+PA14_73310	atpB	PA5560	['KEGG-Pathway-pae00190: Oxidative phosphorylation', 'KEGG-Module-M00157: F-type ATPase, prokaryotes and chloroplasts']	0.5312414808288745	0.0	most stable
+PA14_73320	atpI	PA5561	[]	0.5244370497905003	0.0	most stable
+PA14_73410		PA5568	['KEGG-Pathway-pae03070: Bacterial secretion system', 'KEGG-Pathway-pae03060: Protein export', 'KEGG-Module-M00335: Sec (secretion) system']	0.5399908527235292	0.0	most stable
