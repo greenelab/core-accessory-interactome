@@ -45,7 +45,7 @@ First you need to set up your local repository:
 git clone https://github.com/greenelab/core-accessory-interactome.git
 ```
 Note: Git automatically detects the LFS-tracked files and clones them via http.
-4. Navigate into cloned repo by running the following command in the terminal:
+4. Navigate into the cloned repo by running the following command in the terminal:
 ```
 cd core-accessory-interactome
 ```
