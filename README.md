@@ -38,9 +38,9 @@ Given that different groups of genes both contribute to these traits of interest
 In order to run this simulation on your own gene expression data the following steps should be performed:
 
 First you need to set up your local repository:
-1. Download and install [github's large file tracker](https://git-lfs.github.com/).
+1. Download and install [github's large file tracker](https://git-lfs.github.com/). Once downloaded and installed, setup git lfs by running `git lfs install`
 2. Install [miniconda](https://docs.conda.io/en/latest/miniconda.html)
-3. Clone the `core-accessory-interactome` repository by running the following command in the terminal:
+3. Navigate to the location where you'd like the code to live and clone the `core-accessory-interactome` repository by running the following command in the terminal:
 ```
 git clone https://github.com/greenelab/core-accessory-interactome.git
 ```

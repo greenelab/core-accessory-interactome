@@ -13,15 +13,17 @@ def load_format_operons(operon_filename):
     This function inputs operon annotations from the `operon_filename`
     and returns a pandas df with gene ids as index and the associated
     operon as the column values.
+
+    The operon_filename contains genes with multiple operon annotations.
+    These operon annotations include predicted operons based on the DOOR database,
+    which make up the majority of the annotations) as well as some that
+    are curated (i.e. PseudoCAP).
+    Genes can have both DOOR and PseudoCAP annotations.
+    There are some that have multiple PseudoCAP annotations too.
+
     """
 
     operon_df = pd.read_csv(operon_filename, index_col=0, header=0)
-
-    # There are 247 PAO1 genes with multiple annotations
-    # This operon df contains annotations from predicted operons based on DOOR database
-    # predictions which make up the majority of the operons) as well as some that
-    # are curated (i.e. PseudoCAP)
-    # There are some that have multiple PseudoCAP annotations too
 
     # Here we will keep the last PseudoCAP annotations
     # To ensure that the PseudoCAP annotations are the last ones, we will sort the values
