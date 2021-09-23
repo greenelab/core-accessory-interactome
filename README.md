@@ -53,4 +53,4 @@ cd core-accessory-interactome
 ```bash
 bash install.sh
 ```
-6. Navigate to any of the analysis directories listed in the table above to see the code for how analyses were performed. To reproduce the results and figures of the analysis, run the analysis directories in order.
+6. Navigate to any of the analysis directories listed in the table above to see the code for how analyses were performed. To reproduce the results and figures of the paper, run the analysis directories in order.
