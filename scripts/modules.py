@@ -50,16 +50,20 @@ def get_intra_module_dist(annot_df, pa_prefix):
 				abs_dist.append(dist)
 
 		median_module_dist = np.median(abs_dist)
+		mean_module_dist = np.mean(abs_dist)
 		min_dist = np.min(abs_dist)
 		max_dist = np.max(abs_dist)
+		range_module = max_dist - min_dist
 
 		for _id in ids:
 			rows.append(
 				{
 					"gene id": _id,
+					"mean pairwise dist": mean_module_dist,
 					"median pairwise dist": median_module_dist,
 					"min pairwise dist": min_dist,
 					"max pairwise dist": max_dist,
+					"range pairwise dist": range_module
 				}
 			)
 
