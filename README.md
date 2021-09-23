@@ -49,7 +49,7 @@ Note: Git automatically detects the LFS-tracked files and clones them via http.
 ```
 cd core-accessory-interactome
 ```
-5. Set up conda environment by running the following command in the terminal:
+5. Set up your conda environment by running the following command in the terminal:
 ```bash
 bash install.sh
 ```
