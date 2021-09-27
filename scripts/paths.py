@@ -66,4 +66,5 @@ ARRAY_COMPENDIUM_TO_COMPARE = LOCAL_DATA_DIR / "pao1_array_compendia_tocompare.t
 RNASEQ_COMPENDIUM_TO_COMPARE = LOCAL_DATA_DIR / "pao1_rnaseq_compendia_tocompare.tsv"
 
 # Location of SOPHIE identified common DEGs
-COMMON_DEGS = LOCAL_DATA_DIR / "SOPHIE_GAPE_generic.tsv"
+COMMON_DEGS_PAO1 = LOCAL_DATA_DIR / "generic_gene_summary_SRP117105.tsv"
+COMMON_DEGS_PA14 = LOCAL_DATA_DIR / "generic_gene_summary_SRP074292.tsv"
