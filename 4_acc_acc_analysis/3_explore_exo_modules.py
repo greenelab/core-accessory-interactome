@@ -17,7 +17,14 @@
 #
 # This notebook specifically explores the exoS (PAO1) and exoU (PA14) accessory-accessory modules to determine if there is an interesting biological story here.
 #
-# About exoS and exoU? Why might we be interested in studying the modules?
+# _P. aeruginosa_ uses a type III secretion system (T3SS) to promote development of severe disease, particularly in patients with impaired immune defenses. _P. aeruginosa_ uses a type III secretion system to inject toxic effector proteins into the cytoplasm of eukaryotic cells. ExoU, ExoS, and ExoT, three effector proteins secreted by this system. ExoU and ExoS are usually secreted by different strains.
+#
+# What is known about the mechanism by which these genes contribute to virulence?
+# Heatmaps tell us the structure of the module - if there are any sub-modules.
+# What can we learn from module composition?
+# What can we learn from most co-expressed genes?
+#
+# https://www.ncbi.nlm.nih.gov/pmc/articles/PMC529154/
 
 # +
 # %load_ext autoreload
@@ -134,12 +141,12 @@ exoU_corr = pa14_corr.loc[exoU_module_gene_ids, exoU_module_gene_ids]
 
 # %%time
 f = sns.clustermap(exoS_corr.abs(), cmap="viridis", figsize=(20, 20))
-f.ax_heatmap.set_xticklabels(f.ax_heatmap.get_xmajorticklabels(), fontsize=16)
-f.ax_heatmap.set_yticklabels(f.ax_heatmap.get_ymajorticklabels(), fontsize=16)
-f.fig.suptitle("Correlation of exoS module", y=1.05)
+f.ax_heatmap.set_xticklabels(f.ax_heatmap.get_xmajorticklabels(), fontsize=20)
+f.ax_heatmap.set_yticklabels(f.ax_heatmap.get_ymajorticklabels(), fontsize=20)
+f.fig.suptitle("Correlation of exoS module", y=1.05, fontsize=24)
 
 # %%time
 g = sns.clustermap(exoU_corr.abs(), cmap="viridis", figsize=(20, 20))
-g.ax_heatmap.set_xticklabels(f.ax_heatmap.get_xmajorticklabels(), fontsize=16)
-g.ax_heatmap.set_yticklabels(f.ax_heatmap.get_ymajorticklabels(), fontsize=16)
-g.fig.suptitle("Correlation of exoU module", y=1.05)
+g.ax_heatmap.set_xticklabels(f.ax_heatmap.get_xmajorticklabels(), fontsize=20)
+g.ax_heatmap.set_yticklabels(f.ax_heatmap.get_ymajorticklabels(), fontsize=20)
+g.fig.suptitle("Correlation of exoU module", y=1.05, fontsize=24)
