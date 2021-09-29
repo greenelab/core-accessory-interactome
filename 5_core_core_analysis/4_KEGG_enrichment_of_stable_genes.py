@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ---
 # jupyter:
 #   jupytext:
@@ -145,3 +146,11 @@ pao1_least_stable_enrichment.sort_values(by="corrected p-value").head()
 # Save
 pao1_most_stable_enrichment.to_csv("pao1_most_stable_enrichment.tsv", sep="\t")
 pao1_least_stable_enrichment.to_csv("pao1_least_stable_enrichment.tsv", sep="\t")
+
+# **Takeaway:**
+# * There doesn’t appear to be any enriched KEGG pathways in the least stable genes.
+#     * What does this mean about the role of these least stable core genes? Maybe they are spread across multiple pathways?
+# * Significantly enriched KEGG pathways include Ribosome (commonly enriched in humans), secretion system, metabolism/Krebs cycle
+#     * These KEGG pathways represent some of the essential functions for Pa, so it makes sense that they are enriched amongst the set of stable core genes whose transcriptional relationships don’t vary across strains.
+#     * Only some metabolisms and not others, is that interesting?
+#

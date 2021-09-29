@@ -93,32 +93,6 @@ pa14_acc = core_acc_dict["acc_pa14"]
 
 # ### Are common genes mostly core or accessory?
 
-# +
-# Get shared gene ids
-# shared_acc = pao1_common_DEGs.intersection(pao1_acc)
-# shared_core = pao1_common_DEGs.intersection(pao1_core)
-
-# +
-# common_DEGs.loc[shared_acc, "gene group"] = "accessory"
-# common_DEGs.loc[shared_core, "gene group"] = "core"
-
-# +
-# common_DEGs["gene group"].value_counts()
-
-# +
-# Add gene name
-# pao1_gene_annot = pd.read_csv(pao1_annot_filename, index_col=0, header=0)
-# pao1_gene_annot = pao1_gene_annot["Name"].to_frame("gene name")
-
-# +
-# common_DEGs_label = common_DEGs.merge(
-#    pao1_gene_annot, left_index=True, right_index=True
-# )
-
-# +
-# common_DEGs_label
-# -
-
 # ### Venn diagram
 
 pao1_common_DEGs_set = set(pao1_common_DEGs)
@@ -224,10 +198,6 @@ matplotlib.pyplot.savefig(
     pad_inches=0,
     dpi=300,
 )
-
-# +
-# Save data
-# common_DEGs_label.to_csv("common_DEGs_gene_group_labeled.tsv", sep="\t")
 # -
 
 # ## Enrichment test
@@ -343,9 +313,9 @@ f.figure.savefig(
 # +
 # The two-sided p-value is the probability that, under the null hypothesis,
 # a random table would have a probability equal to or less than the probability of the input table.
-# The probability that we would observe this or an even more imbalanced ratio by chance is about ~61%
+# The probability that we would observe this or an even more imbalanced ratio by chance is ~4%
 
-# There is a positive association based on the odds ratio with a slightly significant p-value
+# There is a negative association based on the odds ratio with a slightly significant p-value
 pao1_oddsr, pao1_pval = scipy.stats.fisher_exact(
     pao1_observed_contingency_table, alternative="two-sided"
 )
@@ -353,7 +323,7 @@ pao1_oddsr, pao1_pval = scipy.stats.fisher_exact(
 print(pao1_oddsr, pao1_pval)
 
 # +
-# There is a positive association based on the odds ratio with a slightly significant p-value
+# There is a negative association based on the odds ratio with a slightly significant p-value
 pa14_oddsr, pa14_pval = scipy.stats.fisher_exact(
     pa14_observed_contingency_table, alternative="two-sided"
 )
@@ -379,5 +349,13 @@ print(pa14_chi2, pa14_pval)
 # **Takeaway:**
 #
 # * Based on the venn diagrams, it looks like most common DEGs are core, as expected. Since it is thought that these core genes encode essential functions shared by all strains, it would make sense that these core genes are also those commonly DEGs.
+#
 # * Based on the Fisher's exact test, there is an odds ratio <1 indicating that there is a negative relationship between a gene being common DEGs and a gene being core vs accessory. With the p-value indicating that this relationship is significant.
 #     * This [paper](https://www.d.umn.edu/~tpederse/Pubs/scsug96.pdf) talks about the p-values obtained from the Fisher's exact tests are reliable compared to asymptotic test results when dealing with skewed/unbalanced datasets. Furthermore, [this blog](https://courses.lumenlearning.com/boundless-statistics/chapter/the-chi-squared-test/) suggests that while a $\chi^2$ test is recommended for large datasets, like what we have, in the case where the dataset is skewed/unbalanced the p-values for the Fisher's exact test are more reliable.
+#
+# * Fisher’s exact test, the null hypothesis is that common DEGs are equally likely to be core or accessory genes.
+#     * In order to calculate the significance of the observed data, i.e. the total probability of observing data as extreme or more extreme if the null hypothesis is true
+#     * Percentage of core genes that are common is ~20% compared to ~30% (PAO1) or ~50% (PA14) accessory genes
+#     * There is a negative relationship, meaning if a gene is common DEG, its less likely it’s a core gene
+#
+#

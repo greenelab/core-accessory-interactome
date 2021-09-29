@@ -19,11 +19,6 @@
 #
 # _P. aeruginosa_ uses a type III secretion system (T3SS) to promote development of severe disease, particularly in patients with impaired immune defenses. _P. aeruginosa_ uses a type III secretion system to inject toxic effector proteins into the cytoplasm of eukaryotic cells. ExoU, ExoS, and ExoT, three effector proteins secreted by this system. ExoU and ExoS are usually secreted by different strains.
 #
-# What is known about the mechanism by which these genes contribute to virulence?
-# Heatmaps tell us the structure of the module - if there are any sub-modules.
-# What can we learn from module composition?
-# What can we learn from most co-expressed genes?
-#
 # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC529154/
 
 # +
@@ -150,3 +145,17 @@ g = sns.clustermap(exoU_corr.abs(), cmap="viridis", figsize=(20, 20))
 g.ax_heatmap.set_xticklabels(f.ax_heatmap.get_xmajorticklabels(), fontsize=20)
 g.ax_heatmap.set_yticklabels(f.ax_heatmap.get_ymajorticklabels(), fontsize=20)
 g.fig.suptitle("Correlation of exoU module", y=1.05, fontsize=24)
+
+# **Takeaway**
+# We've aggregated the information from this notebook into a [google sheet](https://docs.google.com/spreadsheets/d/1AuD1Q4lHhWNp5xzgW-hi8mHkHFyd91rmOksXXuAwk4Q/edit#gid=533448426) to easily share with collaborators. This sheet contains Uniprot annotations for each gene within the exoS and exoU modules. The sheet also contains a sorted matrix of genes and how correlated they are with exoS and exoU.
+#
+# * Genes within exoS module appear to be more highly correlated with exoS (see sheet) and each other (see heatmap) unlike exoU module
+#     * What might this mean about exoS, exoU?
+#     * Despite being part of the same T3S system, their relationship to other accessory genes is different
+# * Based on gene annotations, is there a different mechanism by which exoS contributes to virulence compared to exoU?
+#     * This is difficult to answer with so many unannotated genes
+#
+# Some more reading will need to be done to determine the biological motivation here:
+# * What is known about the mechanism by which these genes contribute to virulence?
+# * What can we learn from module composition?
+# * What can we learn from most co-expressed genes?
