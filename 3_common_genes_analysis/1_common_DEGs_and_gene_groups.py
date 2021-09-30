@@ -379,22 +379,18 @@ pa14_core_summary_annot = pd.read_csv(
 )
 # -
 
-pao1_core_summary_annot.head()
+# Note: There are some common core genes that are **not found** in our core-core annotation summary table. This is because of the processing that was performed in [1_core_core_relationships_across_strains.ipynb](../5_core_core_analysis/1_core_core_relationships_across_strains.ipynb) where we were mapping PAO1 genes to their homologous PA14 gene and comparing their transcriptional relationships. Some genes were removed because they mapped to multiple PA14 genes. Genes are also removed if the gene was not found in the PAO1 or PA14 compendia. Similarly for mapping from PA14 to PAO1, there were some genes that were lost due to this processing. So we will use the intersection of gene ids here.
 
-pao1_core_summary_annot.shape
+# Get shared genes
+shared_pao1_core_ids = set(pao1_common_core).intersection(pao1_core_summary_annot.index)
+shared_pa14_core_ids = set(pa14_common_core).intersection(pa14_core_summary_annot.index)
 
-len(pao1_common_core)
+pao1_common_core_df = pao1_core_summary_annot.loc[shared_pao1_core_ids]
 
-len(pao1_common_core.intersection(pao1_core_summary_annot.index))
-
-pao1_core_summary_annot.loc[list(pao1_common_core)]
-
-pa14_core_summary_annot.loc[pa14_common_core]
+pa14_common_core_df = pa14_core_summary_annot.loc[shared_pa14_core_ids]
 
 # +
-# TO DO: Given that we need to pull from this later directory (5) we will need to modify the ordering of the
-# notebooks
-# Load core-core annotations and select only the genes that are common DEGs
+# Load acc-acc annotations and select only the genes that are common DEGs
 pao1_acc_summary_annot_filename = (
     "../4_acc_acc_analysis/pao1_acc_gene_module_annotated_affinity.tsv"
 )
@@ -410,9 +406,20 @@ pa14_acc_summary_annot = pd.read_csv(
 )
 # -
 
-pao1_acc_summary_annot.loc[pao1_common_acc]
+pao1_common_acc_df = pao1_acc_summary_annot.loc[pao1_common_acc]
 
-pa14_acc_summary_annot.loc[pa14_common_acc]
+# Temporarily remove PAO1 gene ids from common PA14 DEGs -- to fix later
+shared_pa14_acc_ids = set(pa14_common_acc).intersection(pa14_acc_summary_annot.index)
+pa14_common_acc_df = pa14_acc_summary_annot.loc[shared_pa14_acc_ids]
+
+# +
+# Save
+pao1_common_core_df.to_csv("pao1_common_core_gene_annot.tsv", sep="\t")
+pa14_common_core_df.to_csv("pa14_common_core_gene_annot.tsv", sep="\t")
+
+pao1_common_acc_df.to_csv("pao1_common_acc_gene_annot.tsv", sep="\t")
+pa14_common_acc_df.to_csv("pa14_common_acc_gene_annot.tsv", sep="\t")
+# -
 
 # **Takeaway:**
 #

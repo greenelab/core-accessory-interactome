@@ -75,6 +75,8 @@ pao1_gene_annot = pao1_gene_annot["Name"].to_frame("gene name")
 pa14_gene_annot = pa14_gene_annot["Name"].to_frame("gene name")
 
 # ## Add gene names
+#
+# **TO DO: Remove these PAO1 gene ids from the correlation and redo correlation and acc-acc. Then add how=left**
 
 # Add gene names
 pao1_gene_module_labels = pao1_membership.merge(
