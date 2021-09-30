@@ -236,8 +236,10 @@ pa14_corr_df = pa14_corr_df.merge(
 )
 # -
 
+print(pao1_corr_df.shape)
 pao1_corr_df.head()
 
+print(pa14_corr_df.shape)
 pa14_corr_df.head()
 
 # ## Plots
@@ -328,8 +330,7 @@ venn2(
 for missing_pa14 in list(low_pa14_set.difference(low_pao1_set)):
     print(missing_pa14 in pao1_corr_df["PA14 homolog id"])
 
-# +
-# Save
+"""# Save
 fig_pao1.savefig(
     pao1_similarity_dist_filename,
     format="svg",
@@ -346,12 +347,13 @@ fig_pa14.savefig(
     transparent=True,
     pad_inches=0,
     dpi=300,
-)
-# -
+)"""
 
+# +
 # Save transcriptional similarity df
-pao1_corr_df.to_csv(pao1_similarity_scores_filename, sep="\t")
-pa14_corr_df.to_csv(pa14_similarity_scores_filename, sep="\t")
+# pao1_corr_df.to_csv(pao1_similarity_scores_filename, sep="\t")
+# pa14_corr_df.to_csv(pa14_similarity_scores_filename, sep="\t")
+# -
 
 # **Takeaways:**
 # The distribution plots are the distribution of correlation scores, which represent how correlated a core gene was with its homolog. As an example, say we have core gene PA0001, we can get its correlation profile (i.e. the row of the correlation matrix) that tells us which core genes PA0001 is highly and lowly correlated with. Then we can map PA0001 to its homolog in PA14 and get its correlation profile. Finally we can take the correlation of those correlation profile to determine how consistent PA0001's relationships are across strains. Genes with a high correlation score (right tail of the distribution) represent genes that are stable and are core genes that are related to the same set of core genes in PAO1 and PA14. While genes with a low correlation score (left tail of the distribution) represent genes that are unstable and are core genes that are not related to the same set of core genes in PAO1 and PA14.

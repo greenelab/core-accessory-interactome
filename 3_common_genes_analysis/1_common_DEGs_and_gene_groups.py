@@ -229,6 +229,11 @@ pao1_observed_contingency_table = np.array(
     ]
 )
 pao1_observed_contingency_table
+# -
+
+# Save common core and acc gene to new var
+pao1_common_core = common_core_genes
+pao1_common_acc = common_acc_genes
 
 # +
 # Make contingency table for PAO1 data
@@ -253,6 +258,11 @@ pa14_observed_contingency_table = np.array(
     ]
 )
 pa14_observed_contingency_table
+# -
+
+# Save common core and acc gene to new var
+pa14_common_core = common_core_genes
+pa14_common_acc = common_acc_genes
 
 # +
 # Make heatmap of contingency table for PAO1
@@ -346,16 +356,72 @@ pa14_chi2, pa14_pval, pa14_dof, pa14_expected_counts = scipy.stats.chi2_continge
 print(pa14_chi2, pa14_pval)
 # -
 
+# ### Who are these genes?
+#
+# Let's look at the core and accessory genes that are also common DEGs
+
+# +
+# TO DO: Given that we need to pull from this later directory (5) we will need to modify the ordering of the
+# notebooks
+# Load core-core annotations and select only the genes that are common DEGs
+pao1_core_summary_annot_filename = (
+    "../5_core_core_analysis/pao1_core_similarity_associations_final.tsv"
+)
+pa14_core_summary_annot_filename = (
+    "../5_core_core_analysis/pa14_core_similarity_associations_final.tsv"
+)
+
+pao1_core_summary_annot = pd.read_csv(
+    pao1_core_summary_annot_filename, sep="\t", index_col=0, header=0
+)
+pa14_core_summary_annot = pd.read_csv(
+    pa14_core_summary_annot_filename, sep="\t", index_col=0, header=0
+)
+# -
+
+pao1_core_summary_annot.head()
+
+pao1_core_summary_annot.shape
+
+len(pao1_common_core)
+
+len(pao1_common_core.intersection(pao1_core_summary_annot.index))
+
+pao1_core_summary_annot.loc[list(pao1_common_core)]
+
+pa14_core_summary_annot.loc[pa14_common_core]
+
+# +
+# TO DO: Given that we need to pull from this later directory (5) we will need to modify the ordering of the
+# notebooks
+# Load core-core annotations and select only the genes that are common DEGs
+pao1_acc_summary_annot_filename = (
+    "../4_acc_acc_analysis/pao1_acc_gene_module_annotated_affinity.tsv"
+)
+pa14_acc_summary_annot_filename = (
+    "../4_acc_acc_analysis/pa14_acc_gene_module_annotated_affinity.tsv"
+)
+
+pao1_acc_summary_annot = pd.read_csv(
+    pao1_acc_summary_annot_filename, sep="\t", index_col=0, header=0
+)
+pa14_acc_summary_annot = pd.read_csv(
+    pa14_acc_summary_annot_filename, sep="\t", index_col=0, header=0
+)
+# -
+
+pao1_acc_summary_annot.loc[pao1_common_acc]
+
+pa14_acc_summary_annot.loc[pa14_common_acc]
+
 # **Takeaway:**
 #
 # * Based on the venn diagrams, it looks like most common DEGs are core, as expected. Since it is thought that these core genes encode essential functions shared by all strains, it would make sense that these core genes are also those commonly DEGs.
 #
-# * Based on the Fisher's exact test, there is an odds ratio <1 indicating that there is a negative relationship between a gene being common DEGs and a gene being core vs accessory. With the p-value indicating that this relationship is significant.
+# * Based on the Fisher's exact test results, there is an odds ratio <1 indicating that there is a negative relationship between a gene being common DEGs and a gene being core vs accessory. With the p-value indicating that this relationship is significant.
 #     * This [paper](https://www.d.umn.edu/~tpederse/Pubs/scsug96.pdf) talks about the p-values obtained from the Fisher's exact tests are reliable compared to asymptotic test results when dealing with skewed/unbalanced datasets. Furthermore, [this blog](https://courses.lumenlearning.com/boundless-statistics/chapter/the-chi-squared-test/) suggests that while a $\chi^2$ test is recommended for large datasets, like what we have, in the case where the dataset is skewed/unbalanced the p-values for the Fisher's exact test are more reliable.
 #
-# * Fisher’s exact test, the null hypothesis is that common DEGs are equally likely to be core or accessory genes.
+# * For the Fisher’s exact test, the null hypothesis is that common DEGs are equally likely to be core or accessory genes.
 #     * In order to calculate the significance of the observed data, i.e. the total probability of observing data as extreme or more extreme if the null hypothesis is true
-#     * Percentage of core genes that are common is ~20% compared to ~30% (PAO1) or ~50% (PA14) accessory genes
+#     * Percentage of core genes that are common is ~19-20% compared to ~26-32% accessory genes
 #     * There is a negative relationship, meaning if a gene is common DEG, its less likely it’s a core gene
-#
-#
