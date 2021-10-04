@@ -102,6 +102,7 @@ def KEGG_enrichment_of_stable_genes(similarity_score_df, gene_list, kegg_df):
         rows.append(
             {
                 "enriched KEGG pathway": kegg_name,
+                "odds ratio": oddsr,
                 "p-value": pval,
                 "num shared genes": len(module_kegg_genes),
                 "size gene set": len(module_genes),

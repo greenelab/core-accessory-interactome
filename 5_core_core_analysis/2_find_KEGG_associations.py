@@ -15,7 +15,7 @@
 
 # # Find KEGG associations
 #
-# This notebokk will create a table that has the KEGG pathways that are associated with all genes, but we are particularly interested in those that are associated with the most and least stable genes.
+# This notebook will create a table that has the KEGG pathways that are associated with all genes, but we are particularly interested in those that are associated with the most and least stable genes.
 
 # +
 # %load_ext autoreload
