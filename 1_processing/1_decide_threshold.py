@@ -28,7 +28,7 @@ import matplotlib.pyplot as plt
 from scripts import paths, utils
 
 # +
-# Raw (TPM) expression data files
+# Raw (normalized counts) expression data files
 pao1_expression_filename = paths.PAO1_GE
 pa14_expression_filename = paths.PA14_GE
 
@@ -37,36 +37,12 @@ sample_to_strain_filename = paths.SAMPLE_TO_STRAIN
 # -
 
 # Load expression data
-# Matrices will be sample x gene after taking the transpose
-pao1_expression = pd.read_csv(pao1_expression_filename, index_col=0, header=0).T
-pa14_expression = pd.read_csv(pa14_expression_filename, index_col=0, header=0).T
+pao1_expression = pd.read_csv(pao1_expression_filename, sep="\t", index_col=0, header=0)
+pa14_expression = pd.read_csv(pa14_expression_filename, sep="\t", index_col=0, header=0)
 
 # Load metadata
 # Set index to experiment id, which is what we will use to map to expression data
 sample_to_strain_table_full = pd.read_csv(sample_to_strain_filename, index_col=2)
-
-# ## Format expression data
-#
-# Format index to only include experiment id. This will be used to map to expression data and SRA labels later
-
-# +
-# Format expression data indices so that values can be mapped to `sample_to_strain_table`
-pao1_index_processed = pao1_expression.index.str.split(".").str[0]
-pa14_index_processed = pa14_expression.index.str.split(".").str[0]
-
-print(
-    f"No. of samples processed using PAO1 reference after filtering: {pao1_expression.shape}"
-)
-print(
-    f"No. of samples processed using PA14 reference after filtering: {pa14_expression.shape}"
-)
-pao1_expression.index = pao1_index_processed
-pa14_expression.index = pa14_index_processed
-# -
-
-pao1_expression.head()
-
-pa14_expression.head()
 
 # ## Format SRA annotations
 
@@ -188,8 +164,8 @@ non_pao1_sra = pao1_pa14_acc_expression.loc[
 
 pao1_threshold = 25
 
-f = sns.distplot(pao1_sra, color="grey", kde=False)
-f = sns.distplot(non_pao1_sra, color="blue", kde=False)
+f = sns.distplot(pao1_sra, color="#C6A9B5", kde=False)
+f = sns.distplot(non_pao1_sra, color="grey", kde=False)
 plt.axvline(pao1_threshold, 0, 100, color="red")
 
 # +
@@ -207,9 +183,9 @@ non_pa14_sra = pao1_pa14_acc_expression.loc[
 
 pa14_threshold = 25
 
-g = sns.distplot(pa14_sra, color="grey", kde=False)
-g = sns.distplot(non_pa14_sra, color="blue", kde=False)
+g = sns.distplot(pa14_sra, color="#895881", kde=False)
+g = sns.distplot(non_pa14_sra, color="grey", kde=False)
 plt.axvline(pa14_threshold, 0, 100, color="red")
 
 # **Takeaway:**
-# Looks like using a threshold of 25 TPM separates between SRA-annotated PAO1 samples vs non-PAO1 samples. Similarly for PA14. This is the threshold we'll use to bin samples into PAO1 vs PA14 compendia.
+# Looks like using a threshold of 25 normalized counts separates between SRA-annotated PAO1 samples vs non-PAO1 samples. Similarly for PA14. This is the threshold we'll use to bin samples into PAO1 vs PA14 compendia.

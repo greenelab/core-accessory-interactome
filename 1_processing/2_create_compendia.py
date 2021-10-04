@@ -43,6 +43,8 @@ opp_threshold = 25
 # -
 
 # ## Load data
+#
+# The expression data being used is described in the [paper](link TBD) with source code [here](https://github.com/hoganlab-dartmouth/pa-seq-compendia)
 
 # +
 # Expression data files
@@ -54,9 +56,8 @@ sample_to_strain_filename = paths.SAMPLE_TO_STRAIN
 # -
 
 # Load expression data
-# Matrices will be sample x gene after taking the transpose
-pao1_expression = pd.read_csv(pao1_expression_filename, index_col=0, header=0).T
-pa14_expression = pd.read_csv(pa14_expression_filename, index_col=0, header=0).T
+pao1_expression = pd.read_csv(pao1_expression_filename, sep="\t", index_col=0, header=0)
+pa14_expression = pd.read_csv(pa14_expression_filename, sep="\t", index_col=0, header=0)
 
 # Load metadata
 # Set index to experiment id, which is what we will use to map to expression data
