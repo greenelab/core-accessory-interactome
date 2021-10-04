@@ -72,8 +72,9 @@ pa14_corr.head()
 # ## Get mapping from PAO1 to PA14
 
 pao1_annotation_filename = paths.GENE_PAO1_ANNOT
+pa14_annotation_filename = paths.GENE_PA14_ANNOT
 gene_mapping_pao1 = utils.get_pao1_pa14_gene_map(pao1_annotation_filename, "pao1")
-gene_mapping_pa14 = utils.get_pao1_pa14_gene_map(pao1_annotation_filename, "pa14")
+gene_mapping_pa14 = utils.get_pao1_pa14_gene_map(pa14_annotation_filename, "pa14")
 
 pao1_gene_name_map = gene_mapping_pao1["Name"].to_frame()
 pa14_gene_name_map = gene_mapping_pa14["Name"].to_frame()
@@ -104,7 +105,6 @@ def compare_gene_relationships(gene_mapping_dict, mapping_to, pao1_corr, pa14_co
             ~pao1_corr_mapped.index.duplicated(keep=False),
             ~pao1_corr_mapped.columns.duplicated(keep=False),
         ]
-
         rows = []
         for pao1_mapped_id in pao1_corr_mapped.index:
 
@@ -236,8 +236,10 @@ pa14_corr_df = pa14_corr_df.merge(
 )
 # -
 
+print(pao1_corr_df.shape)
 pao1_corr_df.head()
 
+print(pa14_corr_df.shape)
 pa14_corr_df.head()
 
 # ## Plots

@@ -212,4 +212,4 @@ g = sns.distplot(non_pa14_sra, color="blue", kde=False)
 plt.axvline(pa14_threshold, 0, 100, color="red")
 
 # **Takeaway:**
-# Looks like using a threshold of 5 TPM separates between SRA-annotated PAO1 samples vs non-PAO1 samples. Similarly for PA14. This is the threshold we'll use to bin samples into PAO1 vs PA14 compendia.
+# Looks like using a threshold of 25 TPM separates between SRA-annotated PAO1 samples vs non-PAO1 samples. Similarly for PA14. This is the threshold we'll use to bin samples into PAO1 vs PA14 compendia.

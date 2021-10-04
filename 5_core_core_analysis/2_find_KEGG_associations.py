@@ -15,7 +15,7 @@
 
 # # Find KEGG associations
 #
-# This notebokk will create a table that has the KEGG pathways that are associated with the most stable and least stable core genes.
+# This notebook will create a table that has the KEGG pathways that are associated with all genes, but we are particularly interested in those that are associated with the most and least stable genes.
 
 # +
 # %load_ext autoreload
@@ -30,8 +30,8 @@ random.seed(1)
 # -
 
 # Output files
-pao1_core_stable_similarity_filename = "pao1_core_stable_associations.tsv"
-pa14_core_stable_similarity_filename = "pa14_core_stable_associations.tsv"
+pao1_out_filename = "pao1_core_similarity_associations.tsv"
+pa14_out_filename = "pa14_core_similarity_associations.tsv"
 
 # +
 # Load transcriptional similarity df
@@ -46,7 +46,11 @@ pa14_similarity_scores = pd.read_csv(
 )
 # -
 
+print(pao1_similarity_scores.shape)
 pao1_similarity_scores.head()
+
+print(pa14_similarity_scores.shape)
+pa14_similarity_scores.head()
 
 # Load KEGG pathway data
 pao1_pathway_filename = "https://raw.githubusercontent.com/greenelab/adage/7a4eda39d360b224268921dc1f2c14b32788ab16/Node_interpretation/pseudomonas_KEGG_terms.txt"
@@ -63,16 +67,8 @@ gene_mapping_pao1 = utils.get_pao1_pa14_gene_map(pao1_annotation_filename, "pao1
 
 gene_mapping_pao1 = gene_mapping_pao1["PA14_ID"].to_frame()
 
-# ## Get pathway associations for most and least stable genes
 
-# Get most and least stable core genes
-most_stable_genes = pao1_similarity_scores[
-    pao1_similarity_scores["label"] == "most stable"
-].index
-least_stable_genes = pao1_similarity_scores[
-    pao1_similarity_scores["label"] == "least stable"
-].index
-
+# ## Get pathway associations for all genes
 
 def get_associated_pathways(genes_):
     rows = []
@@ -85,40 +81,38 @@ def get_associated_pathways(genes_):
     return pd.DataFrame(rows).set_index("gene id")
 
 
-most_stable_associations = get_associated_pathways(most_stable_genes)
-most_stable_associations.head()
+# Get KEGG associations for all genes in PAO1
+all_pao1_gene_ids = list(pao1_similarity_scores.index)
+pao1_associations = get_associated_pathways(all_pao1_gene_ids)
 
-least_stable_associations = get_associated_pathways(least_stable_genes)
-least_stable_associations.head()
-
-# +
-# Concatenate dataframes
-pao1_all_associations = pd.concat([most_stable_associations, least_stable_associations])
-pao1_all_associations.head()
-
-# TO DO: Rename index col
-# -
+print(pao1_associations.shape)
+pao1_associations.head()
 
 # Map PA14 gene ids
-pa14_all_associations = pao1_all_associations.merge(
+pa14_associations = pao1_associations.merge(
     gene_mapping_pao1, left_index=True, right_index=True
 )
-pa14_all_associations.set_index("PA14_ID", inplace=True)
-pa14_all_associations.head()
+pa14_associations.set_index("PA14_ID", inplace=True)
+print(pa14_associations.shape)
+pa14_associations.head()
 
 # Merge KEGG associations with transcriptional similarity information
-pao1_all_associations = pao1_all_associations.merge(
-    pao1_similarity_scores, left_index=True, right_index=True, how="left"
+pao1_associations = pao1_similarity_scores.merge(
+    pao1_associations, left_index=True, right_index=True, how="left"
 )
-pa14_all_associations = pa14_all_associations.merge(
-    pa14_similarity_scores, left_index=True, right_index=True, how="left"
+pa14_associations = pa14_similarity_scores.merge(
+    pa14_associations, left_index=True, right_index=True, how="left"
 )
 
-pao1_all_associations.head()
+print(pao1_associations.shape)
+pao1_associations.head()
+
+print(pa14_associations.shape)
+pa14_associations.head()
 
 # Save
-pao1_all_associations.to_csv(pao1_core_stable_similarity_filename, sep="\t")
-pa14_all_associations.to_csv(pa14_core_stable_similarity_filename, sep="\t")
+pao1_associations.to_csv(pao1_out_filename, sep="\t")
+pa14_associations.to_csv(pa14_out_filename, sep="\t")
 
 # **Takeaway:**
 #

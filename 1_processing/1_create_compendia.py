@@ -65,6 +65,8 @@ sample_to_strain_table_full = pd.read_csv(sample_to_strain_filename, index_col=2
 # ## Get core and accessory annotations
 
 # +
+# Annotations are from BACTOME
+# Gene ids from PAO1 are annotated with the homologous PA14 gene id and vice versa
 pao1_annot_filename = paths.GENE_PAO1_ANNOT
 pa14_annot_filename = paths.GENE_PA14_ANNOT
 

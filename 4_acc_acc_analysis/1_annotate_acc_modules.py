@@ -75,6 +75,8 @@ pao1_gene_annot = pao1_gene_annot["Name"].to_frame("gene name")
 pa14_gene_annot = pa14_gene_annot["Name"].to_frame("gene name")
 
 # ## Add gene names
+#
+# **TO DO: Remove these PAO1 gene ids from the correlation and redo correlation and acc-acc. Then add how=left**
 
 # Add gene names
 pao1_gene_module_labels = pao1_membership.merge(
@@ -396,3 +398,5 @@ pa14_gene_annot.to_csv(f"pa14_acc_gene_module_annotated_{method}.tsv", sep="\t")
 #
 #
 # Note: Since genes can be in multiple KEGG pathways and regulons, each pathway and regulon are separate columns. Whereas operons are a single column since genes can belong to only a single operon.
+#
+# Maybe focus on the ones with a high range since those might tell us about how co-regulation evolves. These far apart come to be regulated by the same one vs all genes that evolved together?
