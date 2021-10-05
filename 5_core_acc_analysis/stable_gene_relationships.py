@@ -172,8 +172,8 @@ pa14_corr = pd.read_csv(pa14_corr_filename, sep="\t", index_col=0, header=0)
 # +
 # Load transcriptional similarity df
 # These are the subset of genes that we will consider
-pao1_similarity_scores_filename = "../5_core_core_analysis/pao1_similarity_scores.tsv"
-pa14_similarity_scores_filename = "../5_core_core_analysis/pa14_similarity_scores.tsv"
+pao1_similarity_scores_filename = "../3_core_core_analysis/pao1_similarity_scores.tsv"
+pa14_similarity_scores_filename = "../3_core_core_analysis/pa14_similarity_scores.tsv"
 
 pao1_similarity_scores = pd.read_csv(
     pao1_similarity_scores_filename, sep="\t", header=0, index_col=0
