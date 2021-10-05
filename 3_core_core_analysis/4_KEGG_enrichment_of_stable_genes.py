@@ -38,7 +38,7 @@ pao1_pathways.head()
 # +
 # Load transcriptional similarity df
 # These are the subset of genes that we will consider
-pao1_similarity_scores_filename = "../5_core_core_analysis/pao1_similarity_scores.tsv"
+pao1_similarity_scores_filename = "pao1_similarity_scores.tsv"
 
 pao1_similarity_scores = pd.read_csv(
     pao1_similarity_scores_filename, sep="\t", header=0, index_col=0

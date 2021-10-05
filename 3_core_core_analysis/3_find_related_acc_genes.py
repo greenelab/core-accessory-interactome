@@ -16,7 +16,7 @@
 
 # # Find co-expressed accessory genes
 #
-# From the [core-acc analysis](../core_acc_analysis/stable_gene_relationships.ipynb) we observed that least stable core genes tended to be highly co-expressed with more accessory genes compared to the most stable core genes. Therefore, this notebook reports the accessory genes that the least core genes are most co-expressed with.
+# From the [core-acc analysis](../5_core_acc_analysis/stable_gene_relationships.ipynb) we observed that least stable core genes tended to be highly co-expressed with more accessory genes compared to the most stable core genes. Therefore, this notebook reports the accessory genes that the least core genes are most co-expressed with.
 
 # +
 # %load_ext autoreload
