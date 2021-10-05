@@ -1,61 +1,61 @@
 	module id	gene name	median expression	mean pairwise dist	median pairwise dist	min pairwise dist	max pairwise dist	range pairwise dist	enriched KEGG pathway	p-value	num shared genes	size module	size KEGG pathway	corrected p-value	operon_name	Anr_regulon	PhoB_regulon	PvdR_regulon	PchR_regulon	AlgU_regulon	LasR_regulon	RhlR_regulon	PqsR_regulon	QscR_regulon	VreI_regulon	Zur_regulon	Anr_short_list	PhoB_short_list	AlgU_short_list	LasR_short_list	RhlR_short_list	PqsR_short_list
-PA4191	7		34.2587488049146	1017.6428571428572	1895.5	1.0	1901.0	1900.0	"1316    KEGG-Module-M00236: Putative polar amino acid ...
-Name: enriched KEGG pathway, dtype: object"	1.0396299511447252e-06	4.0	8.0	24.0	0.0016691258865628562	PA4195-PA4194-PA4193-PA4192-PA4191	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA2334	17		26.1652849223946	1934.622792022792	1708.0	1.0	5475.0	5474.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA3362	16		67.7384324905415	2006.8005263157895	1861.5	1.0	5165.0	5164.0							amiLEBCRS	False	False	False	False	False	False	False	False	True	False	False	False	False	False	False	False	False
-PA1391	5		60.0821247005024	4.666666666666667	4.0	1.0	12.0	11.0							PA1390-PA1391	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA2225	9		27.4827691575698	368.61111111111114	232.0	1.0	1477.0	1476.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA1385	5		77.75187338779341	4.666666666666667	4.0	1.0	12.0	11.0							galE-PA1385	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA0716	3		521.897041853942	920.1060606060606	728.5	1.0	2020.0	2019.0								False	False	False	False	False	False	False	False	False	True	False	False	False	False	False	False	False
-PA4104	6		12.2768870726198	2.6666666666666665	2.0	1.0	6.0	5.0							PA4103-PA4104	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA1381	5		13.7629073359657	4.666666666666667	4.0	1.0	12.0	11.0							PA1381-PA1382	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA0187	16		25.053272359691	2006.8005263157895	1861.5	1.0	5165.0	5164.0							PA0187-PA0188	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA0205	13		24.826541112671197	748.3809523809523	3.0	1.0	2616.0	2615.0	"2304    KEGG-Module-M00299: Spermidine/putrescine tran...
-Name: enriched KEGG pathway, dtype: object"	5.198149755723911e-07	4.0	7.0	12.0	0.0016691258865628562	PA0206-PA0205-PA0204-PA0203	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA5570	17	rpmH	696.192423750506	1934.622792022792	1708.0	1.0	5475.0	5474.0							rpmH-rnpA	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA4192	7		18.777228004855	1017.6428571428572	1895.5	1.0	1901.0	1900.0	"1316    KEGG-Module-M00236: Putative polar amino acid ...
-Name: enriched KEGG pathway, dtype: object"	1.0396299511447252e-06	4.0	8.0	24.0	0.0016691258865628562	PA4195-PA4194-PA4193-PA4192-PA4191	False	False	False	False	False	False	False	False	False	True	False	False	False	False	False	False	False
-PA0642	18		117.92293448576099	872.8571428571429	1292.5	1.0	2011.0	2010.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA2224	9		66.284211013552	368.61111111111114	232.0	1.0	1477.0	1476.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA2139	12		3.0260842542383397	2021.7644444444445	1889.0	54.0	5336.1	5282.1							PA2137-PA2138-PA2139	False	False	False	False	False	False	False	False	True	False	False	False	False	False	False	False	False
-PA1386	5		78.9535166509557	4.666666666666667	4.0	1.0	12.0	11.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA0206	13		33.7772261444926	748.3809523809523	3.0	1.0	2616.0	2615.0	"2304    KEGG-Module-M00299: Spermidine/putrescine tran...
-Name: enriched KEGG pathway, dtype: object"	5.198149755723911e-07	4.0	7.0	12.0	0.0016691258865628562	PA0206-PA0205-PA0204-PA0203	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA1392	5		98.3477270352737	4.666666666666667	4.0	1.0	12.0	11.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA4195	7		51.3313052372083	1017.6428571428572	1895.5	1.0	1901.0	1900.0	"1316    KEGG-Module-M00236: Putative polar amino acid ...
-Name: enriched KEGG pathway, dtype: object"	1.0396299511447252e-06	4.0	8.0	24.0	0.0016691258865628562	PA4195-PA4194-PA4193-PA4192-PA4191	False	False	False	False	False	False	False	False	True	False	False	False	False	False	False	False	False
-PA2819	12		80.7855751396301	2021.7644444444445	1889.0	54.0	5336.1	5282.1								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA5471.1	12		1.12141989199908	2021.7644444444445	1889.0	54.0	5336.1	5282.1								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA3841	16	exoS	273.878750630372	2006.8005263157895	1861.5	1.0	5165.0	5164.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA1938	18		62.3479887694471	872.8571428571429	1292.5	1.0	2011.0	2010.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA0983	9		71.5900976906599	368.61111111111114	232.0	1.0	1477.0	1476.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA0203	13		19.943976017126	748.3809523809523	3.0	1.0	2616.0	2615.0	"2304    KEGG-Module-M00299: Spermidine/putrescine tran...
-Name: enriched KEGG pathway, dtype: object"	5.198149755723911e-07	4.0	7.0	12.0	0.0016691258865628562	PA0206-PA0205-PA0204-PA0203	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA1388	5		45.2958757096552	4.666666666666667	4.0	1.0	12.0	11.0							PA1387-PA1388	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA0645	18		67.43708715287029	872.8571428571429	1292.5	1.0	2011.0	2010.0							PA0643-PA0644-PA0645	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA4105	6		10.5970655467063	2.6666666666666665	2.0	1.0	6.0	5.0							PA4107-PA4106-PA4105	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA0644	18		103.36319008416001	872.8571428571429	1292.5	1.0	2011.0	2010.0							PA0643-PA0644-PA0645	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA0204	13		22.8949218526902	748.3809523809523	3.0	1.0	2616.0	2615.0	"2304    KEGG-Module-M00299: Spermidine/putrescine tran...
-Name: enriched KEGG pathway, dtype: object"	5.198149755723911e-07	4.0	7.0	12.0	0.0016691258865628562	PA0206-PA0205-PA0204-PA0203	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA4623	17		25.907228718460694	1934.622792022792	1708.0	1.0	5475.0	5474.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA0977	8		20.581830940510002	2046.107142857143	2091.0	1.0	4109.0	4108.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA2227	9	vqsM	160.581445119501	368.61111111111114	232.0	1.0	1477.0	1476.0							PA2228-vqsM-PA2226	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA0202	13		43.1118506113968	748.3809523809523	3.0	1.0	2616.0	2615.0	"2304    KEGG-Module-M00299: Spermidine/putrescine tran...
+PA0202	15		43.1118506113968	748.3809523809523	3.0	1.0	2616.0	2615.0	"2642    KEGG-Module-M00299: Spermidine/putrescine tran...
 Name: enriched KEGG pathway, dtype: object"	5.198149755723911e-07	4.0	7.0	12.0	0.0016691258865628562		False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA0188	16		21.0005741159322	2006.8005263157895	1861.5	1.0	5165.0	5164.0							PA0187-PA0188	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA2459	9		78.0055367465237	368.61111111111114	232.0	1.0	1477.0	1476.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA1152	8		37.2719906350903	2046.107142857143	2091.0	1.0	4109.0	4108.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA1388	16		45.2958757096552	4.666666666666667	4.0	1.0	12.0	11.0							PA1387-PA1388	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA0715	0		664.591907962327	920.1060606060606	728.5	1.0	2020.0	2019.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA0204	15		22.8949218526902	748.3809523809523	3.0	1.0	2616.0	2615.0	"2642    KEGG-Module-M00299: Spermidine/putrescine tran...
+Name: enriched KEGG pathway, dtype: object"	5.198149755723911e-07	4.0	7.0	12.0	0.0016691258865628562	PA0206-PA0205-PA0204-PA0203	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA5570	1	rpmH	696.192423750506	1934.6227920227923	1708.0	1.0	5475.0	5474.0							rpmH-rnpA	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA5471.1	5		1.12141989199908	2021.7644444444445	1889.0	54.0	5336.1	5282.1								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA0645	18		67.43708715287029	872.8571428571429	1292.5	1.0	2011.0	2010.0							PA0643-PA0644-PA0645	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA0188	7		21.0005741159322	2006.8005263157893	1861.5	1.0	5165.0	5164.0							PA0187-PA0188	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA4623	1		25.907228718460694	1934.6227920227923	1708.0	1.0	5475.0	5474.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA0642	18		117.92293448576099	872.8571428571429	1292.5	1.0	2011.0	2010.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA0206	15		33.7772261444926	748.3809523809523	3.0	1.0	2616.0	2615.0	"2642    KEGG-Module-M00299: Spermidine/putrescine tran...
+Name: enriched KEGG pathway, dtype: object"	5.198149755723911e-07	4.0	7.0	12.0	0.0016691258865628562	PA0206-PA0205-PA0204-PA0203	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA2819	5		80.7855751396301	2021.7644444444445	1889.0	54.0	5336.1	5282.1								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA1385	16		77.75187338779341	4.666666666666667	4.0	1.0	12.0	11.0							galE-PA1385	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
 PA1937	18		32.2681120892687	872.8571428571429	1292.5	1.0	2011.0	2010.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA3843	17		34.841084536012396	1934.622792022792	1708.0	1.0	5475.0	5474.0							spcS-PA3843	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA2372	3		203.76929292343002	920.1060606060606	728.5	1.0	2020.0	2019.0							PA2365-PA2366-PA2367-PA2368-PA2369-PA2370-PA2371-PA2372	False	False	False	False	False	True	False	False	True	False	False	False	False	False	False	False	False
-PA4107	6	efhP	11.1920693268751	2.6666666666666665	2.0	1.0	6.0	5.0							PA4107-PA4106-PA4105	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA4638	17		103.80650920101	1934.622792022792	1708.0	1.0	5475.0	5474.0							PA4639-PA4638	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA4106	6		17.8599789027373	2.6666666666666665	2.0	1.0	6.0	5.0							PA4107-PA4106-PA4105	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA4103	6		10.7368107552983	2.6666666666666665	2.0	1.0	6.0	5.0							PA4103-PA4104	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA2335	15		21.711643484940602	497.2	102.0	1.0	2312.0	2311.0							PA2335-PA2336	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA0135	12		4.20011482318643	2021.7644444444445	1889.0	54.0	5336.1	5282.1								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA2228	9		81.4612581144145	368.61111111111114	232.0	1.0	1477.0	1476.0							PA2228-vqsM-PA2226	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA5060	17	phaF	3347.89917805559	1934.622792022792	1708.0	1.0	5475.0	5474.0							PA5061-phaF	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA0715	3		664.591907962327	920.1060606060606	728.5	1.0	2020.0	2019.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
-PA0826.1	12		1.4906527713543305	2021.7644444444445	1889.0	54.0	5336.1	5282.1								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA2334	1		26.1652849223946	1934.6227920227923	1708.0	1.0	5475.0	5474.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA0977	2		20.581830940510002	2046.107142857143	2091.0	1.0	4109.0	4108.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA0205	15		24.826541112671197	748.3809523809523	3.0	1.0	2616.0	2615.0	"2642    KEGG-Module-M00299: Spermidine/putrescine tran...
+Name: enriched KEGG pathway, dtype: object"	5.198149755723911e-07	4.0	7.0	12.0	0.0016691258865628562	PA0206-PA0205-PA0204-PA0203	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA3841	7	exoS	273.878750630372	2006.8005263157893	1861.5	1.0	5165.0	5164.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA0983	17		71.5900976906599	368.61111111111114	232.0	1.0	1477.0	1476.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA4638	1		103.80650920101	1934.6227920227923	1708.0	1.0	5475.0	5474.0							PA4639-PA4638	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA4103	14		10.7368107552983	2.6666666666666665	2.0	1.0	6.0	5.0							PA4103-PA4104	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA1386	16		78.9535166509557	4.666666666666667	4.0	1.0	12.0	11.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA4192	6		18.777228004855	1017.6428571428572	1895.5	1.0	1901.0	1900.0	"1147    KEGG-Module-M00236: Putative polar amino acid ...
+Name: enriched KEGG pathway, dtype: object"	1.0396299511447252e-06	4.0	8.0	24.0	0.0016691258865628562	PA4195-PA4194-PA4193-PA4192-PA4191	False	False	False	False	False	False	False	False	False	True	False	False	False	False	False	False	False
+PA2224	17		66.284211013552	368.61111111111114	232.0	1.0	1477.0	1476.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA0826.1	5		1.4906527713543305	2021.7644444444445	1889.0	54.0	5336.1	5282.1								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA4104	14		12.2768870726198	2.6666666666666665	2.0	1.0	6.0	5.0							PA4103-PA4104	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA4107	14	efhP	11.1920693268751	2.6666666666666665	2.0	1.0	6.0	5.0							PA4107-PA4106-PA4105	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA4195	6		51.3313052372083	1017.6428571428572	1895.5	1.0	1901.0	1900.0	"1147    KEGG-Module-M00236: Putative polar amino acid ...
+Name: enriched KEGG pathway, dtype: object"	1.0396299511447252e-06	4.0	8.0	24.0	0.0016691258865628562	PA4195-PA4194-PA4193-PA4192-PA4191	False	False	False	False	False	False	False	False	True	False	False	False	False	False	False	False	False
+PA0135	5		4.20011482318643	2021.7644444444445	1889.0	54.0	5336.1	5282.1								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA2139	5		3.02608425423834	2021.7644444444445	1889.0	54.0	5336.1	5282.1							PA2137-PA2138-PA2139	False	False	False	False	False	False	False	False	True	False	False	False	False	False	False	False	False
+PA4106	14		17.8599789027373	2.6666666666666665	2.0	1.0	6.0	5.0							PA4107-PA4106-PA4105	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA1938	18		62.3479887694471	872.8571428571429	1292.5	1.0	2011.0	2010.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA2335	3		21.711643484940602	497.2	102.0	1.0	2312.0	2311.0							PA2335-PA2336	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA2227	17	vqsM	160.581445119501	368.61111111111114	232.0	1.0	1477.0	1476.0							PA2228-vqsM-PA2226	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA3843	1		34.841084536012396	1934.6227920227923	1708.0	1.0	5475.0	5474.0							spcS-PA3843	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA1152	2		37.2719906350903	2046.107142857143	2091.0	1.0	4109.0	4108.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA2225	17		27.4827691575698	368.61111111111114	232.0	1.0	1477.0	1476.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA2372	0		203.76929292343	920.1060606060606	728.5	1.0	2020.0	2019.0							PA2365-PA2366-PA2367-PA2368-PA2369-PA2370-PA2371-PA2372	False	False	False	False	False	True	False	False	True	False	False	False	False	False	False	False	False
+PA4191	6		34.2587488049146	1017.6428571428572	1895.5	1.0	1901.0	1900.0	"1147    KEGG-Module-M00236: Putative polar amino acid ...
+Name: enriched KEGG pathway, dtype: object"	1.0396299511447252e-06	4.0	8.0	24.0	0.0016691258865628562	PA4195-PA4194-PA4193-PA4192-PA4191	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA3362	7		67.7384324905415	2006.8005263157893	1861.5	1.0	5165.0	5164.0							amiLEBCRS	False	False	False	False	False	False	False	False	True	False	False	False	False	False	False	False	False
+PA1381	16		13.7629073359657	4.666666666666667	4.0	1.0	12.0	11.0							PA1381-PA1382	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA4105	14		10.5970655467063	2.6666666666666665	2.0	1.0	6.0	5.0							PA4107-PA4106-PA4105	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA0203	15		19.943976017126	748.3809523809523	3.0	1.0	2616.0	2615.0	"2642    KEGG-Module-M00299: Spermidine/putrescine tran...
+Name: enriched KEGG pathway, dtype: object"	5.198149755723911e-07	4.0	7.0	12.0	0.0016691258865628562	PA0206-PA0205-PA0204-PA0203	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
 PA0643	18		250.199557065238	872.8571428571429	1292.5	1.0	2011.0	2010.0							PA0643-PA0644-PA0645	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA2228	17		81.4612581144145	368.61111111111114	232.0	1.0	1477.0	1476.0							PA2228-vqsM-PA2226	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA1392	16		98.3477270352737	4.666666666666667	4.0	1.0	12.0	11.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA1391	16		60.0821247005024	4.666666666666667	4.0	1.0	12.0	11.0							PA1390-PA1391	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA2459	17		78.0055367465237	368.61111111111114	232.0	1.0	1477.0	1476.0								False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA0187	7		25.053272359691	2006.8005263157893	1861.5	1.0	5165.0	5164.0							PA0187-PA0188	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA5060	1	phaF	3347.89917805559	1934.6227920227923	1708.0	1.0	5475.0	5474.0							PA5061-phaF	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
+PA0716	0		521.897041853942	920.1060606060606	728.5	1.0	2020.0	2019.0								False	False	False	False	False	False	False	False	False	True	False	False	False	False	False	False	False
+PA0644	18		103.36319008416001	872.8571428571429	1292.5	1.0	2011.0	2010.0							PA0643-PA0644-PA0645	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False	False
