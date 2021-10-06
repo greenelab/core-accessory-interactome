@@ -1,5 +1,6 @@
 # Processing
-All samples were quantified in Salmon using both a PAO1 and PA14 references.
+The Raw data was quantified in Salmon using both PAO1 and PA14 references.
+For more information on the raw data is see this [paper](link TBD) with source code [here](https://github.com/hoganlab-dartmouth/pa-seq-compendia).
 
 To determine which samples are PAO1 versus PA14 we will use the median expression of accessory genes to determine if a sample is PAO1 or PA14.
 In our exploratory analysis we found that samples labeled as PAO1 based on SRA annotations had high PAO1 accessory gene expression.

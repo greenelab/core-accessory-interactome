@@ -24,10 +24,10 @@ Given that different groups of genes both contribute to these traits of interest
 | [0_explore_data](0_explore_data) | This folder contains analysis notebooks to visualize the expression data to get a sense for the variation contained.|
 | [1_processing](1_processing) | This folder contains analysis notebooks to determine what threshold to use to partition the gene expression data into PAO1 and PA14 compendia.|
 | [2_correlation_analysis](2_correlation_analysis) | This folder contains analysis notebooks to detect gene co-expression modules starting with gene expression data, applying Pearson correlation and then clustering on this correlation matrix to obtain gene modules.|
-| [3_common_genes_analysis](3_common_genes_analysis) | This folder contains analysis notebooks to compare common DEGs found in [prior work](https://github.com/greenelab/generic-expression-patterns/blob/master/pseudomonas_analysis/2_identify_generic_genes_pathways.ipynb) to core and accessory genes|
+| [3_core_core_analysis](3_core_core_analysis) | This folder contains analysis notebooks to examine the stability of core genes across strains.|
 | [4_acc_acc_analysis](4_acc_acc_analysis) | This folder contains analysis notebooks to examine accessory-accessory gene modules.|
-| [5_core_core_analysis](5_core_core_analysis) | This folder contains analysis notebooks to examine the stability of core genes across strains.|
-| [6_core_acc_analysis](6_core_acc_analysis) | This folder contains analysis notebooks to examine the relationship between core genes and accessory genes.|
+| [5_core_acc_analysis](5_core_acc_analysis) | This folder contains analysis notebooks to examine the relationship between core genes and accessory genes.|
+| [6_common_genes_analysis](6_common_genes_analysis) | This folder contains analysis notebooks to compare common DEGs found in [prior work](https://github.com/greenelab/generic-expression-patterns/blob/master/pseudomonas_analysis/2_identify_generic_genes_pathways.ipynb) to core and accessory genes|
 | [scripts](scripts) | This folder contains supporting functions that other notebooks in this repository will use.|
 | [data](data) | This folder contains metadata used for different analyses.|
 

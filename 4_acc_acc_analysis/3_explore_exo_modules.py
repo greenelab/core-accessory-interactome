@@ -46,8 +46,8 @@ method_name = "affinity"
 # Gene subset
 gene_subset = "acc"
 
-# Select modules containing exoS (module 16) and exoU (module 17)
-exoS_module_id = 16
+# Select modules containing exoS (module 7) and exoU (module 17)
+exoS_module_id = 7
 exoU_module_id = 17
 # -
 
