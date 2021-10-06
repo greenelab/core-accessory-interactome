@@ -64,9 +64,11 @@ pa14_expression.head()
 #
 # Find any gene ids that are mismatched
 
+mismatched_gene_ids = []
 for gene_id in pao1_expression.columns:
     if "PA14_" in gene_id:
         print(gene_id)
+        mismatched_gene_ids.append(gene_id)
 
 mismatched_gene_ids = []
 for gene_id in pa14_expression.columns:

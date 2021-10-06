@@ -309,6 +309,10 @@ low_pao1.head()
 
 low_pa14.head()
 
+# As a check, we would expect that the most stable core genes are the same if we start with PAO1 gene ids and map to PA14 gene ids (`high_pao1_set`) versus if we start with PA14 gene ids and map to PAO1 gene ids (`high_pa14_set`). Similarly if we compare the least stable core genes.
+#
+# Below we can see that all but a few genes overlap. These genes seem to have fallen slighly outside the bounds of what is considered most/least stable which is why they are not found in the other mapped set.
+
 # Check if the highly correlated genes from PAO1 to PA14 are the same as the ones from PA14 to PAO1
 high_pao1_set = set(high_pao1["PA14 homolog id"])
 high_pa14_set = set(high_pa14.index)
@@ -316,6 +320,19 @@ venn2(
     [high_pao1_set, high_pa14_set],
     set_labels=("highly corr PAO1 to PA14", "highly corr PA14 to PAO1"),
 )
+
+unmapped_pao1_gene_ids = high_pao1_set.difference(high_pa14_set)
+unmapped_pao1_gene_ids
+
+# Look at the PAO1 gene ids that the unmapped PA14 genes map to
+# Maybe these gene ids are not in the expression compendium
+# That does not seem to be the case
+for gene_id in unmapped_pao1_gene_ids:
+    if gene_id in pa14_corr.index:
+        print(gene_id)
+
+# Looks like they barely fell below the most stable threshold used (0.5)
+pa14_corr_df.loc[["PA14_07050", "PA14_15310"]]
 
 # Check if the lowly correlated genes from PAO1 to PA14 are the same as the ones from PA14 to PAO1
 low_pao1_set = set(low_pao1["PA14 homolog id"])
@@ -325,10 +342,18 @@ venn2(
     set_labels=("low corr PAO1 to PA14", "low corr PA14 to PAO1"),
 )
 
-# Missing genes are either not measured in PAO1 or there was not a 1-1 mapping between PAO1 and PA14
-# Since there are so few I'm not really worried about these
-for missing_pa14 in list(low_pa14_set.difference(low_pao1_set)):
-    print(missing_pa14 in pao1_corr_df["PA14 homolog id"])
+unmapped_pa14_gene_ids = low_pa14_set.difference(low_pao1_set)
+unmapped_pa14_gene_ids
+
+# Look at the PA14 gene ids that the unmapped PAO1 genes map to
+# Maybe these PA14 gene ids are not in the expression compendium
+# That does not seem to be the case
+for gene_id in unmapped_pa14_gene_ids:
+    if gene_id in pa14_corr.index:
+        print(gene_id)
+
+# Looks like they barely fell above the least stable threshold used (0.2)
+pa14_corr_df.loc["PA14_36900"]
 
 # +
 # Save
