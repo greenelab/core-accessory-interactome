@@ -15,9 +15,7 @@
 
 # # Examine transcription profiles
 #
-# This notebook performs a small exploratory analysis to check that the genes we are calling "most stable" and "least stable" are _real_. If genes are "most stable" because they are always on then this is not as interesting. To examine this we will add statistics about the expression distribution to the transcriptional similarity scores matrix.
-#
-# We will also plot the correlation between select core genes, like T6SS which our collaborator didn't expect to be stable across strains.
+# This notebook tries to examine why genes are found to be "most stable" and "least stable." This notebook also performs a small exploratory analysis to check that the genes we are calling "most stable" and "least stable" are _real_. If genes are "most stable" because they are always on then this is not as interesting. To examine this we will add statistics about the expression distribution to the transcriptional similarity scores matrix.
 
 # +
 # %load_ext autoreload
@@ -126,13 +124,32 @@ pa14_associations.to_csv(pa14_out_filename, sep="\t")
 #
 # We manually selected these genes.
 
-# T6SS gene selected
-pao1_select_id = "PA0084"
-pa14_homolog_id = "PA14_01020"
+# ### Example of most stable core gene
 
-pao1_expression_stats.loc[pao1_select_id]
+# +
+# tssC1 (T6SS) gene selected
+pao1_most_id = "PA0084"
+pa14_most_id = "PA14_01020"
 
-pa14_expression_stats.loc[pa14_homolog_id]
+# hcp1
+pao1_most_id = "PA0085"
+pa14_most_id = "PA14_01030"
+# -
 
-sns.displot(np.log10(pao1_expression.loc[pao1_select_id]))
-sns.displot(np.log10(pa14_expression.loc[pa14_homolog_id]))
+sns.displot(np.log10(pao1_expression.loc[pao1_most_id]))
+sns.displot(np.log10(pa14_expression.loc[pa14_most_id]))
+
+# ### Example of least stable core gene
+
+# +
+# Least stable core gene
+# pao1_least_id = "PA3507"
+# pa14_least_id = "PA14_10840"
+
+# gloA2
+pao1_least_id = "PA0710"
+pa14_least_id = "PA14_55130"
+# -
+
+sns.displot(np.log10(pao1_expression.loc[pao1_least_id]))
+sns.displot(np.log10(pa14_expression.loc[pa14_least_id]))
