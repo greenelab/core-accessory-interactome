@@ -37,6 +37,8 @@ import scipy.stats
 import statsmodels.stats.multitest
 import pandas as pd
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
 from scripts import paths, utils, modules, annotations
 
 random.seed(1)
@@ -390,9 +392,36 @@ pao1_gene_annot.head()
 print(pa14_gene_annot.shape)
 pa14_gene_annot.head()
 
+# ## Plot trends
+
+# +
+# Get pairwise distance per module
+# Otherwise plotting will be scaled by the number of genes in a module
+pao1_mean_dist = []
+for grp_name, grp_df in pao1_gene_annot.groupby("module id"):
+    pao1_mean_dist.append(grp_df["mean pairwise dist"][0])
+
+pa14_mean_dist = []
+for grp_name, grp_df in pa14_gene_annot.groupby("module id"):
+    pa14_mean_dist.append(grp_df["mean pairwise dist"][0])
+# -
+
+sns.displot(pao1_mean_dist)
+plt.title("Mean pairwise distance of PAO1 accessory modules")
+
+sns.displot(pa14_mean_dist)
+plt.title("Mean pairwise distance of PA14 accessory modules")
+
+# Find which modules/genes have a large range
+pao1_farapart_genes = pao1_gene_annot[pao1_gene_annot["mean pairwise dist"] >= 2000]
+
+pa14_farapart_genes = pa14_gene_annot[pa14_gene_annot["mean pairwise dist"] >= 20000]
+
 # Save
 pao1_gene_annot.to_csv(f"pao1_acc_gene_module_annotated_{method}.tsv", sep="\t")
 pa14_gene_annot.to_csv(f"pa14_acc_gene_module_annotated_{method}.tsv", sep="\t")
+pao1_farapart_genes.to_csv(f"pao1_farapart_acc_modules_{method}.tsv", sep="\t")
+pa14_farapart_genes.to_csv(f"pa14_farapart_acc_modules_{method}.tsv", sep="\t")
 
 # These annotations will be used to help _P. aeruginosa_ experts, like our collaborators, to determine what accessory-accessory modules to focus on.
 #
