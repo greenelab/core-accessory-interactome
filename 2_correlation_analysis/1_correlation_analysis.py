@@ -50,7 +50,7 @@ num_singular_values = 300
 num_singular_values_log = 100
 
 # Which subset of genes to consider: core, acc, all
-subset_genes = "acc"
+subset_genes = "all"
 # -
 
 # Load expression data
@@ -102,39 +102,51 @@ pa14_acc = core_acc_dict["acc_pa14"]
 pao1_corr_original = pao1_compendium.corr()
 pa14_corr_original = pa14_compendium.corr()
 
+# Select subset of genes
+if subset_genes == "core":
+    pao1_corr_original = pao1_corr_original.loc[pao1_core, pao1_core]
+    pa14_corr_original = pa14_corr_original.loc[pa14_core, pa14_core]
+elif subset_genes == "acc":
+    pao1_corr_original = pao1_corr_original.loc[pao1_acc, pao1_acc]
+    pa14_corr_original = pa14_corr_original.loc[pa14_acc, pa14_acc]
+
+# Check for duplicates indices
+assert pao1_corr_original.index.duplicated().sum() == 0
+assert pa14_corr_original.index.duplicated().sum() == 0
+
+# Check for duplicate rows
+assert pao1_corr_original[pao1_corr_original.duplicated(keep=False)].shape[0] == 0
+assert pa14_corr_original[pa14_corr_original.duplicated(keep=False)].shape[0] == 0
+
+print(pao1_corr_original.shape)
 pao1_corr_original.head()
 
+print(pa14_corr_original.shape)
 pa14_corr_original.head()
 
 # +
 # %%time
 # Plot heatmap
 o1 = sns.clustermap(pao1_corr_original.abs(), cmap="viridis", figsize=(20, 20))
-o1.fig.suptitle("Correlation of raw PAO1 genes", y=1.05)
+o1.fig.suptitle("Correlation of raw PAO1 genes", y=1.05, fontsize=24)
 
 # Save
 pao1_pearson_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, "pao1_pearson_clustermap.png"
+    paths.LOCAL_DATA_DIR, f"pao1_{subset_genes}_raw_clustermap.png"
 )
 o1.savefig(pao1_pearson_filename, dpi=300)
 
 # +
 # Plot heatmap
 o2 = sns.clustermap(pa14_corr_original.abs(), cmap="viridis", figsize=(20, 20))
-o2.fig.suptitle("Correlation of raw PA14 genes", y=1.05)
+o2.fig.suptitle("Correlation of raw PA14 genes", y=1.05, fontsize=24)
 
 # Save
 pa14_pearson_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, "pa14_pearson_clustermap.png"
+    paths.LOCAL_DATA_DIR, f"pa14__{subset_genes}_raw_clustermap.png"
 )
 o2.savefig(pa14_pearson_filename, dpi=300)
 # -
-
-# Save original correlation matrices
-pao1_pearson_mat_filename = os.path.join(paths.LOCAL_DATA_DIR, "pao1_pearson_mat.tsv")
-pa14_pearson_mat_filename = os.path.join(paths.LOCAL_DATA_DIR, "pa14_pearson_mat.tsv")
-pao1_corr_original.to_csv(pao1_pearson_mat_filename, sep="\t")
-pa14_corr_original.to_csv(pa14_pearson_mat_filename, sep="\t")
 
 # ## Log transform + SPELL Correlation
 #
@@ -261,6 +273,16 @@ pa14_local_dist.head(10)
 
 f4 = sns.displot(pa14_local_dist["Value"])
 plt.title("Distribution of pairwise distances for PA14 genes")
+
+# Save raw correlation matrices
+pao1_original_mat_filename = os.path.join(
+    paths.LOCAL_DATA_DIR, f"pao1_{subset_genes}_raw_mat.tsv"
+)
+pa14_original_mat_filename = os.path.join(
+    paths.LOCAL_DATA_DIR, f"pa14_{subset_genes}_raw_mat.tsv"
+)
+pao1_corr_original.to_csv(pao1_original_mat_filename, sep="\t")
+pa14_corr_original.to_csv(pa14_original_mat_filename, sep="\t")
 
 # Save log transform + SPELL correlation matrices
 pao1_log_spell_mat_filename = os.path.join(
