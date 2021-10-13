@@ -16,6 +16,10 @@
 # # Common stability analysis
 #
 # This notebook examines the relationship between commonly DE genes and the stability of those genes
+#
+# Based on the work in the [previous notebook](1_common_DEGs_and_gene_groups.ipynb), it appears that there is a positive correlation between the being accessory and the gene being found to be commonly DE. Building off of that, we wanted to examine the relationship between how frequently a gene is changed across experiments and the transcriptional stability of the gene (stability is defined [here](../3_core_core_analysis/1_core_core_relationships_across_strains.ipynb)).
+#
+# Here we hypothesize that if a gene is less stable (i.e. who they are transcriptionally related to changes across strains) then we might see changes across different conditions (i.e. these genes may be more commonly DE). This is the rationale for why accessory genes (which are thought to encode properties that contribute to niche adaptations of strains) are common DE. However this hypothesis doesn't seem to explain the relationship between accessory and common DE.
 
 # %load_ext autoreload
 # %autoreload 2
@@ -103,3 +107,5 @@ sns.jointplot(
     kind="hex",
 )
 plt.suptitle("PA14 core gene stability vs commonality", y=1.05)
+
+# **Takeaway:** There does not look to be any correlation between stability and common DEG. We'll have to think about other followup experiments.
