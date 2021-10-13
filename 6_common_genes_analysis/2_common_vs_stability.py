@@ -79,21 +79,27 @@ pa14_all_stats = pa14_similarity_scores.merge(
 print(pao1_all_stats.shape)
 pao1_all_stats.head()
 
-sns.scatterplot(
+sns.jointplot(
     data=pao1_all_stats,
     x="Transcriptional similarity across strains",
     y="Percentile (simulated)",
+    kind="hex",
+    # alpha=0.2
 )
-plt.title("PAO1 core gene stability vs commonality")
+plt.suptitle("PAO1 core gene stability vs commonality", y=1.05)
 
-sns.scatterplot(
-    data=pao1_all_stats, x="Transcriptional similarity across strains", y="Z score"
+sns.jointplot(
+    data=pao1_all_stats,
+    x="Transcriptional similarity across strains",
+    y="Z score",
+    kind="hex",
 )
-plt.title("PAO1 core gene stability vs commonality (z-score)")
+plt.suptitle("PAO1 core gene stability vs commonality (z-score)", y=1.05)
 
-sns.scatterplot(
+sns.jointplot(
     data=pa14_all_stats,
     x="Transcriptional similarity across strains",
     y="Percentile (simulated)",
+    kind="hex",
 )
-plt.title("PA14 core gene stability vs commonality")
+plt.suptitle("PA14 core gene stability vs commonality", y=1.05)
