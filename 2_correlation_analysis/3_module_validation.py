@@ -52,6 +52,10 @@ sample_seed = 1
 
 # Gene subset
 gene_subset = "acc"
+
+# How was data processed
+# Choices: {"spell", "raw"}
+processed = "raw"
 # -
 
 # ## Examine size of modules
@@ -61,10 +65,12 @@ gene_subset = "acc"
 for method_name in clustering_method_list:
     print(f"Modules using clustering method: {method_name}")
     pao1_membership_filename = os.path.join(
-        paths.LOCAL_DATA_DIR, f"pao1_modules_{method_name}_{gene_subset}.tsv"
+        paths.LOCAL_DATA_DIR,
+        f"pao1_modules_{method_name}_{gene_subset}_{processed}.tsv",
     )
     pa14_membership_filename = os.path.join(
-        paths.LOCAL_DATA_DIR, f"pa14_modules_{method_name}_{gene_subset}.tsv"
+        paths.LOCAL_DATA_DIR,
+        f"pa14_modules_{method_name}_{gene_subset}_{processed}.tsv",
     )
 
     pao1_membership = pd.read_csv(
@@ -91,11 +97,11 @@ def plot_dist_modules(clustering_method_list, gene_subset):
     for i in range(len(clustering_method_list)):
         pao1_membership_filename = os.path.join(
             paths.LOCAL_DATA_DIR,
-            f"pao1_modules_{clustering_method_list[i]}_{gene_subset}.tsv",
+            f"pao1_modules_{clustering_method_list[i]}_{gene_subset}_{processed}.tsv",
         )
         pa14_membership_filename = os.path.join(
             paths.LOCAL_DATA_DIR,
-            f"pa14_modules_{clustering_method_list[i]}_{gene_subset}.tsv",
+            f"pa14_modules_{clustering_method_list[i]}_{gene_subset}_{processed}.tsv",
         )
 
         pao1_membership = pd.read_csv(
@@ -161,10 +167,12 @@ pao1_operon_filename = paths.PAO1_OPERON
 
 # Load membership for specific clustering method
 pao1_membership_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pao1_modules_{method_toexamine}_{gene_subset}.tsv"
+    paths.LOCAL_DATA_DIR,
+    f"pao1_modules_{method_toexamine}_{gene_subset}_{processed}.tsv",
 )
 pa14_membership_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pa14_modules_{method_toexamine}_{gene_subset}.tsv"
+    paths.LOCAL_DATA_DIR,
+    f"pa14_modules_{method_toexamine}_{gene_subset}_{processed}.tsv",
 )
 
 pao1_membership = pd.read_csv(pao1_membership_filename, sep="\t", header=0, index_col=0)

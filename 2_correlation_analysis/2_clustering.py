@@ -53,16 +53,22 @@ affinity_damping = 0.6
 # Gene subset
 gene_subset = "acc"
 
+# How was data processed
+# Choices: {"spell", "raw"}
+processed = "raw"
+
 # Correlation matrix files
+# If using SPELL processed data then the files will be of the form
+# paths.<PAO1/PA14>_CORR_LOG_SPELL_<gene_subset>
 if gene_subset == "all":
-    pao1_corr_filename = paths.PAO1_CORR_LOG_SPELL
-    pa14_corr_filename = paths.PA14_CORR_LOG_SPELL
+    pao1_corr_filename = paths.PAO1_CORR_RAW
+    pa14_corr_filename = paths.PA14_CORR_RAW
 elif gene_subset == "core":
-    pao1_corr_filename = paths.PAO1_CORR_LOG_SPELL_CORE
-    pa14_corr_filename = paths.PA14_CORR_LOG_SPELL_CORE
+    pao1_corr_filename = paths.PAO1_CORR_RAW_CORE
+    pa14_corr_filename = paths.PA14_CORR_RAW_CORE
 elif gene_subset == "acc":
-    pao1_corr_filename = paths.PAO1_CORR_LOG_SPELL_ACC
-    pa14_corr_filename = paths.PA14_CORR_LOG_SPELL_ACC
+    pao1_corr_filename = paths.PAO1_CORR_RAW_ACC
+    pa14_corr_filename = paths.PA14_CORR_RAW_ACC
 # -
 
 # Load correlation data
@@ -151,10 +157,10 @@ pa14_membership_df.head()
 
 # Save membership dataframe
 pao1_membership_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pao1_modules_{cluster_method}_{gene_subset}.tsv"
+    paths.LOCAL_DATA_DIR, f"pao1_modules_{cluster_method}_{gene_subset}_{processed}.tsv"
 )
 pa14_membership_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pa14_modules_{cluster_method}_{gene_subset}.tsv"
+    paths.LOCAL_DATA_DIR, f"pa14_modules_{cluster_method}_{gene_subset}_{processed}.tsv"
 )
 pao1_membership_df.to_csv(pao1_membership_filename, sep="\t")
 pa14_membership_df.to_csv(pa14_membership_filename, sep="\t")
