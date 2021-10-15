@@ -46,14 +46,15 @@ random.seed(1)
 
 # Clustering method used to obtain gene-module assignments
 method = "affinity"
+processed = "raw"
 
 # +
 # Import gene memberships
 pao1_membership_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pao1_modules_{method}_acc.tsv"
+    paths.LOCAL_DATA_DIR, f"pao1_modules_{method}_acc_{processed}.tsv"
 )
 pa14_membership_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pa14_modules_{method}_acc.tsv"
+    paths.LOCAL_DATA_DIR, f"pa14_modules_{method}_acc_{processed}.tsv"
 )
 
 pao1_membership = pd.read_csv(pao1_membership_filename, sep="\t", index_col=0, header=0)

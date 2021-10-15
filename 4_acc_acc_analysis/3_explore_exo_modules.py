@@ -46,16 +46,19 @@ method_name = "affinity"
 # Gene subset
 gene_subset = "acc"
 
-# Select modules containing exoS (module 7) and exoU (module 17)
-exoS_module_id = 7
-exoU_module_id = 17
+processed = "raw"
+
+# Select modules containing exoS (module 7) and exoU (module 17) using SPELL verseion
+# Select modules containing exoS (module 20) and exoU (module 19)
+exoS_module_id = 20
+exoU_module_id = 19
 # -
 
 # ## Load correlation matrix
 
 # Load correlation matrix
-pao1_corr_filename = paths.PAO1_CORR_LOG_SPELL_ACC
-pa14_corr_filename = paths.PA14_CORR_LOG_SPELL_ACC
+pao1_corr_filename = paths.PAO1_CORR_RAW_ACC
+pa14_corr_filename = paths.PA14_CORR_RAW_ACC
 
 pao1_corr = pd.read_csv(pao1_corr_filename, sep="\t", index_col=0, header=0)
 pa14_corr = pd.read_csv(pa14_corr_filename, sep="\t", index_col=0, header=0)
@@ -63,10 +66,10 @@ pa14_corr = pd.read_csv(pa14_corr_filename, sep="\t", index_col=0, header=0)
 # ## Load module membership
 
 pao1_membership_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pao1_modules_{method_name}_{gene_subset}.tsv"
+    paths.LOCAL_DATA_DIR, f"pao1_modules_{method_name}_{gene_subset}_{processed}.tsv"
 )
 pa14_membership_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pa14_modules_{method_name}_{gene_subset}.tsv"
+    paths.LOCAL_DATA_DIR, f"pa14_modules_{method_name}_{gene_subset}_{processed}.tsv"
 )
 
 pao1_membership = pd.read_csv(pao1_membership_filename, sep="\t", header=0, index_col=0)
