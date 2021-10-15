@@ -51,7 +51,7 @@ link_dist = "average"
 affinity_damping = 0.6
 
 # Gene subset
-gene_subset = "acc"
+gene_subset = "all"
 
 # How was data processed
 # Choices: {"spell", "raw"}

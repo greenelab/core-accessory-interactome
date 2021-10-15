@@ -56,8 +56,8 @@ pa14_similarity_scores_filename = "pa14_similarity_scores.tsv"
 
 # +
 # Import correlation matrix
-pao1_corr_filename = paths.PAO1_CORR_LOG_SPELL_CORE
-pa14_corr_filename = paths.PA14_CORR_LOG_SPELL_CORE
+pao1_corr_filename = paths.PAO1_CORR_RAW_CORE
+pa14_corr_filename = paths.PA14_CORR_RAW_CORE
 
 pao1_corr = pd.read_csv(pao1_corr_filename, sep="\t", index_col=0, header=0)
 pa14_corr = pd.read_csv(pa14_corr_filename, sep="\t", index_col=0, header=0)
@@ -332,7 +332,10 @@ for gene_id in unmapped_pao1_gene_ids:
         print(gene_id)
 
 # Looks like they barely fell below the most stable threshold used (0.5)
-pa14_corr_df.loc[["PA14_07050", "PA14_15310"]]
+# pa14_corr_df.loc[["PA14_07050", "PA14_15310"]] # using spell input
+# Looks like there is no equivalent mapping in our annotations
+# Not sure the reason for this
+gene_mapping_pa14.loc[["PA14_09450", "PA14_09440"]]
 
 # Check if the lowly correlated genes from PAO1 to PA14 are the same as the ones from PA14 to PAO1
 low_pao1_set = set(low_pao1["PA14 homolog id"])
@@ -342,6 +345,7 @@ venn2(
     set_labels=("low corr PAO1 to PA14", "low corr PA14 to PAO1"),
 )
 
+# There are unmapped ids using spell
 unmapped_pa14_gene_ids = low_pa14_set.difference(low_pao1_set)
 unmapped_pa14_gene_ids
 
@@ -352,8 +356,9 @@ for gene_id in unmapped_pa14_gene_ids:
     if gene_id in pa14_corr.index:
         print(gene_id)
 
+# +
 # Looks like they barely fell above the least stable threshold used (0.2)
-pa14_corr_df.loc["PA14_36900"]
+# pa14_corr_df.loc["PA14_36900"] # using spell data
 
 # +
 # Save

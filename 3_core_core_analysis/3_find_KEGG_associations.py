@@ -35,8 +35,8 @@ pa14_out_filename = "pa14_core_similarity_associations.tsv"
 
 # +
 # Load transcriptional similarity df
-pao1_similarity_scores_filename = "pao1_core_similarity_expression.tsv"
-pa14_similarity_scores_filename = "pa14_core_similarity_expression.tsv"
+pao1_similarity_scores_filename = "pao1_core_similarity_expression_stats.tsv"
+pa14_similarity_scores_filename = "pa14_core_similarity_expression_stats.tsv"
 
 pao1_similarity_scores = pd.read_csv(
     pao1_similarity_scores_filename, sep="\t", header=0, index_col=0

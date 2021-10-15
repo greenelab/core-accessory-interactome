@@ -40,8 +40,8 @@ use_operon = True
 
 # +
 # Load correlation matrix
-pao1_corr_filename = paths.PAO1_CORR_LOG_SPELL
-pa14_corr_filename = paths.PA14_CORR_LOG_SPELL
+pao1_corr_filename = paths.PAO1_CORR_RAW
+pa14_corr_filename = paths.PA14_CORR_RAW
 
 pao1_corr = pd.read_csv(pao1_corr_filename, sep="\t", index_col=0, header=0)
 pa14_corr = pd.read_csv(pa14_corr_filename, sep="\t", index_col=0, header=0)
@@ -187,8 +187,9 @@ fig_pao1 = sns.displot(
 # Let's try looking at genes within the same module as lasR
 cluster_method = "affinity"
 gene_subset = "all"
+processed = "raw"
 pa14_membership_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pa14_modules_{cluster_method}_{gene_subset}.tsv"
+    paths.LOCAL_DATA_DIR, f"pa14_modules_{cluster_method}_{gene_subset}_{processed}.tsv"
 )
 
 pa14_membership = pd.read_csv(pa14_membership_filename, sep="\t", index_col=0, header=0)
