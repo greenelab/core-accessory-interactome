@@ -176,8 +176,8 @@ g1.fig.suptitle("Correlation of exoU module", y=1.05, fontsize=24)
 
 # +
 # Read in correlation for all genes
-pao1_all_corr_filename = paths.PAO1_CORR_LOG_SPELL
-pa14_all_corr_filename = paths.PA14_CORR_LOG_SPELL
+pao1_all_corr_filename = paths.PAO1_CORR_RAW
+pa14_all_corr_filename = paths.PA14_CORR_RAW
 
 pao1_all_corr = pd.read_csv(pao1_all_corr_filename, sep="\t", index_col=0, header=0)
 pa14_all_corr = pd.read_csv(pa14_all_corr_filename, sep="\t", index_col=0, header=0)
