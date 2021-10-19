@@ -77,6 +77,14 @@ metadata_filename = paths.SAMPLE_METADATA
 pao1_gene_annot = pao1_gene_annot["Name"].to_frame("gene name")
 pa14_gene_annot = pa14_gene_annot["Name"].to_frame("gene name")
 
+print(pao1_gene_annot.shape)
+pao1_gene_annot.tail()
+
+# +
+# Use correlation matrix to get length of the genome
+# -
+
+
 # ## Add gene names
 #
 # **TO DO: Remove these PAO1 gene ids from the correlation and redo correlation and acc-acc. Then add how=left**
@@ -107,7 +115,11 @@ pa14_gene_module_labels.head()
 pao1_compendium = pd.read_csv(paths.PAO1_COMPENDIUM, sep="\t", index_col=0)
 pa14_compendium = pd.read_csv(paths.PA14_COMPENDIUM, sep="\t", index_col=0)
 
+print(pao1_compendium.shape)
 pao1_compendium.head()
+
+print(pa14_compendium.shape)
+pa14_compendium.head()
 
 # Calculate median expression across all samples
 pao1_median_all = pao1_compendium.median().to_frame("median expression")
@@ -166,8 +178,26 @@ pa14_gene_annot.head()
 #
 # How far are genes from other genes in the same module?
 
-pao1_module_dist = modules.get_intra_module_dist(pao1_gene_annot, pa_prefix="PA")
-pa14_module_dist = modules.get_intra_module_dist(pa14_gene_annot, pa_prefix="PA14_")
+# +
+# Sort gene ids and get last gene id to use as length of the genome
+# This gene id should match the number of gene ids
+sorted_pao1_compendium = pao1_compendium.T.sort_index()
+pao1_last_gene_id = sorted_pao1_compendium.index[-1]
+
+sorted_pa14_compendium = pa14_compendium.T.sort_index()
+pa14_last_gene_id = sorted_pa14_compendium.index[-1]
+# -
+
+# Remove "PA" at the beginning of the identifier and convert into a float
+pao1_genome_len = float(pao1_last_gene_id.split("PA")[-1])
+pa14_genome_len = float(pa14_last_gene_id.split("PA14_")[-1])
+
+print(pao1_genome_len, pa14_genome_len)
+
+pao1_module_dist = modules.get_intra_module_dist(pao1_gene_annot, "PA", pao1_genome_len)
+pa14_module_dist = modules.get_intra_module_dist(
+    pa14_gene_annot, "PA14_", pa14_genome_len
+)
 
 pao1_module_dist.head(10)
 
