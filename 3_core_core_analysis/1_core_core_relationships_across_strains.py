@@ -379,11 +379,12 @@ fig_pa14.savefig(
     pad_inches=0,
     dpi=300,
 )
-# -
 
+# +
 # Save transcriptional similarity df
-pao1_corr_df.to_csv(pao1_similarity_scores_filename, sep="\t")
-pa14_corr_df.to_csv(pa14_similarity_scores_filename, sep="\t")
+# pao1_corr_df.to_csv(pao1_similarity_scores_filename, sep="\t")
+# pa14_corr_df.to_csv(pa14_similarity_scores_filename, sep="\t")
+# -
 
 # **Takeaways:**
 # The distribution plots are the distribution of correlation scores, which represent how correlated a core gene was with its homolog. As an example, say we have core gene PA0001, we can get its correlation profile (i.e. the row of the correlation matrix) that tells us which core genes PA0001 is highly and lowly correlated with. Then we can map PA0001 to its homolog in PA14 and get its correlation profile. Finally we can take the correlation of those correlation profile to determine how consistent PA0001's relationships are across strains. Genes with a high correlation score (right tail of the distribution) represent genes that are stable and are core genes that are related to the same set of core genes in PAO1 and PA14. While genes with a low correlation score (left tail of the distribution) represent genes that are unstable and are core genes that are not related to the same set of core genes in PAO1 and PA14.
@@ -391,3 +392,102 @@ pa14_corr_df.to_csv(pa14_similarity_scores_filename, sep="\t")
 # * Some of the the highly consistent core genes include those related to type VI secretion system that plays an important role in resistance of biofilms to antibiotics (_tssC1_, https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3187457/; _hcp1_, https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2831478/; _tssF1_)
 #
 # * Some of the not consistent core genes include _gloA2_ (related to metabolism); PA3507, PA0478 (putative enzymes); PA4685 (hypothetical protein)
+
+# #### Compare results using SPELL-processed expression data vs raw expression data
+#
+# Here we want to compare the composition of the most and least stable genes using the different versions of input.
+
+# +
+# Load version using raw expression data
+pao1_similarity_scores_filename = "pao1_similarity_scores.tsv"
+pa14_similarity_scores_filename = "pa14_similarity_scores.tsv"
+
+pao1_similarity_scores = pd.read_csv(
+    pao1_similarity_scores_filename, sep="\t", header=0, index_col=0
+)
+pa14_similarity_scores = pd.read_csv(
+    pa14_similarity_scores_filename, sep="\t", header=0, index_col=0
+)
+
+# +
+# Load version using SPELL-processed expression data
+pao1_similarity_scores_filename = "pao1_core_similarity_associations_final_spell.tsv"
+pa14_similarity_scores_filename = "pa14_core_similarity_associations_final_spell.tsv"
+
+pao1_similarity_scores_spell = pd.read_csv(
+    pao1_similarity_scores_filename, sep="\t", header=0, index_col=0
+)
+pa14_similarity_scores_spell = pd.read_csv(
+    pa14_similarity_scores_filename, sep="\t", header=0, index_col=0
+)
+
+# +
+# Get most stable genes
+pao1_most_stable = pao1_similarity_scores[
+    pao1_similarity_scores["label"] == "most stable"
+].index
+pao1_most_stable_spell = pao1_similarity_scores_spell[
+    pao1_similarity_scores_spell["label"] == "most stable"
+].index
+
+pa14_most_stable = pa14_similarity_scores[
+    pa14_similarity_scores["label"] == "most stable"
+].index
+pa14_most_stable_spell = pa14_similarity_scores_spell[
+    pa14_similarity_scores_spell["label"] == "most stable"
+].index
+# -
+
+print(pao1_most_stable)
+print(pao1_most_stable_spell)
+print(pa14_most_stable)
+print(pa14_most_stable_spell)
+
+# +
+# Get least stable genes
+pao1_least_stable = pao1_similarity_scores[
+    pao1_similarity_scores["label"] == "least stable"
+].index
+pao1_least_stable_spell = pao1_similarity_scores_spell[
+    pao1_similarity_scores_spell["label"] == "least stable"
+].index
+
+pa14_least_stable = pa14_similarity_scores[
+    pa14_similarity_scores["label"] == "least stable"
+].index
+pa14_least_stable_spell = pa14_similarity_scores_spell[
+    pa14_similarity_scores_spell["label"] == "least stable"
+].index
+# -
+
+print(pao1_least_stable)
+print(pao1_least_stable_spell)
+print(pa14_least_stable)
+print(pa14_least_stable_spell)
+
+# Compare gene sets
+venn2(
+    [set(pao1_most_stable), set(pao1_most_stable_spell)],
+    set_labels=("PAO1 most", "PAO1 most SPELL"),
+)
+plt.title("PAO1 most stable")
+
+venn2(
+    [set(pa14_most_stable), set(pa14_most_stable_spell)],
+    set_labels=("PA14 most", "PA14 most SPELL"),
+)
+plt.title("PA14 most stable")
+
+venn2(
+    [set(pao1_least_stable), set(pao1_least_stable_spell)],
+    set_labels=("PAO1 most", "PAO1 most SPELL"),
+)
+plt.title("PAO1 least stable")
+
+venn2(
+    [set(pa14_least_stable), set(pa14_least_stable_spell)],
+    set_labels=("PA14 most", "PA14 most SPELL"),
+)
+plt.title("PA14 least stable")
+
+# Looks like there is good consistency in the most stable genes but not the least stable genes. This data will help us to decide which input dataset to use?
