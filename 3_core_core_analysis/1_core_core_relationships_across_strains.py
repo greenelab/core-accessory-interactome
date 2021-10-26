@@ -269,7 +269,7 @@ fig_pao1 = sns.displot(
     data=pao1_corr_df,
     x="Transcriptional similarity across strains",
     hue="label",
-    bins=np.linspace(0, 0.7, 36),
+    # bins=np.linspace(0, 0.7, 36),
 )
 # TO DO
 # Select certain colors
@@ -282,7 +282,7 @@ fig_pa14 = sns.displot(
     data=pa14_corr_df,
     x="Transcriptional similarity across strains",
     hue="label",
-    bins=np.linspace(0, 0.7, 36),
+    # bins=np.linspace(0, 0.7, 36),
 )
 plt.title("Similarity of core-core modules PA14 to PAO1")
 
@@ -379,12 +379,11 @@ fig_pa14.savefig(
     pad_inches=0,
     dpi=300,
 )
-
-# +
-# Save transcriptional similarity df
-# pao1_corr_df.to_csv(pao1_similarity_scores_filename, sep="\t")
-# pa14_corr_df.to_csv(pa14_similarity_scores_filename, sep="\t")
 # -
+
+# Save transcriptional similarity df
+pao1_corr_df.to_csv(pao1_similarity_scores_filename, sep="\t")
+pa14_corr_df.to_csv(pa14_similarity_scores_filename, sep="\t")
 
 # **Takeaways:**
 # The distribution plots are the distribution of correlation scores, which represent how correlated a core gene was with its homolog. As an example, say we have core gene PA0001, we can get its correlation profile (i.e. the row of the correlation matrix) that tells us which core genes PA0001 is highly and lowly correlated with. Then we can map PA0001 to its homolog in PA14 and get its correlation profile. Finally we can take the correlation of those correlation profile to determine how consistent PA0001's relationships are across strains. Genes with a high correlation score (right tail of the distribution) represent genes that are stable and are core genes that are related to the same set of core genes in PAO1 and PA14. While genes with a low correlation score (left tail of the distribution) represent genes that are unstable and are core genes that are not related to the same set of core genes in PAO1 and PA14.
@@ -420,6 +419,38 @@ pao1_similarity_scores_spell = pd.read_csv(
 pa14_similarity_scores_spell = pd.read_csv(
     pa14_similarity_scores_filename, sep="\t", header=0, index_col=0
 )
+# -
+
+# Merge scores across raw and SPELL-processed versions
+pao1_raw_spell = pao1_similarity_scores.merge(
+    pao1_similarity_scores_spell,
+    left_index=True,
+    right_index=True,
+    suffixes=["_raw", "_spell"],
+)
+pa14_raw_spell = pa14_similarity_scores.merge(
+    pa14_similarity_scores_spell,
+    left_index=True,
+    right_index=True,
+    suffixes=["_raw", "_spell"],
+)
+
+# Pairplot
+sns.jointplot(
+    data=pao1_raw_spell,
+    x="Transcriptional similarity across strains_raw",
+    y="Transcriptional similarity across strains_spell",
+    kind="hex",
+)
+plt.suptitle("PAO1 raw vs SPELL")
+
+sns.jointplot(
+    data=pa14_raw_spell,
+    x="Transcriptional similarity across strains_raw",
+    y="Transcriptional similarity across strains_spell",
+    kind="hex",
+)
+plt.suptitle("PA14 raw vs SPELL")
 
 # +
 # Get most stable genes
@@ -480,13 +511,13 @@ plt.title("PA14 most stable")
 
 venn2(
     [set(pao1_least_stable), set(pao1_least_stable_spell)],
-    set_labels=("PAO1 most", "PAO1 most SPELL"),
+    set_labels=("PAO1 least", "PAO1 least SPELL"),
 )
 plt.title("PAO1 least stable")
 
 venn2(
     [set(pa14_least_stable), set(pa14_least_stable_spell)],
-    set_labels=("PA14 most", "PA14 most SPELL"),
+    set_labels=("PA14 least", "PA14 least SPELL"),
 )
 plt.title("PA14 least stable")
 

@@ -18,10 +18,18 @@
 #
 # This notebook examines the correlation structure in the gene expression data generated in [1_create_compendia.ipynb](../processing/1_create_compendia.ipynb).
 #
-# When we performed clustering on the correlation matrices (using Pearson correlation) we found that pairs of genes had either very high correlation scores (>0.5) or very low correlation scores (<0.1). As a result gene pairs that were highly correlated clustered into a single large module. This finding is consistent with a [previous study](https://link.springer.com/article/10.1186/1471-2164-7-187), which found that KEGG (a database that containes genes or proteins annotated with specific biological processes as reported in the literature) is bias in some biological processes represented. Figure 1C demonstrates that a large fraction of gene pairs are ribosomal relationships - in the top 0.1% most co-expressed genes, 99% belong to the ribosome pathway.
-# Furthermore, protein function prediction based on co-expression drop dramatically after removing the ribisome pathway (Figure 1A, B).
+# The correlation of the counts matrix relates how similar a pair of genes are based on their expression profiles - **relates genes over samples**.
+# High correlation means that a pair of genes have a similar expression profiles - i.e. similar levels of expression across samples/contexts, so genes both have low expression in the same samples and high expression in the same samples.
+# * Pro: Easy to interpret
+# * Con: Many gene pairs found to have a high correlation because many genes are related to the same pathway have the similar expression profiles. This is consistent with [Myers et al.](https://link.springer.com/article/10.1186/1471-2164-7-187), who found that there can be an over-representation of genes associated with the same pathway (i.e. a large fraction of gene pairs represent ribosomal relationships). This very prominent signal makes it difficult to detect other signals. Figure 1C demonstrates that a large fraction of gene pairs are ribosomal relationships - in the top 0.1% most co-expressed genes, 99% belong to the ribosome pathway. Furthermore, protein function prediction based on co-expression drop dramatically after removing the ribisome pathway (Figure 1A, B).
 #
-# This notebook applies different corrections to try to remove this very dominant global signal in the data. This notebook follows from [1a_transformation_correlation_analysis.ipynb](1a_transformation_correlation_analysis.ipynb). Here we are applying dimensionality reduction techniques in addition to scaling the data.
+# To try to remove this very dominant global signal in the data. Here we are applying dimensionality reduction techniques in addition to scaling the data using a method called SPELL.
+# The correlation of the SPELL matrix relates genes based on the gene coefficient matrix - **relate genes over their contribution to singular vectors (linear combination of genes - linear relationship between genes)**.
+# High correlation means that a pair of genes contributes similarly to a singular vector, which are the axes pointing in the direction of the spread of the data and capture how genes are related to each other
+# * Pro: Gene contributions are more balanced so that redundant signals (i.e. many genes from the same pathway - genes that vary together) are represented by a few SVs as opposed to many samples. More balanced also means that more subtle signals can be amplified (i.e. genes related by a smaller pathway are also captured by a few SVs)
+# * Con: Can amplify noise - i.e. an SV that corresponds to some technical source of variability now has a similar weight to other real signals
+#
+# For more information comparing using counts vs SPELL-processing see: https://docs.google.com/presentation/d/18E0boNODJaxP-YYNIlccrh0kASbc7bapQBMovOX62jw/edit#slide=id.gf9d09c6be6_0_0
 
 # %load_ext autoreload
 # %autoreload 2

@@ -120,7 +120,7 @@ pa14_associations.to_csv(pa14_out_filename, sep="\t")
 #
 # One of the "most stable" core genes found were from the T6SS, which is surprising given that...
 #
-# We will plot the distribution of these genes to make sure that ____
+# We will plot the distribution of these genes to make sure that the reason these T6SS genes are found to be stable is because all the genes are "off". Based on the plots below, this doesn't look to be the explanation for why T6SS genes are found to be stable across strains.
 #
 # We manually selected these genes.
 
