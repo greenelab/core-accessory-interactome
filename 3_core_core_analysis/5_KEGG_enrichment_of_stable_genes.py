@@ -144,9 +144,12 @@ pao1_most_stable_enrichment.sort_values(by="corrected p-value").head()
 print(pao1_least_stable_enrichment.shape)
 pao1_least_stable_enrichment.sort_values(by="corrected p-value").head()
 
+# TO DO: Remove 'compare' when we decide which input to use
 # Save
-pao1_most_stable_enrichment.to_csv("pao1_most_stable_enrichment.tsv", sep="\t")
-pao1_least_stable_enrichment.to_csv("pao1_least_stable_enrichment.tsv", sep="\t")
+pao1_most_stable_enrichment.to_csv("pao1_most_stable_enrichment_compare.tsv", sep="\t")
+pao1_least_stable_enrichment.to_csv(
+    "pao1_least_stable_enrichment_compare.tsv", sep="\t"
+)
 
 # **Takeaway:**
 # * There does not appear to be any enriched KEGG pathways in the least stable genes.

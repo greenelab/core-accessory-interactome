@@ -42,8 +42,13 @@ random.seed(1)
 # -
 
 # Params
+# To roughly match the number of most and least stable genes found using SPELL
+# Let's use the following percentages: 9% for most stable and 4% for least stable
+# TO DO: moving forward, use X% instead of hard threshold cutoff?
 high_threshold = 0.5
 low_threshold = 0.2
+most_percent = 0.09
+least_percent = 0.04
 
 # +
 # Output filenames
@@ -69,7 +74,7 @@ pao1_corr.head()
 print(pa14_corr.shape)
 pa14_corr.head()
 
-# ## Get mapping from PAO1 to PA14
+# ## Compare transcriptional profiles
 
 pao1_annotation_filename = paths.GENE_PAO1_ANNOT
 pa14_annotation_filename = paths.GENE_PA14_ANNOT
@@ -244,11 +249,10 @@ pa14_corr_df.head()
 
 # ## Plots
 
-# +
-# Add label for most and least stable genes
+# Add label for most and least stable genes using threshold cutoff
 pao1_corr_df["label"] = ""
 pa14_corr_df["label"] = ""
-pao1_corr_df.loc[
+"""pao1_corr_df.loc[
     pao1_corr_df["Transcriptional similarity across strains"] > high_threshold, "label"
 ] = "most stable"
 pao1_corr_df.loc[
@@ -261,8 +265,28 @@ pa14_corr_df.loc[
 pa14_corr_df.loc[
     pa14_corr_df["Transcriptional similarity across strains"] < low_threshold, "label"
 ] = "least stable"
+"""
 
-# +
+# Add label for most and least stable genes based on top X%
+pao1_most_stable = pao1_corr_df.sort_values(
+    "Transcriptional similarity across strains", ascending=False
+).head(round(most_percent * len(pao1_corr_df)))
+pao1_least_stable = pao1_corr_df.sort_values(
+    "Transcriptional similarity across strains", ascending=False
+).tail(round(least_percent * len(pao1_corr_df)))
+
+pa14_most_stable = pa14_corr_df.sort_values(
+    "Transcriptional similarity across strains", ascending=False
+).head(round(most_percent * len(pa14_corr_df)))
+pa14_least_stable = pa14_corr_df.sort_values(
+    "Transcriptional similarity across strains", ascending=False
+).tail(round(least_percent * len(pa14_corr_df)))
+
+pao1_corr_df.loc[pao1_most_stable.index, "label"] = "most stable"
+pao1_corr_df.loc[pao1_least_stable.index, "label"] = "least stable"
+pa14_corr_df.loc[pa14_most_stable.index, "label"] = "most stable"
+pa14_corr_df.loc[pa14_least_stable.index, "label"] = "least stable"
+
 # Plot distribution of correlation scores
 # This scores indicate how transcriptionally similar genes are across PAO1 and PA14 strains
 fig_pao1 = sns.displot(
@@ -274,9 +298,7 @@ fig_pao1 = sns.displot(
 # TO DO
 # Select certain colors
 # Remove empty legend
-
 plt.title("Similarity of core-core modules PAO1 to PA14")
-# -
 
 fig_pa14 = sns.displot(
     data=pa14_corr_df,
@@ -284,22 +306,37 @@ fig_pa14 = sns.displot(
     hue="label",
     # bins=np.linspace(0, 0.7, 36),
 )
+# TO DO
+# Select certain colors
+# Remove empty legend
 plt.title("Similarity of core-core modules PA14 to PAO1")
 
-# Select genes that are on the high and low end to examine, map gene names
-high_pao1 = pao1_corr_df[
+# ### Compare most/least stable genes found mapping PAO1 > PA14 and PA14 > PAO1
+#
+# As a check, we would expect that the most stable core genes are the same if we start with PAO1 gene ids and map to PA14 gene ids (`high_pao1_set`) versus if we start with PA14 gene ids and map to PAO1 gene ids (`high_pa14_set`). Similarly if we compare the least stable core genes.
+#
+# Below we can see that all but a few genes overlap. These genes seem to have fallen slighly outside the bounds of what is considered most/least stable which is why they are not found in the other mapped set.
+
+# Select genes that are on the high and low end to examine overlap
+"""high_pao1 = pao1_corr_df[
     pao1_corr_df["Transcriptional similarity across strains"] > high_threshold
 ]
 low_pao1 = pao1_corr_df[
     pao1_corr_df["Transcriptional similarity across strains"] < low_threshold
-]
+]"""
 
-high_pa14 = pa14_corr_df[
+high_pao1 = pao1_most_stable
+low_pao1 = pao1_least_stable
+
+"""high_pa14 = pa14_corr_df[
     pa14_corr_df["Transcriptional similarity across strains"] > high_threshold
 ]
 low_pa14 = pa14_corr_df[
     pa14_corr_df["Transcriptional similarity across strains"] < low_threshold
-]
+]"""
+
+high_pa14 = pa14_most_stable
+low_pa14 = pa14_least_stable
 
 high_pao1.head()
 
@@ -308,10 +345,6 @@ high_pa14.head()
 low_pao1.head()
 
 low_pa14.head()
-
-# As a check, we would expect that the most stable core genes are the same if we start with PAO1 gene ids and map to PA14 gene ids (`high_pao1_set`) versus if we start with PA14 gene ids and map to PAO1 gene ids (`high_pa14_set`). Similarly if we compare the least stable core genes.
-#
-# Below we can see that all but a few genes overlap. These genes seem to have fallen slighly outside the bounds of what is considered most/least stable which is why they are not found in the other mapped set.
 
 # Check if the highly correlated genes from PAO1 to PA14 are the same as the ones from PA14 to PAO1
 high_pao1_set = set(high_pao1["PA14 homolog id"])
@@ -392,7 +425,7 @@ pa14_corr_df.to_csv(pa14_similarity_scores_filename, sep="\t")
 #
 # * Some of the not consistent core genes include _gloA2_ (related to metabolism); PA3507, PA0478 (putative enzymes); PA4685 (hypothetical protein)
 
-# #### Compare results using SPELL-processed expression data vs raw expression data
+# ### Compare results using SPELL-processed expression data vs raw expression data
 #
 # Here we want to compare the composition of the most and least stable genes using the different versions of input.
 
@@ -410,14 +443,18 @@ pa14_similarity_scores = pd.read_csv(
 
 # +
 # Load version using SPELL-processed expression data
-pao1_similarity_scores_filename = "pao1_core_similarity_associations_final_spell.tsv"
-pa14_similarity_scores_filename = "pa14_core_similarity_associations_final_spell.tsv"
+pao1_similarity_scores_spell_filename = (
+    "pao1_core_similarity_associations_final_spell.tsv"
+)
+pa14_similarity_scores_spell_filename = (
+    "pa14_core_similarity_associations_final_spell.tsv"
+)
 
 pao1_similarity_scores_spell = pd.read_csv(
-    pao1_similarity_scores_filename, sep="\t", header=0, index_col=0
+    pao1_similarity_scores_spell_filename, sep="\t", header=0, index_col=0
 )
 pa14_similarity_scores_spell = pd.read_csv(
-    pa14_similarity_scores_filename, sep="\t", header=0, index_col=0
+    pa14_similarity_scores_spell_filename, sep="\t", header=0, index_col=0
 )
 # -
 
@@ -467,12 +504,6 @@ pa14_most_stable = pa14_similarity_scores[
 pa14_most_stable_spell = pa14_similarity_scores_spell[
     pa14_similarity_scores_spell["label"] == "most stable"
 ].index
-# -
-
-print(pao1_most_stable)
-print(pao1_most_stable_spell)
-print(pa14_most_stable)
-print(pa14_most_stable_spell)
 
 # +
 # Get least stable genes
@@ -490,11 +521,6 @@ pa14_least_stable_spell = pa14_similarity_scores_spell[
     pa14_similarity_scores_spell["label"] == "least stable"
 ].index
 # -
-
-print(pao1_least_stable)
-print(pao1_least_stable_spell)
-print(pa14_least_stable)
-print(pa14_least_stable_spell)
 
 # Compare gene sets
 venn2(
@@ -520,5 +546,77 @@ venn2(
     set_labels=("PA14 least", "PA14 least SPELL"),
 )
 plt.title("PA14 least stable")
+
+# ### Add label for genes that are shared by SPELL and counts data versus only in one or the other
+#
+
+# +
+# Who are the genes that are the same vs different?
+pao1_most_shared_raw_spell_ids = list(
+    set(pao1_most_stable).intersection(set(pao1_most_stable_spell))
+)
+pao1_most_raw_only_ids = list(
+    set(pao1_most_stable).difference(set(pao1_most_stable_spell))
+)
+pao1_most_spell_only_ids = list(
+    set(pao1_most_stable_spell).difference(set(pao1_most_stable))
+)
+
+pao1_least_shared_raw_spell_ids = list(
+    set(pao1_least_stable).intersection(set(pao1_least_stable_spell))
+)
+pao1_least_raw_only_ids = list(
+    set(pao1_least_stable).difference(set(pao1_least_stable_spell))
+)
+pao1_least_spell_only_ids = list(
+    set(pao1_least_stable_spell).difference(set(pao1_least_stable))
+)
+
+# +
+pa14_most_shared_raw_spell_ids = list(
+    set(pa14_most_stable).intersection(set(pa14_most_stable_spell))
+)
+pa14_most_raw_only_ids = list(
+    set(pa14_most_stable).difference(set(pa14_most_stable_spell))
+)
+pa14_most_spell_only_ids = list(
+    set(pa14_most_stable_spell).difference(set(pa14_most_stable))
+)
+
+pa14_least_shared_raw_spell_ids = list(
+    set(pa14_least_stable).intersection(set(pa14_least_stable_spell))
+)
+pa14_least_raw_only_ids = list(
+    set(pa14_least_stable).difference(set(pa14_least_stable_spell))
+)
+pa14_least_spell_only_ids = list(
+    set(pa14_least_stable_spell).difference(set(pa14_least_stable))
+)
+
+# +
+pao1_corr_df["comparison"] = ""
+pao1_corr_df.loc[pao1_most_shared_raw_spell_ids, "comparison"] = "most stable in both"
+pao1_corr_df.loc[pao1_most_raw_only_ids, "comparison"] = "most stable in counts"
+pao1_corr_df.loc[pao1_most_spell_only_ids, "comparison"] = "most stable in SPELL"
+
+pao1_corr_df.loc[pao1_least_shared_raw_spell_ids, "comparison"] = "least stable in both"
+pao1_corr_df.loc[pao1_least_raw_only_ids, "comparison"] = "least stable in counts"
+pao1_corr_df.loc[pao1_least_spell_only_ids, "comparison"] = "least stable in SPELL"
+
+# +
+pa14_corr_df["comparison"] = ""
+pa14_corr_df.loc[pa14_most_shared_raw_spell_ids, "comparison"] = "most stable in both"
+pa14_corr_df.loc[pa14_most_raw_only_ids, "comparison"] = "most stable in counts"
+pa14_corr_df.loc[pa14_most_spell_only_ids, "comparison"] = "most stable in SPELL"
+
+pa14_corr_df.loc[pa14_least_shared_raw_spell_ids, "comparison"] = "least stable in both"
+pa14_corr_df.loc[pa14_least_raw_only_ids, "comparison"] = "least stable in counts"
+pa14_corr_df.loc[pa14_least_spell_only_ids, "comparison"] = "least stable in SPELL"
+# -
+
+# TO DO: remove after we decide which input version to use
+# Save transcriptional similarity df
+pao1_corr_df.to_csv(pao1_similarity_scores_filename, sep="\t")
+pa14_corr_df.to_csv(pa14_similarity_scores_filename, sep="\t")
 
 # Looks like there is good consistency in the most stable genes but not the least stable genes. This data will help us to decide which input dataset to use?
