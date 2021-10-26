@@ -51,7 +51,11 @@ module_size_threshold = 1000
 sample_seed = 1
 
 # Gene subset
-gene_subset = "core"
+gene_subset = "acc"
+
+# How was data processed
+# Choices: {"spell", "raw"}
+processed = "raw"
 # -
 
 # ## Examine size of modules
@@ -61,10 +65,12 @@ gene_subset = "core"
 for method_name in clustering_method_list:
     print(f"Modules using clustering method: {method_name}")
     pao1_membership_filename = os.path.join(
-        paths.LOCAL_DATA_DIR, f"pao1_modules_{method_name}_{gene_subset}.tsv"
+        paths.LOCAL_DATA_DIR,
+        f"pao1_modules_{method_name}_{gene_subset}_{processed}.tsv",
     )
     pa14_membership_filename = os.path.join(
-        paths.LOCAL_DATA_DIR, f"pa14_modules_{method_name}_{gene_subset}.tsv"
+        paths.LOCAL_DATA_DIR,
+        f"pa14_modules_{method_name}_{gene_subset}_{processed}.tsv",
     )
 
     pao1_membership = pd.read_csv(
@@ -91,11 +97,11 @@ def plot_dist_modules(clustering_method_list, gene_subset):
     for i in range(len(clustering_method_list)):
         pao1_membership_filename = os.path.join(
             paths.LOCAL_DATA_DIR,
-            f"pao1_modules_{clustering_method_list[i]}_{gene_subset}.tsv",
+            f"pao1_modules_{clustering_method_list[i]}_{gene_subset}_{processed}.tsv",
         )
         pa14_membership_filename = os.path.join(
             paths.LOCAL_DATA_DIR,
-            f"pa14_modules_{clustering_method_list[i]}_{gene_subset}.tsv",
+            f"pa14_modules_{clustering_method_list[i]}_{gene_subset}_{processed}.tsv",
         )
 
         pao1_membership = pd.read_csv(
@@ -161,18 +167,22 @@ pao1_operon_filename = paths.PAO1_OPERON
 
 # Load membership for specific clustering method
 pao1_membership_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pao1_modules_{method_toexamine}.tsv"
+    paths.LOCAL_DATA_DIR,
+    f"pao1_modules_{method_toexamine}_{gene_subset}_{processed}.tsv",
 )
 pa14_membership_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pa14_modules_{method_toexamine}.tsv"
+    paths.LOCAL_DATA_DIR,
+    f"pa14_modules_{method_toexamine}_{gene_subset}_{processed}.tsv",
 )
 
 pao1_membership = pd.read_csv(pao1_membership_filename, sep="\t", header=0, index_col=0)
 pa14_membership = pd.read_csv(pa14_membership_filename, sep="\t", header=0, index_col=0)
 # -
 
+print(pao1_membership.shape)
 pao1_membership.head()
 
+print(pa14_membership.shape)
 pa14_membership.head()
 
 # According to Jake relationships tend to be more meaningful if the module is smaller (e.g. if an operon with 5 genes is contained in a module consisting of 10 total genes, this seems more biologically/functionally meaningful than an operon with 5 genes contained in a module consisting of 500 genes).
@@ -271,7 +281,9 @@ pa14_operon.head()
 print(pao1_regulon.shape)
 pao1_regulon.head()
 
-# ### Get operon/regulon information using PA14 ids
+# ### Get regulon information using PA14 ids
+#
+# Note that we can only do this mapping for core genes
 
 pa14_regulon = pao1_regulon.copy()
 
@@ -454,8 +466,9 @@ pao1_regulon_prob = coverage_of_genesets(pao1_membership, pao1_regulon, "regulon
 pao1_regulon_prob.head()
 
 # %%time
-pa14_regulon_prob = coverage_of_genesets(pa14_membership, pa14_regulon, "regulon")
-pa14_regulon_prob.head()
+if gene_subset == "core":
+    pa14_regulon_prob = coverage_of_genesets(pa14_membership, pa14_regulon, "regulon")
+    pa14_regulon_prob.head()
 
 # +
 # As a baseline make a membership df mapping genes to a shuffled set of module ids
@@ -489,10 +502,11 @@ pao1_regulon_shuffle_prob = coverage_of_genesets(
 pao1_regulon_shuffle_prob.head()
 
 # %%time
-pa14_regulon_shuffle_prob = coverage_of_genesets(
-    pa14_membership_shuffle, pa14_regulon, "regulon"
-)
-pa14_regulon_shuffle_prob.head()
+if gene_subset == "core":
+    pa14_regulon_shuffle_prob = coverage_of_genesets(
+        pa14_membership_shuffle, pa14_regulon, "regulon"
+    )
+    pa14_regulon_shuffle_prob.head()
 
 # ## Plot distribution of probabilities
 #
@@ -601,11 +615,18 @@ fig_regulon = sns.histplot(
     ax=axes[0],
     label="true",
 )
-fig_regulon = sns.histplot(
-    pa14_regulon_prob["pr(x,y in module|x,y in regulon)"],
-    bins=bins_shared,
-    ax=axes[1],
-)
+if gene_subset == "core":
+    fig_regulon = sns.histplot(
+        pa14_regulon_prob["pr(x,y in module|x,y in regulon)"],
+        bins=bins_shared,
+        ax=axes[1],
+    )
+    fig_regulon = sns.histplot(
+        pa14_regulon_shuffle_prob["pr(x,y in module|x,y in regulon)"],
+        bins=bins_shared,
+        color="grey",
+        ax=axes[1],
+    )
 fig_regulon = sns.histplot(
     pao1_regulon_shuffle_prob["pr(x,y in module|x,y in regulon)"],
     bins=bins_shared,
@@ -613,15 +634,10 @@ fig_regulon = sns.histplot(
     ax=axes[0],
     label="shuffle",
 )
-fig_regulon = sns.histplot(
-    pa14_regulon_shuffle_prob["pr(x,y in module|x,y in regulon)"],
-    bins=bins_shared,
-    color="grey",
-    ax=axes[1],
-)
 
 axes[0].set_title("PAO1 regulon coverage")
-axes[1].set_title("PA14 regulon coverage")
+if gene_subset == "core":
+    axes[1].set_title("PA14 regulon coverage")
 
 legend = axes[0].legend()
 # -
@@ -630,9 +646,11 @@ pao1_regulon_prob.describe()
 
 pao1_regulon_shuffle_prob.describe()
 
-pa14_regulon_prob.describe()
+if gene_subset == "core":
+    pa14_regulon_prob.describe()
 
-pa14_regulon_shuffle_prob.describe()
+if gene_subset == "core":
+    pa14_regulon_shuffle_prob.describe()
 
 # **Takeaway:**
 # There is a higher probability that given pair of genes that are from the same operon, that they are also from the same module, compared to a randomly shuffled set of module assignments. Although there are some operons with low probabilties, overall genes in most operons have a high probability of being found in the same module.

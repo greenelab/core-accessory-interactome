@@ -37,6 +37,8 @@ import scipy.stats
 import statsmodels.stats.multitest
 import pandas as pd
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
 from scripts import paths, utils, modules, annotations
 
 random.seed(1)
@@ -44,14 +46,15 @@ random.seed(1)
 
 # Clustering method used to obtain gene-module assignments
 method = "affinity"
+processed = "raw"
 
 # +
 # Import gene memberships
 pao1_membership_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pao1_modules_{method}_acc.tsv"
+    paths.LOCAL_DATA_DIR, f"pao1_modules_{method}_acc_{processed}.tsv"
 )
 pa14_membership_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pa14_modules_{method}_acc.tsv"
+    paths.LOCAL_DATA_DIR, f"pa14_modules_{method}_acc_{processed}.tsv"
 )
 
 pao1_membership = pd.read_csv(pao1_membership_filename, sep="\t", index_col=0, header=0)
@@ -73,6 +76,14 @@ metadata_filename = paths.SAMPLE_METADATA
 # Having the data in a df instead of a series will just allow me to do my merges that are in the notebook
 pao1_gene_annot = pao1_gene_annot["Name"].to_frame("gene name")
 pa14_gene_annot = pa14_gene_annot["Name"].to_frame("gene name")
+
+print(pao1_gene_annot.shape)
+pao1_gene_annot.tail()
+
+# +
+# Use correlation matrix to get length of the genome
+# -
+
 
 # ## Add gene names
 #
@@ -104,7 +115,11 @@ pa14_gene_module_labels.head()
 pao1_compendium = pd.read_csv(paths.PAO1_COMPENDIUM, sep="\t", index_col=0)
 pa14_compendium = pd.read_csv(paths.PA14_COMPENDIUM, sep="\t", index_col=0)
 
+print(pao1_compendium.shape)
 pao1_compendium.head()
+
+print(pa14_compendium.shape)
+pa14_compendium.head()
 
 # Calculate median expression across all samples
 pao1_median_all = pao1_compendium.median().to_frame("median expression")
@@ -163,8 +178,26 @@ pa14_gene_annot.head()
 #
 # How far are genes from other genes in the same module?
 
-pao1_module_dist = modules.get_intra_module_dist(pao1_gene_annot, pa_prefix="PA")
-pa14_module_dist = modules.get_intra_module_dist(pa14_gene_annot, pa_prefix="PA14_")
+# +
+# Sort gene ids and get last gene id to use as length of the genome
+# This gene id should match the number of gene ids
+sorted_pao1_compendium = pao1_compendium.T.sort_index()
+pao1_last_gene_id = sorted_pao1_compendium.index[-1]
+
+sorted_pa14_compendium = pa14_compendium.T.sort_index()
+pa14_last_gene_id = sorted_pa14_compendium.index[-1]
+# -
+
+# Remove "PA" at the beginning of the identifier and convert into a float
+pao1_genome_len = float(pao1_last_gene_id.split("PA")[-1])
+pa14_genome_len = float(pa14_last_gene_id.split("PA14_")[-1])
+
+print(pao1_genome_len, pa14_genome_len)
+
+pao1_module_dist = modules.get_intra_module_dist(pao1_gene_annot, "PA", pao1_genome_len)
+pa14_module_dist = modules.get_intra_module_dist(
+    pa14_gene_annot, "PA14_", pa14_genome_len
+)
 
 pao1_module_dist.head(10)
 
@@ -390,9 +423,36 @@ pao1_gene_annot.head()
 print(pa14_gene_annot.shape)
 pa14_gene_annot.head()
 
+# ## Plot trends
+
+# +
+# Get pairwise distance per module
+# Otherwise plotting will be scaled by the number of genes in a module
+pao1_mean_dist = []
+for grp_name, grp_df in pao1_gene_annot.groupby("module id"):
+    pao1_mean_dist.append(grp_df["mean pairwise dist"][0])
+
+pa14_mean_dist = []
+for grp_name, grp_df in pa14_gene_annot.groupby("module id"):
+    pa14_mean_dist.append(grp_df["mean pairwise dist"][0])
+# -
+
+sns.displot(pao1_mean_dist)
+plt.title("Mean pairwise distance of PAO1 accessory modules")
+
+sns.displot(pa14_mean_dist)
+plt.title("Mean pairwise distance of PA14 accessory modules")
+
+# Find which modules/genes have a large range
+pao1_farapart_genes = pao1_gene_annot[pao1_gene_annot["mean pairwise dist"] >= 2000]
+
+pa14_farapart_genes = pa14_gene_annot[pa14_gene_annot["mean pairwise dist"] >= 20000]
+
 # Save
 pao1_gene_annot.to_csv(f"pao1_acc_gene_module_annotated_{method}.tsv", sep="\t")
 pa14_gene_annot.to_csv(f"pa14_acc_gene_module_annotated_{method}.tsv", sep="\t")
+pao1_farapart_genes.to_csv(f"pao1_farapart_acc_modules_{method}.tsv", sep="\t")
+pa14_farapart_genes.to_csv(f"pa14_farapart_acc_modules_{method}.tsv", sep="\t")
 
 # These annotations will be used to help _P. aeruginosa_ experts, like our collaborators, to determine what accessory-accessory modules to focus on.
 #

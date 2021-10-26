@@ -8,7 +8,9 @@ META_DIR = PROJECT_DIR / "data" / "metadata"
 
 # Path to local directory where data files will be stored
 LOCAL_DIR = Path.home()
-LOCAL_DATA_DIR = LOCAL_DIR / "Documents" / "Data" / "Core_accessory" / "compendia_download"
+LOCAL_DATA_DIR = (
+    LOCAL_DIR / "Documents" / "Data" / "Core_accessory" / "compendia_download"
+)
 
 # Location of gene expression matrix stored locally due to size
 PAO1_GE = LOCAL_DATA_DIR / "pao1_aligned_rnaseq_compendium_zp2_MRnorm.csv"
@@ -40,9 +42,15 @@ PA14_COMPENDIUM_LABEL = LOCAL_DATA_DIR / "pa14_compendia_labeled.tsv"
 PAO1_COMPENDIUM = LOCAL_DATA_DIR / "pao1_compendia.tsv"
 PA14_COMPENDIUM = LOCAL_DATA_DIR / "pa14_compendia.tsv"
 
-# Location of correlation matrices
-PAO1_CORR_RAW = LOCAL_DATA_DIR / "pao1_pearson_mat.tsv"
-PA14_CORR_RAW = LOCAL_DATA_DIR / "pa14_pearson_mat.tsv"
+# Location of correlation matrices using MR normalized data
+PAO1_CORR_RAW = LOCAL_DATA_DIR / "pao1_all_raw_mat.tsv"
+PA14_CORR_RAW = LOCAL_DATA_DIR / "pa14_all_raw_mat.tsv"
+PAO1_CORR_RAW_CORE = LOCAL_DATA_DIR / "pao1_core_raw_mat.tsv"
+PA14_CORR_RAW_CORE = LOCAL_DATA_DIR / "pa14_core_raw_mat.tsv"
+PAO1_CORR_RAW_ACC = LOCAL_DATA_DIR / "pao1_acc_raw_mat.tsv"
+PA14_CORR_RAW_ACC = LOCAL_DATA_DIR / "pa14_acc_raw_mat.tsv"
+
+# Location of correlation matrices using SPELL processed MR normalized data
 PAO1_CORR_LOG_SPELL = LOCAL_DATA_DIR / "pao1_all_log_spell_mat.tsv"
 PA14_CORR_LOG_SPELL = LOCAL_DATA_DIR / "pa14_all_log_spell_mat.tsv"
 PAO1_CORR_LOG_SPELL_CORE = LOCAL_DATA_DIR / "pao1_core_log_spell_mat.tsv"

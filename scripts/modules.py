@@ -9,7 +9,7 @@ import numpy as np
 from itertools import product
 
 
-def get_intra_module_dist(annot_df, pa_prefix):
+def get_intra_module_dist(annot_df, pa_prefix, genome_len):
 	"""
 	For genes in the same module, calculate the pairwise distance from each other
 	calculate the median pairwise distance to represent how spread the module is
@@ -20,6 +20,9 @@ def get_intra_module_dist(annot_df, pa_prefix):
 	annot_df (pandas dataframe): dataframe gene id x features
 
 	pa_prefix (string): "PA" for PAO1 strains or "PA14_" for PA14 strains
+
+	genome_len: float
+		Length of the genome to use to calculate distance since the genome is circular
 
 	Returns
 	--------
@@ -43,11 +46,17 @@ def get_intra_module_dist(annot_df, pa_prefix):
 		# and gene2="PA0001" so there is a distance of 0 here.
 		# But in the next iteration we have gene1 = "PA0001" and gene2 = "PA0004"
 		# so the distance is 3 here.
+
+		# Note: Sine the genome is circular we will use modulo to compute distance
+		# For example the distance between PA0001 to PA5563 is 1 since the end of the
+		# genome circles back to the beginning
 		for gene1, gene2 in product(num_ids, num_ids):
 			if gene1 != gene2:
-				dist = abs(gene1 - gene2)
+				dist1 = (gene1 - gene2) % genome_len
+				dist2 = (gene2 - gene1) % genome_len
+				shortest_dist = min(dist1, dist2)
 				# print(gene1, gene2, dist)
-				abs_dist.append(dist)
+				abs_dist.append(shortest_dist)
 
 		median_module_dist = np.median(abs_dist)
 		mean_module_dist = np.mean(abs_dist)
