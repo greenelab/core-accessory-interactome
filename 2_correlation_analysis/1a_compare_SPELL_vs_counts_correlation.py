@@ -20,6 +20,8 @@
 # 1. Correlation of the MR counts expression matrix
 # 2. Correlation of the MR counts that have been processed using SPELL
 #
+# **About the correlation matrices**
+#
 # The correlation of the counts matrix relates how similar a pair of genes are based on their expression profiles - **relates genes over samples**.
 # High correlation means that a pair of genes have a similar expression profiles - i.e. similar levels of expression across samples/contexts, so genes both have low expression in the same samples and high expression in the same samples.
 # * Pro: Easy to interpret
@@ -32,11 +34,16 @@
 # * Con: Can amplify noise - i.e. an SV that corresponds to some technical source of variability now has a similar weight to other real signals
 #
 # For more information comparing using counts vs SPELL-processing see: https://docs.google.com/presentation/d/18E0boNODJaxP-YYNIlccrh0kASbc7bapQBMovOX62jw/edit#slide=id.gf9d09c6be6_0_0
+#
+# **Experiment**
+# For this experiment, given a set of known gene regulons, that we expect to be clustered together, let's we evaluate which correlation matrix captures these geneset relationships better.
+# To determine this we calculate the percentage of within (i.e. edges connecting two genes within the geneset) compared to the percentage of edges between (i.e.edges connecting a gene within the geneset and some other external gene).
 
 # %load_ext autoreload
 # %autoreload 2
 # %matplotlib inline
 import os
+import random
 import pandas as pd
 import numpy as np
 import seaborn as sns
@@ -52,6 +59,9 @@ top_percent = 0.01
 
 # Regulon file
 regulon_filename = "gene_sets_refs.csv"
+# regulon_filename = "regprecise_format.txt"
+
+regulon_delim = ","
 # -
 
 # ## Load correlation matrix
@@ -80,7 +90,6 @@ def get_corr_threshold(corr_df, top_percent):
     flat_corr_df.columns = ["gene_1", "gene_2", "corr_value"]
 
     # Get quantile
-    # TO DO:Take abs????
     threshold = flat_corr_df.quantile(1 - top_percent)["corr_value"]
     print("correlation threshold: ", threshold)
 
@@ -98,11 +107,34 @@ pao1_corr_counts_threshold = get_corr_threshold(pao1_corr_counts, top_percent)
 
 pao1_corr_spell_threshold = get_corr_threshold(pao1_corr_spell, top_percent)
 
-# Create adjacency matrix using threshold defined above
-# The adjacency matrix will determine the strength of the connection between two genes
-# If the concordance is strong enough (i.e. above the threshold), then
-# the genes are connected by an edge
-# TO DO:abs?????
+# ### Quick check
+# Look at what the distribution of correlation scores looks like to make sure the threshold makes sense
+
+# +
+tril_corr_counts_test = pao1_corr_counts.where(
+    ~np.triu(np.ones(pao1_corr_counts.shape)).astype(np.bool)
+)
+tril_corr_spell_test = pao1_corr_spell.where(
+    ~np.triu(np.ones(pao1_corr_spell.shape)).astype(np.bool)
+)
+
+# Flatten dataframe
+flat_corr_counts_test = tril_corr_counts_test.stack().reset_index()
+flat_corr_counts_test.columns = ["gene_1", "gene_2", "corr_value"]
+
+flat_corr_spell_test = tril_corr_spell_test.stack().reset_index()
+flat_corr_spell_test.columns = ["gene_1", "gene_2", "corr_value"]
+# -
+
+sns.displot(flat_corr_counts_test["corr_value"])
+sns.displot(flat_corr_spell_test["corr_value"])
+
+# We will create adjacency matrix using threshold defined above.
+# The adjacency matrix will determine the strength of the connection between two genes.
+# If the concordance is strong enough (i.e. above the threshold), then the genes are connected by an edge.
+#
+# Since we're examining the connectedness of genes within a regulon we will **not** take the absolute value of the correlation scores. Regulons are groups of operons that share the same transcription factor and therefore we'd expect genes within the same operon to be positively correlated. Operons are a groups of contiguous genes with a shared promoter sequence. For more information the difference between regulon vs operon read [here](https://pediaa.com/what-is-the-difference-between-operon-and-regulon/)
+
 pao1_counts_adj = (pao1_corr_counts > pao1_corr_counts_threshold).astype(float)
 pao1_spell_adj = (pao1_corr_spell > pao1_corr_spell_threshold).astype(float)
 
@@ -112,10 +144,11 @@ pao1_spell_adj.head()
 
 # ## Evaluate relationships captured
 #
-# Given a set of known gene regulons, that we expect to be clustered together, let's calculate we want to evaluate which correlation matrix captures these geneset relationships better. To determine this we calculate the percentage of within (i.e. edges connecting two genes within the geneset) compared to the percentage of edges between(i.e.edges connecting a gene within the geneset and some other external gene).
+# For this experiment, given a set of known gene regulons, that we expect to be clustered together, let's we evaluate which correlation matrix captures these geneset relationships better.
+# To determine this we calculate the percentage of within (i.e. edges connecting two genes within the geneset) compared to the percentage of edges between (i.e.edges connecting a gene within the geneset and some other external gene).
 
 # Load regulon data
-regulon_df = pd.read_csv(regulon_filename, header=0, index_col=0)
+regulon_df = pd.read_csv(regulon_filename, sep=regulon_delim, header=0, index_col=0)
 
 # Format regulon data
 regulon_df["Genes"] = regulon_df["Genes"].str.split(";").apply(list)
@@ -139,33 +172,37 @@ def compare_within_btwn_edge(adj_df, regulon_df):
     rows = []
     for regulon_name in regulon_df.index:
         geneset = regulon_df.loc[regulon_name, "Genes"]
-        print(geneset)
-        print(len(geneset))
 
+        # Processing
         # Since there are some gene ids that are from PA14
         # We will take the intersection
         geneset_processed = set(geneset).intersection(adj_df.index)
 
+        # WITHIN gene calculations
         # Get within edges
+        # Since this is a symmetric matrix we only will consider the
+        # bottom triangle (excluding the diagonal) in order to count
+        # the number of unique connections
         within_df = adj_df.loc[geneset_processed, geneset_processed]
         tril_within_df = within_df.where(
             ~np.triu(np.ones(within_df.shape)).astype(np.bool)
         )
-        # print(tril_within_df)
 
         flat_within_df = tril_within_df.stack().reset_index()
         flat_within_df.columns = ["gene_1", "gene_2", "edge"]
         total_within_pairs = flat_within_df.shape[0]
-        # print(flat_within_df)
 
-        # count the number of within edges
+        # Get proportion of within edges
         num_within_edges = flat_within_df["edge"].sum()
-        print(num_within_edges)
+        prop_within = num_within_edges / total_within_pairs
 
+        # BETWEEN calculations
         # Get between edges
+        # This matrix is a rectangle of genes in the regulon x genes not in the regulon
+        # so we can look at connectsion across the entire matrix as opposed to taking
+        # the lower triangle
         not_geneset = set(adj_df.index).difference(geneset_processed)
         between_df = adj_df.loc[geneset_processed, not_geneset]
-        # tril_between_df = between_df.where(~np.triu(np.ones(between_df.shape)).astype(np.bool))
 
         flat_between_df = between_df.stack().reset_index()
         flat_between_df.columns = ["gene_1", "gene_2", "edge"]
@@ -173,14 +210,7 @@ def compare_within_btwn_edge(adj_df, regulon_df):
 
         # count the number of within edges
         num_between_edges = flat_between_df["edge"].sum()
-        print(num_between_edges)
-
-        # Get the proportion of 1's looking at within and between genes
-        total_pairs = total_within_pairs + total_between_pairs
-        prop_within = num_within_edges / total_pairs
-        prop_between = num_between_edges / total_pairs
-        print("within", prop_within)
-        print("between", prop_between)
+        prop_between = num_between_edges / total_between_pairs
 
         # Make output df
         rows.append(
@@ -193,7 +223,6 @@ def compare_within_btwn_edge(adj_df, regulon_df):
             }
         )
     output_df = pd.DataFrame(rows)
-    print(output_df)
 
     return output_df
 
@@ -258,68 +287,15 @@ plt.subplots_adjust(
 )
 axes1[0].set_xticklabels(axes1[0].get_xticklabels(), rotation=40, ha="right")
 axes1[1].set_xticklabels(axes1[1].get_xticklabels(), rotation=40, ha="right")
-axes1[0].set_title("counts matrix")
-axes1[1].set_title("SPELL matrix")
+axes1[0].set_title(f"counts matrix (threshold={pao1_corr_counts_threshold: .2f})")
+axes1[1].set_title(f"SPELL matrix (threshold={pao1_corr_spell_threshold: .2f})")
 axes1[0].set_ylabel("% edges")
 axes1[1].set_ylabel("% edges")
 axes1[0].set_xlabel("")
 axes1[1].set_xlabel("Regulon")
 plt.suptitle(
-    f"% within vs between edges (using top {top_percent}%) per regulon", fontsize=14
+    f"% within vs between edges (using top {top_percent*100}%) per regulon", fontsize=14
 )
-# -
-
-# **Check:**
-#
-# We noticed that there is a spike in the % of between edges for the *Anr_short_list*. We suspect that these between genes are connected to the other Anr_regulon genes that were removed in this short list. Let's check this.
-
-pao1_spell_stats_test = pao1_spell_stats.set_index("Regulon")
-
-pao1_spell_stats_test.loc[["Anr_regulon", "Anr_short_list"]]
-
-# Get genes from the Anr regulon and the short list
-anr_regulon_genes = pao1_spell_stats_test.loc["Anr_regulon", "Genes"]
-anr_short_genes = pao1_spell_stats_test.loc["Anr_short_list", "Genes"]
-
-# Get genes removed from the short list
-anr_short_missing_genes = list(set(anr_regulon_genes).difference(set(anr_short_genes)))
-print(len(anr_short_missing_genes))
-assert len(anr_short_missing_genes) == 72 - 5
-
-# +
-# Examine between relationships
-# Get within edges
-within_df = pao1_spell_adj.loc[anr_short_genes, anr_short_genes]
-tril_within_df = within_df.where(~np.triu(np.ones(within_df.shape)).astype(np.bool))
-flat_within_df = tril_within_df.stack().reset_index()
-flat_within_df.columns = ["gene_1", "gene_2", "edge"]
-total_within_pairs = flat_within_df.shape[0]
-
-# count the number of within edges
-num_within_edges = flat_within_df["edge"].sum()
-print(num_within_edges)
-# -
-
-pao1_spell_adj.loc[anr_short_genes, anr_short_missing_genes]
-
-# +
-# Get between edges
-between_df = pao1_spell_adj.loc[anr_short_genes, anr_short_missing_genes]
-tril_between_df = between_df.where(~np.triu(np.ones(between_df.shape)).astype(np.bool))
-flat_between_df = tril_between_df.stack().reset_index()
-flat_between_df.columns = ["gene_1", "gene_2", "edge"]
-total_between_pairs = flat_between_df.shape[0]
-
-# count the number of within edges
-num_between_edges = flat_between_df["edge"].sum()
-print(num_between_edges)
-# -
-
-# Get the proportion of 1's looking at within and between genes
-total_pairs = total_within_pairs + total_between_pairs
-prop_within = num_within_edges / total_pairs
-prop_between = num_between_edges / total_pairs
-print(prop_within, prop_between)
 
 # +
 # Make boxplot for number of edges within vs between genes in gene sets/regulons
@@ -342,15 +318,117 @@ fig2 = sns.boxplot(
     notch=True,
     ax=axes2[1],
 )
-axes2[0].set_title("counts matrix")
-axes2[1].set_title("SPELL matrix")
+axes2[0].set_title(f"counts matrix (threshold={pao1_corr_counts_threshold: .2f})")
+axes2[1].set_title(f"SPELL matrix (threshold={pao1_corr_spell_threshold: .2f})")
 axes2[0].set_ylabel("% edges")
 axes2[1].set_ylabel("% edges")
 axes2[0].set_xlabel("")
 axes2[1].set_xlabel("")
-plt.suptitle(f"% within vs between edges (using top {top_percent}%)", fontsize=14)
+plt.suptitle(f"% within vs between edges (using top {top_percent*100}%)", fontsize=14)
+# -
+
+# Save plot
+fig1.figure.savefig(
+    f"pao1_within_vs_between_edges_top_{top_percent}_per_regulon.svg", dpi=300
+)
+fig2.figure.savefig(f"pao1_within_vs_between_edges_top_{top_percent}.svg", dpi=300)
+
+
+# ### Check
+#
+# As a control, we will create pseudo-regulons by creating regulons with a random set of size matched genes and comparing the within versus between connections.
+#
+# The way we calculate the proportions of within and between connections is to take the number of within connections divided by the number of all possible within pairs.
+# Similarly for the between connections we take the number of between connections divided by the number of all possible between pairs. For this calculation, the denominators are separate because the number of non-regulon genes is much larger.
+# Our _hypothesis_ is that the between connections are mostly due to noise and randomness in the data. If we divided the number of within connections by the total number of all pairs (within pairs + between pairs) then any signal from the within connections will get drowned out by the noise from the between connections because the size of the regulons are so much smaller.
+#
+# If the between connections are mostly noise, then we'd expect using a shuffled set of regulons, our within and between connections to be roughly equal in distribution. This is what we find.
+
+# Make shuffled regulon dataset
+def make_shuffled_regulon(regulon_df, gene_ids):
+    """
+    This function inputs real regulon data and creates
+    a fake regulon dataset by randomly sampling groups of
+    size matched regulons
+    """
+    rows = []
+    for regulon_name in regulon_df.index:
+        len_regulon = regulon_df.loc[regulon_name, "Lengths"]
+
+        # Select random set of size-matched genes
+        random_geneset = random.sample(gene_ids, len_regulon)
+
+        # Make output df
+        rows.append(
+            {
+                "Regulon": regulon_name,
+                "Lengths": regulon_df.loc[regulon_name, "Lengths"],
+                "Genes": random_geneset,
+            }
+        )
+    output_df = pd.DataFrame(rows)
+
+    return output_df
+
+
+shuffled_regulon_df = make_shuffled_regulon(regulon_df, list(pao1_corr_counts.index))
+
+shuffled_regulon_df.head()
+
+pao1_counts_shuffled_stats = compare_within_btwn_edge(
+    pao1_counts_adj, shuffled_regulon_df
+)
+
+pao1_spell_shuffled_stats = compare_within_btwn_edge(
+    pao1_spell_adj, shuffled_regulon_df
+)
+
+pao1_counts_shuffled_stats.head()
 
 # +
-# Save plot
-# fig1.figure.savefig(f"pao1_within_vs_between_edges_top_{top_percent}_per_regulon.svg", dpi=300)
-# fig2.figure.savefig(f"pao1_within_vs_between_edges_top_{top_percent}.svg", dpi=300)
+# Format data for plotting
+pao1_counts_shuffled_stats_melt = pd.melt(
+    pao1_counts_shuffled_stats.reset_index(),
+    id_vars=["Regulon", "Lengths", "Genes"],
+    value_vars=["% within edges", "% between edges"],
+)
+
+pao1_spell_shuffled_stats_melt = pd.melt(
+    pao1_spell_shuffled_stats.reset_index(),
+    id_vars=["Regulon", "Lengths", "Genes"],
+    value_vars=["% within edges", "% between edges"],
+)
+# -
+
+pao1_counts_shuffled_stats_melt.head()
+
+# +
+# Make boxplot for number of edges within vs between genes in gene sets/regulons
+fig3, axes3 = plt.subplots(ncols=2, nrows=1, figsize=(10, 5))
+
+fig3 = sns.boxplot(
+    data=pao1_counts_shuffled_stats_melt,
+    x="variable",
+    y="value",
+    palette="Blues",
+    notch=True,
+    ax=axes3[0],
+)
+
+fig3 = sns.boxplot(
+    data=pao1_spell_shuffled_stats_melt,
+    x="variable",
+    y="value",
+    palette="Blues",
+    notch=True,
+    ax=axes3[1],
+)
+axes3[0].set_title(f"counts matrix (threshold={pao1_corr_counts_threshold: .2f})")
+axes3[1].set_title(f"SPELL matrix (threshold={pao1_corr_spell_threshold: .2f})")
+axes3[0].set_ylabel("% edges")
+axes3[1].set_ylabel("% edges")
+axes3[0].set_xlabel("")
+axes3[1].set_xlabel("")
+plt.suptitle(
+    f"% SHUFFLED within vs between edges (using top {top_percent*100}%)", fontsize=14
+)
