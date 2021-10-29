@@ -41,11 +41,11 @@ from scripts import paths, utils
 
 # +
 # Params
-num_singular_values = 300
+# Vary by strain type and gene type???
 num_singular_values_log = 100
 
 # Which subset of genes to consider: core, acc, all
-subset_genes = "all"
+subset_genes = "acc"
 # -
 
 # Load expression data
@@ -89,6 +89,19 @@ pa14_core = core_acc_dict["core_pa14"]
 pao1_acc = core_acc_dict["acc_pao1"]
 pa14_acc = core_acc_dict["acc_pa14"]
 
+# ## Select gene subset
+
+# Select subset of genes
+if subset_genes == "core":
+    pao1_compendium = pao1_compendium[pao1_core]
+    pa14_compendium = pa14_compendium[pa14_core]
+elif subset_genes == "acc":
+    pao1_compendium = pao1_compendium[pao1_acc]
+    pa14_compendium = pa14_compendium[pa14_acc]
+
+print(pao1_compendium.shape)
+print(pa14_compendium.shape)
+
 # ## Correlation of raw gene expression data
 #
 # Here is the correlation of the raw data without any malnipulations. This will serve as a reference to compare the correlations below where applied corrections to the correlations to account for the dominant signal described above.
@@ -97,13 +110,13 @@ pa14_acc = core_acc_dict["acc_pa14"]
 pao1_corr_original = pao1_compendium.corr()
 pa14_corr_original = pa14_compendium.corr()
 
-# Select subset of genes
+"""# Select subset of genes
 if subset_genes == "core":
     pao1_corr_original = pao1_corr_original.loc[pao1_core, pao1_core]
     pa14_corr_original = pa14_corr_original.loc[pa14_core, pa14_core]
 elif subset_genes == "acc":
     pao1_corr_original = pao1_corr_original.loc[pao1_acc, pao1_acc]
-    pa14_corr_original = pa14_corr_original.loc[pa14_acc, pa14_acc]
+    pa14_corr_original = pa14_corr_original.loc[pa14_acc, pa14_acc]"""
 
 # Check for duplicates indices
 assert pao1_corr_original.index.duplicated().sum() == 0
@@ -122,7 +135,7 @@ pa14_corr_original.head()
 # +
 # %%time
 # Plot heatmap
-o1 = sns.clustermap(pao1_corr_original.abs(), cmap="viridis", figsize=(20, 20))
+o1 = sns.clustermap(pao1_corr_original, cmap="viridis", figsize=(20, 20))
 o1.fig.suptitle("Correlation of raw PAO1 genes", y=1.05, fontsize=24)
 
 # Save
@@ -133,7 +146,7 @@ o1.savefig(pao1_pearson_filename, dpi=300)
 
 # +
 # Plot heatmap
-o2 = sns.clustermap(pa14_corr_original.abs(), cmap="viridis", figsize=(20, 20))
+o2 = sns.clustermap(pa14_corr_original, cmap="viridis", figsize=(20, 20))
 o2.fig.suptitle("Correlation of raw PA14 genes", y=1.05, fontsize=24)
 
 # Save
@@ -204,7 +217,7 @@ assert pa14_corr_log_spell[pa14_corr_log_spell.duplicated(keep=False)].shape[0] 
 
 # +
 # Plot heatmap
-h1a = sns.clustermap(pao1_corr_log_spell.abs(), cmap="viridis", figsize=(20, 20))
+h1a = sns.clustermap(pao1_corr_log_spell, cmap="icefire", figsize=(20, 20))
 h1a.fig.suptitle(
     f"log transform + SPELL corrected using {num_singular_values_log} vectors (PAO1)",
     y=1.05,
@@ -217,7 +230,7 @@ pao1_log_spell_filename = os.path.join(
 h1a.savefig(pao1_log_spell_filename, dpi=300)
 
 # +
-h2a = sns.clustermap(pa14_corr_log_spell.abs(), cmap="viridis", figsize=(20, 20))
+h2a = sns.clustermap(pa14_corr_log_spell, cmap="icefire", figsize=(20, 20))
 h2a.fig.suptitle(
     f"log transformed + SPELL corrected using {num_singular_values_log} vectors (PA14)",
     y=1.05,

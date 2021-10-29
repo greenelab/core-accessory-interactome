@@ -59,7 +59,7 @@ PAO1_CORR_LOG_SPELL_ACC = LOCAL_DATA_DIR / "pao1_acc_log_spell_mat.tsv"
 PA14_CORR_LOG_SPELL_ACC = LOCAL_DATA_DIR / "pa14_acc_log_spell_mat.tsv"
 
 # Location of metadata
-PAO1_REGULON = META_DIR / "regulons_format.csv"
+PAO1_REGULON = META_DIR / "gene_sets_refs.csv"
 PAO1_OPERON = META_DIR / "PAO1-operons-2021-07-19.csv"
 PA14_OPERON = META_DIR / "PA14-operons-2021-07-19.csv"
 

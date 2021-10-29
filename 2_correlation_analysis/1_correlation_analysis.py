@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.9.1
+#       jupytext_version: 1.9.1+dev
 #   kernelspec:
 #     display_name: Python [conda env:core_acc] *
 #     language: python
@@ -16,20 +16,9 @@
 
 # # Correlation analysis
 #
-# This notebook examines the correlation structure in the gene expression data generated in [1_create_compendia.ipynb](../processing/1_create_compendia.ipynb).
+# This notebook creates the correlation matrix using SPELL processed data.
 #
-# The correlation of the counts matrix relates how similar a pair of genes are based on their expression profiles - **relates genes over samples**.
-# High correlation means that a pair of genes have a similar expression profiles - i.e. similar levels of expression across samples/contexts, so genes both have low expression in the same samples and high expression in the same samples.
-# * Pro: Easy to interpret
-# * Con: Many gene pairs found to have a high correlation because many genes are related to the same pathway have the similar expression profiles. This is consistent with [Myers et al.](https://link.springer.com/article/10.1186/1471-2164-7-187), who found that there can be an over-representation of genes associated with the same pathway (i.e. a large fraction of gene pairs represent ribosomal relationships). This very prominent signal makes it difficult to detect other signals. Figure 1C demonstrates that a large fraction of gene pairs are ribosomal relationships - in the top 0.1% most co-expressed genes, 99% belong to the ribosome pathway. Furthermore, protein function prediction based on co-expression drop dramatically after removing the ribisome pathway (Figure 1A, B).
-#
-# To try to remove this very dominant global signal in the data. Here we are applying dimensionality reduction techniques in addition to scaling the data using a method called SPELL.
-# The correlation of the SPELL matrix relates genes based on the gene coefficient matrix - **relate genes over their contribution to singular vectors (linear combination of genes - linear relationship between genes)**.
-# High correlation means that a pair of genes contributes similarly to a singular vector, which are the axes pointing in the direction of the spread of the data and capture how genes are related to each other
-# * Pro: Gene contributions are more balanced so that redundant signals (i.e. many genes from the same pathway - genes that vary together) are represented by a few SVs as opposed to many samples. More balanced also means that more subtle signals can be amplified (i.e. genes related by a smaller pathway are also captured by a few SVs)
-# * Con: Can amplify noise - i.e. an SV that corresponds to some technical source of variability now has a similar weight to other real signals
-#
-# For more information comparing using counts vs SPELL-processing see: https://docs.google.com/presentation/d/18E0boNODJaxP-YYNIlccrh0kASbc7bapQBMovOX62jw/edit#slide=id.gf9d09c6be6_0_0
+# The decision to process the data using SPELL as opposed to applying the correlation directly to the counts matrix can be found in [spell_vs_counts_experiment](spell_vs_counts_experiment/1a_compare_SPELL_vs_counts_correlation.ipynb)
 
 # %load_ext autoreload
 # %autoreload 2
@@ -54,11 +43,10 @@ from scripts import paths, utils
 
 # +
 # Params
-num_singular_values = 300
 num_singular_values_log = 100
 
 # Which subset of genes to consider: core, acc, all
-subset_genes = "all"
+subset_genes = "core"
 # -
 
 # Load expression data
@@ -102,60 +90,6 @@ pa14_core = core_acc_dict["core_pa14"]
 pao1_acc = core_acc_dict["acc_pao1"]
 pa14_acc = core_acc_dict["acc_pa14"]
 
-# ## Correlation of raw gene expression data
-#
-# Here is the correlation of the raw data without any malnipulations. This will serve as a reference to compare the correlations below where applied corrections to the correlations to account for the dominant signal described above.
-
-# Correlation
-pao1_corr_original = pao1_compendium.corr()
-pa14_corr_original = pa14_compendium.corr()
-
-# Select subset of genes
-if subset_genes == "core":
-    pao1_corr_original = pao1_corr_original.loc[pao1_core, pao1_core]
-    pa14_corr_original = pa14_corr_original.loc[pa14_core, pa14_core]
-elif subset_genes == "acc":
-    pao1_corr_original = pao1_corr_original.loc[pao1_acc, pao1_acc]
-    pa14_corr_original = pa14_corr_original.loc[pa14_acc, pa14_acc]
-
-# Check for duplicates indices
-assert pao1_corr_original.index.duplicated().sum() == 0
-assert pa14_corr_original.index.duplicated().sum() == 0
-
-# Check for duplicate rows
-assert pao1_corr_original[pao1_corr_original.duplicated(keep=False)].shape[0] == 0
-assert pa14_corr_original[pa14_corr_original.duplicated(keep=False)].shape[0] == 0
-
-print(pao1_corr_original.shape)
-pao1_corr_original.head()
-
-print(pa14_corr_original.shape)
-pa14_corr_original.head()
-
-# +
-# %%time
-# Plot heatmap
-o1 = sns.clustermap(pao1_corr_original.abs(), cmap="viridis", figsize=(20, 20))
-o1.fig.suptitle("Correlation of raw PAO1 genes", y=1.05, fontsize=24)
-
-# Save
-pao1_pearson_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pao1_{subset_genes}_raw_clustermap.png"
-)
-o1.savefig(pao1_pearson_filename, dpi=300)
-
-# +
-# Plot heatmap
-o2 = sns.clustermap(pa14_corr_original.abs(), cmap="viridis", figsize=(20, 20))
-o2.fig.suptitle("Correlation of raw PA14 genes", y=1.05, fontsize=24)
-
-# Save
-pa14_pearson_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pa14__{subset_genes}_raw_clustermap.png"
-)
-o2.savefig(pa14_pearson_filename, dpi=300)
-# -
-
 # ## Log transform + SPELL Correlation
 #
 # _Review of SVD_
@@ -191,15 +125,13 @@ print(pa14_U.shape, pa14_s.shape, pa14_Vh.shape)
 pao1_U_df = pd.DataFrame(data=pao1_U, index=pao1_compendium_T.index)
 pa14_U_df = pd.DataFrame(data=pa14_U, index=pa14_compendium_T.index)
 
-# +
 # Correlation of U
 # Since `corr()` computes pairwise correlation of columns we need to invert U
-
 pao1_corr_log_spell = pao1_U_df.iloc[:, :num_singular_values_log].T.corr()
 pa14_corr_log_spell = pa14_U_df.iloc[:, :num_singular_values_log].T.corr()
-# -
 
 # Select subset of genes
+# Note: genes are selected after correlation is performed
 if subset_genes == "core":
     pao1_corr_log_spell = pao1_corr_log_spell.loc[pao1_core, pao1_core]
     pa14_corr_log_spell = pa14_corr_log_spell.loc[pa14_core, pa14_core]
@@ -216,8 +148,28 @@ assert pao1_corr_log_spell[pao1_corr_log_spell.duplicated(keep=False)].shape[0] 
 assert pa14_corr_log_spell[pa14_corr_log_spell.duplicated(keep=False)].shape[0] == 0
 
 # +
+# Plot distribution of scores
+triu_pao1_corr_df = pao1_corr_log_spell.where(
+    np.triu(np.ones(pao1_corr_log_spell.shape)).astype(np.bool)
+)
+
+flat_pao1_corr_df = triu_pao1_corr_df.stack().reset_index()
+flat_pao1_corr_df.columns = ["gene_1", "gene_2", "corr_val"]
+
+triu_pa14_corr_df = pa14_corr_log_spell.where(
+    np.triu(np.ones(pa14_corr_log_spell.shape)).astype(np.bool)
+)
+
+flat_pa14_corr_df = triu_pa14_corr_df.stack().reset_index()
+flat_pa14_corr_df.columns = ["gene_1", "gene_2", "corr_val"]
+# -
+
+sns.displot(flat_pao1_corr_df["corr_val"])
+sns.displot(flat_pa14_corr_df["corr_val"])
+
+# +
 # Plot heatmap
-h1a = sns.clustermap(pao1_corr_log_spell.abs(), cmap="viridis", figsize=(20, 20))
+h1a = sns.clustermap(pao1_corr_log_spell, cmap="icefire", figsize=(20, 20))
 h1a.fig.suptitle(
     f"log transform + SPELL corrected using {num_singular_values_log} vectors (PAO1)",
     y=1.05,
@@ -230,7 +182,7 @@ pao1_log_spell_filename = os.path.join(
 h1a.savefig(pao1_log_spell_filename, dpi=300)
 
 # +
-h2a = sns.clustermap(pa14_corr_log_spell.abs(), cmap="viridis", figsize=(20, 20))
+h2a = sns.clustermap(pa14_corr_log_spell, cmap="icefire", figsize=(20, 20))
 h2a.fig.suptitle(
     f"log transformed + SPELL corrected using {num_singular_values_log} vectors (PA14)",
     y=1.05,
@@ -281,16 +233,6 @@ pa14_local_dist.head(10)
 
 f4 = sns.displot(pa14_local_dist["Value"])
 plt.title("Distribution of pairwise distances for PA14 genes")
-
-# Save raw correlation matrices
-pao1_original_mat_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pao1_{subset_genes}_raw_mat.tsv"
-)
-pa14_original_mat_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pa14_{subset_genes}_raw_mat.tsv"
-)
-pao1_corr_original.to_csv(pao1_original_mat_filename, sep="\t")
-pa14_corr_original.to_csv(pa14_original_mat_filename, sep="\t")
 
 # Save log transform + SPELL correlation matrices
 pao1_log_spell_mat_filename = os.path.join(

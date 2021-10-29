@@ -35,6 +35,9 @@ from scripts import paths
 # ## User params
 
 # +
+# Subset of genes
+subset_genes = "all"
+
 # Threshold to use to define edges between genes
 # Top X% of genes are used
 top_percent = 0.01
@@ -48,8 +51,12 @@ regulon_delim = ","
 
 # ## Load correlation matrix
 
-pao1_corr_filename = paths.PAO1_CORR_RAW
-pao1_corr_spell_filename = paths.PAO1_CORR_LOG_SPELL
+pao1_corr_filename = os.path.join(
+    paths.LOCAL_DATA_DIR, f"pao1_{subset_genes}_raw_mat_test.tsv"
+)
+pao1_corr_spell_filename = os.path.join(
+    paths.LOCAL_DATA_DIR, f"pao1_{subset_genes}_log_spell_mat_test.tsv"
+)
 
 # Load correlation data
 pao1_corr_counts = pd.read_csv(pao1_corr_filename, sep="\t", index_col=0, header=0)
@@ -308,6 +315,24 @@ axes2[0].set_xlabel("")
 axes2[1].set_xlabel("")
 plt.suptitle(f"% within vs between edges (using top {top_percent*100}%)", fontsize=14)
 # -
+
+# Look at the regulons that differed the most to make sure there isn't some sort of bias -
+# like they all have very few genes
+# Doesn't look to be the case
+regulon_df.loc[
+    [
+        "Zur_regulon",
+        "Anr_short_list",
+        "PhoB_short_list",
+        "AlgU_short_list",
+        "LasR_short_list",
+        "RhlR_short_list",
+        "GbdR_regulon",
+        "ErdR_regulon",
+        "SoxR_regulon",
+        "PhhR_regulon",
+    ]
+]
 
 # Save plot
 fig1.figure.savefig(

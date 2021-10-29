@@ -13,7 +13,7 @@
 #     name: conda-env-core_acc-py
 # ---
 
-# # Validate array vs RNA-seq modules
+# # Validate module composition
 #
 # This notebook examines the composition of the modules is a few ways:
 # 1. This notebook compares the modules found using array data vs RNA-seq data. We would expect the modules to be similar
@@ -74,7 +74,7 @@ pao1_array_corr_original = pao1_array_compendium.corr()
 
 # %%time
 # Plot heatmap
-o1 = sns.clustermap(pao1_array_corr_original.abs(), cmap="viridis", figsize=(20, 20))
+o1 = sns.clustermap(pao1_array_corr_original, cmap="icefire", figsize=(20, 20))
 o1.fig.suptitle("Correlation of raw PAO1 genes (array compendium)", y=1.05)
 
 # Transpose compendia to be gene x sample
@@ -100,7 +100,7 @@ pao1_array_corr_log_spell = array_U_df.iloc[:, :num_singular_values_log].T.corr(
 
 # %%time
 # Plot heatmap
-h1a = sns.clustermap(pao1_array_corr_log_spell.abs(), cmap="viridis", figsize=(20, 20))
+h1a = sns.clustermap(pao1_array_corr_log_spell, cmap="icefire", figsize=(20, 20))
 h1a.fig.suptitle(
     f"log transform + SPELL corrected using {num_singular_values_log} vectors (PAO1 array)",
     y=1.05,
@@ -139,7 +139,7 @@ pao1_array_membership_df.head()
 # The modules for the RNA-seq compendium were generated using the same procedure as we just performed using the array compendium. The code for performing this module detection can be found in the previous 1_ and 2_ notebooks in this directory.
 
 pao1_rnaseq_membership_filename = os.path.join(
-    paths.LOCAL_DATA_DIR, f"pao1_modules_{cluster_method}_all.tsv"
+    paths.LOCAL_DATA_DIR, f"pao1_modules_{cluster_method}_all_spell.tsv"
 )
 
 pao1_rnaseq_membership_df = pd.read_csv(
