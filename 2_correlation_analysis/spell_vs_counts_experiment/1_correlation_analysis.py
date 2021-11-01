@@ -41,11 +41,17 @@ from scripts import paths, utils
 
 # +
 # Params
-# Vary by strain type and gene type???
-num_singular_values_log = 100
 
 # Which subset of genes to consider: core, acc, all
-subset_genes = "acc"
+subset_genes = "all"
+
+# The number of accessory genes is 200 - 500
+# The number of core genes is ~ 5000
+# So the number of singular vectors is relative to the number of genes
+if subset_genes == "acc":
+    num_SVs = 50
+else:
+    num_SVs = 100
 # -
 
 # Load expression data
@@ -110,14 +116,6 @@ print(pa14_compendium.shape)
 pao1_corr_original = pao1_compendium.corr()
 pa14_corr_original = pa14_compendium.corr()
 
-"""# Select subset of genes
-if subset_genes == "core":
-    pao1_corr_original = pao1_corr_original.loc[pao1_core, pao1_core]
-    pa14_corr_original = pa14_corr_original.loc[pa14_core, pa14_core]
-elif subset_genes == "acc":
-    pao1_corr_original = pao1_corr_original.loc[pao1_acc, pao1_acc]
-    pa14_corr_original = pa14_corr_original.loc[pa14_acc, pa14_acc]"""
-
 # Check for duplicates indices
 assert pao1_corr_original.index.duplicated().sum() == 0
 assert pa14_corr_original.index.duplicated().sum() == 0
@@ -135,7 +133,7 @@ pa14_corr_original.head()
 # +
 # %%time
 # Plot heatmap
-o1 = sns.clustermap(pao1_corr_original, cmap="viridis", figsize=(20, 20))
+o1 = sns.clustermap(pao1_corr_original, cmap="BrBG", center=0, figsize=(20, 20))
 o1.fig.suptitle("Correlation of raw PAO1 genes", y=1.05, fontsize=24)
 
 # Save
@@ -146,7 +144,7 @@ o1.savefig(pao1_pearson_filename, dpi=300)
 
 # +
 # Plot heatmap
-o2 = sns.clustermap(pa14_corr_original, cmap="viridis", figsize=(20, 20))
+o2 = sns.clustermap(pa14_corr_original, cmap="BrBG", center=0, figsize=(20, 20))
 o2.fig.suptitle("Correlation of raw PA14 genes", y=1.05, fontsize=24)
 
 # Save
@@ -191,21 +189,10 @@ print(pa14_U.shape, pa14_s.shape, pa14_Vh.shape)
 pao1_U_df = pd.DataFrame(data=pao1_U, index=pao1_compendium_T.index)
 pa14_U_df = pd.DataFrame(data=pa14_U, index=pa14_compendium_T.index)
 
-# +
 # Correlation of U
 # Since `corr()` computes pairwise correlation of columns we need to invert U
-
-pao1_corr_log_spell = pao1_U_df.iloc[:, :num_singular_values_log].T.corr()
-pa14_corr_log_spell = pa14_U_df.iloc[:, :num_singular_values_log].T.corr()
-# -
-
-# Select subset of genes
-if subset_genes == "core":
-    pao1_corr_log_spell = pao1_corr_log_spell.loc[pao1_core, pao1_core]
-    pa14_corr_log_spell = pa14_corr_log_spell.loc[pa14_core, pa14_core]
-elif subset_genes == "acc":
-    pao1_corr_log_spell = pao1_corr_log_spell.loc[pao1_acc, pao1_acc]
-    pa14_corr_log_spell = pa14_corr_log_spell.loc[pa14_acc, pa14_acc]
+pao1_corr_log_spell = pao1_U_df.iloc[:, :num_SVs].T.corr()
+pa14_corr_log_spell = pa14_U_df.iloc[:, :num_SVs].T.corr()
 
 # Check for duplicates indices
 assert pao1_corr_log_spell.index.duplicated().sum() == 0
@@ -217,10 +204,11 @@ assert pa14_corr_log_spell[pa14_corr_log_spell.duplicated(keep=False)].shape[0] 
 
 # +
 # Plot heatmap
-h1a = sns.clustermap(pao1_corr_log_spell, cmap="icefire", figsize=(20, 20))
+h1a = sns.clustermap(pao1_corr_log_spell, cmap="BrBG", center=0, figsize=(20, 20))
 h1a.fig.suptitle(
-    f"log transform + SPELL corrected using {num_singular_values_log} vectors (PAO1)",
+    f"log transform + SPELL corrected using {num_SVs} vectors (PAO1)",
     y=1.05,
+    fontsize=24,
 )
 
 # Save
@@ -230,10 +218,11 @@ pao1_log_spell_filename = os.path.join(
 h1a.savefig(pao1_log_spell_filename, dpi=300)
 
 # +
-h2a = sns.clustermap(pa14_corr_log_spell, cmap="icefire", figsize=(20, 20))
+h2a = sns.clustermap(pa14_corr_log_spell, cmap="BrBG", center=0, figsize=(20, 20))
 h2a.fig.suptitle(
-    f"log transformed + SPELL corrected using {num_singular_values_log} vectors (PA14)",
+    f"log transformed + SPELL corrected using {num_SVs} vectors (PA14)",
     y=1.05,
+    fontsize=24,
 )
 
 # Save
