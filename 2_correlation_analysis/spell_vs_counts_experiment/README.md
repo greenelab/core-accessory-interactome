@@ -3,7 +3,7 @@
 There are two possible correlation matrices we can use for our analysis:
 
 1. Correlation of the median-ratio counts expression matrix
-2. Correlation of the median-ratio counts that have been processed using SPELL
+2. Correlation of the median-ratio counts that have been processed using [SPELL](https://academic.oup.com/bioinformatics/article/23/20/2692/229926)
 
 **About the correlation matrices**
 
@@ -18,6 +18,6 @@ High correlation means that a pair of genes contributes similarly to a singular 
 * Pro: Gene contributions are more balanced so that redundant signals (i.e. many genes from the same pathway - genes that vary together) are represented by a few SVs as opposed to many samples. More balanced also means that more subtle signals can be amplified (i.e. genes related by a smaller pathway are also captured by a few SVs)
 * Con: Can amplify noise - i.e. an SV that corresponds to some technical source of variability now has a similar weight to other real signals
 
-For more information comparing using counts vs SPELL-processing see: https://docs.google.com/presentation/d/18E0boNODJaxP-YYNIlccrh0kASbc7bapQBMovOX62jw/edit#slide=id.gf9d09c6be6_0_0
+For more information comparing using counts vs SPELL-processing see: https://docs.google.com/presentation/d/1-FBJgZh0_JW2Q11ZdaA412V3535rvfRgsI1PK0yVR3s/edit?usp=sharing
 
 These notebooks generate both correlation matrices ([1_correlation_analysis.ipynb](1_correlation_analysis.ipynb)) and compare how well we are able to capture biological signals using each one ([1a_compare_SPELL_vs_counts_correlation.ipynb](1a_compare_SPELL_vs_counts_correlation.ipynb))

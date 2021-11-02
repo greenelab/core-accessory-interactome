@@ -48,6 +48,9 @@ subset_genes = "all"
 # The number of accessory genes is 200 - 500
 # The number of core genes is ~ 5000
 # So the number of singular vectors is relative to the number of genes
+# These numbers for selected based on a manual inspection of the heatmaps
+# Making sure the dominant signal is removed and the approximate size of the clusters
+# seems reasonable
 if subset_genes == "acc":
     num_SVs = 50
 else:
@@ -110,7 +113,7 @@ print(pa14_compendium.shape)
 
 # ## Correlation of raw gene expression data
 #
-# Here is the correlation of the raw data without any malnipulations. This will serve as a reference to compare the correlations below where applied corrections to the correlations to account for the dominant signal described above.
+# Here is the correlation of the raw data without any manipulations. This will serve as a reference to compare the correlations below where applied corrections to the correlations to account for the dominant signal described above.
 
 # Correlation
 pao1_corr_original = pao1_compendium.corr()
@@ -178,6 +181,16 @@ pa14_compendium_log10 = np.log10(1 + pa14_compendium_T)
 # Apply SVD
 pao1_U, pao1_s, pao1_Vh = np.linalg.svd(pao1_compendium_log10, full_matrices=False)
 pa14_U, pa14_s, pa14_Vh = np.linalg.svd(pa14_compendium_log10, full_matrices=False)
+
+# #### Quick check
+#
+# Plot the variance explained to make sure that our choice of number of singular vectors is reasonable and aligns with our manual inspection
+
+plt.plot(pao1_s ** 2 / sum(pao1_s ** 2) * 100)
+plt.ylabel("Percent variability explained")
+
+plt.plot(pa14_s ** 2 / sum(pa14_s ** 2) * 100)
+plt.ylabel("Percent variability explained")
 
 print(pao1_compendium_T.shape)
 print(pao1_U.shape, pao1_s.shape, pao1_Vh.shape)
