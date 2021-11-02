@@ -16,7 +16,7 @@
 
 # # Find co-expressed accessory genes
 #
-# From the [core-acc analysis](../5_core_acc_analysis/stable_gene_relationships.ipynb) we observed that least stable core genes tended to be highly co-expressed with more accessory genes compared to the most stable core genes. Therefore, this notebook reports the accessory genes that the least core genes are most co-expressed with.
+# Later we analyze core genes in relation to accessory genes. Therefore, this notebook reports the accessory genes that the core genes are most co-expressed with.
 
 # +
 # %load_ext autoreload
@@ -40,8 +40,8 @@ use_operon = True
 
 # +
 # Load correlation matrix
-pao1_corr_filename = paths.PAO1_CORR_RAW
-pa14_corr_filename = paths.PA14_CORR_RAW
+pao1_corr_filename = paths.PAO1_CORR_LOG_SPELL
+pa14_corr_filename = paths.PA14_CORR_LOG_SPELL
 
 pao1_corr = pd.read_csv(pao1_corr_filename, sep="\t", index_col=0, header=0)
 pa14_corr = pd.read_csv(pa14_corr_filename, sep="\t", index_col=0, header=0)
@@ -61,8 +61,8 @@ pa14_membership.head()
 # +
 # Load transcriptional similarity df
 # These are the subset of genes that we will consider
-pao1_similarity_scores_filename = "pao1_similarity_scores.tsv"
-pa14_similarity_scores_filename = "pa14_similarity_scores.tsv"
+pao1_similarity_scores_filename = "pao1_similarity_scores_spell.tsv"
+pa14_similarity_scores_filename = "pa14_similarity_scores_spell.tsv"
 
 pao1_similarity_scores = pd.read_csv(
     pao1_similarity_scores_filename, sep="\t", header=0, index_col=0
@@ -239,8 +239,8 @@ pa14_least_acc_relationships.head()
 # ### Add accessory gene list to core-core annotation df
 
 # Load current core-core annotations
-pao1_core_stable_similarity_filename = "pao1_core_similarity_associations.tsv"
-pa14_core_stable_similarity_filename = "pa14_core_similarity_associations.tsv"
+pao1_core_stable_similarity_filename = "pao1_core_similarity_associations_spell.tsv"
+pa14_core_stable_similarity_filename = "pa14_core_similarity_associations_spell.tsv"
 
 pao1_all_associations = pd.read_csv(
     pao1_core_stable_similarity_filename, sep="\t", header=0, index_col=0
@@ -270,16 +270,10 @@ pao1_all_associations.sort_values(by="label").head()
 
 pa14_all_associations.sort_values(by="label").head()
 
-# TO DO: Remove 'compare' when we decide which input to use
 # Save
 pao1_all_associations.to_csv(
-    "pao1_core_similarity_associations_final_compare.tsv", sep="\t"
+    "pao1_core_similarity_associations_final_spell.tsv", sep="\t"
 )
 pa14_all_associations.to_csv(
-    "pa14_core_similarity_associations_final_compare.tsv", sep="\t"
+    "pa14_core_similarity_associations_final_spell.tsv", sep="\t"
 )
-
-# Based on the results, there are some accessory genes that are shared by 4-5 core genes, most of these are uncharacterized by uniprot: one is integrase catalytic domain, GGDEF domain proteins.
-#
-# What threshold makes sense for looking at the top # co-expressed accessory genes?
-#

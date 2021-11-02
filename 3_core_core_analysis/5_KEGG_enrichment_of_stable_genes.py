@@ -38,7 +38,7 @@ pao1_pathways.head()
 # +
 # Load transcriptional similarity df
 # These are the subset of genes that we will consider
-pao1_similarity_scores_filename = "pao1_similarity_scores.tsv"
+pao1_similarity_scores_filename = "pao1_similarity_scores_spell.tsv"
 
 pao1_similarity_scores = pd.read_csv(
     pao1_similarity_scores_filename, sep="\t", header=0, index_col=0
@@ -146,15 +146,12 @@ pao1_least_stable_enrichment.sort_values(by="corrected p-value").head()
 
 # TO DO: Remove 'compare' when we decide which input to use
 # Save
-pao1_most_stable_enrichment.to_csv("pao1_most_stable_enrichment_compare.tsv", sep="\t")
-pao1_least_stable_enrichment.to_csv(
-    "pao1_least_stable_enrichment_compare.tsv", sep="\t"
-)
+pao1_most_stable_enrichment.to_csv("pao1_most_stable_enrichment_spell.tsv", sep="\t")
+pao1_least_stable_enrichment.to_csv("pao1_least_stable_enrichment_spell.tsv", sep="\t")
 
 # **Takeaway:**
-# * There does not appear to be any enriched KEGG pathways in the least stable genes.
+# * There does not appear to be any significantly enriched KEGG pathways in the least stable genes.
 #     * What does this mean about the role of these least stable core genes? Maybe they are spread across multiple pathways?
-#     * Based on the dataframe created in the [previous notebook](2_find_KEGG_associations.ipynb) like many least stable core genes are not found in any KEGG pathway, but there are some that are found in many KEGG pathways: https://docs.google.com/spreadsheets/d/1SqEyBvutfbsOTo4afg9GiEzP32ZKplkN1a6MpAQBvZI/edit#gid=1943176121
+#     * Based on the dataframe created in the [previous notebook](3_find_KEGG_associations.ipynb) like many least stable core genes are not found in any KEGG pathway, but there are some that are found in many KEGG pathways: https://docs.google.com/spreadsheets/d/1SqEyBvutfbsOTo4afg9GiEzP32ZKplkN1a6MpAQBvZI/edit#gid=1943176121
 # * The most stable core genes are significantly enriched KEGG pathways include Ribosome (commonly enriched in humans), secretion system, metabolism/Krebs cycle
 #     * These KEGG pathways represent some of the essential functions for Pa, so it makes sense that they are enriched amongst the set of stable core genes whose transcriptional relationships don’t vary across strains.
-#     * Only some metabolisms and not others, is that interesting?

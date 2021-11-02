@@ -30,13 +30,13 @@ random.seed(1)
 # -
 
 # Output files
-pao1_out_filename = "pao1_core_similarity_associations.tsv"
-pa14_out_filename = "pa14_core_similarity_associations.tsv"
+pao1_out_filename = "pao1_core_similarity_associations_spell.tsv"
+pa14_out_filename = "pa14_core_similarity_associations_spell.tsv"
 
 # +
 # Load transcriptional similarity df
-pao1_similarity_scores_filename = "pao1_core_similarity_expression_stats.tsv"
-pa14_similarity_scores_filename = "pa14_core_similarity_expression_stats.tsv"
+pao1_similarity_scores_filename = "pao1_core_similarity_expression_stats_spell.tsv"
+pa14_similarity_scores_filename = "pa14_core_similarity_expression_stats_spell.tsv"
 
 pao1_similarity_scores = pd.read_csv(
     pao1_similarity_scores_filename, sep="\t", header=0, index_col=0
@@ -113,11 +113,3 @@ pa14_associations.head()
 # Save
 pao1_associations.to_csv(pao1_out_filename, sep="\t")
 pa14_associations.to_csv(pa14_out_filename, sep="\t")
-
-# **Takeaway:**
-#
-# Based on the pathways associated with the most and least stable core genes, we find that the most stable core genes tend to be associated with pathways related to cellular maintenance including: protein transport systems, ribosomes, metabolism, type III, IV secretion system which mediates virulence.
-#
-# There are far fewer KEGG pathways that least stable core genes are found to be associated with. The least stable core genes are mostly associated with different types of metabolism.
-#
-# A google doc containing the most and least stable core genes and some information about them is [here](https://docs.google.com/spreadsheets/d/1SqEyBvutfbsOTo4afg9GiEzP32ZKplkN1a6MpAQBvZI/edit?usp=sharing).
