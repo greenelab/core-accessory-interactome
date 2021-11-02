@@ -266,40 +266,18 @@ print(pa14_all_associations.shape)
 
 pao1_all_associations.head()
 
-# +
-# Reorder columns
-pao1_all_associations = pao1_all_associations[
-    [
-        "Name",
-        "PA14 homolog id",
-        "label",
-        "Transcriptional similarity across strains",
-        "P-value",
-        "pathways present",
-        "Related acc genes",
-    ]
-]
-
-pa14_all_associations = pa14_all_associations[
-    [
-        "Name",
-        "PAO1 homolog id",
-        "label",
-        "Transcriptional similarity across strains",
-        "P-value",
-        "pathways present",
-        "Related acc genes",
-    ]
-]
-# -
-
 pao1_all_associations.sort_values(by="label").head()
 
 pa14_all_associations.sort_values(by="label").head()
 
+# TO DO: Remove 'compare' when we decide which input to use
 # Save
-pao1_all_associations.to_csv("pao1_core_similarity_associations_final.tsv", sep="\t")
-pa14_all_associations.to_csv("pa14_core_similarity_associations_final.tsv", sep="\t")
+pao1_all_associations.to_csv(
+    "pao1_core_similarity_associations_final_compare.tsv", sep="\t"
+)
+pa14_all_associations.to_csv(
+    "pa14_core_similarity_associations_final_compare.tsv", sep="\t"
+)
 
 # Based on the results, there are some accessory genes that are shared by 4-5 core genes, most of these are uncharacterized by uniprot: one is integrase catalytic domain, GGDEF domain proteins.
 #

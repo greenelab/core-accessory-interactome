@@ -17,7 +17,7 @@
 #
 # This notebook performs a couple of analyses to validate the co-expression modules generated:
 # 1. We examine the size of modules
-# 2. We examine how co-operonic/co-regulonic genes are clustered into a few modules
+# 2. We examine how co-operonic/co-regulonic genes are clustered into a few modules. A similar analysis can be found [here](spell_vs_counts_experiment/1a_compare_SPELL_vs_counts_correlation.ipynb) comparing within vs between edges for a given regulon/geneset.
 
 # +
 # %load_ext autoreload
@@ -51,11 +51,10 @@ module_size_threshold = 1000
 sample_seed = 1
 
 # Gene subset
-gene_subset = "acc"
+gene_subset = "all"
 
 # How was data processed
-# Choices: {"spell", "raw"}
-processed = "raw"
+processed = "spell"
 # -
 
 # ## Examine size of modules
@@ -655,4 +654,6 @@ if gene_subset == "core":
 # **Takeaway:**
 # There is a higher probability that given pair of genes that are from the same operon, that they are also from the same module, compared to a randomly shuffled set of module assignments. Although there are some operons with low probabilties, overall genes in most operons have a high probability of being found in the same module.
 #
-# We don't see as drastic of a skewing for the regulons, though the mean using the true module labels is slightly higher compared to the shuffle module labels. Perhaps this is because regulons are not as tightly co-regulated.
+# We don't see as drastic of a skewing for the regulons, though the mean using the true module labels is slightly higher compared to the shuffle module labels.
+#
+# Overall, this demonstrated that operons are well captured in our correlation matrix. However, a more effective way to assess this can be found [here](spell_vs_counts_experiment/1a_compare_SPELL_vs_counts_correlation.ipynb). Since the size of the regulons with respect to the non-regulon genes is so different, dividing by the total number of genes will drown out any signal we have.

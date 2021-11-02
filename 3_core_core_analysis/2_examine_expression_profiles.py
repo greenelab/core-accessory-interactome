@@ -60,43 +60,66 @@ pa14_similarity_scores.head()
 pao1_expression_filename = paths.PAO1_COMPENDIUM
 pa14_expression_filename = paths.PA14_COMPENDIUM
 
-# Transpose gene expression matrices to be gene x sample
-pao1_expression = pd.read_csv(
-    pao1_expression_filename, sep="\t", header=0, index_col=0
-).T
-pa14_expression = pd.read_csv(
-    pa14_expression_filename, sep="\t", header=0, index_col=0
-).T
+# Expression matrices are sample x gene
+pao1_expression = pd.read_csv(pao1_expression_filename, sep="\t", header=0, index_col=0)
+pa14_expression = pd.read_csv(pa14_expression_filename, sep="\t", header=0, index_col=0)
 
 pao1_expression.head()
 
-# Calculate mean, median, variance, range of expression
-pao1_expression["median expression"] = pao1_expression.median(axis=1)
-pao1_expression["mean expression"] = pao1_expression.mean(axis=1)
-pao1_expression["variance expression"] = pao1_expression.var(axis=1)
-pao1_expression["max expression"] = pao1_expression.max(axis=1)
-pao1_expression["min expression"] = pao1_expression.min(axis=1)
-pao1_expression["range expression"] = pao1_expression.max(axis=1) - pao1_expression.min(
-    axis=1
+pao1_expression.tail()
+
+# Get distribution statistics
+pao1_expression_stats = pao1_expression.describe()
+pa14_expression_stats = pa14_expression.describe()
+
+pao1_expression_stats.head()
+
+pa14_expression_stats.head()
+
+# Format statistic data
+pao1_expression_stats = pao1_expression_stats.T
+pao1_expression_stats = pao1_expression_stats.drop(columns=["count"])
+pao1_expression_stats = pao1_expression_stats.rename(
+    columns={
+        "mean": "mean expression",
+        "std": "standard deviation expression",
+        "25%": "25% expression",
+        "50%": "50% expression",
+        "75%": "75% expression",
+        "min": "min expression",
+        "max": "max expression",
+    }
+)
+pao1_expression_stats["variance expression"] = (
+    pao1_expression_stats["standard deviation expression"] ** 2
+)
+pao1_expression_stats["range expression"] = (
+    pao1_expression_stats["max expression"] - pao1_expression_stats["min expression"]
 )
 
-pa14_expression["median expression"] = pa14_expression.median(axis=1)
-pa14_expression["mean expression"] = pa14_expression.mean(axis=1)
-pa14_expression["variance expression"] = pa14_expression.var(axis=1)
-pa14_expression["max expression"] = pa14_expression.max(axis=1)
-pa14_expression["min expression"] = pa14_expression.min(axis=1)
-pa14_expression["range expression"] = pa14_expression.max(axis=1) - pa14_expression.min(
-    axis=1
+pa14_expression_stats = pa14_expression_stats.T
+pa14_expression_stats = pa14_expression_stats.drop(columns=["count"])
+pa14_expression_stats = pa14_expression_stats.rename(
+    columns={
+        "mean": "mean expression",
+        "std": "standard deviation expression",
+        "25%": "25% expression",
+        "50%": "50% expression",
+        "75%": "75% expression",
+        "min": "min expression",
+        "max": "max expression",
+    }
+)
+pa14_expression_stats["variance expression"] = (
+    pa14_expression_stats["standard deviation expression"] ** 2
+)
+pa14_expression_stats["range expression"] = (
+    pa14_expression_stats["max expression"] - pa14_expression_stats["min expression"]
 )
 
-select_columns = pao1_expression.columns[
-    pao1_expression.columns.str.contains("expression")
-]
+pao1_expression_stats.head()
 
-pao1_expression_stats = pao1_expression[select_columns]
-pa14_expression_stats = pa14_expression[select_columns]
-
-pao1_expression_stats
+pa14_expression_stats.head()
 
 # Merge expression statistics with transcriptional similarity information
 pao1_associations = pao1_similarity_scores.merge(
@@ -136,8 +159,8 @@ pao1_most_id = "PA0085"
 pa14_most_id = "PA14_01030"
 # -
 
-sns.displot(np.log10(pao1_expression.loc[pao1_most_id]))
-sns.displot(np.log10(pa14_expression.loc[pa14_most_id]))
+sns.displot(np.log10(pao1_expression[pao1_most_id]))
+sns.displot(np.log10(pa14_expression[pa14_most_id]))
 
 # ### Example of least stable core gene
 
@@ -151,5 +174,5 @@ pao1_least_id = "PA0710"
 pa14_least_id = "PA14_55130"
 # -
 
-sns.displot(np.log10(pao1_expression.loc[pao1_least_id]))
-sns.displot(np.log10(pa14_expression.loc[pa14_least_id]))
+sns.displot(np.log10(pao1_expression[pao1_least_id]))
+sns.displot(np.log10(pa14_expression[pa14_least_id]))
