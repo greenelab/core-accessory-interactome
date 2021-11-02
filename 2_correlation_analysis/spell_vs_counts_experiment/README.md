@@ -2,8 +2,8 @@
 
 There are two possible correlation matrices we can use for our analysis:
 
-1. Correlation of the MR counts expression matrix
-2. Correlation of the MR counts that have been processed using SPELL
+1. Correlation of the median-ratio counts expression matrix
+2. Correlation of the median-ratio counts that have been processed using SPELL
 
 **About the correlation matrices**
 
