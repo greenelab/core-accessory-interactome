@@ -292,20 +292,17 @@ fig_pao1 = sns.displot(
     x="Transcriptional similarity across strains",
     hue="label",
     palette={"": "grey", "least stable": "#ffc3a0", "most stable": "#0CA8AC"},
+    legend=None,
+    bins=np.linspace(0, 1, 50),
 )
-fig_pao1.get_legend_labels()
-# TO DO
-# plt.legend(labels={"least stable": "#ffc3a0", "most stable": "#0CA8AC"})
-# leg = fig_pao1.legend()
-# Remove empty legend
-# handles, labels = plt.get_legend_handles_labels()
-# fig_pao1.legend(handles=handles[1:], labels=labels[1:])
-# plt.legend(loc='upper right', labels=["least stable", "most stable"])
+plt.legend(
+    labels=["most stable", "least stable"],
+    bbox_to_anchor=(1.05, 0.6),
+    loc="upper left",
+    borderaxespad=0,
+)
 
-plt.title("Similarity of core-core modules PAO1 to PA14")
-# -
-
-fig_pao1.legend.get_labels()
+plt.title("Stability of core genes across strain types", fontsize=14, y=1.1)
 
 # +
 fig_pa14 = sns.displot(
