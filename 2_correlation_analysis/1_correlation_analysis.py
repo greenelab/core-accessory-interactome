@@ -45,7 +45,7 @@ from scripts import paths, utils
 # Params
 
 # Which subset of genes to consider: core, acc, all
-subset_genes = "all"
+subset_genes = "acc"
 
 if subset_genes == "acc":
     num_SVs = 50
@@ -142,10 +142,14 @@ print(pa14_U.shape, pa14_s.shape, pa14_Vh.shape)
 pao1_U_df = pd.DataFrame(data=pao1_U, index=pao1_compendium_T.index)
 pa14_U_df = pd.DataFrame(data=pa14_U, index=pa14_compendium_T.index)
 
+pao1_U_df.head()
+
 # Correlation of U
 # Since `corr()` computes pairwise correlation of columns we need to invert U
 pao1_corr_log_spell = pao1_U_df.iloc[:, :num_SVs].T.corr()
 pa14_corr_log_spell = pa14_U_df.iloc[:, :num_SVs].T.corr()
+
+print(pao1_U_df.iloc[:, :num_SVs].shape)
 
 # Check for duplicates indices
 assert pao1_corr_log_spell.index.duplicated().sum() == 0

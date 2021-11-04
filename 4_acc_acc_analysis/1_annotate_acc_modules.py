@@ -46,7 +46,7 @@ random.seed(1)
 
 # Clustering method used to obtain gene-module assignments
 method = "affinity"
-processed = "raw"
+processed = "spell"
 
 # +
 # Import gene memberships
@@ -59,6 +59,10 @@ pa14_membership_filename = os.path.join(
 
 pao1_membership = pd.read_csv(pao1_membership_filename, sep="\t", index_col=0, header=0)
 pa14_membership = pd.read_csv(pa14_membership_filename, sep="\t", index_col=0, header=0)
+# -
+
+print(pao1_membership.shape)
+print(pa14_membership.shape)
 
 # +
 # Import gene metadata
@@ -159,13 +163,15 @@ pa14_gene_annot = pa14_gene_module_labels.merge(
     pa14_median_all, left_index=True, right_index=True, how="left"
 )
 
+# +
 # Add median subset expression to gene ids
-"""pao1_gene_annot = pao1_gene_annot.merge(
-    pao1_median_subset, left_index=True, right_index=True, how="left"
-)
-pa14_gene_annot = pa14_gene_annot.merge(
-    pa14_median_subset, left_index=True, right_index=True, how="left"
-)"""
+# pao1_gene_annot = pao1_gene_annot.merge(
+#    pao1_median_subset, left_index=True, right_index=True, how="left"
+# )
+# pa14_gene_annot = pa14_gene_annot.merge(
+#    pa14_median_subset, left_index=True, right_index=True, how="left"
+# )
+# -
 
 print(pao1_gene_annot.shape)
 pao1_gene_annot.head()
@@ -221,14 +227,8 @@ pao1_gene_annot.head()
 #
 # Since the numbers are large, we also applied the $\chi^2$ test as an alternative to the Fisher's exact test.
 
-# +
 pao1_pathway_filename = "https://raw.githubusercontent.com/greenelab/adage/7a4eda39d360b224268921dc1f2c14b32788ab16/Node_interpretation/pseudomonas_KEGG_terms.txt"
 
-# pao1_pathways = pd.read_csv(pao1_pathway_filename, sep="\t", index_col=0, header=None)
-# -
-
-# pao1_pathways[2] = pao1_pathways[2].str.split(";").apply(set)
-# pao1_pathways.index = pao1_pathways.index.str.split(" - ").str[0]
 pao1_pathways = annotations.load_format_KEGG(pao1_pathway_filename)
 pao1_pathways.head()
 
@@ -424,6 +424,14 @@ print(pa14_gene_annot.shape)
 pa14_gene_annot.head()
 
 # ## Plot trends
+#
+# In general, accessory genes thought to be acquired from other bacterial strains (https://academic.oup.com/femsle/article/356/2/235/542446) and clustered in islands along the genome ([Kung et al](https://pubmed.ncbi.nlm.nih.gov/21119020/)). So we would expect most accessory gene modules to have a small range.
+#
+# However, maybe there are some accessory modules that have a large intra-gene distance where genes form relationships that are long range. This might indicate accessory genes coming to be regulated after integration.
+#
+# Evidence of regulation changing after integration: integration of ICE clc resulted in uncoupling of the clc integrase gene from its constitutive promoter: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC107606/
+#
+# Note: We will likely not focus on these accessory genes with a high range because we will be getting into Pa evolution, which will require a different type of analysis.
 
 # +
 # Get pairwise distance per module
@@ -449,14 +457,20 @@ pao1_farapart_genes = pao1_gene_annot[pao1_gene_annot["mean pairwise dist"] >= 2
 pa14_farapart_genes = pa14_gene_annot[pa14_gene_annot["mean pairwise dist"] >= 20000]
 
 # Save
-pao1_gene_annot.to_csv(f"pao1_acc_gene_module_annotated_{method}.tsv", sep="\t")
-pa14_gene_annot.to_csv(f"pa14_acc_gene_module_annotated_{method}.tsv", sep="\t")
-pao1_farapart_genes.to_csv(f"pao1_farapart_acc_modules_{method}.tsv", sep="\t")
-pa14_farapart_genes.to_csv(f"pa14_farapart_acc_modules_{method}.tsv", sep="\t")
+pao1_gene_annot.to_csv(
+    f"pao1_acc_gene_module_annotated_{method}_{processed}.tsv", sep="\t"
+)
+pa14_gene_annot.to_csv(
+    f"pa14_acc_gene_module_annotated_{method}_{processed}.tsv", sep="\t"
+)
+pao1_farapart_genes.to_csv(
+    f"pao1_farapart_acc_modules_{method}_{processed}.tsv", sep="\t"
+)
+pa14_farapart_genes.to_csv(
+    f"pa14_farapart_acc_modules_{method}_{processed}.tsv", sep="\t"
+)
 
 # These annotations will be used to help _P. aeruginosa_ experts, like our collaborators, to determine what accessory-accessory modules to focus on.
 #
 #
 # Note: Since genes can be in multiple KEGG pathways and regulons, each pathway and regulon are separate columns. Whereas operons are a single column since genes can belong to only a single operon.
-#
-# Maybe focus on the ones with a high range since those might tell us about how co-regulation evolves. These far apart come to be regulated by the same one vs all genes that evolved together?

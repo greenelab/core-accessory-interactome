@@ -46,19 +46,18 @@ method_name = "affinity"
 # Gene subset
 gene_subset = "acc"
 
-processed = "raw"
+processed = "spell"
 
-# Select modules containing exoS (module 7) and exoU (module 17) using SPELL verseion
-# Select modules containing exoS (module 20) and exoU (module 19)
-exoS_module_id = 20
-exoU_module_id = 19
+# Select modules containing exoS (module 17) and exoU (module 6)
+exoS_module_id = 17
+exoU_module_id = 6
 # -
 
 # ## Load correlation matrix
 
 # Load correlation matrix
-pao1_corr_filename = paths.PAO1_CORR_RAW_ACC
-pa14_corr_filename = paths.PA14_CORR_RAW_ACC
+pao1_corr_filename = paths.PAO1_CORR_LOG_SPELL_ACC
+pa14_corr_filename = paths.PA14_CORR_LOG_SPELL_ACC
 
 pao1_corr = pd.read_csv(pao1_corr_filename, sep="\t", index_col=0, header=0)
 pa14_corr = pd.read_csv(pa14_corr_filename, sep="\t", index_col=0, header=0)
@@ -147,13 +146,13 @@ exoU_corr_module_names = add_gene_name_to_index(pa14_gene_annot, exoU_corr_modul
 # -
 
 # %%time
-f1 = sns.clustermap(exoS_corr_module_names.abs(), cmap="viridis")
+f1 = sns.clustermap(exoS_corr_module_names, cmap="BrBG", center=0)
 f1.ax_heatmap.set_xticklabels(f1.ax_heatmap.get_xmajorticklabels(), fontsize=20)
 f1.ax_heatmap.set_yticklabels(f1.ax_heatmap.get_ymajorticklabels(), fontsize=20)
 f1.fig.suptitle("Correlation of exoS module", y=1.05, fontsize=24)
 
 # %%time
-g1 = sns.clustermap(exoU_corr_module_names.abs(), cmap="viridis")
+g1 = sns.clustermap(exoU_corr_module_names, cmap="BrBG", center=0)
 g1.ax_heatmap.set_xticklabels(g1.ax_heatmap.get_xmajorticklabels(), fontsize=20)
 g1.ax_heatmap.set_yticklabels(g1.ax_heatmap.get_ymajorticklabels(), fontsize=20)
 g1.fig.suptitle("Correlation of exoU module", y=1.05, fontsize=24)
@@ -173,11 +172,13 @@ g1.fig.suptitle("Correlation of exoU module", y=1.05, fontsize=24)
 # * What can we learn from most co-expressed genes?
 
 # ## Other relationships between exoS/U and other genes
+#
+# Get co-expression relationship between exoS/U and all other genes (both core and accessory)
 
 # +
 # Read in correlation for all genes
-pao1_all_corr_filename = paths.PAO1_CORR_RAW
-pa14_all_corr_filename = paths.PA14_CORR_RAW
+pao1_all_corr_filename = paths.PAO1_CORR_LOG_SPELL
+pa14_all_corr_filename = paths.PA14_CORR_LOG_SPELL
 
 pao1_all_corr = pd.read_csv(pao1_all_corr_filename, sep="\t", index_col=0, header=0)
 pa14_all_corr = pd.read_csv(pa14_all_corr_filename, sep="\t", index_col=0, header=0)
@@ -256,8 +257,8 @@ print(exoU_all_corr.shape)
 exoU_all_corr.head()
 
 # Save
-exoS_all_corr.to_csv("exoS_relationship.tsv", sep="\t")
-exoU_all_corr.to_csv("exoU_relationship.tsv", sep="\t")
+exoS_all_corr.to_csv(f"exoS_relationship_{processed}.tsv", sep="\t")
+exoU_all_corr.to_csv(f"exoU_relationship_{processed}.tsv", sep="\t")
 
 # **Takeaway**
 # What can we say about the relationship between exoS/U and all other genes?

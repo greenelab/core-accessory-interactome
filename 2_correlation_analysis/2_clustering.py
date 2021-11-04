@@ -72,6 +72,9 @@ elif gene_subset == "acc":
 pao1_corr = pd.read_csv(pao1_corr_filename, sep="\t", index_col=0, header=0)
 pa14_corr = pd.read_csv(pa14_corr_filename, sep="\t", index_col=0, header=0)
 
+print(pao1_corr.shape)
+print(pa14_corr.shape)
+
 # ## Module detection
 # To detect modules, we will use a clustering algorithm
 
