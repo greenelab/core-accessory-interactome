@@ -356,6 +356,30 @@ pa14_chi2, pa14_pval, pa14_dof, pa14_expected_counts = scipy.stats.chi2_continge
 print(pa14_chi2, pa14_pval)
 # -
 
+# ### Compare against previous publication
+# Let's compare our results to those published by [Balasubramanian et al. 2009](https://link.springer.com/article/10.1186/1479-7364-3-4-361#Sec17), who found a set of genes that were commonly DE across multiple stress responses and that 90% of them were found in core genes.
+# They found 303 commonly DEGs, of which 29 of were accessory genes. We want to compare this finding to our own.
+#
+# Some implementation notes:
+# * core and PAO1 accessory genes are defined by [Mathee et al. 2008](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2268591/) Supplementary figure 6.
+# * 5,021 core genes
+# * 91 accessory genes
+#
+# Balasubramanian et al. 2009 claims that these common DEGs are mostly found in core genes based on the proportion of common genes that are core genes. However, if we peform $\chi^2$ test, like we did here, then we get consistent results that there is a relationship between common and accessory genes.
+#
+# _Why are we using $\chi^2$-test?_
+# * Since we are asking “how likely are core genes to be common?” We need to consider the uncommon genes as well because despite core genes being found in high proportion of common genes, this proportion could be equally high in uncommon genes.
+# * The other reason to use this test is to account for the skewing in the number of genes in each gene group. There are many more core genes than accessory genes so there are more chances for core genes to be found to overlap with common genes. By looking at the proportion of common vs uncommon amongst the core genes and common vs uncommon in the accessory genes we are indirectly taking into account the total number of genes in each gene group
+
+# +
+pub_contingency_table = [[274, 5021 - 274], [29, 91]]
+pub_oddsr, pub_pval = scipy.stats.fisher_exact(
+    pub_contingency_table, alternative="two-sided"
+)
+
+print(pub_oddsr, pub_pval)
+# -
+
 # ### Who are these genes?
 #
 # Let's look at the core and accessory genes that are also common DEGs
