@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.9.1
+#       jupytext_version: 1.9.1+dev
 #   kernelspec:
 #     display_name: Python [conda env:core_acc] *
 #     language: python
@@ -363,10 +363,10 @@ print(pa14_chi2, pa14_pval)
 # +
 # Load core-core annotations and select only the genes that are common DEGs
 pao1_core_summary_annot_filename = (
-    "../3_core_core_analysis/pao1_core_similarity_associations_final.tsv"
+    "../3_core_core_analysis/pao1_core_similarity_associations_final_spell.tsv"
 )
 pa14_core_summary_annot_filename = (
-    "../3_core_core_analysis/pa14_core_similarity_associations_final.tsv"
+    "../3_core_core_analysis/pa14_core_similarity_associations_final_spell.tsv"
 )
 
 pao1_core_summary_annot = pd.read_csv(
@@ -390,10 +390,10 @@ pa14_common_core_df = pa14_core_summary_annot.loc[shared_pa14_core_ids]
 # +
 # Load acc-acc annotations and select only the genes that are common DEGs
 pao1_acc_summary_annot_filename = (
-    "../4_acc_acc_analysis/pao1_acc_gene_module_annotated_affinity.tsv"
+    "../4_acc_acc_analysis/pao1_acc_gene_module_annotated_affinity_spell.tsv"
 )
 pa14_acc_summary_annot_filename = (
-    "../4_acc_acc_analysis/pa14_acc_gene_module_annotated_affinity.tsv"
+    "../4_acc_acc_analysis/pa14_acc_gene_module_annotated_affinity_spell.tsv"
 )
 
 pao1_acc_summary_annot = pd.read_csv(
@@ -419,12 +419,10 @@ pa14_common_acc_df.to_csv("pa14_common_acc_gene_annot.tsv", sep="\t")
 
 # **Takeaway:**
 #
-# * Based on the venn diagrams, it looks like most common DEGs are core, as expected. Since it is thought that these core genes encode essential functions shared by all strains, it would make sense that these core genes are also those commonly DEGs.
-#
 # * Based on the Fisher's exact test results, there is an odds ratio <1 indicating that there is a negative relationship between a gene being common DEGs and a gene being core vs accessory. With the p-value indicating that this relationship is significant.
 #     * This [paper](https://www.d.umn.edu/~tpederse/Pubs/scsug96.pdf) talks about the p-values obtained from the Fisher's exact tests are reliable compared to asymptotic test results when dealing with skewed/unbalanced datasets. Furthermore, [this blog](https://courses.lumenlearning.com/boundless-statistics/chapter/the-chi-squared-test/) suggests that while a $\chi^2$ test is recommended for large datasets, like what we have, in the case where the dataset is skewed/unbalanced the p-values for the Fisher's exact test are more reliable.
 #
 # * For the Fisher’s exact test, the null hypothesis is that common DEGs are equally likely to be core or accessory genes.
 #     * In order to calculate the significance of the observed data, i.e. the total probability of observing data as extreme or more extreme if the null hypothesis is true
 #     * Percentage of core genes that are common is ~19-20% compared to ~26-32% accessory genes
-#     * There is a negative relationship, meaning if a gene is common DEG, its less likely it’s a core gene
+#     * There is a negative relationship, meaning if a gene is common DEG, its less likely it’s a core gene at least for PAO1. While for PA14 common genes are equally likely to be core or accessory.

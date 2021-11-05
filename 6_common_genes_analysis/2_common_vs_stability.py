@@ -54,8 +54,12 @@ pao1_SOPHIE_stats.head()
 # +
 # Load transcriptional similarity df
 # These are the subset of genes that we will consider
-pao1_similarity_scores_filename = "../3_core_core_analysis/pao1_similarity_scores.tsv"
-pa14_similarity_scores_filename = "../3_core_core_analysis/pa14_similarity_scores.tsv"
+pao1_similarity_scores_filename = (
+    "../3_core_core_analysis/pao1_core_similarity_associations_final_spell.tsv"
+)
+pa14_similarity_scores_filename = (
+    "../3_core_core_analysis/pa14_core_similarity_associations_final_spell.tsv"
+)
 
 pao1_similarity_scores = pd.read_csv(
     pao1_similarity_scores_filename, sep="\t", header=0, index_col=0
