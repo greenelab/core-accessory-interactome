@@ -24,6 +24,8 @@
 import os
 import pandas as pd
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
 import scipy.stats
 import statsmodels.stats.multitest
 from scripts import paths, utils, annotations
@@ -144,7 +146,78 @@ pao1_most_stable_enrichment.sort_values(by="corrected p-value").head()
 print(pao1_least_stable_enrichment.shape)
 pao1_least_stable_enrichment.sort_values(by="corrected p-value").head()
 
-# TO DO: Remove 'compare' when we decide which input to use
+# ## Plot
+
+# +
+# Plot top most stable
+pao1_most_stable_enrichment_top = pao1_most_stable_enrichment.sort_values(
+    by="corrected p-value"
+).head(10)
+# pval_lst = list(
+# pao1_most_stable_enrichment_top.sort_values(by="corrected p-value", ascending=False)["corrected p-value"])
+
+plt.figure(figsize=(8, 6))
+f = sns.scatterplot(
+    data=pao1_most_stable_enrichment_top,
+    x="odds ratio",
+    y="enriched KEGG pathway",
+    s=300,
+    # size="corrected p-value",
+    hue="corrected p-value",
+    # hue_order=pval_lst,
+    # size_order=pval_lst,
+    # sizes=(100, 10),
+    legend="full",
+)
+plt.legend(
+    title="corrected p-value",
+    title_fontsize=14,
+    fontsize=12,
+    bbox_to_anchor=(1.05, 0.8),
+    loc="upper left",
+    borderaxespad=0,
+)
+
+f.set_title("Enrichment of most stable core genes", fontsize=16)
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
+f.set_xlabel("Odds ratio", fontsize=16)
+f.set_ylabel("")
+
+# +
+# Plot top most stable
+pao1_least_stable_enrichment_top = pao1_least_stable_enrichment.sort_values(
+    by="corrected p-value"
+).head(10)
+plt.figure(figsize=(8, 6))
+g = sns.scatterplot(
+    data=pao1_least_stable_enrichment_top,
+    x="odds ratio",
+    y="enriched KEGG pathway",
+    s=300,
+    # size="corrected p-value",
+    hue="corrected p-value",
+    # hue_order=pval_lst,
+    # size_order=pval_lst,
+    # sizes=(100, 10),
+    legend="full",
+)
+plt.legend(
+    title="corrected p-value",
+    title_fontsize=14,
+    fontsize=12,
+    bbox_to_anchor=(1.05, 0.6),
+    loc="upper left",
+    borderaxespad=0,
+)
+
+plt.title("Enrichment of least stable core genes", fontsize=16)
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
+g.set_xlabel("Odds ratio", fontsize=16)
+g.set_ylabel("")
+# -
+
 # Save
 pao1_most_stable_enrichment.to_csv("pao1_most_stable_enrichment_spell.tsv", sep="\t")
 pao1_least_stable_enrichment.to_csv("pao1_least_stable_enrichment_spell.tsv", sep="\t")
