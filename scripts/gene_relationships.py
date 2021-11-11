@@ -6,6 +6,7 @@ Scripts to analyze relationships between gene types
 """
 import pandas as pd
 import numpy as np
+import random
 
 
 def get_relationship_in_genome_space(core_acc_df, offset_to_bin, operon_df=None):
@@ -137,6 +138,7 @@ def get_relationship_in_expression_space(
     offset_to_bin,
     operon_df=None,
     sum_increment=1,
+    if_ci_calc=False
 ):
 
     """For each accessory gene, is the highest correlated, 2nd-highest correlated, 3rd
@@ -170,11 +172,14 @@ def get_relationship_in_expression_space(
         Integer that is the window size to sum across. This will allow
         users to consider the top N most correlated genes instead of just
         the top correlated gene.
+    if_ci_calc: bool
+        If we are calculating the CI then we want to allow for duplicate rows
     """
     # Get subset of genes
     corr_subset = corr_df.loc[genes_to_consider]
 
     rows = []
+    rows2 = []
     for gene in corr_subset.index:
         if operon_df is not None:
             # This subset needs to be reset each iteration
@@ -182,7 +187,8 @@ def get_relationship_in_expression_space(
             corr_subset = corr_df.loc[genes_to_consider]
 
             # Note: PA14 contains duplicate rows so we will drop those here
-            corr_subset = corr_subset.drop_duplicates()
+            if not if_ci_calc:
+                corr_subset = corr_subset.drop_duplicates()
 
             # Check if gene is found in an operon
             if gene in operon_df.index:
@@ -200,14 +206,43 @@ def get_relationship_in_expression_space(
                 corr_subset = corr_subset.drop(columns=co_operonic_genes_to_remove)
 
         offset_max = corr_subset.shape[1]
-
         # Note: we are removing genes that are co-operonic first
         # and then finding the most co-expressed genes
-        top_corr_genes = list(corr_subset.loc[gene].nlargest(offset_max).index[1:])
+
+        # If calculating the confidence interval, there will be
+        # duplicate rows due to sampling so we need to select
+        # one of the rows
+        if isinstance(corr_subset.loc[gene], pd.DataFrame):
+            duplicated_corr_subset = corr_subset.loc[gene]
+            select_corr_subset = duplicated_corr_subset[~duplicated_corr_subset.duplicated()]
+            top_corr_genes = list(select_corr_subset.loc[gene].nlargest(offset_max).index[1:])
+        else:
+            top_corr_genes = list(corr_subset.loc[gene].nlargest(offset_max).index[1:])
+
         top_gene_labels = list(gene_mapping_df.loc[top_corr_genes, "core/acc"].values)
         rows.append(top_gene_labels)
+        rows2.append(top_corr_genes)
 
+    # This df is `genes_to_consider` x offset_max
+    # Each row corresponds to a gene being considered
+    # Each column contains either `acc` or `core` string
+    # to indicate if the top correlated gene is `acc` or `core`
+    #    0     1     2     3     4     5     6     7     8     9     ...  5552  \
+    # 0  core  core  core  core  core  core  core  core  core  core  ...  core
+    # 1  core  core  core  core  core  core  core  core  core  core  ...  None
+    # 2  core  core  core  core  core  core  core  core  core  core  ...  core
+    # 3  core  core  core  core  core  core  core  core  core  core  ...  core
+    # 4  core  core  core  core  core  core  core  core  core  core  ...  core
+
+    # TO DO
+    # Want to try to return a dataframe with all the top related accessory genes
+    # that we can look into since we found that least stable core genes are
+    # more co-expressed with other accessory genes
     expression_dist_counts = pd.DataFrame(rows)
+    # related_gene_ids = pd.DataFrame(rows2)
+    # bool_acc = expression_dist_counts == "acc"
+    # print(expression_dist_counts == "acc")
+    # print(related_gene_ids.loc[bool_acc])
 
     # Count types of relationships
     expression_dist_counts_acc = (expression_dist_counts == "acc").sum().to_frame("acc")
@@ -229,7 +264,27 @@ def get_relationship_in_expression_space(
     expression_dist_counts = expression_dist_counts.melt(
         var_name="gene type", value_name="total", ignore_index=False
     )
+    # This df is offset_max x 2
+    # This df makes the strings `acc`, `core` a variable.
+    # For each offset (row) we count the number of `acc` strings and the number
+    # of `core` strings
+    # gene type  total
+    # 0          acc      1
+    # 1          acc      1
+    # 2          acc      1
+    # 3          acc      0
+    # 4          acc      1
+    # ...        ...    ...
+    # 5557      core    170
+    # 5558      core    155
+    # 5559      core    108
+    # 5560      core     56
+    # 5561      core     53
     expression_dist_counts = expression_dist_counts.rename_axis("offset").reset_index()
+
+    # Set index to a column named `offset`
+    # Add 1 since index=0 indicates its the most co-expressed gene, not including
+    # itself
     expression_dist_counts["offset"] = expression_dist_counts["offset"] + 1
 
     # Average counts for weaker correlation relationships
@@ -252,6 +307,55 @@ def get_relationship_in_expression_space(
     # total_counts = expression_dist_counts.groupby("offset")["total"].sum()[1]
     # expression_dist_counts["proportion"] = expression_dist_counts["total"]/total_counts
     return expression_dist_counts
+
+
+def get_CI_expression_relationships(
+    num_iter,
+    corr_df,
+    genes_to_consider,
+    gene_mapping_df,
+    offset_to_bin,
+    operon_df=None,
+    sum_increment=1,
+):
+    """
+    This function returns the CI for the
+    get_relationship_in_expression_space()
+    """
+
+    for i in range(num_iter):
+        # Randomly sample `genes_to_consider` with replacement
+        # This will return a sample of the same size as
+        # `genes_to_consider` but with a different random set of genes
+
+        # TO DO
+        # Need to figure out how to reun this calculation with duplicate genes
+        genes_to_consider_sample = random.choices(genes_to_consider, k=len(genes_to_consider))
+
+        # Get correlation relationships
+        relationships_df = get_relationship_in_expression_space(
+            corr_df,
+            genes_to_consider_sample,
+            gene_mapping_df,
+            offset_to_bin,
+            operon_df,
+            sum_increment,
+            if_ci_calc=True
+        )
+        relationships_df.columns = ["offset", "gene type", f"total_{i}"]
+
+        # Concatenate df per run
+        print(relationships_df)
+        if i == 0:
+            result_df = relationships_df
+        else:
+            result_df = result_df.merge(
+                relationships_df,
+                left_on=["offset", "gene type"],
+                right_on=["offset", "gene type"])
+            print(result_df)
+
+    return result_df
 
 
 def find_related_acc_genes(

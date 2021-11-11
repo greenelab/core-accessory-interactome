@@ -218,6 +218,28 @@ expression_dist_counts_pao1_most = (
     )
 )
 
+# +
+# %%time
+expression_dist_counts_pao1_most_ci = (
+    gene_relationships.get_CI_expression_relationships(
+        5,
+        pao1_corr,
+        pao1_most_stable_genes,
+        pao1_arr,
+        offset_to_bin,
+        pao1_operon_expression_to_use,
+        sum_increment_to_use,
+    )
+)
+
+# TO DO:
+# To finish in the next PR
+# Check existing method to calculate ci in sns.barplot
+# https://stackoverflow.com/questions/46125182/is-seaborn-confidence-interval-computed-correctly
+# Customize ci with https://stackoverflow.com/questions/52767423/is-it-possible-to-input-values-for-confidence-interval-error-bars-on-seaborn-ba
+# Add this for other relationships
+# -
+
 # %%time
 expression_dist_counts_pao1_least = (
     gene_relationships.get_relationship_in_expression_space(
@@ -313,6 +335,15 @@ expression_dist_counts_pao1_most.loc[pao1_acc_most_ids, "normalized"] = (
 expression_dist_counts_pao1_most.loc[pao1_core_most_ids, "normalized"] = (
     expression_dist_counts_pao1_most.loc[pao1_core_most_ids, "percent"]
     / pao1_core_expected
+)
+
+# CI
+expression_dist_counts_pao1_most_ci[
+    ["total_0", "total_1", "total_2", "total_3", "total_4"]
+] /= pao1_acc_expected
+# Get 95% range
+pao1_most_ci_ranges = expression_dist_counts_pao1_most_ci.quantile(
+    [0.025, 0.975], axis=1
 )
 
 # +
@@ -424,7 +455,14 @@ fig = sns.barplot(
         "most stable core": "#F8744C",
         "least stable core": "#FCC7B7",
     },
+    # ci=100
 )
+# TO DO:
+# Fix CI addition
+# plt.errorbar(
+#    x=['1','2','3','4','5','6','7','8','9','10','10+'],
+#    yerr=pao1_most_ci_ranges
+# )
 plt.axhline(y=1.0, color="black", linestyle="--")
 fig.legend_.remove()
 fig.set_title("Who are most/least stable core genes related to (PAO1)", fontsize=16)
@@ -465,9 +503,9 @@ fig2.set_title("Who are most/least stable core genes related to (PA14)", fontsiz
 fig2.set_ylabel("Odds ratio", fontsize=14)
 fig2.set_xlabel("Rank correlation in expression space", fontsize=14)
 plt.legend(bbox_to_anchor=(1.05, 0.6), loc=2, borderaxespad=0.0, fontsize=12)
+# -
 
-# +
-# Save figures using operons
+"""# Save figures using operons
 # Save figures not using operons
 # Save figure with rolling sum and operons
 # Save figure with rolling sum not using operons
@@ -487,8 +525,7 @@ fig2.figure.savefig(
     transparent=True,
     pad_inches=0,
     dpi=300,
-)
-# -
+)"""
 
 # **Takeaway:**
 #
