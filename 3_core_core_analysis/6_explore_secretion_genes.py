@@ -119,7 +119,8 @@ sns.swarmplot(
 
 plt.title("Stability of secretion system genes", fontsize=14)
 plt.legend()
+# -
 
-# +
-# vgrG genes have low stability in T6SS
-# Other pathways don't have as many genes with a low score
+# We hypothesized that most secretion machinery genes would be conserved but that secreted proteins (i.e. effector proteins) would be less conserved. In general, the effector proteins were not included in the KEGG annotations, which is probably why these secretion systems were found to be highly stable.
+#
+# There are some low scoring genes found, especially for the T6SS. Based on a manual inspection, these appear to be _vgrG_ genes that do encode some of the effector proteins.

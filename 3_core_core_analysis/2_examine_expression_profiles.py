@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ---
 # jupyter:
 #   jupytext:
@@ -141,7 +142,7 @@ pa14_associations.to_csv(pa14_out_filename, sep="\t")
 
 # ## Examine expression distribution
 #
-# One of the "most stable" core genes found were from the T6SS, which is surprising given that...
+# One of the "most stable" core genes found were from the T6SS, which is surprising given this pathway allows for inter-strain warfare and so we’d expect genes within this pathway to vary across strains.
 #
 # We will plot the distribution of these genes to make sure that the reason these T6SS genes are found to be stable is because all the genes are "off". Based on the plots below, this doesn't look to be the explanation for why T6SS genes are found to be stable across strains.
 #

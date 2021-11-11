@@ -223,8 +223,9 @@ pao1_most_stable_enrichment.to_csv("pao1_most_stable_enrichment_spell.tsv", sep=
 pao1_least_stable_enrichment.to_csv("pao1_least_stable_enrichment_spell.tsv", sep="\t")
 
 # **Takeaway:**
-# * There does not appear to be any significantly enriched KEGG pathways in the least stable genes.
-#     * What does this mean about the role of these least stable core genes? Maybe they are spread across multiple pathways?
-#     * Based on the dataframe created in the [previous notebook](3_find_KEGG_associations.ipynb) like many least stable core genes are not found in any KEGG pathway, but there are some that are found in many KEGG pathways: https://docs.google.com/spreadsheets/d/1SqEyBvutfbsOTo4afg9GiEzP32ZKplkN1a6MpAQBvZI/edit#gid=1943176121
-# * The most stable core genes are significantly enriched KEGG pathways include Ribosome (commonly enriched in humans), secretion system, metabolism/Krebs cycle
-#     * These KEGG pathways represent some of the essential functions for Pa, so it makes sense that they are enriched amongst the set of stable core genes whose transcriptional relationships don’t vary across strains.
+#
+# KEGG enrichment analysis found that stable genes were significantly associated with essential functions: ribosome, lipopolysaccharide biosynthesis, citrate cycle. However, there are also pathways like the secretion systems, which allow for inter-strain warfare, that we’d expect to vary across strains but were found to be conserved (T3SS, T6SS) - looks like most of the genes annotated as T3/6SS are related to the secretion machinery, which is conserved across strains.
+#
+# There does NOT appear to be any significantly enriched KEGG pathways in the least stable core genes. However the least stable genes with the top enrichment score seem to be related to stress response
+#
+# KEGG enrichment: https://docs.google.com/spreadsheets/d/1lXZZXXjZSOuQ-cMOZ9I5llIJ2OBOQBur0Spso2WN4oY/edit#gid=0

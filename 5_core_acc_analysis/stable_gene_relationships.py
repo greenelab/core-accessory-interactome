@@ -16,7 +16,7 @@
 
 # # Relationships using expression distance
 #
-# This notebook is performing the same analysis as seen in [all_gene_relationships.ipynb](all_gene_relationships.ipynb), where we are examining who is related to who. Previously we started with an accessory gene and asked: is the highest correlated gene another accessory gene or a core gene? For this analysis, we are starting with the most stable core genes and asking the same question: is the highest correlated gene core or accessory?
+# This notebook is performing the same analysis as seen in [all_gene_relationships.ipynb](archive/all_gene_relationships.ipynb), where we are examining who is related to who. Previously we started with an accessory gene and asked: is the highest correlated gene another accessory gene or a core gene? For this analysis, we are starting with the most stable core genes and asking the same question: is the highest correlated gene core or accessory?
 #
 # Note: We do not have the genome location metric here because this would require a significant effort to figure out how to modify the existing code to only focus on a subset of genes.
 
