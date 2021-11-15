@@ -15,7 +15,7 @@
 
 # # Compare core-core modules in PAO1 vs PA14
 #
-# This notebook examines how _stable_ core genes are across strains PAO1, PA14. Here we start with a given PAO1 gene and rank who its related to from most to least correlated. We then ask if the homologous PA14 gene as the same ranking. If they do, then this gene is considered _stable_.
+# Given that core genes are homologous across strain types, this notebook examines how _stable_ core genes are across strains PAO1, PA14. Here we start with a given PAO1 gene and rank who its related to from most to least correlated. We then ask if the homologous PA14 gene as the same ranking. If they do, then this gene is considered _stable_.
 #
 # The approach:
 # 1. Make core-core correlation matrix
@@ -42,27 +42,22 @@ random.seed(1)
 # -
 
 # Params
-# To roughly match the number of most and least stable genes found using SPELL
-# Let's use the following percentages: 9% for most stable and 4% for least stable
-# TO DO: moving forward, use X% instead of hard threshold cutoff?
-high_threshold = 0.5
-low_threshold = 0.2
-most_percent = 0.09
-least_percent = 0.04
+most_percent = 0.05
+least_percent = 0.05
 
 # +
 # Output filenames
-pao1_similarity_dist_filename = "pao1_similarity_scores_dist.svg"
-pa14_similarity_dist_filename = "pa14_similarity_scores_dist.svg"
+pao1_similarity_dist_filename = "pao1_similarity_scores_dist_spell.svg"
+pa14_similarity_dist_filename = "pa14_similarity_scores_dist_spell.svg"
 
 # Files containing genes with highest and lowest transcriptional similarity scores high and low
-pao1_similarity_scores_filename = "pao1_similarity_scores.tsv"
-pa14_similarity_scores_filename = "pa14_similarity_scores.tsv"
+pao1_similarity_scores_filename = "pao1_similarity_scores_spell.tsv"
+pa14_similarity_scores_filename = "pa14_similarity_scores_spell.tsv"
 
 # +
 # Import correlation matrix
-pao1_corr_filename = paths.PAO1_CORR_RAW_CORE
-pa14_corr_filename = paths.PA14_CORR_RAW_CORE
+pao1_corr_filename = paths.PAO1_CORR_LOG_SPELL_CORE
+pa14_corr_filename = paths.PA14_CORR_LOG_SPELL_CORE
 
 pao1_corr = pd.read_csv(pao1_corr_filename, sep="\t", index_col=0, header=0)
 pa14_corr = pd.read_csv(pa14_corr_filename, sep="\t", index_col=0, header=0)
@@ -249,23 +244,9 @@ pa14_corr_df.head()
 
 # ## Plots
 
-# Add label for most and least stable genes using threshold cutoff
+# Add label for most and least stable genes
 pao1_corr_df["label"] = ""
 pa14_corr_df["label"] = ""
-"""pao1_corr_df.loc[
-    pao1_corr_df["Transcriptional similarity across strains"] > high_threshold, "label"
-] = "most stable"
-pao1_corr_df.loc[
-    pao1_corr_df["Transcriptional similarity across strains"] < low_threshold, "label"
-] = "least stable"
-
-pa14_corr_df.loc[
-    pa14_corr_df["Transcriptional similarity across strains"] > high_threshold, "label"
-] = "most stable"
-pa14_corr_df.loc[
-    pa14_corr_df["Transcriptional similarity across strains"] < low_threshold, "label"
-] = "least stable"
-"""
 
 # Add label for most and least stable genes based on top X%
 pao1_most_stable = pao1_corr_df.sort_values(
@@ -275,6 +256,14 @@ pao1_least_stable = pao1_corr_df.sort_values(
     "Transcriptional similarity across strains", ascending=False
 ).tail(round(least_percent * len(pao1_corr_df)))
 
+pao1_most_threshold = pao1_most_stable.iloc[-1][
+    "Transcriptional similarity across strains"
+]
+pao1_least_threshold = pao1_least_stable.iloc[0][
+    "Transcriptional similarity across strains"
+]
+print(pao1_least_threshold, pao1_most_threshold)
+
 pa14_most_stable = pa14_corr_df.sort_values(
     "Transcriptional similarity across strains", ascending=False
 ).head(round(most_percent * len(pa14_corr_df)))
@@ -282,34 +271,49 @@ pa14_least_stable = pa14_corr_df.sort_values(
     "Transcriptional similarity across strains", ascending=False
 ).tail(round(least_percent * len(pa14_corr_df)))
 
+pa14_most_threshold = pa14_most_stable.iloc[-1][
+    "Transcriptional similarity across strains"
+]
+pa14_least_threshold = pa14_least_stable.iloc[0][
+    "Transcriptional similarity across strains"
+]
+print(pa14_least_threshold, pa14_most_threshold)
+
 pao1_corr_df.loc[pao1_most_stable.index, "label"] = "most stable"
 pao1_corr_df.loc[pao1_least_stable.index, "label"] = "least stable"
 pa14_corr_df.loc[pa14_most_stable.index, "label"] = "most stable"
 pa14_corr_df.loc[pa14_least_stable.index, "label"] = "least stable"
 
+# +
 # Plot distribution of correlation scores
 # This scores indicate how transcriptionally similar genes are across PAO1 and PA14 strains
 fig_pao1 = sns.displot(
     data=pao1_corr_df,
     x="Transcriptional similarity across strains",
     hue="label",
-    # bins=np.linspace(0, 0.7, 36),
+    palette={"": "grey", "least stable": "#ffc3a0", "most stable": "#0CA8AC"},
+    legend=None,
+    bins=np.linspace(0, 1, 50),
 )
-# TO DO
-# Select certain colors
-# Remove empty legend
-plt.title("Similarity of core-core modules PAO1 to PA14")
+plt.legend(
+    labels=["most stable", "least stable"],
+    bbox_to_anchor=(1.05, 0.6),
+    loc="upper left",
+    borderaxespad=0,
+)
 
+plt.title("Stability of core genes across strain types", fontsize=14, y=1.1)
+
+# +
 fig_pa14 = sns.displot(
     data=pa14_corr_df,
     x="Transcriptional similarity across strains",
     hue="label",
-    # bins=np.linspace(0, 0.7, 36),
+    palette={"": "grey", "least stable": "#ffc3a0", "most stable": "#0CA8AC"},
 )
-# TO DO
-# Select certain colors
-# Remove empty legend
+
 plt.title("Similarity of core-core modules PA14 to PAO1")
+# -
 
 # ### Compare most/least stable genes found mapping PAO1 > PA14 and PA14 > PAO1
 #
@@ -317,23 +321,8 @@ plt.title("Similarity of core-core modules PA14 to PAO1")
 #
 # Below we can see that all but a few genes overlap. These genes seem to have fallen slighly outside the bounds of what is considered most/least stable which is why they are not found in the other mapped set.
 
-# Select genes that are on the high and low end to examine overlap
-"""high_pao1 = pao1_corr_df[
-    pao1_corr_df["Transcriptional similarity across strains"] > high_threshold
-]
-low_pao1 = pao1_corr_df[
-    pao1_corr_df["Transcriptional similarity across strains"] < low_threshold
-]"""
-
 high_pao1 = pao1_most_stable
 low_pao1 = pao1_least_stable
-
-"""high_pa14 = pa14_corr_df[
-    pa14_corr_df["Transcriptional similarity across strains"] > high_threshold
-]
-low_pa14 = pa14_corr_df[
-    pa14_corr_df["Transcriptional similarity across strains"] < low_threshold
-]"""
 
 high_pa14 = pa14_most_stable
 low_pa14 = pa14_least_stable
@@ -357,19 +346,6 @@ venn2(
 unmapped_pao1_gene_ids = high_pao1_set.difference(high_pa14_set)
 unmapped_pao1_gene_ids
 
-# Look at the PAO1 gene ids that the unmapped PA14 genes map to
-# Maybe these gene ids are not in the expression compendium
-# That does not seem to be the case
-for gene_id in unmapped_pao1_gene_ids:
-    if gene_id in pa14_corr.index:
-        print(gene_id)
-
-# Looks like they barely fell below the most stable threshold used (0.5)
-# pa14_corr_df.loc[["PA14_07050", "PA14_15310"]] # using spell input
-# Looks like there is no equivalent mapping in our annotations
-# Not sure the reason for this
-gene_mapping_pa14.loc[["PA14_09450", "PA14_09440"]]
-
 # Check if the lowly correlated genes from PAO1 to PA14 are the same as the ones from PA14 to PAO1
 low_pao1_set = set(low_pao1["PA14 homolog id"])
 low_pa14_set = set(low_pa14.index)
@@ -379,19 +355,18 @@ venn2(
 )
 
 # There are unmapped ids using spell
-unmapped_pa14_gene_ids = low_pa14_set.difference(low_pao1_set)
-unmapped_pa14_gene_ids
+unmapped_pa14_pao1_gene_ids = low_pa14_set.difference(low_pao1_set)
+unmapped_pao1_pa14_gene_ids = low_pao1_set.difference(low_pa14_set)
 
-# Look at the PA14 gene ids that the unmapped PAO1 genes map to
-# Maybe these PA14 gene ids are not in the expression compendium
-# That does not seem to be the case
-for gene_id in unmapped_pa14_gene_ids:
-    if gene_id in pa14_corr.index:
-        print(gene_id)
+# There are unmapped ids using spell
+print(unmapped_pa14_pao1_gene_ids)
+print(unmapped_pao1_pa14_gene_ids)
 
-# +
-# Looks like they barely fell above the least stable threshold used (0.2)
-# pa14_corr_df.loc["PA14_36900"] # using spell data
+# Looks like PA14_36900 homolog doesn't exist in our PAO1 compendium
+pao1_corr_df[pao1_corr_df["PA14 homolog id"] == "PA14_36900"]
+
+# Looks like this gene barely fell above the least stable threshold
+pa14_corr_df.loc[["PA14_03770"]]  # using spell data
 
 # +
 # Save
@@ -419,8 +394,8 @@ pao1_corr_df.to_csv(pao1_similarity_scores_filename, sep="\t")
 pa14_corr_df.to_csv(pa14_similarity_scores_filename, sep="\t")
 
 # **Takeaways:**
+#
 # The distribution plots are the distribution of correlation scores, which represent how correlated a core gene was with its homolog. As an example, say we have core gene PA0001, we can get its correlation profile (i.e. the row of the correlation matrix) that tells us which core genes PA0001 is highly and lowly correlated with. Then we can map PA0001 to its homolog in PA14 and get its correlation profile. Finally we can take the correlation of those correlation profile to determine how consistent PA0001's relationships are across strains. Genes with a high correlation score (right tail of the distribution) represent genes that are stable and are core genes that are related to the same set of core genes in PAO1 and PA14. While genes with a low correlation score (left tail of the distribution) represent genes that are unstable and are core genes that are not related to the same set of core genes in PAO1 and PA14.
 #
-# * Some of the the highly consistent core genes include those related to type VI secretion system that plays an important role in resistance of biofilms to antibiotics (_tssC1_, https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3187457/; _hcp1_, https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2831478/; _tssF1_)
-#
-# * Some of the not consistent core genes include _gloA2_ (related to metabolism); PA3507, PA0478 (putative enzymes); PA4685 (hypothetical protein)
+# Based on the distribution plots, we find that there exist a set of core genes that are stable across strain types and while there are others that are inconsistent across strain types.
+# See [KEGG enrichment analysis](5_KEGG_enrichment_of_stable_genes.ipynb) where we looked into which genes are most stable vs least stable.

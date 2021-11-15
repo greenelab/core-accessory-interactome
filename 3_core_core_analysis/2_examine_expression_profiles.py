@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ---
 # jupyter:
 #   jupytext:
@@ -32,13 +33,13 @@ random.seed(1)
 # -
 
 # Output files
-pao1_out_filename = "pao1_core_similarity_expression_stats.tsv"
-pa14_out_filename = "pa14_core_similarity_expression_stats.tsv"
+pao1_out_filename = "pao1_core_similarity_expression_stats_spell.tsv"
+pa14_out_filename = "pa14_core_similarity_expression_stats_spell.tsv"
 
 # +
 # Load transcriptional similarity df
-pao1_similarity_scores_filename = "pao1_similarity_scores.tsv"
-pa14_similarity_scores_filename = "pa14_similarity_scores.tsv"
+pao1_similarity_scores_filename = "pao1_similarity_scores_spell.tsv"
+pa14_similarity_scores_filename = "pa14_similarity_scores_spell.tsv"
 
 pao1_similarity_scores = pd.read_csv(
     pao1_similarity_scores_filename, sep="\t", header=0, index_col=0
@@ -141,7 +142,7 @@ pa14_associations.to_csv(pa14_out_filename, sep="\t")
 
 # ## Examine expression distribution
 #
-# One of the "most stable" core genes found were from the T6SS, which is surprising given that...
+# One of the "most stable" core genes found were from the T6SS, which is surprising given this pathway allows for inter-strain warfare and so we’d expect genes within this pathway to vary across strains.
 #
 # We will plot the distribution of these genes to make sure that the reason these T6SS genes are found to be stable is because all the genes are "off". Based on the plots below, this doesn't look to be the explanation for why T6SS genes are found to be stable across strains.
 #

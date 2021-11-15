@@ -16,7 +16,7 @@
 
 # # Relationships using expression distance
 #
-# This notebook is performing the same analysis as seen in [all_gene_relationships.ipynb](all_gene_relationships.ipynb), where we are examining who is related to who. Previously we started with an accessory gene and asked: is the highest correlated gene another accessory gene or a core gene? For this analysis, we are starting with the most stable core genes and asking the same question: is the highest correlated gene core or accessory?
+# This notebook is performing the same analysis as seen in [all_gene_relationships.ipynb](archive/all_gene_relationships.ipynb), where we are examining who is related to who. Previously we started with an accessory gene and asked: is the highest correlated gene another accessory gene or a core gene? For this analysis, we are starting with the most stable core genes and asking the same question: is the highest correlated gene core or accessory?
 #
 # Note: We do not have the genome location metric here because this would require a significant effort to figure out how to modify the existing code to only focus on a subset of genes.
 
@@ -38,23 +38,26 @@ random.seed(1)
 
 # +
 # User params
-method = "affinity"
 offset_to_bin = 10
 
 use_operon = True
 sum_increment_to_use = 1
 
 # Output filename
-pao1_figure_filename = "PAO1_stablility_expression_relationships_operon_corrected.svg"
-pa14_figure_filename = "PA14_stability_expression_relationships_operon_corrected.svg"
+pao1_figure_filename = (
+    "PAO1_stablility_expression_relationships_operon_corrected_spell.svg"
+)
+pa14_figure_filename = (
+    "PA14_stability_expression_relationships_operon_corrected_spell.svg"
+)
 # -
 
 # ### Import gene ids
 
 # +
 # Import correlation matrix to get gene ids
-pao1_corr_filename = paths.PAO1_CORR_RAW
-pa14_corr_filename = paths.PA14_CORR_RAW
+pao1_corr_filename = paths.PAO1_CORR_LOG_SPELL
+pa14_corr_filename = paths.PA14_CORR_LOG_SPELL
 
 pao1_corr = pd.read_csv(pao1_corr_filename, sep="\t", index_col=0, header=0)
 pa14_corr = pd.read_csv(pa14_corr_filename, sep="\t", index_col=0, header=0)
@@ -172,8 +175,12 @@ pa14_corr = pd.read_csv(pa14_corr_filename, sep="\t", index_col=0, header=0)
 # +
 # Load transcriptional similarity df
 # These are the subset of genes that we will consider
-pao1_similarity_scores_filename = "../3_core_core_analysis/pao1_similarity_scores.tsv"
-pa14_similarity_scores_filename = "../3_core_core_analysis/pa14_similarity_scores.tsv"
+pao1_similarity_scores_filename = (
+    "../3_core_core_analysis/pao1_core_similarity_associations_final_spell.tsv"
+)
+pa14_similarity_scores_filename = (
+    "../3_core_core_analysis/pa14_core_similarity_associations_final_spell.tsv"
+)
 
 pao1_similarity_scores = pd.read_csv(
     pao1_similarity_scores_filename, sep="\t", header=0, index_col=0
@@ -210,6 +217,30 @@ expression_dist_counts_pao1_most = (
         sum_increment_to_use,
     )
 )
+
+# +
+# %%time
+expression_dist_counts_pao1_most_ci = (
+    gene_relationships.get_CI_expression_relationships(
+        5,
+        pao1_corr,
+        pao1_most_stable_genes,
+        pao1_arr,
+        offset_to_bin,
+        pao1_operon_expression_to_use,
+        sum_increment_to_use,
+    )
+)
+
+# TO DO:
+# To finish in the next PR
+# Check existing method to calculate ci in sns.barplot
+# https://stackoverflow.com/questions/46125182/is-seaborn-confidence-interval-computed-correctly
+# Customize ci with https://stackoverflow.com/questions/52767423/is-it-possible-to-input-values-for-confidence-interval-error-bars-on-seaborn-ba
+# Add this for other relationships
+# -
+
+# %%time
 expression_dist_counts_pao1_least = (
     gene_relationships.get_relationship_in_expression_space(
         pao1_corr,
@@ -232,6 +263,8 @@ expression_dist_counts_pa14_most = (
         sum_increment_to_use,
     )
 )
+
+# %%time
 expression_dist_counts_pa14_least = (
     gene_relationships.get_relationship_in_expression_space(
         pa14_corr,
@@ -251,80 +284,228 @@ expression_dist_counts_pa14_most.head()
 
 expression_dist_counts_pa14_least.head()
 
+# ### Format data for plotting
+#
+# Here we will calculate the proportion of gene types per offset and then normalize by the proportion of core and accessory genes. This will return an oddsratio type value where if the value is >1 than the proportion of genes of that type are more than expected.
+
+# Calculate the percentages per offset
+expression_dist_counts_pao1_most["percent"] = expression_dist_counts_pao1_most[
+    "total"
+] / len(pao1_most_stable_genes)
+expression_dist_counts_pao1_least["percent"] = expression_dist_counts_pao1_least[
+    "total"
+] / len(pao1_least_stable_genes)
+
+expression_dist_counts_pa14_most["percent"] = expression_dist_counts_pa14_most[
+    "total"
+] / len(pa14_most_stable_genes)
+expression_dist_counts_pa14_least["percent"] = expression_dist_counts_pa14_least[
+    "total"
+] / len(pa14_least_stable_genes)
+
+# Baseline/expected proportions for PAO1
+pao1_total = len(pao1_core) + len(pao1_acc)
+pao1_acc_expected = len(pao1_acc) / pao1_total
+pao1_core_expected = len(pao1_core) / pao1_total
+print("total pao1 genes", pao1_total)
+print("pao1 acc baseline", pao1_acc_expected)
+print("pao1 core baseline", pao1_core_expected)
+
+# Baseline/expected proportions for PA14
+pa14_total = len(pa14_core) + len(pa14_acc)
+pa14_acc_expected = len(pa14_acc) / pa14_total
+pa14_core_expected = len(pa14_core) / pa14_total
+print("total pa14 genes", pa14_total)
+print("pa14 acc baseline", pa14_acc_expected)
+print("pa14 core baseline", pa14_core_expected)
+
+# +
+# Normalize by baseline PAO1 most stable
+pao1_acc_most_ids = expression_dist_counts_pao1_most.loc[
+    expression_dist_counts_pao1_most["gene type"] == "acc"
+].index
+pao1_core_most_ids = expression_dist_counts_pao1_most.loc[
+    expression_dist_counts_pao1_most["gene type"] == "core"
+].index
+
+expression_dist_counts_pao1_most.loc[pao1_acc_most_ids, "normalized"] = (
+    expression_dist_counts_pao1_most.loc[pao1_acc_most_ids, "percent"]
+    / pao1_acc_expected
+)
+expression_dist_counts_pao1_most.loc[pao1_core_most_ids, "normalized"] = (
+    expression_dist_counts_pao1_most.loc[pao1_core_most_ids, "percent"]
+    / pao1_core_expected
+)
+
+# CI
+expression_dist_counts_pao1_most_ci[
+    ["total_0", "total_1", "total_2", "total_3", "total_4"]
+] /= pao1_acc_expected
+# Get 95% range
+pao1_most_ci_ranges = expression_dist_counts_pao1_most_ci.quantile(
+    [0.025, 0.975], axis=1
+)
+
+# +
+# Normalize by baseline PAO1 least stable
+pao1_acc_least_ids = expression_dist_counts_pao1_least.loc[
+    expression_dist_counts_pao1_least["gene type"] == "acc"
+].index
+pao1_core_least_ids = expression_dist_counts_pao1_least.loc[
+    expression_dist_counts_pao1_least["gene type"] == "core"
+].index
+
+expression_dist_counts_pao1_least.loc[pao1_acc_least_ids, "normalized"] = (
+    expression_dist_counts_pao1_least.loc[pao1_acc_least_ids, "percent"]
+    / pao1_acc_expected
+)
+expression_dist_counts_pao1_least.loc[pao1_core_least_ids, "normalized"] = (
+    expression_dist_counts_pao1_least.loc[pao1_core_least_ids, "percent"]
+    / pao1_core_expected
+)
+
+# +
+# Normalize by baseline PA14 most stable
+pa14_acc_most_ids = expression_dist_counts_pa14_most.loc[
+    expression_dist_counts_pa14_most["gene type"] == "acc"
+].index
+pa14_core_most_ids = expression_dist_counts_pao1_most.loc[
+    expression_dist_counts_pa14_most["gene type"] == "core"
+].index
+
+expression_dist_counts_pa14_most.loc[pa14_acc_most_ids, "normalized"] = (
+    expression_dist_counts_pa14_most.loc[pa14_acc_most_ids, "percent"]
+    / pa14_acc_expected
+)
+expression_dist_counts_pa14_most.loc[pa14_core_most_ids, "normalized"] = (
+    expression_dist_counts_pa14_most.loc[pa14_core_most_ids, "percent"]
+    / pa14_core_expected
+)
+
+# +
+# Normalize by baseline PA14 least stable
+pa14_acc_least_ids = expression_dist_counts_pa14_least.loc[
+    expression_dist_counts_pa14_least["gene type"] == "acc"
+].index
+pa14_core_least_ids = expression_dist_counts_pa14_least.loc[
+    expression_dist_counts_pa14_least["gene type"] == "core"
+].index
+
+expression_dist_counts_pa14_least.loc[pa14_acc_least_ids, "normalized"] = (
+    expression_dist_counts_pa14_least.loc[pa14_acc_least_ids, "percent"]
+    / pa14_acc_expected
+)
+expression_dist_counts_pa14_least.loc[pa14_core_least_ids, "normalized"] = (
+    expression_dist_counts_pa14_least.loc[pa14_core_least_ids, "percent"]
+    / pa14_core_expected
+)
+
+# +
+# Combine PAO1 dataframes
+expression_dist_counts_pao1_most.loc[pao1_acc_most_ids, "label"] = "most stable acc"
+expression_dist_counts_pao1_most.loc[pao1_core_most_ids, "label"] = "most stable core"
+expression_dist_counts_pao1_least.loc[pao1_acc_least_ids, "label"] = "least stable acc"
+expression_dist_counts_pao1_least.loc[
+    pao1_core_least_ids, "label"
+] = "least stable core"
+
+expression_dist_counts_pao1_all = pd.concat(
+    [expression_dist_counts_pao1_most, expression_dist_counts_pao1_least]
+)
+# -
+
+expression_dist_counts_pao1_all
+
+# +
+# Combine PA14 dataframes
+expression_dist_counts_pa14_most.loc[pa14_acc_most_ids, "label"] = "most stable acc"
+expression_dist_counts_pa14_most.loc[pa14_core_most_ids, "label"] = "most stable core"
+expression_dist_counts_pa14_least.loc[pa14_acc_least_ids, "label"] = "least stable acc"
+expression_dist_counts_pa14_least.loc[
+    pa14_core_least_ids, "label"
+] = "least stable core"
+
+expression_dist_counts_pa14_all = pd.concat(
+    [expression_dist_counts_pa14_most, expression_dist_counts_pa14_least]
+)
+# -
+
+expression_dist_counts_pa14_all
+
 # ### Plot
 
 # +
 # Plot PAO1 trends
-fig, axes = plt.subplots(ncols=1, nrows=2, figsize=(10, 10))
+plt.figure(figsize=(10, 8))
 
 fig = sns.barplot(
-    data=expression_dist_counts_pao1_most,
+    data=expression_dist_counts_pao1_all,
     x="offset",
-    y="total",
-    hue="gene type",
-    ax=axes[0],
-    palette=sns.color_palette("Paired"),
+    y="normalized",
+    hue="label",
+    hue_order=[
+        "most stable acc",
+        "least stable acc",
+        "most stable core",
+        "least stable core",
+    ],
+    palette={
+        "most stable acc": "#21368B",
+        "least stable acc": "#A6AED0",
+        "most stable core": "#F8744C",
+        "least stable core": "#FCC7B7",
+    },
+    # ci=100
 )
+# TO DO:
+# Fix CI addition
+# plt.errorbar(
+#    x=['1','2','3','4','5','6','7','8','9','10','10+'],
+#    yerr=pao1_most_ci_ranges
+# )
+plt.axhline(y=1.0, color="black", linestyle="--")
 fig.legend_.remove()
-fig.set_title("Starting with most stable core gene PAO1")
-fig.set_ylabel("Number of genes")
-fig.set_xlabel("Rank correlation in expression space")
-
-fig = sns.barplot(
-    data=expression_dist_counts_pao1_least,
-    x="offset",
-    y="total",
-    hue="gene type",
-    ax=axes[1],
-    palette=sns.color_palette("Paired"),
-)
-fig.legend_.remove()
-fig.set_title("Starting with least stable core gene PAO1")
-fig.set_ylabel("Number of genes")
-fig.set_xlabel("Rank correlation in expression space")
-
-
+fig.set_title("Who are most/least stable core genes related to (PAO1)", fontsize=16)
+fig.set_ylabel("Odds ratio", fontsize=14)
+fig.set_xlabel("Rank correlation in expression space", fontsize=14)
 # Note: We are creating a single global legend that apply
 # to all the facets of this figure. To do this using
 # matplotlib, we need to be a little creative here
 # and add the legend to a new location that is applied
 # to the figure and then remove the legend from the facet.
-plt.legend(bbox_to_anchor=(1.05, 1.15), loc=2, borderaxespad=0.0)
+plt.legend(bbox_to_anchor=(1.05, 0.6), loc=2, borderaxespad=0.0, fontsize=12)
 
 # +
 # Plot PA14 trends
-fig2, axes2 = plt.subplots(ncols=1, nrows=2, figsize=(10, 10))
+plt.figure(figsize=(10, 8))
 
 fig2 = sns.barplot(
-    data=expression_dist_counts_pa14_most,
+    data=expression_dist_counts_pa14_all,
     x="offset",
-    y="total",
-    hue="gene type",
-    ax=axes2[0],
-    palette=sns.color_palette("Paired"),
+    y="normalized",
+    hue="label",
+    hue_order=[
+        "most stable acc",
+        "least stable acc",
+        "most stable core",
+        "least stable core",
+    ],
+    palette={
+        "most stable acc": "#21368B",
+        "least stable acc": "#A6AED0",
+        "most stable core": "#F8744C",
+        "least stable core": "#FCC7B7",
+    },
 )
+plt.axhline(y=1.0, color="black", linestyle="--")
 fig2.legend_.remove()
-fig2.set_title("Starting with most stable core gene PA14")
-fig2.set_ylabel("Number of genes")
-fig2.set_xlabel("Rank correlation in expression space")
+fig2.set_title("Who are most/least stable core genes related to (PA14)", fontsize=16)
+fig2.set_ylabel("Odds ratio", fontsize=14)
+fig2.set_xlabel("Rank correlation in expression space", fontsize=14)
+plt.legend(bbox_to_anchor=(1.05, 0.6), loc=2, borderaxespad=0.0, fontsize=12)
+# -
 
-fig2 = sns.barplot(
-    data=expression_dist_counts_pa14_least,
-    x="offset",
-    y="total",
-    hue="gene type",
-    ax=axes2[1],
-    palette=sns.color_palette("Paired"),
-)
-fig2.legend_.remove()
-fig2.set_title("Starting with least stable core gene PA14")
-fig2.set_ylabel("Number of genes")
-fig2.set_xlabel("Rank correlation in expression space")
-
-plt.legend(bbox_to_anchor=(1.05, 1.15), loc=2, borderaxespad=0.0)
-
-# +
-# Save figures using operons
+"""# Save figures using operons
 # Save figures not using operons
 # Save figure with rolling sum and operons
 # Save figure with rolling sum not using operons
@@ -344,10 +525,9 @@ fig2.figure.savefig(
     transparent=True,
     pad_inches=0,
     dpi=300,
-)
-# -
+)"""
 
 # **Takeaway:**
 #
 # * Least stable core genes have more accessory gene neighbors compared to most stable core genes
-# * Maybe these least stable genes are late core genes (i.e. acquired recently)? Maybe these least stable core genes transcriptional behavior is modified by the accessory genes.
+# * Previous evidence found that insertion sequences (type of accessory gene) can change the expression of existing genes once it is integrated into the genome. So perhaps these least stable core genes transcriptional behavior is modified by the accessory genes.

@@ -24,6 +24,8 @@
 import os
 import pandas as pd
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
 import scipy.stats
 import statsmodels.stats.multitest
 from scripts import paths, utils, annotations
@@ -38,7 +40,7 @@ pao1_pathways.head()
 # +
 # Load transcriptional similarity df
 # These are the subset of genes that we will consider
-pao1_similarity_scores_filename = "pao1_similarity_scores.tsv"
+pao1_similarity_scores_filename = "pao1_similarity_scores_spell.tsv"
 
 pao1_similarity_scores = pd.read_csv(
     pao1_similarity_scores_filename, sep="\t", header=0, index_col=0
@@ -126,6 +128,7 @@ def KEGG_enrichment_of_stable_genes(similarity_score_df, gene_list, kegg_df):
     )
 
     enrichment_df["corrected p-value"] = pvals_corrected_
+    enrichment_df["-log10 adj p-value"] = -np.log10(enrichment_df["corrected p-value"])
 
     return enrichment_df
 
@@ -144,17 +147,83 @@ pao1_most_stable_enrichment.sort_values(by="corrected p-value").head()
 print(pao1_least_stable_enrichment.shape)
 pao1_least_stable_enrichment.sort_values(by="corrected p-value").head()
 
-# TO DO: Remove 'compare' when we decide which input to use
-# Save
-pao1_most_stable_enrichment.to_csv("pao1_most_stable_enrichment_compare.tsv", sep="\t")
-pao1_least_stable_enrichment.to_csv(
-    "pao1_least_stable_enrichment_compare.tsv", sep="\t"
+# ## Plot
+
+# +
+# Create a shared scale to use for both plots
+# np.linspace(3.759057e-22, 1)
+
+# +
+# Plot top most stable
+pao1_most_stable_enrichment_top = pao1_most_stable_enrichment.sort_values(
+    by="corrected p-value"
+).head(10)
+norm = plt.Normalize(0, 22)
+cmap = sns.cubehelix_palette(as_cmap=True)
+
+plt.figure(figsize=(8, 6))
+f = plt.scatter(
+    data=pao1_most_stable_enrichment_top,
+    x="odds ratio",
+    y="enriched KEGG pathway",
+    s=300,
+    c="-log10 adj p-value",
+    norm=norm,
+    cmap=cmap,
+)
+sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+sm.set_array([])
+cf = plt.colorbar(sm)
+cf.ax.set_title("-log10 adj p-value", fontsize=12)
+
+plt.title("Enrichment of most stable core genes", fontsize=16, y=1.05)
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
+plt.xlabel("Odds ratio", fontsize=16)
+plt.ylabel("")
+
+# +
+# Plot top most stable
+pao1_least_stable_enrichment_top = pao1_least_stable_enrichment.sort_values(
+    by="corrected p-value"
+).head(10)
+plt.figure(figsize=(8, 6))
+norm = plt.Normalize(0.0, 22)
+cmap = sns.cubehelix_palette(as_cmap=True)
+
+g = plt.scatter(
+    data=pao1_least_stable_enrichment_top,
+    x="odds ratio",
+    y="enriched KEGG pathway",
+    s=300,
+    c="-log10 adj p-value",
+    norm=norm,
+    cmap=cmap,
 )
 
+sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+sm.set_array([])
+cg = plt.colorbar(sm)
+cg.ax.set_title("-log10 adj p-value", fontsize=12)
+
+plt.title("Enrichment of least stable core genes", fontsize=16, y=1.05)
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
+plt.xlabel("Odds ratio", fontsize=16)
+plt.ylabel("")
+
+# TO DO
+# Update colorbar text to include label for -log10 p-value
+# -
+
+# Save
+pao1_most_stable_enrichment.to_csv("pao1_most_stable_enrichment_spell.tsv", sep="\t")
+pao1_least_stable_enrichment.to_csv("pao1_least_stable_enrichment_spell.tsv", sep="\t")
+
 # **Takeaway:**
-# * There does not appear to be any enriched KEGG pathways in the least stable genes.
-#     * What does this mean about the role of these least stable core genes? Maybe they are spread across multiple pathways?
-#     * Based on the dataframe created in the [previous notebook](2_find_KEGG_associations.ipynb) like many least stable core genes are not found in any KEGG pathway, but there are some that are found in many KEGG pathways: https://docs.google.com/spreadsheets/d/1SqEyBvutfbsOTo4afg9GiEzP32ZKplkN1a6MpAQBvZI/edit#gid=1943176121
-# * The most stable core genes are significantly enriched KEGG pathways include Ribosome (commonly enriched in humans), secretion system, metabolism/Krebs cycle
-#     * These KEGG pathways represent some of the essential functions for Pa, so it makes sense that they are enriched amongst the set of stable core genes whose transcriptional relationships don’t vary across strains.
-#     * Only some metabolisms and not others, is that interesting?
+#
+# KEGG enrichment analysis found that stable genes were significantly associated with essential functions: ribosome, lipopolysaccharide biosynthesis, citrate cycle. However, there are also pathways like the secretion systems, which allow for inter-strain warfare, that we’d expect to vary across strains but were found to be conserved (T3SS, T6SS) - looks like most of the genes annotated as T3/6SS are related to the secretion machinery, which is conserved across strains.
+#
+# There does NOT appear to be any significantly enriched KEGG pathways in the least stable core genes. However the least stable genes with the top enrichment score seem to be related to stress response
+#
+# KEGG enrichment: https://docs.google.com/spreadsheets/d/1lXZZXXjZSOuQ-cMOZ9I5llIJ2OBOQBur0Spso2WN4oY/edit#gid=0
