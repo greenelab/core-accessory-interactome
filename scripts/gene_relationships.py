@@ -212,6 +212,10 @@ def get_relationship_in_expression_space(
         # If calculating the confidence interval, there will be
         # duplicate rows due to sampling so we need to select
         # one of the rows
+        # Note: .duplicated() returns a boolean series marking
+        # all duplicate occurances as True except the First one
+        # In order to drop all duplicate occurences we will use
+        # ~.duplicated()
         if isinstance(corr_subset.loc[gene], pd.DataFrame):
             duplicated_corr_subset = corr_subset.loc[gene]
             select_corr_subset = duplicated_corr_subset[~duplicated_corr_subset.duplicated()]
@@ -326,7 +330,7 @@ def get_CI_expression_relationships(
     for i in range(num_iter):
         # Randomly sample `genes_to_consider` with replacement
         # This will return a sample of the same size as
-        # `genes_to_consider` but with a different random set of genes
+        # `genes_to_consider` but with a different subset of genes.
 
         # TO DO
         # Need to figure out how to reun this calculation with duplicate genes

@@ -128,6 +128,7 @@ def KEGG_enrichment_of_stable_genes(similarity_score_df, gene_list, kegg_df):
     )
 
     enrichment_df["corrected p-value"] = pvals_corrected_
+    enrichment_df["-log10 adj p-value"] = -np.log10(enrichment_df["corrected p-value"])
 
     return enrichment_df
 
@@ -149,40 +150,37 @@ pao1_least_stable_enrichment.sort_values(by="corrected p-value").head()
 # ## Plot
 
 # +
+# Create a shared scale to use for both plots
+# np.linspace(3.759057e-22, 1)
+
+# +
 # Plot top most stable
 pao1_most_stable_enrichment_top = pao1_most_stable_enrichment.sort_values(
     by="corrected p-value"
 ).head(10)
-# pval_lst = list(
-# pao1_most_stable_enrichment_top.sort_values(by="corrected p-value", ascending=False)["corrected p-value"])
+norm = plt.Normalize(0, 22)
+cmap = sns.cubehelix_palette(as_cmap=True)
 
 plt.figure(figsize=(8, 6))
-f = sns.scatterplot(
+f = plt.scatter(
     data=pao1_most_stable_enrichment_top,
     x="odds ratio",
     y="enriched KEGG pathway",
     s=300,
-    # size="corrected p-value",
-    hue="corrected p-value",
-    # hue_order=pval_lst,
-    # size_order=pval_lst,
-    # sizes=(100, 10),
-    legend="full",
+    c="-log10 adj p-value",
+    norm=norm,
+    cmap=cmap,
 )
-plt.legend(
-    title="corrected p-value",
-    title_fontsize=14,
-    fontsize=12,
-    bbox_to_anchor=(1.05, 0.8),
-    loc="upper left",
-    borderaxespad=0,
-)
+sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+sm.set_array([])
+cf = plt.colorbar(sm)
+cf.ax.set_title("-log10 adj p-value", fontsize=12)
 
-f.set_title("Enrichment of most stable core genes", fontsize=16)
+plt.title("Enrichment of most stable core genes", fontsize=16, y=1.05)
 plt.xticks(fontsize=14)
 plt.yticks(fontsize=14)
-f.set_xlabel("Odds ratio", fontsize=16)
-f.set_ylabel("")
+plt.xlabel("Odds ratio", fontsize=16)
+plt.ylabel("")
 
 # +
 # Plot top most stable
@@ -190,32 +188,32 @@ pao1_least_stable_enrichment_top = pao1_least_stable_enrichment.sort_values(
     by="corrected p-value"
 ).head(10)
 plt.figure(figsize=(8, 6))
-g = sns.scatterplot(
+norm = plt.Normalize(0.0, 22)
+cmap = sns.cubehelix_palette(as_cmap=True)
+
+g = plt.scatter(
     data=pao1_least_stable_enrichment_top,
     x="odds ratio",
     y="enriched KEGG pathway",
     s=300,
-    # size="corrected p-value",
-    hue="corrected p-value",
-    # hue_order=pval_lst,
-    # size_order=pval_lst,
-    # sizes=(100, 10),
-    legend="full",
-)
-plt.legend(
-    title="corrected p-value",
-    title_fontsize=14,
-    fontsize=12,
-    bbox_to_anchor=(1.05, 0.6),
-    loc="upper left",
-    borderaxespad=0,
+    c="-log10 adj p-value",
+    norm=norm,
+    cmap=cmap,
 )
 
-plt.title("Enrichment of least stable core genes", fontsize=16)
+sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+sm.set_array([])
+cg = plt.colorbar(sm)
+cg.ax.set_title("-log10 adj p-value", fontsize=12)
+
+plt.title("Enrichment of least stable core genes", fontsize=16, y=1.05)
 plt.xticks(fontsize=14)
 plt.yticks(fontsize=14)
-g.set_xlabel("Odds ratio", fontsize=16)
-g.set_ylabel("")
+plt.xlabel("Odds ratio", fontsize=16)
+plt.ylabel("")
+
+# TO DO
+# Update colorbar text to include label for -log10 p-value
 # -
 
 # Save
