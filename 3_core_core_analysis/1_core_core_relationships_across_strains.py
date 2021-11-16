@@ -315,6 +315,11 @@ fig_pa14 = sns.displot(
 plt.title("Similarity of core-core modules PA14 to PAO1")
 # -
 
+# **Takeaways:**
+#
+# * Other highly stable genes are sdh suc lpd (central metabolism), ribosomal genes.
+# * RhlRI more stable than LasRI; pqsABCDE/MvfR in the middle.
+
 # ### Compare most/least stable genes found mapping PAO1 > PA14 and PA14 > PAO1
 #
 # As a check, we would expect that the most stable core genes are the same if we start with PAO1 gene ids and map to PA14 gene ids (`high_pao1_set`) versus if we start with PA14 gene ids and map to PAO1 gene ids (`high_pa14_set`). Similarly if we compare the least stable core genes.
