@@ -29,6 +29,7 @@ import random
 import scipy
 import pandas as pd
 import numpy as np
+import textwrap
 import seaborn as sns
 import matplotlib.pyplot as plt
 from statsmodels.stats.multitest import multipletests
@@ -338,13 +339,40 @@ expression_dist_counts_pao1_most.loc[pao1_core_most_ids, "normalized"] = (
 )
 
 # CI
-expression_dist_counts_pao1_most_ci[
-    ["total_0", "total_1", "total_2", "total_3", "total_4"]
+# expression_dist_counts_pao1_most_ci[
+#    ["total_0", "total_1", "total_2", "total_3", "total_4"]
+# ] /= pao1_acc_expected
+# Get 95% range
+# pao1_most_ci_ranges = expression_dist_counts_pao1_most_ci.quantile(
+#    [0.025, 0.975], axis=1
+# )
+# -
+
+expression_dist_counts_pao1_most_ci
+
+# Get percent
+expression_dist_counts_pao1_most_ci.loc[
+    pao1_acc_most_ids, ["total_0", "total_1", "total_2", "total_3", "total_4"]
+] /= len(pao1_most_stable_genes)
+
+expression_dist_counts_pao1_most_ci
+
+# Normalize
+expression_dist_counts_pao1_most_ci.loc[
+    pao1_acc_most_ids, ["total_0", "total_1", "total_2", "total_3", "total_4"]
 ] /= pao1_acc_expected
+
+expression_dist_counts_pao1_most_ci
+
 # Get 95% range
 pao1_most_ci_ranges = expression_dist_counts_pao1_most_ci.quantile(
     [0.025, 0.975], axis=1
 )
+
+pao1_most_ci_ranges
+
+# +
+## TESTING ABOVE
 
 # +
 # Normalize by baseline PAO1 least stable
@@ -438,69 +466,94 @@ expression_dist_counts_pa14_all
 # Plot PAO1 trends
 plt.figure(figsize=(10, 8))
 
+pao1_subset = expression_dist_counts_pao1_all[
+    (expression_dist_counts_pao1_all["gene type"] == "acc")
+    & (expression_dist_counts_pao1_all["label"] == "most stable acc")
+]
+
 fig = sns.barplot(
-    data=expression_dist_counts_pao1_all,
+    data=pao1_subset,
     x="offset",
     y="normalized",
     hue="label",
     hue_order=[
         "most stable acc",
         "least stable acc",
-        "most stable core",
-        "least stable core",
+        # "most stable core",
+        # "least stable core",
     ],
     palette={
         "most stable acc": "#21368B",
         "least stable acc": "#A6AED0",
-        "most stable core": "#F8744C",
-        "least stable core": "#FCC7B7",
+        # "most stable core": "#F8744C",
+        # "least stable core": "#FCC7B7",
     },
-    # ci=100
+    estimator=np.mean,
+    ci=90,
+    n_boot=5,
+    errcolor="red",
+    errwidth=2,
 )
-# TO DO:
-# Fix CI addition
-# plt.errorbar(
-#    x=['1','2','3','4','5','6','7','8','9','10','10+'],
-#    yerr=pao1_most_ci_ranges
-# )
+plt.errorbar(
+    x=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "10+"],
+    y=pao1_subset["normalized"],
+    yerr=(
+        (
+            pao1_most_ci_ranges.loc[0.975, pao1_acc_most_ids]
+            - pao1_most_ci_ranges.loc[0.025, pao1_acc_most_ids]
+        )
+    ),
+)
+
 plt.axhline(y=1.0, color="black", linestyle="--")
-fig.legend_.remove()
 fig.set_title("Who are most/least stable core genes related to (PAO1)", fontsize=16)
-fig.set_ylabel("Odds ratio", fontsize=14)
+fig.set_ylabel(
+    r"Fold change" + "\n" + "(% acc genes co-express/% acc genes in genome)",
+    fontsize=14,
+)
 fig.set_xlabel("Rank correlation in expression space", fontsize=14)
-# Note: We are creating a single global legend that apply
-# to all the facets of this figure. To do this using
-# matplotlib, we need to be a little creative here
-# and add the legend to a new location that is applied
-# to the figure and then remove the legend from the facet.
 plt.legend(bbox_to_anchor=(1.05, 0.6), loc=2, borderaxespad=0.0, fontsize=12)
+
+# new_labels = ["Most stable gene", "Least stable gene"]
+# for t, l in zip(fig._legend.texts, new_labels): t.set_text(l)
+# -
+
+"""pao1_subset = expression_dist_counts_pao1_all[
+    (expression_dist_counts_pao1_all["gene type"] == "acc") &
+    (expression_dist_counts_pao1_all["label"] == "most stable acc")
+]
+pao1_subset["normalized"]"""
 
 # +
 # Plot PA14 trends
 plt.figure(figsize=(10, 8))
 
 fig2 = sns.barplot(
-    data=expression_dist_counts_pa14_all,
+    data=expression_dist_counts_pa14_all[
+        expression_dist_counts_pa14_all["gene type"] == "acc"
+    ],
     x="offset",
     y="normalized",
     hue="label",
     hue_order=[
         "most stable acc",
         "least stable acc",
-        "most stable core",
-        "least stable core",
+        # "most stable core",
+        # "least stable core",
     ],
     palette={
         "most stable acc": "#21368B",
         "least stable acc": "#A6AED0",
-        "most stable core": "#F8744C",
-        "least stable core": "#FCC7B7",
+        # "most stable core": "#F8744C",
+        # "least stable core": "#FCC7B7",
     },
 )
 plt.axhline(y=1.0, color="black", linestyle="--")
-fig2.legend_.remove()
 fig2.set_title("Who are most/least stable core genes related to (PA14)", fontsize=16)
-fig2.set_ylabel("Odds ratio", fontsize=14)
+fig2.set_ylabel(
+    r"Fold change" + "\n" + "(% acc genes co-express/% acc genes in genome)",
+    fontsize=14,
+)
 fig2.set_xlabel("Rank correlation in expression space", fontsize=14)
 plt.legend(bbox_to_anchor=(1.05, 0.6), loc=2, borderaxespad=0.0, fontsize=12)
 # -
@@ -526,6 +579,16 @@ fig2.figure.savefig(
     pad_inches=0,
     dpi=300,
 )"""
+
+# +
+# TO DO:
+# Legend label
+# Fix CI addition
+# plt.errorbar(
+#    x=['1','2','3','4','5','6','7','8','9','10','10+'],
+#    yerr=pao1_most_ci_ranges
+# )
+# -
 
 # **Takeaway:**
 #
