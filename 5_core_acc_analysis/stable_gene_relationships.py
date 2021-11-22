@@ -36,7 +36,7 @@ from statsmodels.stats.multitest import multipletests
 from plotnine import (
     ggplot,
     labs,
-    geom_line,
+    geom_hline,
     geom_bar,
     geom_errorbar,
     positions,
@@ -46,6 +46,8 @@ from plotnine import (
     theme,
     facet_wrap,
     scale_fill_manual,
+    scale_x_continuous,
+    xlim,
     guides,
     guide_legend,
     element_blank,
@@ -147,44 +149,6 @@ print(pa14_arr.shape)
 pa14_arr.head()
 
 pa14_arr.tail()
-
-"""# Fill in index of operon_df to include all genes
-all_pao1_gene_ids = pao1_arr.index
-all_pa14_gene_ids = pa14_arr.index
-
-# Get missing gene ids
-missing_pao1_gene_ids = set(all_pao1_gene_ids).difference(pao1_operon.index)
-missing_pa14_gene_ids = set(all_pa14_gene_ids).difference(pa14_operon.index)
-
-# Make dataframe with missing gene ids with np.nan values for operon_name
-missing_pao1_gene_df = pd.DataFrame(
-    data=np.nan, index=list(missing_pao1_gene_ids), columns=["operon_name"]
-)
-missing_pa14_gene_df = pd.DataFrame(
-    data=np.nan, index=list(missing_pa14_gene_ids), columns=["operon_name"]
-)
-
-pao1_operon_genome_dist = pao1_operon.append(missing_pao1_gene_df)
-pa14_operon_genome_dist = pa14_operon.append(missing_pa14_gene_df)
-
-pao1_operon_genome_dist = pao1_operon_genome_dist.loc[all_pao1_gene_ids]
-pa14_operon_genome_dist = pa14_operon_genome_dist.loc[all_pa14_gene_ids]"""
-
-# +
-# print(pao1_operon_genome_dist.shape)
-# pao1_operon_genome_dist.tail()
-
-# +
-# print(pa14_operon_genome_dist.shape)
-# pa14_operon_genome_dist.tail()
-# -
-
-"""if use_operon:
-    pao1_operon_genome_to_use = pao1_operon_genome_dist
-    pa14_operon_genome_to_use = pa14_operon_genome_dist
-else:
-    pao1_operon_genome_to_use = None
-    pa14_operon_genome_to_use = None"""
 
 # ## Find relationships using expression distance
 
@@ -454,18 +418,20 @@ expression_dist_counts_pa14_all
 pao1_subset = expression_dist_counts_pao1_all[
     (expression_dist_counts_pao1_all["gene type"] == "acc")
 ]
-x_ticks = list(pao1_subset["offset"].astype("str"))
-# pao1_subset.loc[pao1_subset.index,"threshold"] = 1.0
+pao1_subset["offset"] = list(pao1_subset["offset"].astype("str"))
+# x_ticks = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "10+",
+#          "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "10+"]
 
 fig_pao1 = (
-    ggplot(pao1_subset, aes(x=x_ticks, y="normalized", fill="label"))
+    ggplot(pao1_subset, aes(x="offset", y="normalized", fill="label"))
     + geom_bar(stat="identity", position="dodge", width=0.8)
     + geom_errorbar(
         pao1_subset,
-        aes(x=x_ticks, ymin="ymin", ymax="ymax"),
+        aes(x="offset", ymin="ymin", ymax="ymax"),
         position=positions.position_dodge(0.8),
         color="darkgrey",
     )
+    + geom_hline(aes(yintercept=1.0), linetype="dashed")
     + labs(
         x="Rank co-expression",
         y=r"Fold change" + "\n" + "(% acc genes co-express/% acc genes in genome)",
@@ -478,32 +444,41 @@ fig_pao1 = (
         panel_grid_major_y=element_line(color="lightgrey"),
         axis_line=element_line(color="grey"),
         legend_key=element_rect(fill="white", colour="white"),
-        legend_title=element_text(family="sans-serif", size=15),
+        legend_title=element_blank(),
         legend_text=element_text(family="sans-serif", size=12),
         plot_title=element_text(family="sans-serif", size=15),
         axis_text=element_text(family="sans-serif", size=12),
         axis_title=element_text(family="sans-serif", size=10),
     )
-    + scale_fill_manual(values=["#21368B", "#A6AED0"])
+    # + scale_x_discrete(breaks=x_ticks, labels=x_ticks) \
+    + scale_fill_manual(
+        values=["#21368B", "#A6AED0"],
+        labels=[
+            "Accessory genes related to least stable core genes",
+            "Accessory genes related to most stable core genes",
+        ],
+    )
 )
 print(fig_pao1)
+
+# TO DO: Need to figure out how to fix the ordering of the x-tick labels
 
 # +
 pa14_subset = expression_dist_counts_pa14_all[
     (expression_dist_counts_pa14_all["gene type"] == "acc")
 ]
-x_ticks = list(pa14_subset["offset"].astype("str"))
-# pa14_subset.loc[pao1_subset.index,"threshold"] = 1.0
+pa14_subset["offset"] = list(pa14_subset["offset"].astype("str"))
 
 fig_pa14 = (
-    ggplot(pa14_subset, aes(x=x_ticks, y="normalized", fill="label"))
+    ggplot(pa14_subset, aes(x="offset", y="normalized", fill="label"))
     + geom_bar(stat="identity", position="dodge", width=0.8)
     + geom_errorbar(
         pa14_subset,
-        aes(x=x_ticks, ymin="ymin", ymax="ymax"),
+        aes(x="offset", ymin="ymin", ymax="ymax"),
         position=positions.position_dodge(0.8),
         color="darkgrey",
     )
+    + geom_hline(aes(yintercept=1.0), linetype="dashed")
     + labs(
         x="Rank co-expression",
         y=r"Fold change" + "\n" + "(% acc genes co-express/% acc genes in genome)",
@@ -516,16 +491,67 @@ fig_pa14 = (
         panel_grid_major_y=element_line(color="lightgrey"),
         axis_line=element_line(color="grey"),
         legend_key=element_rect(fill="white", colour="white"),
-        legend_title=element_text(family="sans-serif", size=15),
+        legend_title=element_blank(),
         legend_text=element_text(family="sans-serif", size=12),
         plot_title=element_text(family="sans-serif", size=15),
         axis_text=element_text(family="sans-serif", size=12),
         axis_title=element_text(family="sans-serif", size=10),
     )
-    + scale_fill_manual(values=["#21368B", "#A6AED0"])
+    + scale_fill_manual(
+        values=["#21368B", "#A6AED0"],
+        labels=[
+            "Accessory genes related to least stable core genes",
+            "Accessory genes related to most stable core genes",
+        ],
+    )
 )
 print(fig_pa14)
+
+# +
+# Calculate statistical test between the distribution of the top 10 co-expressed
+# genes related to the least stable vs the most stable core genes
+# Test: mean number of co-expressed accessory genes in least stable group vs mean number of
+# co-expressed accessory genes in most stable group
+# (compare dark blue and light blue bars)
+
+pao1_least_df = pao1_subset[pao1_subset["label"] == "least stable acc"]
+pao1_least_df = pao1_least_df[pao1_least_df.offset != "+10"]
+pao1_least_vals = pao1_least_df["normalized"].values
+
+pao1_most_df = pao1_subset[pao1_subset["label"] == "most stable acc"]
+pao1_most_df = pao1_most_df[pao1_most_df.offset != "+10"]
+pao1_most_vals = pao1_most_df["normalized"].values
+
+# Independent t-test
+# Test the null hypothesis such that the means of two populations are equal
+(pao1_stats, pao1_pvalue) = scipy.stats.ttest_ind(pao1_least_vals, pao1_most_vals)
+print(pao1_stats, pao1_pvalue)
+
+# Non-parametric test
+# nonparametric test of the null hypothesis that, for randomly selected values X and Y from two populations,
+# the probability of X being greater than Y is equal to the probability of Y being greater than X.
+(pao1_stats, pao1_pvalue) = scipy.stats.mannwhitneyu(pao1_least_vals, pao1_most_vals)
+print(pao1_stats, pao1_pvalue)
+
+# +
+pa14_least_df = pa14_subset[pa14_subset["label"] == "least stable acc"]
+pa14_least_df = pa14_least_df[pa14_least_df.offset != "+10"]
+pa14_least_vals = pa14_least_df["normalized"].values
+
+pa14_most_df = pa14_subset[pa14_subset["label"] == "most stable acc"]
+pa14_most_df = pa14_most_df[pa14_most_df.offset != "+10"]
+pa14_most_vals = pa14_most_df["normalized"].values
+
+# Independent t-test
+(pa14_stats, pa14_pvalue) = scipy.stats.ttest_ind(pa14_least_vals, pa14_most_vals)
+print(pa14_stats, pa14_pvalue)
+
+# Non-parametric test
+(pa14_stats, pa14_pvalue) = scipy.stats.mannwhitneyu(pa14_least_vals, pa14_most_vals)
+print(pa14_stats, pa14_pvalue)
 # -
+
+# Based on the bar plots we can be confident in our trend (as seen by the confidence intervals) that least stable genes are more co-expressed with accessory genes compared to most stable genes. This difference between least and most stable genes is further quantified by the t-test comparing the distribution of accessory genes related least vs most genes.
 
 """# Plot PAO1 trends
 plt.figure(figsize=(10, 8))
@@ -635,20 +661,6 @@ fig2.figure.savefig(
     pad_inches=0,
     dpi=300,
 )"""
-
-# +
-# TO DO: depending on feedback on the new structure we will need to prettify the figure
-# legend names
-# coloring
-# Adjust ordering of x-axis
-
-# Add horizontal at 1.0
-# # + geom_line(pao1_subset,
-#            aes(x=x_ticks, y="threshold"),
-#            linetype='dashed',
-#            size=1,
-#            color="black",
-#            show_legend=False) \
 # -
 
 # **Takeaway:**
