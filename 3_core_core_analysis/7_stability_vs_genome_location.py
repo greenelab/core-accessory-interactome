@@ -18,7 +18,7 @@
 #
 # Here we want to know about the relationship between stability and genome distance: Are more stable genes located in similar locations on the genome in PAO1 vs PA14 compared to least stable genes?
 #
-# We hypothesize that least stable genes are not syntenic (i.e. located in different regions of the genome) across strains, which might indicate a different some transcriptional re-wiring.
+# We hypothesize that least stable genes are not syntenic (i.e. located in different regions of the genome) across strains, which might indicate a different some transcriptional re-wiring across strain types.
 #
 # There are 2 approaches we take here:
 # 1. For each least/most stable gene, get the neighboring core/homologous genes and determine if they match between PAO1 vs PA14.
@@ -335,21 +335,45 @@ homolog_dist_df = (
 
 # +
 plt.figure(figsize=(10, 8))
-sns.violinplot(
+fig_match_homolog = sns.stripplot(
     data=homolog_neighborhood_df, x="core gene group", y="value", palette="Set2"
 )
 
 plt.title("% Matching homologs", fontsize=14)
 plt.xlabel("")
-plt.ylabel("% neighboring homologs that match")
+plt.xticks(fontsize=14)
+plt.ylabel("% neighboring homologs that match", fontsize=14)
 
 # +
 plt.figure(figsize=(10, 8))
-sns.violinplot(data=homolog_dist_df, x="core gene group", y="value", palette="Set2")
+fig_dist = sns.stripplot(
+    data=homolog_dist_df, x="core gene group", y="value", palette="Set2"
+)
 
 plt.title("Distance between homologs", fontsize=14)
 plt.xlabel("")
-plt.ylabel("L1 Distance")
+plt.xticks(fontsize=14)
+plt.ylabel("L1 Distance", fontsize=14)
+
+# +
+# Save
+fig_match_homolog.figure.savefig(
+    "stability_percent_match_homolog.svg",
+    format="svg",
+    bbox_inches="tight",
+    transparent=True,
+    pad_inches=0,
+    dpi=300,
+)
+
+fig_dist.figure.savefig(
+    "stability_dist.svg",
+    format="svg",
+    bbox_inches="tight",
+    transparent=True,
+    pad_inches=0,
+    dpi=300,
+)
 # -
 
 # Both approaches yeild similar trends which is good. So the signal is robust. However, both approaches find that there is not an association between stability and if the gene is located in the same location across strain types. We thought that least stable genes might be located in a different location in PAO1 vs PA14 (i.e. we would expect L1 distance to be higher in least stable genes or percent matching homologs to be lower in least stable genes). We instead find that the distances and percent of matching homologs are similar between most and least stable genes.
