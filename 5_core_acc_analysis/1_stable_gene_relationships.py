@@ -46,7 +46,7 @@ from plotnine import (
     theme,
     facet_wrap,
     scale_fill_manual,
-    scale_x_continuous,
+    scale_x_discrete,
     xlim,
     guides,
     guide_legend,
@@ -419,8 +419,7 @@ pao1_subset = expression_dist_counts_pao1_all[
     (expression_dist_counts_pao1_all["gene type"] == "acc")
 ]
 pao1_subset["offset"] = list(pao1_subset["offset"].astype("str"))
-# x_ticks = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "10+",
-#          "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "10+"]
+x_ticks = ["+10", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 
 fig_pao1 = (
     ggplot(pao1_subset, aes(x="offset", y="normalized", fill="label"))
@@ -450,7 +449,6 @@ fig_pao1 = (
         axis_text=element_text(family="sans-serif", size=12),
         axis_title=element_text(family="sans-serif", size=10),
     )
-    # + scale_x_discrete(breaks=x_ticks, labels=x_ticks) \
     + scale_fill_manual(
         values=["#21368B", "#A6AED0"],
         labels=[
@@ -458,10 +456,9 @@ fig_pao1 = (
             "Accessory genes related to most stable core genes",
         ],
     )
+    + scale_x_discrete(limits=x_ticks, labels=x_ticks)
 )
 print(fig_pao1)
-
-# TO DO: Need to figure out how to fix the ordering of the x-tick labels
 
 # +
 pa14_subset = expression_dist_counts_pa14_all[
@@ -504,6 +501,7 @@ fig_pa14 = (
             "Accessory genes related to most stable core genes",
         ],
     )
+    + scale_x_discrete(limits=x_ticks, labels=x_ticks)
 )
 print(fig_pa14)
 
@@ -553,115 +551,8 @@ print(pa14_stats, pa14_pvalue)
 
 # Based on the bar plots we can be confident in our trend (as seen by the confidence intervals) that least stable genes are more co-expressed with accessory genes compared to most stable genes. This difference between least and most stable genes is further quantified by the t-test comparing the distribution of accessory genes related least vs most genes.
 
-"""# Plot PAO1 trends
-plt.figure(figsize=(10, 8))
-
-pao1_subset = expression_dist_counts_pao1_all[
-    (expression_dist_counts_pao1_all["gene type"] == "acc")
-]
-
-fig = sns.barplot(
-    data=pao1_subset,
-    x="offset",
-    y="normalized",
-    hue="label",
-    hue_order=[
-        "most stable acc",
-        "least stable acc",
-        # "most stable core",
-        # "least stable core",
-    ],
-    palette={
-        "most stable acc": "#21368B",
-        "least stable acc": "#A6AED0",
-        # "most stable core": "#F8744C",
-        # "least stable core": "#FCC7B7",
-    },
-    estimator=np.mean,
-    ci=90,
-    n_boot=5,
-    errcolor="red",
-    errwidth=2,
-)
-plt.errorbar(
-    x=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "10+"],
-    y=pao1_subset["normalized"],
-    yerr=(
-        (pao1_subset["ymax"] - pao1_subset["ymin"]
-        )
-    ),
-)
-
-plt.axhline(y=1.0, color="black", linestyle="--")
-fig.set_title("Who are most/least stable core genes related to (PAO1)", fontsize=16)
-fig.set_ylabel(
-    r"Fold change" + "\n" + "(% acc genes co-express/% acc genes in genome)",
-    fontsize=14,
-)
-fig.set_xlabel("Rank correlation in expression space", fontsize=14)
-plt.legend(bbox_to_anchor=(1.05, 0.6), loc=2, borderaxespad=0.0, fontsize=12)
-
-# new_labels = ["Most stable gene", "Least stable gene"]
-# for t, l in zip(fig._legend.texts, new_labels): t.set_text(l)"""
-
-"""# Plot PA14 trends
-plt.figure(figsize=(10, 8))
-
-fig2 = sns.barplot(
-    data=expression_dist_counts_pa14_all[
-        expression_dist_counts_pa14_all["gene type"] == "acc"
-    ],
-    x="offset",
-    y="normalized",
-    hue="label",
-    hue_order=[
-        "most stable acc",
-        "least stable acc",
-        # "most stable core",
-        # "least stable core",
-    ],
-    palette={
-        "most stable acc": "#21368B",
-        "least stable acc": "#A6AED0",
-        # "most stable core": "#F8744C",
-        # "least stable core": "#FCC7B7",
-    },
-)
-plt.axhline(y=1.0, color="black", linestyle="--")
-fig2.set_title("Who are most/least stable core genes related to (PA14)", fontsize=16)
-fig2.set_ylabel(
-    r"Fold change" + "\n" + "(% acc genes co-express/% acc genes in genome)",
-    fontsize=14,
-)
-fig2.set_xlabel("Rank correlation in expression space", fontsize=14)
-plt.legend(bbox_to_anchor=(1.05, 0.6), loc=2, borderaxespad=0.0, fontsize=12)"""
-
-# +
 ggsave(plot=fig_pao1, filename=pao1_figure_filename, device="svg", dpi=300)
 ggsave(plot=fig_pa14, filename=pa14_figure_filename, device="svg", dpi=300)
-
-"""# Save figures using operons
-# Save figures not using operons
-# Save figure with rolling sum and operons
-# Save figure with rolling sum not using operons
-fig.figure.savefig(
-    pao1_figure_filename,
-    format="svg",
-    bbox_inches="tight",
-    transparent=True,
-    pad_inches=0,
-    dpi=300,
-)
-
-fig2.figure.savefig(
-    pa14_figure_filename,
-    format="svg",
-    bbox_inches="tight",
-    transparent=True,
-    pad_inches=0,
-    dpi=300,
-)"""
-# -
 
 # **Takeaway:**
 #

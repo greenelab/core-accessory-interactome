@@ -156,34 +156,52 @@ exo_core_corr.head()
 
 # ### Plot
 
-sns.jointplot(data=exo_core_corr, x="corr to exoS", y="corr to exoU", kind="hex")
+# Core genes highly co-expressed with both exoS and exoU
+exo_core_both = exo_core_corr[
+    (exo_core_corr["corr to exoS"] > 0.4) & (exo_core_corr["corr to exoU"] > 0.4)
+]
+exo_core_both_ids = exo_core_both.index
+exo_core_both
 
-sns.scatterplot(
+# Core genes co-expressed with exoS
+exoS_core_only = exo_core_corr[
+    (exo_core_corr["corr to exoS"] > 0.2) & (exo_core_corr["corr to exoU"] < 0.2)
+]
+exoS_core_only_ids = exoS_core_only.index
+exoS_core_only
+
+# Add labels
+exo_core_corr["label"] = ""
+exo_core_corr.loc[exo_core_both_ids, "label"] = "both"
+exo_core_corr.loc[exoS_core_only_ids, "label"] = "exoS only"
+
+fig_exo_corr = sns.scatterplot(
     data=exo_core_corr,
     x="corr to exoS",
     y="corr to exoU",
     alpha=0.6,
+    hue="label",
 )
+plt.ylabel(r"Correlation to $exoU$", fontsize=14)
+plt.xlabel(R"Correlation to $exoS$", fontsize=14)
+plt.legend(bbox_to_anchor=(1.05, 1))
 
-# Core genes highly co-expressed with both exoS and exoU
-exo_core_corr[
-    (exo_core_corr["corr to exoS"] > 0.6) & (exo_core_corr["corr to exoU"] > 0.6)
-]
+sns.jointplot(data=exo_core_corr, x="corr to exoS", y="corr to exoU", kind="hex")
 
-# Core genes co-expressed with exoS
-exo_core_corr[
-    (exo_core_corr["corr to exoS"] > 0.2) & (exo_core_corr["corr to exoU"] < 0.2)
-]
-
-# Core genes co-expressed with exoU
-exo_core_corr[
-    (exo_core_corr["corr to exoS"] < 0.2) & (exo_core_corr["corr to exoU"] > 0.2)
-]
-
+# +
 # Save
 exo_core_corr.to_csv("core_genes_related_to_exoSU.tsv", sep="\t")
+
+fig_exo_corr.figure.savefig(
+    "core_genes_correlated_with_exo.svg",
+    format="svg",
+    bbox_inches="tight",
+    transparent=True,
+    pad_inches=0,
+    dpi=300,
+)
+# -
 
 # **Takeaway**
 # * Core genes that are highly co-expressed with both exoS and exoU are related to the T3SS secretion machinery
 # * Core genes highly co-expressed with exoS are TBD
-# * Core genes highly co-expressed with exoU are TBD
