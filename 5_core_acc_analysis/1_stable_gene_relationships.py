@@ -44,6 +44,7 @@ from plotnine import (
     ggsave,
     theme_bw,
     theme,
+    theme_seaborn,
     facet_wrap,
     scale_fill_manual,
     scale_x_discrete,
@@ -436,13 +437,11 @@ fig_pao1 = (
         y=r"Fold change" + "\n" + "(% acc genes co-express/% acc genes in genome)",
         title="Who are most/least stable core genes related to (PAO1)",
     )
+    + theme_seaborn("white")
     + theme(
-        plot_background=element_rect(fill="white"),
-        panel_background=element_rect(fill="white"),
         panel_grid_major_x=element_line(color="lightgrey"),
         panel_grid_major_y=element_line(color="lightgrey"),
         axis_line=element_line(color="grey"),
-        legend_key=element_rect(fill="white", colour="white"),
         legend_title=element_blank(),
         legend_text=element_text(family="sans-serif", size=12),
         plot_title=element_text(family="sans-serif", size=15),
@@ -481,13 +480,11 @@ fig_pa14 = (
         y=r"Fold change" + "\n" + "(% acc genes co-express/% acc genes in genome)",
         title="Who are most/least stable core genes related to (PA14)",
     )
+    + theme_seaborn("white")
     + theme(
-        plot_background=element_rect(fill="white"),
-        panel_background=element_rect(fill="white"),
         panel_grid_major_x=element_line(color="lightgrey"),
         panel_grid_major_y=element_line(color="lightgrey"),
         axis_line=element_line(color="grey"),
-        legend_key=element_rect(fill="white", colour="white"),
         legend_title=element_blank(),
         legend_text=element_text(family="sans-serif", size=12),
         plot_title=element_text(family="sans-serif", size=15),

@@ -83,7 +83,9 @@ gene_mapping_pao1.head()
 
 # ## Approach 1
 #
-# For each most and least stable gene, select the neighboring core genes and determine if the neighboring core genes in PAO1 match with the ones in PA14. If the proprotion of matches is high then that indicates that the most/least stable genes is located in the same relative position on the genome in PAO1 and PA14.
+# Recall that we want to determine if least stable genes are located in the same location on the genome in PAO1 and PA14.
+#
+# This approach starts with the least stable core gene in PAO1 and selects its nearest core neighbors (the number of neighbors is specified by `window_size`). Then we map that least stable core gene to PA14. Starting with the homologous least stable core gene in PA14 select its nearest core neighbors. Next, since these neighbors are core genes can map between PAO1 and PA14. We compare the two sets of neighbors and determine how many of the neighbors in PAO1 map to the PA14 neighbors. If the percent of neighbors that match are high then this indicates that the starting least stable gene is located a similar location in both PAO1 and PA14 because the neighboring genes are the same.
 
 def percent_matching_homologs(
     pao1_core_genes_df,
@@ -207,7 +209,9 @@ random_matched_neighborhood = percent_matching_homologs(
 
 # ## Approach 2
 #
-# This approach converts the gene ids into numeric values by dropping the "PA" or "PA14" prefix. Then the numeric ids are scaled to range 0-1 and the absolute difference is calculated between the most/least stable PAO1 and PA14 homolog gene. If the difference is small that would indicate the the most/least stable gene is located in a similar position in the genome in PAO1 and PA14.
+# Recall that we want to determine if least stable genes are located in the same location on the genome in PAO1 and PA14.
+#
+# This approach takes the genome location defined by the gene ids (PA####, PA14_####). The gene ids are converted into numeric values by dropping the "PA" or "PA14" prefix. Then the numeric ids are scaled to be in the same range since the number of genes in PA14 is more than in PAO1 - here we scaled the values to be in range 0-1. Then we take the absolute value of the difference between the least stable gene location in PAO1 versus the location in PA14. If the difference is small that would indicate the the most or least stable gene is located in a similar position in the genome in PAO1 and PA14.
 
 def dist_pao1_pa14_homolog(
     pao1_core_genes_df,
@@ -376,7 +380,8 @@ fig_dist.figure.savefig(
 )
 # -
 
-# Both approaches yeild similar trends which is good. So the signal is robust. However, both approaches find that there is not an association between stability and if the gene is located in the same location across strain types. We thought that least stable genes might be located in a different location in PAO1 vs PA14 (i.e. we would expect L1 distance to be higher in least stable genes or percent matching homologs to be lower in least stable genes). We instead find that the distances and percent of matching homologs are similar between most and least stable genes.
+# * Both approaches yeild similar trends which is good. So the signal is robust.
+# * However, both approaches find that there is not a strong association between stability and if the gene is located in the same location across strain types. We thought that least stable genes might be located in a different location in PAO1 vs PA14 (i.e. we would expect L1 distance to be higher in least stable genes or percent matching homologs to be lower in least stable genes). We instead find that the distances and percent of matching homologs are similar between most and least stable genes. There might be some least stable genes that are located farther away in genome space, but the consistency of location isn't the primary driver behind these core genes being least stable.
 #
 # TO DO: Read more about synteny:
 # * https://academic.oup.com/bioinformatics/article/36/Supplement_1/i21/5870523
