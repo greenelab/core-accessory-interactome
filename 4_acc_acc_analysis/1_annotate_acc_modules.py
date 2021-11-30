@@ -64,6 +64,10 @@ pa14_membership = pd.read_csv(pa14_membership_filename, sep="\t", index_col=0, h
 print(pao1_membership.shape)
 print(pa14_membership.shape)
 
+pao1_membership.value_counts().median()
+
+pa14_membership.value_counts().median()
+
 # +
 # Import gene metadata
 pao1_gene_annot_filename = paths.GENE_PAO1_ANNOT

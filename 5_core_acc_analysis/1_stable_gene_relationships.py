@@ -29,9 +29,35 @@ import random
 import scipy
 import pandas as pd
 import numpy as np
+import textwrap
 import seaborn as sns
 import matplotlib.pyplot as plt
 from statsmodels.stats.multitest import multipletests
+from plotnine import (
+    ggplot,
+    labs,
+    geom_hline,
+    geom_bar,
+    geom_errorbar,
+    positions,
+    aes,
+    ggsave,
+    theme_bw,
+    theme,
+    theme_seaborn,
+    facet_wrap,
+    scale_fill_manual,
+    scale_x_discrete,
+    xlim,
+    guides,
+    guide_legend,
+    element_blank,
+    element_text,
+    element_rect,
+    element_line,
+    coords,
+)
+
 from scripts import utils, paths, gene_relationships, annotations
 
 random.seed(1)
@@ -125,43 +151,6 @@ pa14_arr.head()
 
 pa14_arr.tail()
 
-# +
-# Fill in index of operon_df to include all genes
-all_pao1_gene_ids = pao1_arr.index
-all_pa14_gene_ids = pa14_arr.index
-
-# Get missing gene ids
-missing_pao1_gene_ids = set(all_pao1_gene_ids).difference(pao1_operon.index)
-missing_pa14_gene_ids = set(all_pa14_gene_ids).difference(pa14_operon.index)
-
-# Make dataframe with missing gene ids with np.nan values for operon_name
-missing_pao1_gene_df = pd.DataFrame(
-    data=np.nan, index=list(missing_pao1_gene_ids), columns=["operon_name"]
-)
-missing_pa14_gene_df = pd.DataFrame(
-    data=np.nan, index=list(missing_pa14_gene_ids), columns=["operon_name"]
-)
-
-pao1_operon_genome_dist = pao1_operon.append(missing_pao1_gene_df)
-pa14_operon_genome_dist = pa14_operon.append(missing_pa14_gene_df)
-
-pao1_operon_genome_dist = pao1_operon_genome_dist.loc[all_pao1_gene_ids]
-pa14_operon_genome_dist = pa14_operon_genome_dist.loc[all_pa14_gene_ids]
-# -
-
-print(pao1_operon_genome_dist.shape)
-pao1_operon_genome_dist.tail()
-
-print(pa14_operon_genome_dist.shape)
-pa14_operon_genome_dist.tail()
-
-if use_operon:
-    pao1_operon_genome_to_use = pao1_operon_genome_dist
-    pa14_operon_genome_to_use = pa14_operon_genome_dist
-else:
-    pao1_operon_genome_to_use = None
-    pa14_operon_genome_to_use = None
-
 # ## Find relationships using expression distance
 
 # Correlation matrix files
@@ -217,28 +206,6 @@ expression_dist_counts_pao1_most = (
         sum_increment_to_use,
     )
 )
-
-# +
-# %%time
-expression_dist_counts_pao1_most_ci = (
-    gene_relationships.get_CI_expression_relationships(
-        5,
-        pao1_corr,
-        pao1_most_stable_genes,
-        pao1_arr,
-        offset_to_bin,
-        pao1_operon_expression_to_use,
-        sum_increment_to_use,
-    )
-)
-
-# TO DO:
-# To finish in the next PR
-# Check existing method to calculate ci in sns.barplot
-# https://stackoverflow.com/questions/46125182/is-seaborn-confidence-interval-computed-correctly
-# Customize ci with https://stackoverflow.com/questions/52767423/is-it-possible-to-input-values-for-confidence-interval-error-bars-on-seaborn-ba
-# Add this for other relationships
-# -
 
 # %%time
 expression_dist_counts_pao1_least = (
@@ -337,15 +304,6 @@ expression_dist_counts_pao1_most.loc[pao1_core_most_ids, "normalized"] = (
     / pao1_core_expected
 )
 
-# CI
-expression_dist_counts_pao1_most_ci[
-    ["total_0", "total_1", "total_2", "total_3", "total_4"]
-] /= pao1_acc_expected
-# Get 95% range
-pao1_most_ci_ranges = expression_dist_counts_pao1_most_ci.quantile(
-    [0.025, 0.975], axis=1
-)
-
 # +
 # Normalize by baseline PAO1 least stable
 pao1_acc_least_ids = expression_dist_counts_pao1_least.loc[
@@ -399,8 +357,8 @@ expression_dist_counts_pa14_least.loc[pa14_core_least_ids, "normalized"] = (
     expression_dist_counts_pa14_least.loc[pa14_core_least_ids, "percent"]
     / pa14_core_expected
 )
+# -
 
-# +
 # Combine PAO1 dataframes
 expression_dist_counts_pao1_most.loc[pao1_acc_most_ids, "label"] = "most stable acc"
 expression_dist_counts_pao1_most.loc[pao1_core_most_ids, "label"] = "most stable core"
@@ -409,14 +367,6 @@ expression_dist_counts_pao1_least.loc[
     pao1_core_least_ids, "label"
 ] = "least stable core"
 
-expression_dist_counts_pao1_all = pd.concat(
-    [expression_dist_counts_pao1_most, expression_dist_counts_pao1_least]
-)
-# -
-
-expression_dist_counts_pao1_all
-
-# +
 # Combine PA14 dataframes
 expression_dist_counts_pa14_most.loc[pa14_acc_most_ids, "label"] = "most stable acc"
 expression_dist_counts_pa14_most.loc[pa14_core_most_ids, "label"] = "most stable core"
@@ -425,107 +375,181 @@ expression_dist_counts_pa14_least.loc[
     pa14_core_least_ids, "label"
 ] = "least stable core"
 
+
+# ### Add confidence interval
+
+# +
+# Import confidence interval data
+pao1_most_ci = pd.read_csv("pao1_most_ci.tsv", sep="\t", index_col=0, header=0)
+pao1_least_ci = pd.read_csv("pao1_least_ci.tsv", sep="\t", index_col=0, header=0)
+
+pa14_most_ci = pd.read_csv("pa14_most_ci.tsv", sep="\t", index_col=0, header=0)
+pa14_least_ci = pd.read_csv("pa14_least_ci.tsv", sep="\t", index_col=0, header=0)
+# -
+
+expression_dist_counts_pao1_most = expression_dist_counts_pao1_most.merge(
+    pao1_most_ci[["ymin", "ymax"]], left_index=True, right_index=True
+)
+expression_dist_counts_pao1_least = expression_dist_counts_pao1_least.merge(
+    pao1_least_ci[["ymin", "ymax"]], left_index=True, right_index=True
+)
+
+expression_dist_counts_pa14_most = expression_dist_counts_pa14_most.merge(
+    pa14_most_ci[["ymin", "ymax"]], left_index=True, right_index=True
+)
+expression_dist_counts_pa14_least = expression_dist_counts_pa14_least.merge(
+    pa14_least_ci[["ymin", "ymax"]], left_index=True, right_index=True
+)
+
+expression_dist_counts_pao1_all = pd.concat(
+    [expression_dist_counts_pao1_most, expression_dist_counts_pao1_least]
+)
+
+expression_dist_counts_pao1_all
+
 expression_dist_counts_pa14_all = pd.concat(
     [expression_dist_counts_pa14_most, expression_dist_counts_pa14_least]
 )
-# -
 
 expression_dist_counts_pa14_all
 
 # ### Plot
 
 # +
-# Plot PAO1 trends
-plt.figure(figsize=(10, 8))
+pao1_subset = expression_dist_counts_pao1_all[
+    (expression_dist_counts_pao1_all["gene type"] == "acc")
+]
+pao1_subset["offset"] = list(pao1_subset["offset"].astype("str"))
+x_ticks = ["+10", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 
-fig = sns.barplot(
-    data=expression_dist_counts_pao1_all,
-    x="offset",
-    y="normalized",
-    hue="label",
-    hue_order=[
-        "most stable acc",
-        "least stable acc",
-        "most stable core",
-        "least stable core",
-    ],
-    palette={
-        "most stable acc": "#21368B",
-        "least stable acc": "#A6AED0",
-        "most stable core": "#F8744C",
-        "least stable core": "#FCC7B7",
-    },
-    # ci=100
+fig_pao1 = (
+    ggplot(pao1_subset, aes(x="offset", y="normalized", fill="label"))
+    + geom_bar(stat="identity", position="dodge", width=0.8)
+    + geom_errorbar(
+        pao1_subset,
+        aes(x="offset", ymin="ymin", ymax="ymax"),
+        position=positions.position_dodge(0.8),
+        color="darkgrey",
+    )
+    + geom_hline(aes(yintercept=1.0), linetype="dashed")
+    + labs(
+        x="Rank co-expression",
+        y=r"Fold change" + "\n" + "(% acc genes co-express/% acc genes in genome)",
+        title="Who are most/least stable core genes related to (PAO1)",
+    )
+    + theme_seaborn("white")
+    + theme(
+        panel_grid_major_x=element_line(color="lightgrey"),
+        panel_grid_major_y=element_line(color="lightgrey"),
+        axis_line=element_line(color="grey"),
+        legend_title=element_blank(),
+        legend_text=element_text(family="sans-serif", size=12),
+        plot_title=element_text(family="sans-serif", size=15),
+        axis_text=element_text(family="sans-serif", size=12),
+        axis_title=element_text(family="sans-serif", size=10),
+    )
+    + scale_fill_manual(
+        values=["#21368B", "#A6AED0"],
+        labels=[
+            "Accessory genes related to least stable core genes",
+            "Accessory genes related to most stable core genes",
+        ],
+    )
+    + scale_x_discrete(limits=x_ticks, labels=x_ticks)
 )
-# TO DO:
-# Fix CI addition
-# plt.errorbar(
-#    x=['1','2','3','4','5','6','7','8','9','10','10+'],
-#    yerr=pao1_most_ci_ranges
-# )
-plt.axhline(y=1.0, color="black", linestyle="--")
-fig.legend_.remove()
-fig.set_title("Who are most/least stable core genes related to (PAO1)", fontsize=16)
-fig.set_ylabel("Odds ratio", fontsize=14)
-fig.set_xlabel("Rank correlation in expression space", fontsize=14)
-# Note: We are creating a single global legend that apply
-# to all the facets of this figure. To do this using
-# matplotlib, we need to be a little creative here
-# and add the legend to a new location that is applied
-# to the figure and then remove the legend from the facet.
-plt.legend(bbox_to_anchor=(1.05, 0.6), loc=2, borderaxespad=0.0, fontsize=12)
+print(fig_pao1)
 
 # +
-# Plot PA14 trends
-plt.figure(figsize=(10, 8))
+pa14_subset = expression_dist_counts_pa14_all[
+    (expression_dist_counts_pa14_all["gene type"] == "acc")
+]
+pa14_subset["offset"] = list(pa14_subset["offset"].astype("str"))
 
-fig2 = sns.barplot(
-    data=expression_dist_counts_pa14_all,
-    x="offset",
-    y="normalized",
-    hue="label",
-    hue_order=[
-        "most stable acc",
-        "least stable acc",
-        "most stable core",
-        "least stable core",
-    ],
-    palette={
-        "most stable acc": "#21368B",
-        "least stable acc": "#A6AED0",
-        "most stable core": "#F8744C",
-        "least stable core": "#FCC7B7",
-    },
+fig_pa14 = (
+    ggplot(pa14_subset, aes(x="offset", y="normalized", fill="label"))
+    + geom_bar(stat="identity", position="dodge", width=0.8)
+    + geom_errorbar(
+        pa14_subset,
+        aes(x="offset", ymin="ymin", ymax="ymax"),
+        position=positions.position_dodge(0.8),
+        color="darkgrey",
+    )
+    + geom_hline(aes(yintercept=1.0), linetype="dashed")
+    + labs(
+        x="Rank co-expression",
+        y=r"Fold change" + "\n" + "(% acc genes co-express/% acc genes in genome)",
+        title="Who are most/least stable core genes related to (PA14)",
+    )
+    + theme_seaborn("white")
+    + theme(
+        panel_grid_major_x=element_line(color="lightgrey"),
+        panel_grid_major_y=element_line(color="lightgrey"),
+        axis_line=element_line(color="grey"),
+        legend_title=element_blank(),
+        legend_text=element_text(family="sans-serif", size=12),
+        plot_title=element_text(family="sans-serif", size=15),
+        axis_text=element_text(family="sans-serif", size=12),
+        axis_title=element_text(family="sans-serif", size=10),
+    )
+    + scale_fill_manual(
+        values=["#21368B", "#A6AED0"],
+        labels=[
+            "Accessory genes related to least stable core genes",
+            "Accessory genes related to most stable core genes",
+        ],
+    )
+    + scale_x_discrete(limits=x_ticks, labels=x_ticks)
 )
-plt.axhline(y=1.0, color="black", linestyle="--")
-fig2.legend_.remove()
-fig2.set_title("Who are most/least stable core genes related to (PA14)", fontsize=16)
-fig2.set_ylabel("Odds ratio", fontsize=14)
-fig2.set_xlabel("Rank correlation in expression space", fontsize=14)
-plt.legend(bbox_to_anchor=(1.05, 0.6), loc=2, borderaxespad=0.0, fontsize=12)
+print(fig_pa14)
+
+# +
+# Calculate statistical test between the distribution of the top 10 co-expressed
+# genes related to the least stable vs the most stable core genes
+# Test: mean number of co-expressed accessory genes in least stable group vs mean number of
+# co-expressed accessory genes in most stable group
+# (compare dark blue and light blue bars)
+
+pao1_least_df = pao1_subset[pao1_subset["label"] == "least stable acc"]
+pao1_least_df = pao1_least_df[pao1_least_df.offset != "+10"]
+pao1_least_vals = pao1_least_df["normalized"].values
+
+pao1_most_df = pao1_subset[pao1_subset["label"] == "most stable acc"]
+pao1_most_df = pao1_most_df[pao1_most_df.offset != "+10"]
+pao1_most_vals = pao1_most_df["normalized"].values
+
+# Independent t-test
+# Test the null hypothesis such that the means of two populations are equal
+(pao1_stats, pao1_pvalue) = scipy.stats.ttest_ind(pao1_least_vals, pao1_most_vals)
+print(pao1_stats, pao1_pvalue)
+
+# Non-parametric test
+# nonparametric test of the null hypothesis that, for randomly selected values X and Y from two populations,
+# the probability of X being greater than Y is equal to the probability of Y being greater than X.
+(pao1_stats, pao1_pvalue) = scipy.stats.mannwhitneyu(pao1_least_vals, pao1_most_vals)
+print(pao1_stats, pao1_pvalue)
+
+# +
+pa14_least_df = pa14_subset[pa14_subset["label"] == "least stable acc"]
+pa14_least_df = pa14_least_df[pa14_least_df.offset != "+10"]
+pa14_least_vals = pa14_least_df["normalized"].values
+
+pa14_most_df = pa14_subset[pa14_subset["label"] == "most stable acc"]
+pa14_most_df = pa14_most_df[pa14_most_df.offset != "+10"]
+pa14_most_vals = pa14_most_df["normalized"].values
+
+# Independent t-test
+(pa14_stats, pa14_pvalue) = scipy.stats.ttest_ind(pa14_least_vals, pa14_most_vals)
+print(pa14_stats, pa14_pvalue)
+
+# Non-parametric test
+(pa14_stats, pa14_pvalue) = scipy.stats.mannwhitneyu(pa14_least_vals, pa14_most_vals)
+print(pa14_stats, pa14_pvalue)
 # -
 
-"""# Save figures using operons
-# Save figures not using operons
-# Save figure with rolling sum and operons
-# Save figure with rolling sum not using operons
-fig.figure.savefig(
-    pao1_figure_filename,
-    format="svg",
-    bbox_inches="tight",
-    transparent=True,
-    pad_inches=0,
-    dpi=300,
-)
+# Based on the bar plots we can be confident in our trend (as seen by the confidence intervals) that least stable genes are more co-expressed with accessory genes compared to most stable genes. This difference between least and most stable genes is further quantified by the t-test comparing the distribution of accessory genes related least vs most genes.
 
-fig2.figure.savefig(
-    pa14_figure_filename,
-    format="svg",
-    bbox_inches="tight",
-    transparent=True,
-    pad_inches=0,
-    dpi=300,
-)"""
+ggsave(plot=fig_pao1, filename=pao1_figure_filename, device="svg", dpi=300)
+ggsave(plot=fig_pa14, filename=pa14_figure_filename, device="svg", dpi=300)
 
 # **Takeaway:**
 #

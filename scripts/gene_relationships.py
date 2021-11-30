@@ -179,7 +179,6 @@ def get_relationship_in_expression_space(
     corr_subset = corr_df.loc[genes_to_consider]
 
     rows = []
-    rows2 = []
     for gene in corr_subset.index:
         if operon_df is not None:
             # This subset needs to be reset each iteration
@@ -225,7 +224,6 @@ def get_relationship_in_expression_space(
 
         top_gene_labels = list(gene_mapping_df.loc[top_corr_genes, "core/acc"].values)
         rows.append(top_gene_labels)
-        rows2.append(top_corr_genes)
 
     # This df is `genes_to_consider` x offset_max
     # Each row corresponds to a gene being considered
@@ -238,15 +236,7 @@ def get_relationship_in_expression_space(
     # 3  core  core  core  core  core  core  core  core  core  core  ...  core
     # 4  core  core  core  core  core  core  core  core  core  core  ...  core
 
-    # TO DO
-    # Want to try to return a dataframe with all the top related accessory genes
-    # that we can look into since we found that least stable core genes are
-    # more co-expressed with other accessory genes
     expression_dist_counts = pd.DataFrame(rows)
-    # related_gene_ids = pd.DataFrame(rows2)
-    # bool_acc = expression_dist_counts == "acc"
-    # print(expression_dist_counts == "acc")
-    # print(related_gene_ids.loc[bool_acc])
 
     # Count types of relationships
     expression_dist_counts_acc = (expression_dist_counts == "acc").sum().to_frame("acc")
@@ -332,8 +322,6 @@ def get_CI_expression_relationships(
         # This will return a sample of the same size as
         # `genes_to_consider` but with a different subset of genes.
 
-        # TO DO
-        # Need to figure out how to reun this calculation with duplicate genes
         genes_to_consider_sample = random.choices(genes_to_consider, k=len(genes_to_consider))
 
         # Get correlation relationships
@@ -349,7 +337,6 @@ def get_CI_expression_relationships(
         relationships_df.columns = ["offset", "gene type", f"total_{i}"]
 
         # Concatenate df per run
-        print(relationships_df)
         if i == 0:
             result_df = relationships_df
         else:
@@ -357,7 +344,6 @@ def get_CI_expression_relationships(
                 relationships_df,
                 left_on=["offset", "gene type"],
                 right_on=["offset", "gene type"])
-            print(result_df)
 
     return result_df
 

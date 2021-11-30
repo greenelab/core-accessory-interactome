@@ -81,7 +81,13 @@ T6SS_similarity.sort_values(by="Transcriptional similarity across strains")
 
 T3SS_similarity.sort_values(by="Transcriptional similarity across strains")
 
-sec_similarity.sort_values(by="Transcriptional similarity across strains")
+# +
+# sec_similarity.sort_values(by="Transcriptional similarity across strains")
+# -
+
+# Save T3SS and T6SS df for easier lookup
+T3SS_similarity.to_csv("T3SS_core_similarity_associations_final_spell.tsv", sep="\t")
+T6SS_similarity.to_csv("T6SS_core_similarity_associations_final_spell.tsv", sep="\t")
 
 # ## Plot
 
@@ -109,12 +115,43 @@ sns.swarmplot(
     alpha=0.8,
 )
 
-sns.swarmplot(
-    data=sec_similarity,
-    x="Transcriptional similarity across strains",
-    color="yellow",
-    label="secretion system genes",
-    alpha=0.8,
+# sns.swarmplot(
+#    data=sec_similarity,
+#    x="Transcriptional similarity across strains",
+#    color="yellow",
+#    label="secretion system genes",
+#    alpha=0.8,
+# )
+
+# Add text labels for least stable genes amongst the T3SS/T6SS
+plt.text(
+    x=T3SS_similarity.loc[
+        T3SS_similarity["Name"] == "pscR", "Transcriptional similarity across strains"
+    ],
+    y=0.02,
+    s="$pscR$",
+)
+
+plt.text(
+    x=T6SS_similarity.loc[
+        T6SS_similarity["Name"] == "vgrG6", "Transcriptional similarity across strains"
+    ],
+    y=-0.02,
+    s="$vgrG6$",
+)
+plt.text(
+    x=T6SS_similarity.loc[
+        T6SS_similarity["Name"] == "vgrG3", "Transcriptional similarity across strains"
+    ],
+    y=-0.02,
+    s="$vgrG3$",
+)
+plt.text(
+    x=T6SS_similarity.loc[
+        T6SS_similarity["Name"] == "vgrG4a", "Transcriptional similarity across strains"
+    ],
+    y=-0.02,
+    s="$vgrG4a$",
 )
 
 plt.title("Stability of secretion system genes", fontsize=14)
@@ -123,4 +160,6 @@ plt.legend()
 
 # We hypothesized that most secretion machinery genes would be conserved but that secreted proteins (i.e. effector proteins) would be less conserved. In general, the effector proteins were not included in the KEGG annotations, which is probably why these secretion systems were found to be highly stable.
 #
-# There are some low scoring genes found, especially for the T6SS. Based on a manual inspection, these appear to be _vgrG_ genes that do encode some of the effector proteins.
+# T6SS genes are among the most stable with the vgrG6, vgrG3, vgrG4a among the least stable. T3SS among the most stable with pscR among the least stable
+#
+# Need to read more about these genes and if it makes sense that they are at the bottom.

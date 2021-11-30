@@ -144,7 +144,7 @@ pa14_associations.to_csv(pa14_out_filename, sep="\t")
 #
 # One of the "most stable" core genes found were from the T6SS, which is surprising given this pathway allows for inter-strain warfare and so we’d expect genes within this pathway to vary across strains.
 #
-# We will plot the distribution of these genes to make sure that the reason these T6SS genes are found to be stable is because all the genes are "off". Based on the plots below, this doesn't look to be the explanation for why T6SS genes are found to be stable across strains.
+# We will plot the distribution of these genes to make sure that the reason these T6SS genes are found to be stable is because all the genes are "off". Based on the plots below, this doesn't look to be the explanation for why T6SS genes are found to be stable across strains. Genes are expressed (> 1.0 log10 expression = 10 normalized counts)
 #
 # We manually selected these genes.
 
@@ -152,12 +152,24 @@ pa14_associations.to_csv(pa14_out_filename, sep="\t")
 
 # +
 # tssC1 (T6SS) gene selected
-pao1_most_id = "PA0084"
-pa14_most_id = "PA14_01020"
+# pao1_most_id = "PA0084"
+# pa14_most_id = "PA14_01020"
 
-# hcp1
-pao1_most_id = "PA0085"
-pa14_most_id = "PA14_01030"
+# hcp1 (T6SS)
+# pao1_most_id = "PA0085"
+# pa14_most_id = "PA14_01030"
+
+# tssF1 (T6SS)
+# pao1_most_id = "PA0088"
+# pa14_most_id = "PA14_01070"
+
+# pscC (T3SS)
+# pao1_most_id = "PA1716"
+# pa14_most_id = "PA14_42350"
+
+# pscF (T3SS)
+pao1_most_id = "PA1719"
+pa14_most_id = "PA14_42310"
 # -
 
 sns.displot(np.log10(pao1_expression[pao1_most_id]))
@@ -167,12 +179,11 @@ sns.displot(np.log10(pa14_expression[pa14_most_id]))
 
 # +
 # Least stable core gene
-# pao1_least_id = "PA3507"
-# pa14_least_id = "PA14_10840"
+# pao1_least_id = "PA4685"
+# pa14_least_id = "PA14_61980"
 
-# gloA2
-pao1_least_id = "PA0710"
-pa14_least_id = "PA14_55130"
+pao1_least_id = "PA2458"
+pa14_least_id = "PA14_32830"
 # -
 
 sns.displot(np.log10(pao1_expression[pao1_least_id]))
