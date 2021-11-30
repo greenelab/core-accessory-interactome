@@ -18,7 +18,7 @@
 #
 # Here we want to know about the relationship between stability and genome distance: Are more stable genes located in similar locations on the genome in PAO1 vs PA14 compared to least stable genes?
 #
-# We hypothesize that least stable genes are not syntenic (i.e. located in different regions of the genome) across strains, which might indicate a different some transcriptional re-wiring across strain types.
+# We hypothesize that least stable genes are not syntenic (i.e. located in different regions of the genome) across strains, which might indicate different transcriptional re-wiring across strain types.
 #
 # There are 2 approaches we take here:
 # 1. For each least/most stable gene, get the neighboring core/homologous genes and determine if they match between PAO1 vs PA14.
