@@ -40,3 +40,4 @@ dependencies:
   - hdbscan == 0.8.27
   - fastcluster == 1.1.28
   - tzlocal == 2.1
+  - svgutils==0.3.1
