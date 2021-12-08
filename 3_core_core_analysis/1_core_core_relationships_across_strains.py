@@ -298,19 +298,12 @@ fig_pao1 = sns.displot(
     alpha=0.8,
     bins=np.linspace(0, 1, 50),
 )
-# fig_pao1._legend.texts = [fig_pao1._legend.texts[0], fig_pao1._legend.texts[1]]
-# replace labels
-# new_labels = ['label 1', 'label 2']
-# for t, l in zip(fig_pao1._legend.texts, new_labels): t.set_text(l)
 fig_pao1._legend.remove()
 
 old_legend = fig_pao1._legend
 handles = old_legend.legendHandles
 
 legend = plt.legend(
-    # pao1_corr_df["label"].unique(),
-    # labels=["_nolegend_", "least stable", "most stable"],
-    # labels=["most stable", "least stable", "_nolegend_"],
     handles=[handles[0], handles[1]],
     labels=[fig_pao1._legend.texts[0].get_text(), fig_pao1._legend.texts[1].get_text()],
     bbox_to_anchor=(1.05, 0.6),

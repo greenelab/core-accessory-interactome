@@ -23,16 +23,6 @@ import os
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
-# +
-# TO DO
-# Make sure font is readable at 100% zoom (at least 14 in python, 12 in google slides)
-# Figure 1A. Make it more clear which rows are being compared for the correlation. Take the last row or highlight better
-# Figure 2A: make correlation clear so its stable gene X vs all other genes with labels core/acc.
-# Clarify connection between figure 2A and 2B. Add y-axis to workflow. Maybe additional things
-# Terminology: is this fold change vs enrichment
-# Change 10+ to >10
-# -
-
 # Directory of output figures
 # local_directory = "/home/alexandra/Documents/Data/Generic_expression_patterns/"
 output_directory = "output/"
@@ -91,7 +81,7 @@ panel_1a_label = sg.TextElement(10, 20, "A", size=18, weight="bold", font="Verda
 panel_1b_label = sg.TextElement(10, 500, "B", size=18, weight="bold", font="Verdana")
 panel_1c_label = sg.TextElement(500, 500, "C", size=18, weight="bold", font="Verdana")
 
-figure_1 = sg.SVGFigure("1000", "1000")
+figure_1 = sg.SVGFigure("950", "900")
 figure_1.append(
     [
         etree.Element("rect", {"width": "100%", "height": "100%", "fill": "white"}),
@@ -125,7 +115,7 @@ panel_2b_left = make_figure_panel(
     "../5_core_acc_analysis/PA14_stability_expression_relationships_operon_corrected_spell.svg",
     scale_x_input=1,
     scale_y_input=1,
-    x_loc=455,
+    x_loc=450,
     y_loc=500,
 )
 panel_2c = make_figure_panel(
@@ -140,7 +130,7 @@ panel_2a_label = sg.TextElement(10, 20, "A", size=18, weight="bold", font="Verda
 panel_2b_label = sg.TextElement(10, 500, "B", size=18, weight="bold", font="Verdana")
 panel_2c_label = sg.TextElement(10, 900, "C", size=18, weight="bold", font="Verdana")
 
-figure_2 = sg.SVGFigure("1300", "1200")
+figure_2 = sg.SVGFigure("1000", "1200")
 figure_2.append(
     [
         etree.Element("rect", {"width": "100%", "height": "100%", "fill": "white"}),

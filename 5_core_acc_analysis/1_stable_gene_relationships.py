@@ -420,7 +420,8 @@ pao1_subset = expression_dist_counts_pao1_all[
     (expression_dist_counts_pao1_all["gene type"] == "acc")
 ]
 pao1_subset["offset"] = list(pao1_subset["offset"].astype("str"))
-x_ticks = ["+10", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+pao1_subset["offset"].replace("+10", ">10", inplace=True)
+x_ticks = [">10", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 
 fig_pao1 = (
     ggplot(pao1_subset, aes(x="offset", y="normalized", fill="label"))
@@ -434,8 +435,8 @@ fig_pao1 = (
     + geom_hline(aes(yintercept=1.0), linetype="dashed")
     + labs(
         x="Rank co-expression",
-        y=r"Fold change" + "\n" + "(% acc genes co-express/% acc genes in genome)",
-        title="Who are most/least stable core genes related to (PAO1)",
+        y="% accessory fold change",
+        title="Stability vs accessory gene relationship (PAO1)",
     )
     + theme_seaborn("white")
     + theme(
@@ -444,15 +445,15 @@ fig_pao1 = (
         axis_line=element_line(color="grey"),
         legend_title=element_blank(),
         legend_text=element_text(family="sans-serif", size=12),
-        plot_title=element_text(family="sans-serif", size=15),
+        plot_title=element_text(family="sans-serif", size=16),
         axis_text=element_text(family="sans-serif", size=12),
-        axis_title=element_text(family="sans-serif", size=10),
+        axis_title=element_text(family="sans-serif", size=14),
     )
     + scale_fill_manual(
-        values=["#21368B", "#A6AED0"],
+        values=["#a6aed0ff", "#4e1c80"],
         labels=[
-            "Accessory genes related to least stable core genes",
-            "Accessory genes related to most stable core genes",
+            "least stable",
+            "most stable",
         ],
     )
     + scale_x_discrete(limits=x_ticks, labels=x_ticks)
@@ -464,6 +465,7 @@ pa14_subset = expression_dist_counts_pa14_all[
     (expression_dist_counts_pa14_all["gene type"] == "acc")
 ]
 pa14_subset["offset"] = list(pa14_subset["offset"].astype("str"))
+pa14_subset["offset"].replace("+10", ">10", inplace=True)
 
 fig_pa14 = (
     ggplot(pa14_subset, aes(x="offset", y="normalized", fill="label"))
@@ -477,8 +479,8 @@ fig_pa14 = (
     + geom_hline(aes(yintercept=1.0), linetype="dashed")
     + labs(
         x="Rank co-expression",
-        y=r"Fold change" + "\n" + "(% acc genes co-express/% acc genes in genome)",
-        title="Who are most/least stable core genes related to (PA14)",
+        y=r"% accessory fold change",
+        title="Stability vs accessory gene relationship (PA14)",
     )
     + theme_seaborn("white")
     + theme(
@@ -487,15 +489,15 @@ fig_pa14 = (
         axis_line=element_line(color="grey"),
         legend_title=element_blank(),
         legend_text=element_text(family="sans-serif", size=12),
-        plot_title=element_text(family="sans-serif", size=15),
+        plot_title=element_text(family="sans-serif", size=16),
         axis_text=element_text(family="sans-serif", size=12),
-        axis_title=element_text(family="sans-serif", size=10),
+        axis_title=element_text(family="sans-serif", size=14),
     )
     + scale_fill_manual(
-        values=["#21368B", "#A6AED0"],
+        values=["#a6aed0ff", "#4e1c80"],
         labels=[
-            "Accessory genes related to least stable core genes",
-            "Accessory genes related to most stable core genes",
+            "least stable",
+            "most stable",
         ],
     )
     + scale_x_discrete(limits=x_ticks, labels=x_ticks)
