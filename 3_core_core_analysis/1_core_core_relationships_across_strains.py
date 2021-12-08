@@ -291,28 +291,48 @@ fig_pao1 = sns.displot(
     data=pao1_corr_df,
     x="Transcriptional similarity across strains",
     hue="label",
-    palette={"": "grey", "least stable": "#ffc3a0", "most stable": "#0CA8AC"},
-    legend=None,
+    hue_order=["least stable", "most stable", ""],
+    # label=["", "least stable", "most stable"],
+    palette={"": "lightgrey", "least stable": "#a6aed0ff", "most stable": "#4e1c80"},
+    legend=True,
+    alpha=0.8,
     bins=np.linspace(0, 1, 50),
 )
-plt.legend(
-    labels=["most stable", "least stable"],
+# fig_pao1._legend.texts = [fig_pao1._legend.texts[0], fig_pao1._legend.texts[1]]
+# replace labels
+# new_labels = ['label 1', 'label 2']
+# for t, l in zip(fig_pao1._legend.texts, new_labels): t.set_text(l)
+fig_pao1._legend.remove()
+
+old_legend = fig_pao1._legend
+handles = old_legend.legendHandles
+
+legend = plt.legend(
+    # pao1_corr_df["label"].unique(),
+    # labels=["_nolegend_", "least stable", "most stable"],
+    # labels=["most stable", "least stable", "_nolegend_"],
+    handles=[handles[0], handles[1]],
+    labels=[fig_pao1._legend.texts[0].get_text(), fig_pao1._legend.texts[1].get_text()],
     bbox_to_anchor=(1.05, 0.6),
     loc="upper left",
     borderaxespad=0,
 )
 
 plt.title("Stability of core genes across strain types", fontsize=14, y=1.1)
+plt.xlabel("Transcriptional similarity score", fontsize=14)
+plt.ylabel("Count", fontsize=14)
 
 # +
 fig_pa14 = sns.displot(
     data=pa14_corr_df,
     x="Transcriptional similarity across strains",
     hue="label",
-    palette={"": "grey", "least stable": "#ffc3a0", "most stable": "#0CA8AC"},
+    palette={"": "darkgrey", "least stable": "#a6aed0ff", "most stable": "#4e1c80"},
 )
 
 plt.title("Similarity of core-core modules PA14 to PAO1")
+plt.xlabel("Transcriptional similarity score", fontsize=14)
+plt.ylabel("Count", fontsize=14)
 # -
 
 # **Takeaways:**

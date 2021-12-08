@@ -25,17 +25,12 @@ import matplotlib.image as mpimg
 
 # +
 # TO DO
-# Make sure font is readable at 100% zoom
+# Make sure font is readable at 100% zoom (at least 14 in python, 12 in google slides)
 # Figure 1A. Make it more clear which rows are being compared for the correlation. Take the last row or highlight better
 # Figure 2A: make correlation clear so its stable gene X vs all other genes with labels core/acc.
 # Clarify connection between figure 2A and 2B. Add y-axis to workflow. Maybe additional things
 # Terminology: is this fold change vs enrichment
 # Change 10+ to >10
-
-# Quick
-# Not sure how many points are in Figure 1C, maybe add violin + jitter?
-# Two panels of figure 2B are too close
-# Flipped colors in Figure 2A and 2B
 # -
 
 # Directory of output figures
@@ -130,7 +125,7 @@ panel_2b_left = make_figure_panel(
     "../5_core_acc_analysis/PA14_stability_expression_relationships_operon_corrected_spell.svg",
     scale_x_input=1,
     scale_y_input=1,
-    x_loc=400,
+    x_loc=455,
     y_loc=500,
 )
 panel_2c = make_figure_panel(
@@ -145,7 +140,7 @@ panel_2a_label = sg.TextElement(10, 20, "A", size=18, weight="bold", font="Verda
 panel_2b_label = sg.TextElement(10, 500, "B", size=18, weight="bold", font="Verdana")
 panel_2c_label = sg.TextElement(10, 900, "C", size=18, weight="bold", font="Verdana")
 
-figure_2 = sg.SVGFigure("1200", "1200")
+figure_2 = sg.SVGFigure("1300", "1200")
 figure_2.append(
     [
         etree.Element("rect", {"width": "100%", "height": "100%", "fill": "white"}),
