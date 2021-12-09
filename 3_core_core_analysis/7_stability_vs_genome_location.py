@@ -352,7 +352,7 @@ fig_match_homolog = sns.stripplot(
 )
 
 fig_match_homolog.set_xticklabels(["least stable", "most stable", "random"], size=16)
-plt.title("% Matching homologs", fontsize=16)
+plt.title("Stability vs relative genome location", fontsize=16)
 plt.xlabel("")
 plt.ylabel("% of neighboring homologs that match", fontsize=16)
 plt.ylabel("% neighboring homologs that match", fontsize=16)

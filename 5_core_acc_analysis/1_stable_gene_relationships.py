@@ -49,6 +49,7 @@ from plotnine import (
     scale_fill_manual,
     scale_x_discrete,
     xlim,
+    ylim,
     guides,
     guide_legend,
     element_blank,
@@ -457,6 +458,7 @@ fig_pao1 = (
         ],
     )
     + scale_x_discrete(limits=x_ticks, labels=x_ticks)
+    + ylim(0, 3.5)
 )
 print(fig_pao1)
 
@@ -501,6 +503,7 @@ fig_pa14 = (
         ],
     )
     + scale_x_discrete(limits=x_ticks, labels=x_ticks)
+    + ylim(0, 3.5)
 )
 print(fig_pa14)
 
