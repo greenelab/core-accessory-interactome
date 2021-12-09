@@ -340,18 +340,34 @@ homolog_dist_df = (
 # +
 plt.figure(figsize=(10, 8))
 fig_match_homolog = sns.stripplot(
-    data=homolog_neighborhood_df, x="core gene group", y="value", palette="Set2"
+    data=homolog_neighborhood_df,
+    x="core gene group",
+    y="value",
+    jitter=True,
+    palette={
+        "least stable % matching": "#a6aed0ff",
+        "most stable % matching": "#4e1c80",
+        "random % matching": "lightgrey",
+    },
 )
 
-plt.title("% Matching homologs", fontsize=14)
+fig_match_homolog.set_xticklabels(["least stable", "most stable", "random"], size=16)
+plt.title("Stability vs relative genome location", fontsize=16)
 plt.xlabel("")
-plt.xticks(fontsize=14)
-plt.ylabel("% neighboring homologs that match", fontsize=14)
+plt.ylabel("% of neighboring homologs that match", fontsize=16)
+plt.ylabel("% neighboring homologs that match", fontsize=16)
 
 # +
 plt.figure(figsize=(10, 8))
 fig_dist = sns.stripplot(
-    data=homolog_dist_df, x="core gene group", y="value", palette="Set2"
+    data=homolog_dist_df,
+    x="core gene group",
+    y="value",
+    palette={
+        "least stable dist": "#a6aed0ff",
+        "most stable dist": "#330066",
+        "random dist": "lightgrey",
+    },
 )
 
 plt.title("Distance between homologs", fontsize=14)

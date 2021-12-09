@@ -179,8 +179,9 @@ fig_exo_corr = sns.scatterplot(
     data=exo_core_corr,
     x="corr to exoS",
     y="corr to exoU",
-    alpha=0.6,
+    alpha=0.7,
     hue="label",
+    palette={"": "darkgrey", "both": "#fd5e0c", "exoS only": "#f9da76"},
 )
 plt.ylabel(r"Correlation to $exoU$", fontsize=14)
 plt.xlabel(R"Correlation to $exoS$", fontsize=14)
