@@ -140,11 +140,26 @@ def percent_matching_homologs(
         pao1_gene_idx = pao1_core_genes_df.index.get_loc(pao1_id)
         # print(pao1_gene_idx)
         # print([pao1_gene_idx - window_size, pao1_gene_idx + window_size + 1])
-        pao1_gene_neighborhood_ids = pao1_core_genes_df.iloc[
-            max(pao1_gene_idx - window_size, 0) : min(
-                pao1_gene_idx + window_size + 1, max_pao1
-            )
-        ].index
+        min_window = pao1_gene_idx - window_size
+        max_window = pao1_gene_idx + window_size + 1
+
+        new_idx = []
+        for i in range(min_window, pao1_gene_idx):
+            if i < 0:
+                print("here - pao1 min")
+                new_i = max_pao1 + i
+                new_idx.append(new_i)
+            else:
+                new_idx.append(i)
+        for j in range(pao1_gene_idx, max_window):
+            if j > max_pao1 - 1:
+                print("here - pao1 max")
+                new_j = j % max_pao1
+                new_idx.append(new_j)
+            else:
+                new_idx.append(j)
+        # print(new_idx)
+        pao1_gene_neighborhood_ids = pao1_core_genes_df.iloc[new_idx].index
         # print(pao1_gene_neighborhood_ids)
 
         # Remove least/most stable gene
@@ -158,11 +173,26 @@ def percent_matching_homologs(
 
         # Get PA14 neighboring core genes
         pa14_gene_idx = pa14_core_genes_df.index.get_loc(mapped_pa14_id)
-        pa14_gene_neighborhood_ids = pa14_core_genes_df.iloc[
-            max(pa14_gene_idx - window_size, 0) : min(
-                pa14_gene_idx + window_size + 1, max_pa14
-            )
-        ].index
+
+        min_window = pa14_gene_idx - window_size
+        max_window = pa14_gene_idx + window_size + 1
+
+        new_idx = []
+        for i in range(min_window, pa14_gene_idx):
+            if i < 0:
+                print("here - pa14 min")
+                new_i = max_pa14 + i
+                new_idx.append(new_i)
+            else:
+                new_idx.append(i)
+        for j in range(pa14_gene_idx, max_window):
+            if j > max_pa14 - 1:
+                print("here - pa14 max")
+                new_j = j % max_pa14
+                new_idx.append(new_j)
+            else:
+                new_idx.append(j)
+        pa14_gene_neighborhood_ids = pa14_core_genes_df.iloc[new_idx].index
 
         # Remove least/most stable gene
         pa14_gene_neighborhood_ids = pa14_gene_neighborhood_ids.drop(
