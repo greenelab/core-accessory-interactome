@@ -44,6 +44,7 @@ pa14_metadata.head(10)
 # Clean up values?
 # Only plot the top 10?
 # Coloring palette
+# Count NA?
 # -
 
 # Format dataframe
