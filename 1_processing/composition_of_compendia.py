@@ -42,15 +42,9 @@ pa14_metadata.head(10)
 # +
 # TO DO
 # Clean up values?
-# Only plot the top 10
-# Coloring
-# Increase axis label
-# Name axis "PAO1 compendium"
+# Only plot the top 10?
+# Coloring palette
 # -
-
-# ## Plot media distribution in PAO1 and PA14
-#
-# Media will be at the study level
 
 # Format dataframe
 # Only keep first row
@@ -60,6 +54,17 @@ pa14_metadata_first = pa14_metadata[~pa14_metadata.index.duplicated(keep="first"
 # Concatenate
 both_metadata_first = pd.concat([pao1_metadata_first, pa14_metadata_first])
 
+# Rename to clean up legend
+media_mapper = {
+    "TSB": "Tryptic Soy Broth",
+}
+# gene_function_mapper = {}
+both_metadata_first.replace({"Medium": media_mapper}, inplace=True)
+
+# ## Plot media distribution in PAO1 and PA14
+#
+# Media will be at the study level
+
 both_metadata_first_media = (
     both_metadata_first.groupby(["Strain", "Medium"])
     .size()
@@ -67,10 +72,18 @@ both_metadata_first_media = (
     .pivot(columns="Medium", index="Strain", values=0)
 )
 
-both_metadata_first_media.plot(
+both_metadata_first_media
+
+fig_media = both_metadata_first_media.plot(
     kind="bar", stacked=True, colormap="Set2", figsize=(12, 8)
 )
 plt.legend(bbox_to_anchor=(1.5, 1), loc="upper right", ncol=1)
+plt.title("Media used in experiments", fontsize=16)
+fig_media.set_xlabel("")
+fig_media.set_ylabel("Count", fontsize=14)
+fig_media.set_xticklabels(
+    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=14
+)
 
 # ## Plot Gene function distribution in PAO1 and PA14
 # Gene function will be at the study level as well since the gene will be the same
@@ -83,10 +96,18 @@ both_metadata_first_function = (
     .pivot(columns="Gene.Function", index="Strain", values=0)
 )
 
-both_metadata_first_function.plot(
+both_metadata_first_function
+
+fig_function = both_metadata_first_function.plot(
     kind="bar", stacked=True, colormap="Set2", figsize=(12, 8)
 )
 plt.legend(bbox_to_anchor=(1.8, 1), loc="upper right", ncol=1)
+plt.title("Gene function studied in experiments", fontsize=16)
+fig_function.set_xlabel("")
+fig_function.set_ylabel("Count", fontsize=14)
+fig_function.set_xticklabels(
+    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=14
+)
 
 # ## Plot pathways associated with perturbed gene
 #
@@ -112,8 +133,24 @@ both_metadata_kegg = (
 
 both_metadata_kegg
 
-both_metadata_kegg.plot(kind="bar", stacked=True, colormap="Set2", figsize=(12, 8))
-plt.legend(bbox_to_anchor=(1.8, 1), loc="upper right", ncol=1)
+fig_kegg = both_metadata_kegg.plot(
+    kind="bar", stacked=True, colormap="Set2", figsize=(12, 8)
+)
+plt.legend(bbox_to_anchor=(1.45, 1), loc="upper right", ncol=1)
+plt.title("KEGG pathway studied in experiments", fontsize=16)
+fig_kegg.set_xlabel("")
+fig_kegg.set_ylabel("Count", fontsize=14)
+fig_kegg.set_xticklabels(
+    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=14
+)
 
-# +
 # Save plots
+fig_media.figure.savefig(
+    "compendia_media.svg", dpi=300, format="svg", bbox_inches="tight"
+)
+fig_function.figure.savefig(
+    "compendia_gene_function.svg", dpi=300, format="svg", bbox_inches="tight"
+)
+fig_kegg.figure.savefig(
+    "compendia_kegg.svg", dpi=300, format="svg", bbox_inches="tight"
+)
