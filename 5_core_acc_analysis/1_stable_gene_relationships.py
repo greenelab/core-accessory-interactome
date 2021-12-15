@@ -431,12 +431,12 @@ fig_pao1 = (
         pao1_subset,
         aes(x="offset", ymin="ymin", ymax="ymax"),
         position=positions.position_dodge(0.8),
-        color="darkgrey",
+        color="black",
     )
     + geom_hline(aes(yintercept=1.0), linetype="dashed")
     + labs(
         x="Rank co-expression",
-        y="% accessory fold change",
+        y="observed/expected",
         title="Stability vs accessory gene relationship (PAO1)",
     )
     + theme_seaborn("white")
@@ -476,12 +476,12 @@ fig_pa14 = (
         pa14_subset,
         aes(x="offset", ymin="ymin", ymax="ymax"),
         position=positions.position_dodge(0.8),
-        color="darkgrey",
+        color="black",
     )
     + geom_hline(aes(yintercept=1.0), linetype="dashed")
     + labs(
         x="Rank co-expression",
-        y=r"% accessory fold change",
+        y="observed/expected",
         title="Stability vs accessory gene relationship (PA14)",
     )
     + theme_seaborn("white")

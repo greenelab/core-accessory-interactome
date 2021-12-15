@@ -312,7 +312,7 @@ legend = plt.legend(
 )
 
 plt.title("Stability of core genes across strain types", fontsize=14, y=1.1)
-plt.xlabel("Transcriptional similarity score", fontsize=14)
+plt.xlabel("Transcriptional stability", fontsize=14)
 plt.ylabel("Count", fontsize=14)
 
 # +
@@ -324,7 +324,7 @@ fig_pa14 = sns.displot(
 )
 
 plt.title("Similarity of core-core modules PA14 to PAO1")
-plt.xlabel("Transcriptional similarity score", fontsize=14)
+plt.xlabel("Transcriptional stability", fontsize=14)
 plt.ylabel("Count", fontsize=14)
 # -
 

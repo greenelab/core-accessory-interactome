@@ -132,8 +132,8 @@ panel_2d = make_figure_panel(
 
 panel_2a_label = sg.TextElement(10, 20, "A", size=18, weight="bold", font="Verdana")
 panel_2b_label = sg.TextElement(700, 20, "B", size=18, weight="bold", font="Verdana")
-panel_2c_label = sg.TextElement(10, 400, "B", size=18, weight="bold", font="Verdana")
-panel_2d_label = sg.TextElement(700, 400, "C", size=18, weight="bold", font="Verdana")
+panel_2c_label = sg.TextElement(10, 400, "C", size=18, weight="bold", font="Verdana")
+panel_2d_label = sg.TextElement(700, 400, "D", size=18, weight="bold", font="Verdana")
 
 figure_2 = sg.SVGFigure("1200", "800")
 figure_2.append(
