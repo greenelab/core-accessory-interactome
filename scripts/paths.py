@@ -13,8 +13,10 @@ LOCAL_DATA_DIR = (
 )
 
 # Location of gene expression matrix stored locally due to size
-PAO1_GE = LOCAL_DATA_DIR / "pao1_aligned_rnaseq_compendium_zp2_MRnorm.csv"
-PA14_GE = LOCAL_DATA_DIR / "pa14_aligned_rnaseq_compendium_zp2_MRnorm.csv"
+PAO1_GE_RAW = LOCAL_DATA_DIR / "pao1_aligned_compendium_p2_filtered_counts_norm.csv"
+PA14_GE_RAW = LOCAL_DATA_DIR / "pa14_aligned_compendium_p2_filtered_counts_norm.csv"
+PAO1_GE = LOCAL_DATA_DIR / "pao1_aligned_compendium_p2_filtered_counts_norm_processed.tsv"
+PA14_GE = LOCAL_DATA_DIR / "pa14_aligned_compendium_p2_filtered_counts_norm_processed.tsv"
 
 # Location of metadata mapping sample to strain name
 SAMPLE_TO_STRAIN = LOCAL_DATA_DIR / "Run_Table_Strain_Bool_GD.csv"
