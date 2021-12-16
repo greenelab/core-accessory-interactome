@@ -146,14 +146,12 @@ def percent_matching_homologs(
         new_idx = []
         for i in range(min_window, pao1_gene_idx):
             if i < 0:
-                print("here - pao1 min")
                 new_i = max_pao1 + i
                 new_idx.append(new_i)
             else:
                 new_idx.append(i)
         for j in range(pao1_gene_idx, max_window):
             if j > max_pao1 - 1:
-                print("here - pao1 max")
                 new_j = j % max_pao1
                 new_idx.append(new_j)
             else:
@@ -180,14 +178,12 @@ def percent_matching_homologs(
         new_idx = []
         for i in range(min_window, pa14_gene_idx):
             if i < 0:
-                print("here - pa14 min")
                 new_i = max_pa14 + i
                 new_idx.append(new_i)
             else:
                 new_idx.append(i)
         for j in range(pa14_gene_idx, max_window):
             if j > max_pa14 - 1:
-                print("here - pa14 max")
                 new_j = j % max_pa14
                 new_idx.append(new_j)
             else:
@@ -385,7 +381,7 @@ fig_match_homolog.set_xticklabels(["least stable", "most stable", "random"], siz
 plt.title("Stability vs relative genome location", fontsize=16)
 plt.xlabel("")
 plt.ylabel("% of neighboring homologs that match", fontsize=16)
-plt.ylabel("% neighboring homologs that match", fontsize=16)
+plt.ylabel("% neighboring homologs matched", fontsize=16)
 
 # +
 plt.figure(figsize=(10, 8))
