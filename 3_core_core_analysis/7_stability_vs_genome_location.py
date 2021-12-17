@@ -378,7 +378,7 @@ fig_match_homolog = sns.stripplot(
 )
 
 fig_match_homolog.set_xticklabels(["least stable", "most stable", "random"], size=16)
-plt.title("Stability vs relative genome location", fontsize=16)
+plt.title("Stability vs relative genome location", fontsize=18)
 plt.xlabel("")
 plt.ylabel("% neighboring core genes matched", fontsize=16)
 
