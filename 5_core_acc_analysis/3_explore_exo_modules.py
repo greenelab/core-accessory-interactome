@@ -158,14 +158,14 @@ exo_core_corr.head()
 
 # Core genes highly co-expressed with both exoS and exoU
 exo_core_both = exo_core_corr[
-    (exo_core_corr["corr to exoS"] > 0.4) & (exo_core_corr["corr to exoU"] > 0.4)
+    (exo_core_corr["corr to exoS"] > 0.4) & (exo_core_corr["corr to exoU"] > 0.2)
 ]
 exo_core_both_ids = exo_core_both.index
 exo_core_both
 
 # Core genes co-expressed with exoS
 exoS_core_only = exo_core_corr[
-    (exo_core_corr["corr to exoS"] > 0.2) & (exo_core_corr["corr to exoU"] < 0.2)
+    (exo_core_corr["corr to exoS"] > 0.2) & (exo_core_corr["corr to exoU"] < 0)
 ]
 exoS_core_only_ids = exoS_core_only.index
 exoS_core_only
@@ -175,6 +175,8 @@ exo_core_corr["label"] = ""
 exo_core_corr.loc[exo_core_both_ids, "label"] = "both"
 exo_core_corr.loc[exoS_core_only_ids, "label"] = "exoS only"
 
+# +
+plt.figure(figsize=[10, 8])
 fig_exo_corr = sns.scatterplot(
     data=exo_core_corr,
     x="corr to exoS",
@@ -183,9 +185,12 @@ fig_exo_corr = sns.scatterplot(
     hue="label",
     palette={"": "darkgrey", "both": "#fd5e0c", "exoS only": "#f9da76"},
 )
+
 plt.ylabel(r"Correlation to $exoU$", fontsize=14)
 plt.xlabel(R"Correlation to $exoS$", fontsize=14)
-plt.legend(bbox_to_anchor=(1.05, 1))
+plt.title("Correlation of core genes with T3SS accessory genes", fontsize=16)
+plt.legend(bbox_to_anchor=(1.05, 1), fontsize=14)
+# -
 
 sns.jointplot(data=exo_core_corr, x="corr to exoS", y="corr to exoU", kind="hex")
 
