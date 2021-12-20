@@ -51,7 +51,7 @@ module_size_threshold = 1000
 sample_seed = 1
 
 # Gene subset
-gene_subset = "all"
+gene_subset = "acc"
 
 # How was data processed
 processed = "spell"

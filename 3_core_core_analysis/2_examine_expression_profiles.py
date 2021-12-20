@@ -172,8 +172,8 @@ pao1_most_id = "PA1719"
 pa14_most_id = "PA14_42310"
 # -
 
-sns.displot(np.log10(pao1_expression[pao1_most_id]))
-sns.displot(np.log10(pa14_expression[pa14_most_id]))
+sns.displot(np.log10(pao1_expression[pao1_most_id] + 1))
+sns.displot(np.log10(pa14_expression[pa14_most_id] + 1))
 
 # ### Example of least stable core gene
 
@@ -186,5 +186,5 @@ pao1_least_id = "PA2458"
 pa14_least_id = "PA14_32830"
 # -
 
-sns.displot(np.log10(pao1_expression[pao1_least_id]))
-sns.displot(np.log10(pa14_expression[pa14_least_id]))
+sns.displot(np.log10(pao1_expression[pao1_least_id] + 1))
+sns.displot(np.log10(pa14_expression[pa14_least_id] + 1))

@@ -309,11 +309,12 @@ legend = plt.legend(
     bbox_to_anchor=(1.05, 0.6),
     loc="upper left",
     borderaxespad=0,
+    fontsize=12,
 )
 
 plt.title("Stability of core genes across strain types", fontsize=14, y=1.1)
-plt.xlabel("Transcriptional stability", fontsize=14)
-plt.ylabel("Count", fontsize=14)
+plt.xlabel("Transcriptional stability", fontsize=12)
+plt.ylabel("Count", fontsize=12)
 
 # +
 fig_pa14 = sns.displot(

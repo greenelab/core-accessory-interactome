@@ -1,6 +1,6 @@
 # Identifying the interaction of core and accessory genes in *P. aeruginosa*
 
-**Alexandra J Lee, Georgia Doing, Deborah A Hogan and Casey S Greene**
+**Alexandra J Lee, Georgia Doing, Samuel L. Neff, Deborah A Hogan and Casey S Greene**
 
 **April 2020**
 

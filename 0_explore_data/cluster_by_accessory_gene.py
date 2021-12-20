@@ -50,8 +50,8 @@ from scripts import paths, utils
 
 # +
 # Expression data files
-pao1_expression_filename = paths.PAO1_GE
-pa14_expression_filename = paths.PA14_GE
+pao1_expression_filename = paths.PAO1_GE_RAW
+pa14_expression_filename = paths.PA14_GE_RAW
 
 # File containing table to map sample id to strain name
 sample_to_strain_filename = paths.SAMPLE_TO_STRAIN
@@ -528,12 +528,11 @@ fig3 += pn.geom_point(
     pn.aes(color="Strain type_pao1"),
     alpha=0.3,
 )
-# fig3 += pn.scale_color_manual(values=colors)
+fig3 += pn.scale_color_manual(values=colors)
 fig3 += pn.labs(
     x="median expression of PAO1-only genes",
     y="median expression of PA14-only genes",
     title="MR normalized estimated counts of accessory genes",
-    # title="Estimated counts of accessory genes",
     width=10,
 )
 fig3 += pn.theme_bw()
@@ -554,7 +553,6 @@ fig3 += pn.guides(
 print(fig3)
 
 fig3.save("Expression_accessory_genes_all_samples.svg", format="svg", dpi=300)
-# fig3.save("Expression_accessory_genes_all_samples_Georgia.svg", format="svg", dpi=300)
 
 # +
 # Plot log-scaled

@@ -94,8 +94,6 @@ pao1_gene_annot.tail()
 
 
 # ## Add gene names
-#
-# **TO DO: Remove these PAO1 gene ids from the correlation and redo correlation and acc-acc. Then add how=left**
 
 # Add gene names
 pao1_gene_module_labels = pao1_membership.merge(
