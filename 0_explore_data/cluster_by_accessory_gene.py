@@ -547,7 +547,9 @@ fig3 += pn.theme(
     axis_title=pn.element_text(family="sans-serif", size=14),
 )
 fig3 += pn.guides(
-    colour=pn.guide_legend(title="SRA strain type", override_aes={"alpha": 1})
+    colour=pn.guide_legend(
+        title="SRA strain type", override_aes={"alpha": 1, "size": 3}
+    )
 )
 
 print(fig3)

@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.9.1
+#       jupytext_version: 1.9.1+dev
 #   kernelspec:
 #     display_name: Python [conda env:core_acc] *
 #     language: python
@@ -75,16 +75,20 @@ both_metadata_first_media = (
 
 both_metadata_first_media
 
+# Output media legends for Georgia to review
+both_metadata_first_media.T.to_csv("media_legend.tsv", sep="\t")
+
 fig_media = both_metadata_first_media.plot(
     kind="bar", stacked=True, colormap="Set2", figsize=(12, 8)
 )
 plt.legend(bbox_to_anchor=(1.5, 1), loc="upper right", ncol=1)
-plt.title("Media used in experiments", fontsize=16)
+plt.title("Media used in experiments", fontsize=18)
 fig_media.set_xlabel("")
-fig_media.set_ylabel("Count", fontsize=14)
+fig_media.set_ylabel("Count", fontsize=18)
 fig_media.set_xticklabels(
-    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=14
+    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=18
 )
+fig_media.tick_params(labelsize=16)
 
 # ## Plot Gene function distribution in PAO1 and PA14
 # Gene function will be at the study level as well since the gene will be the same
@@ -99,16 +103,20 @@ both_metadata_first_function = (
 
 both_metadata_first_function
 
+# Output function metadata for Georgia to review
+both_metadata_first_function.T.to_csv("gene_function_legend.tsv", sep="\t")
+
 fig_function = both_metadata_first_function.plot(
     kind="bar", stacked=True, colormap="Set2", figsize=(12, 8)
 )
 plt.legend(bbox_to_anchor=(1.8, 1), loc="upper right", ncol=1)
-plt.title("Gene function studied in experiments", fontsize=16)
+plt.title("Gene function studied in experiments", fontsize=18)
 fig_function.set_xlabel("")
-fig_function.set_ylabel("Count", fontsize=14)
+fig_function.set_ylabel("Count", fontsize=18)
 fig_function.set_xticklabels(
-    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=14
+    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=18
 )
+fig_function.tick_params(labelsize=16)
 
 # ## Plot pathways associated with perturbed gene
 #
@@ -134,16 +142,20 @@ both_metadata_kegg = (
 
 both_metadata_kegg
 
+# Output kegg metadata for Georgia to review
+both_metadata_kegg.T.to_csv("pathway_legend.tsv", sep="\t")
+
 fig_kegg = both_metadata_kegg.plot(
     kind="bar", stacked=True, colormap="Set2", figsize=(12, 8)
 )
 plt.legend(bbox_to_anchor=(1.45, 1), loc="upper right", ncol=1)
-plt.title("KEGG pathway studied in experiments", fontsize=16)
+plt.title("KEGG pathway studied in experiments", fontsize=18)
 fig_kegg.set_xlabel("")
-fig_kegg.set_ylabel("Count", fontsize=14)
+fig_kegg.set_ylabel("Count", fontsize=18)
 fig_kegg.set_xticklabels(
-    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=14
+    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=18
 )
+fig_kegg.tick_params(labelsize=16)
 
 # Save plots
 fig_media.figure.savefig(
