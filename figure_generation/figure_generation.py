@@ -56,41 +56,87 @@ def make_figure_panel(filename, scale_x_input, scale_y_input, x_loc, y_loc):
 
 # Create panels for figure 1
 panel_1a = make_figure_panel(
+    "../0_explore_data/Expression_accessory_genes_all_samples.svg",
+    scale_x_input=1,
+    scale_y_input=1,
+    x_loc=10,
+    y_loc=30,
+)
+panel_1b = make_figure_panel(
+    "../1_processing/MR_median_acc_expression_pa14_compendium_25threshold.svg",
+    scale_x_input=1,
+    scale_y_input=1,
+    x_loc=550,
+    y_loc=30,
+)
+panel_1c = make_figure_panel(
+    "../1_processing/MR_median_acc_expression_pao1_compendium_25threshold.svg",
+    scale_x_input=1,
+    scale_y_input=1,
+    x_loc=1100,
+    y_loc=30,
+)
+panel_1b_inset = make_figure_panel(
+    "../1_processing/dist_median_acc_expression_pa14_compendium_0threshold.svg",
+    scale_x_input=0.6,
+    scale_y_input=0.6,
+    x_loc=700,
+    y_loc=80,
+)
+panel_1c_inset = make_figure_panel(
+    "../1_processing/dist_median_acc_expression_pao1_compendium_0threshold.svg",
+    scale_x_input=0.6,
+    scale_y_input=0.6,
+    x_loc=1230,
+    y_loc=80,
+)
+panel_1d = make_figure_panel(
     "../1_processing/compendia_media.svg",
     scale_x_input=0.5,
     scale_y_input=0.5,
     x_loc=30,
-    y_loc=10,
+    y_loc=400,
 )
-panel_1b = make_figure_panel(
+panel_1e = make_figure_panel(
     "../1_processing/compendia_gene_function.svg",
     scale_x_input=0.5,
     scale_y_input=0.5,
-    x_loc=600,
-    y_loc=10,
+    x_loc=550,
+    y_loc=400,
 )
-panel_1c = make_figure_panel(
+panel_1f = make_figure_panel(
     "../1_processing/compendia_kegg.svg",
     scale_x_input=0.5,
     scale_y_input=0.5,
-    x_loc=30,
-    y_loc=300,
+    x_loc=1100,
+    y_loc=400,
 )
 
 panel_1a_label = sg.TextElement(10, 20, "A", size=18, weight="bold", font="Verdana")
-panel_1b_label = sg.TextElement(600, 20, "B", size=18, weight="bold", font="Verdana")
-panel_1c_label = sg.TextElement(10, 300, "C", size=18, weight="bold", font="Verdana")
+panel_1b_label = sg.TextElement(550, 20, "B", size=18, weight="bold", font="Verdana")
+panel_1c_label = sg.TextElement(1100, 20, "C", size=18, weight="bold", font="Verdana")
+panel_1d_label = sg.TextElement(10, 400, "D", size=18, weight="bold", font="Verdana")
+panel_1e_label = sg.TextElement(550, 400, "E", size=18, weight="bold", font="Verdana")
+panel_1f_label = sg.TextElement(1100, 400, "F", size=18, weight="bold", font="Verdana")
 
-figure_1 = sg.SVGFigure("1200", "600")
+figure_1 = sg.SVGFigure("1700", "800")
 figure_1.append(
     [
         etree.Element("rect", {"width": "100%", "height": "100%", "fill": "white"}),
         panel_1a,
         panel_1b,
         panel_1c,
+        panel_1b_inset,
+        panel_1c_inset,
+        panel_1d,
+        panel_1e,
+        panel_1f,
         panel_1a_label,
         panel_1b_label,
         panel_1c_label,
+        panel_1d_label,
+        panel_1e_label,
+        panel_1f_label,
     ]
 )
 display(SVG(figure_1.to_str()))
