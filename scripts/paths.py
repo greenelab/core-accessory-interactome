@@ -12,9 +12,11 @@ LOCAL_DATA_DIR = (
     LOCAL_DIR / "Documents" / "Data" / "Core_accessory" / "compendia_download"
 )
 
+# Location of files to be provided
+
 # Location of gene expression matrix stored locally due to size
-PAO1_GE_RAW = LOCAL_DATA_DIR / "pao1_aligned_compendium_p2_filtered_counts_norm.csv"
-PA14_GE_RAW = LOCAL_DATA_DIR / "pa14_aligned_compendium_p2_filtered_counts_norm.csv"
+PAO1_GE_RAW = LOCAL_DATA_DIR / "Dataset_S3_PAO1_compendium.csv"
+PA14_GE_RAW = LOCAL_DATA_DIR / "Dataset_S4_PA14_compendium.csv"
 PAO1_GE = LOCAL_DATA_DIR / "pao1_aligned_compendium_p2_filtered_counts_norm_processed.tsv"
 PA14_GE = LOCAL_DATA_DIR / "pa14_aligned_compendium_p2_filtered_counts_norm_processed.tsv"
 
@@ -32,6 +34,8 @@ GENE_PA14_ANNOT = LOCAL_DATA_DIR / "PA14_ID_2_PAO1_ID_PA14ref.csv"
 # Location for Salmon log files
 PAO1_LOGS = LOCAL_DATA_DIR / "logs_pao1_cdna_k15.csv"
 PA14_LOGS = LOCAL_DATA_DIR / "logs_pa14_cdna_k15.csv"
+
+# Location of files generated
 
 # Location for pre-binned compendia files that have been formated to be
 # sample x gene matrices with experiment id as sample id
