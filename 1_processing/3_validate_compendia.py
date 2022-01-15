@@ -66,12 +66,6 @@ pao1_expression_filename = (
 pa14_expression_filename = (
     f"MR_median_acc_expression_pa14_compendium_{threshold}threshold.svg"
 )
-pao1_dist_filename = (
-    f"dist_median_acc_expression_pao1_compendium_{threshold}threshold.svg"
-)
-pa14_dist_filename = (
-    f"dist_median_acc_expression_pa14_compendium_{threshold}threshold.svg"
-)
 
 # ## Get core and accessory annotations
 
@@ -302,7 +296,7 @@ f.set_ylabel("Count", fontsize=18)
 f.set_xlabel("PAO1 expression", fontsize=18)
 f.tick_params(labelsize=16)
 plt.legend(fontsize=16)
-f.figure.savefig(pao1_dist_filename, format="svg", dpi=300)
+# f.figure.savefig(pao1_dist_filename, format="svg", dpi=300)
 
 # +
 # Get PA14 samples that are labeled PA14 and non-PA14
@@ -338,7 +332,7 @@ g.set_ylabel("Count", fontsize=18)
 g.set_xlabel("PA14 expression", fontsize=18)
 g.tick_params(labelsize=16)
 plt.legend(fontsize=16)
-g.figure.savefig(pa14_dist_filename, format="svg", dpi=300)
+# g.figure.savefig(pa14_dist_filename, format="svg", dpi=300)
 # -
 
 # ## Core plots
