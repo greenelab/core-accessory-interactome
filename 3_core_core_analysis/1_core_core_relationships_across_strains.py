@@ -381,11 +381,14 @@ unmapped_pao1_pa14_gene_ids = low_pao1_set.difference(low_pa14_set)
 print(unmapped_pa14_pao1_gene_ids)
 print(unmapped_pao1_pa14_gene_ids)
 
-# Looks like PA14_36900 homolog doesn't exist in our PAO1 compendium
-pao1_corr_df[pao1_corr_df["PA14 homolog id"] == "PA14_36900"]
+# Looks like 'PA14_07440', 'PA14_32250' homologs don't exist in our PAO1 compendium
+pao1_corr_df[
+    (pao1_corr_df["PA14 homolog id"] == "PA14_07440")
+    & (pao1_corr_df["PA14 homolog id"] == "PA14_32250")
+]
 
-# Looks like this gene barely fell above the least stable threshold
-pa14_corr_df.loc[["PA14_03770"]]  # using spell data
+# Looks like this gene barely fell above the least stable threshold in PAO1
+pa14_corr_df.loc[["PA14_45020", "PA14_13240"]]  # using spell data
 
 # +
 # Save

@@ -404,9 +404,9 @@ plt.title("Distance between homologs", fontsize=14)
 plt.xlabel("")
 plt.xticks(fontsize=14)
 plt.ylabel("L1 Distance", fontsize=14)
-# -
 
-"""# Save
+# +
+# Save
 fig_match_homolog.figure.savefig(
     "stability_percent_match_homolog.svg",
     format="svg",
@@ -423,7 +423,8 @@ fig_dist.figure.savefig(
     transparent=True,
     pad_inches=0,
     dpi=300,
-)"""
+)
+# -
 
 # * Both approaches yeild similar trends which is good. So the signal is robust.
 # * However, both approaches find that there is not a strong association between stability and if the gene is located in the same location across strain types. We thought that least stable genes might be located in a different location in PAO1 vs PA14 (i.e. we would expect L1 distance to be higher in least stable genes or percent matching homologs to be lower in least stable genes). We instead find that the distances and percent of matching homologs are similar between most and least stable genes. There might be some least stable genes that are located farther away in genome space, but the consistency of location isn't the primary driver behind these core genes being least stable.
