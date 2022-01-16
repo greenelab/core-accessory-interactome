@@ -170,10 +170,18 @@ exoS_core_only = exo_core_corr[
 exoS_core_only_ids = exoS_core_only.index
 exoS_core_only
 
+# Core genes co-expressed with exoU
+exoU_core_only = exo_core_corr[
+    (exo_core_corr["corr to exoS"] < 0.2) & (exo_core_corr["corr to exoU"] > 0.2)
+]
+exoU_core_only_ids = exoU_core_only.index
+exoU_core_only
+
 # Add labels
 exo_core_corr["label"] = ""
 exo_core_corr.loc[exo_core_both_ids, "label"] = "both"
 exo_core_corr.loc[exoS_core_only_ids, "label"] = "exoS only"
+exo_core_corr.loc[exoU_core_only_ids, "label"] = "exoU only"
 
 # +
 plt.figure(figsize=[10, 8])
@@ -183,7 +191,12 @@ fig_exo_corr = sns.scatterplot(
     y="corr to exoU",
     alpha=0.7,
     hue="label",
-    palette={"": "darkgrey", "both": "#fd5e0c", "exoS only": "#f9da76"},
+    palette={
+        "": "darkgrey",
+        "both": "#fd5e0c",
+        "exoS only": "#f9da76",
+        "exoU only": "#6495ED",
+    },
 )
 
 plt.ylabel(r"Correlation to $exoU$", fontsize=20)

@@ -109,9 +109,9 @@ pa14_least_counts_df = pa14_least_counts_df.merge(
     pa14_gene_name_map["Name"], left_index=True, right_index=True, how="left"
 )
 
-pao1_least_counts_df
+pao1_least_counts_df.sort_values(by="counts", ascending=False)
 
-pa14_least_counts_df
+pa14_least_counts_df.sort_values(by="counts", ascending=False)
 
 # Save
 pao1_least_counts_df.to_csv("pao1_acc_coexpressed_with_least_stable.tsv", sep="\t")
