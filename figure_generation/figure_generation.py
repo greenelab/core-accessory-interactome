@@ -66,60 +66,52 @@ panel_1b = make_figure_panel(
     "../1_processing/MR_median_acc_expression_pa14_compendium_25threshold.svg",
     scale_x_input=1,
     scale_y_input=1,
-    x_loc=550,
+    x_loc=600,
     y_loc=30,
 )
 panel_1c = make_figure_panel(
     "../1_processing/MR_median_acc_expression_pao1_compendium_25threshold.svg",
     scale_x_input=1,
     scale_y_input=1,
-    x_loc=1100,
+    x_loc=1200,
     y_loc=30,
 )
 panel_1b_inset = make_figure_panel(
-    "../1_processing/dist_median_acc_expression_pa14_compendium_0threshold.svg",
+    "../1_processing/dist_median_acc_expression_pa14_compendium_25threshold.svg",
     scale_x_input=0.6,
     scale_y_input=0.6,
-    x_loc=700,
+    x_loc=750,
     y_loc=80,
 )
 panel_1c_inset = make_figure_panel(
-    "../1_processing/dist_median_acc_expression_pao1_compendium_0threshold.svg",
+    "../1_processing/dist_median_acc_expression_pao1_compendium_25threshold.svg",
     scale_x_input=0.6,
     scale_y_input=0.6,
-    x_loc=1230,
+    x_loc=1340,
     y_loc=80,
 )
 panel_1d = make_figure_panel(
     "../1_processing/compendia_media.svg",
-    scale_x_input=0.5,
-    scale_y_input=0.5,
+    scale_x_input=0.8,
+    scale_y_input=0.8,
     x_loc=30,
     y_loc=400,
 )
 panel_1e = make_figure_panel(
-    "../1_processing/compendia_gene_function.svg",
-    scale_x_input=0.5,
-    scale_y_input=0.5,
-    x_loc=550,
-    y_loc=400,
-)
-panel_1f = make_figure_panel(
     "../1_processing/compendia_kegg.svg",
-    scale_x_input=0.5,
-    scale_y_input=0.5,
-    x_loc=1100,
+    scale_x_input=0.8,
+    scale_y_input=0.8,
+    x_loc=900,
     y_loc=400,
 )
 
 panel_1a_label = sg.TextElement(10, 20, "A", size=18, weight="bold", font="Verdana")
-panel_1b_label = sg.TextElement(550, 20, "B", size=18, weight="bold", font="Verdana")
-panel_1c_label = sg.TextElement(1100, 20, "C", size=18, weight="bold", font="Verdana")
+panel_1b_label = sg.TextElement(600, 20, "B", size=18, weight="bold", font="Verdana")
+panel_1c_label = sg.TextElement(1200, 20, "C", size=18, weight="bold", font="Verdana")
 panel_1d_label = sg.TextElement(10, 400, "D", size=18, weight="bold", font="Verdana")
-panel_1e_label = sg.TextElement(550, 400, "E", size=18, weight="bold", font="Verdana")
-panel_1f_label = sg.TextElement(1100, 400, "F", size=18, weight="bold", font="Verdana")
+panel_1e_label = sg.TextElement(900, 400, "E", size=18, weight="bold", font="Verdana")
 
-figure_1 = sg.SVGFigure("1700", "800")
+figure_1 = sg.SVGFigure("1800", "800")
 figure_1.append(
     [
         etree.Element("rect", {"width": "100%", "height": "100%", "fill": "white"}),
@@ -130,13 +122,11 @@ figure_1.append(
         panel_1c_inset,
         panel_1d,
         panel_1e,
-        panel_1f,
         panel_1a_label,
         panel_1b_label,
         panel_1c_label,
         panel_1d_label,
         panel_1e_label,
-        panel_1f_label,
     ]
 )
 display(SVG(figure_1.to_str()))
@@ -222,8 +212,8 @@ panel_3b_left = make_figure_panel(
 )
 panel_3c = make_figure_panel(
     "../5_core_acc_analysis/core_genes_correlated_with_exo.svg",
-    scale_x_input=0.6,
-    scale_y_input=0.6,
+    scale_x_input=0.65,
+    scale_y_input=0.65,
     x_loc=30,
     y_loc=800,
 )

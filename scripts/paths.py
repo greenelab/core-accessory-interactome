@@ -35,6 +35,21 @@ GENE_PA14_ANNOT = LOCAL_DATA_DIR / "PA14_ID_2_PAO1_ID_PA14ref.csv"
 PAO1_LOGS = LOCAL_DATA_DIR / "logs_pao1_cdna_k15.csv"
 PA14_LOGS = LOCAL_DATA_DIR / "logs_pa14_cdna_k15.csv"
 
+# Location for standardized media, pathway names, gene function
+MEDIA_MAP = LOCAL_DATA_DIR / "media_legend_GD.txt"
+PATHWAY_MAP = LOCAL_DATA_DIR / "pathway_legend_GD.txt"
+GENE_FUNT_MAP = LOCAL_DATA_DIR / "gene_function_legend_GD.txt"
+
+# Location of PAO1 array compendium metadata file
+ARRAY_DATA_URL = "https://raw.githubusercontent.com/greenelab/adage/master/Data_collection_processing/Pa_compendium_02.22.2014.pcl"
+ARRAY_METADATA_URL = "https://raw.githubusercontent.com/greenelab/generic-expression-patterns/97a55c8d53b5d1812399479d530b9cbaee689079/pseudomonas_analysis/data/metadata/sample_annotations.tsv"
+
+# Location of processed PAO1 array and RNA-seq compendia files
+# These compendia are using the same set of genes to compare
+# module composition between array and RNA-seq
+ARRAY_COMPENDIUM_TO_COMPARE = LOCAL_DATA_DIR / "pao1_array_compendia_tocompare.tsv"
+RNASEQ_COMPENDIUM_TO_COMPARE = LOCAL_DATA_DIR / "pao1_rnaseq_compendia_tocompare.tsv"
+
 # Location of files generated
 
 # Location for pre-binned compendia files that have been formated to be
@@ -64,17 +79,9 @@ PA14_CORR_LOG_SPELL_CORE = LOCAL_DATA_DIR / "pa14_core_log_spell_mat.tsv"
 PAO1_CORR_LOG_SPELL_ACC = LOCAL_DATA_DIR / "pao1_acc_log_spell_mat.tsv"
 PA14_CORR_LOG_SPELL_ACC = LOCAL_DATA_DIR / "pa14_acc_log_spell_mat.tsv"
 
+# Location of files in repository
+
 # Location of metadata
 PAO1_REGULON = META_DIR / "gene_sets_refs.csv"
 PAO1_OPERON = META_DIR / "PAO1-operons-2021-07-19.csv"
 PA14_OPERON = META_DIR / "PA14-operons-2021-07-19.csv"
-
-# Location of PAO1 array compendium metadata file
-ARRAY_DATA_URL = "https://raw.githubusercontent.com/greenelab/adage/master/Data_collection_processing/Pa_compendium_02.22.2014.pcl"
-ARRAY_METADATA_URL = "https://raw.githubusercontent.com/greenelab/generic-expression-patterns/97a55c8d53b5d1812399479d530b9cbaee689079/pseudomonas_analysis/data/metadata/sample_annotations.tsv"
-
-# Location of processed PAO1 array and RNA-seq compendia files
-# These compendia are using the same set of genes to compare
-# module composition between array and RNA-seq
-ARRAY_COMPENDIUM_TO_COMPARE = LOCAL_DATA_DIR / "pao1_array_compendia_tocompare.tsv"
-RNASEQ_COMPENDIUM_TO_COMPARE = LOCAL_DATA_DIR / "pao1_rnaseq_compendia_tocompare.tsv"
