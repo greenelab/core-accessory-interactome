@@ -50,6 +50,10 @@ ARRAY_METADATA_URL = "https://raw.githubusercontent.com/greenelab/generic-expres
 ARRAY_COMPENDIUM_TO_COMPARE = LOCAL_DATA_DIR / "pao1_array_compendia_tocompare.tsv"
 RNASEQ_COMPENDIUM_TO_COMPARE = LOCAL_DATA_DIR / "pao1_rnaseq_compendia_tocompare.tsv"
 
+# Location of Pa array compendium and associated metadata
+ARRAY_COMPENDIUM_GE = LOCAL_DATA_DIR / "Pa_compendium_02.22.2014.pcl"
+ARRAY_COMPENDIUM_METADATA = LOCAL_DATA_DIR / "sample_annotations.tsv"
+
 # Location of files generated
 
 # Location for pre-binned compendia files that have been formated to be
