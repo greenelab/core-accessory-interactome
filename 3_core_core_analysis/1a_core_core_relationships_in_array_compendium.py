@@ -15,7 +15,7 @@
 
 # # Core-core relationships in array compendium
 #
-# This notebook performs the same stability analysis using the *P. aeruginosa* array compendium that is described in ____.
+# This notebook performs the same stability analysis using the *P. aeruginosa* array compendium that is described in [Tan et al.](https://journals.asm.org/doi/10.1128/msystems.00025-15?permanently=true) and found in the associated repository [here](https://github.com/greenelab/adage/blob/master/Data_collection_processing/Pa_compendium_02.22.2014.pcl). This notebook then compares the most stable genes identified using the array compendium compared to the RNA-seq compendium to validate our results are robust across platform (positive control).
 
 # +
 # %load_ext autoreload
@@ -38,15 +38,12 @@ random.seed(1)
 most_percent = 0.05
 least_percent = 0.05
 
-"""
+# +
 # Output filenames
-pao1_similarity_dist_filename = "pao1_similarity_scores_dist_spell.svg"
-pa14_similarity_dist_filename = "pa14_similarity_scores_dist_spell.svg"
+array_similarity_dist_filename = "array_similarity_scores_dist_spell.svg"
 
 # Files containing genes with highest and lowest transcriptional similarity scores high and low
-pao1_similarity_scores_filename = "pao1_similarity_scores_spell.tsv"
-pa14_similarity_scores_filename = "pa14_similarity_scores_spell.tsv"
-"""
+array_similarity_scores_filename = "array_similarity_scores_spell.tsv"
 
 # +
 # Import correlation matrix
@@ -66,13 +63,6 @@ print(array_metadata.shape)
 array_metadata.head()
 
 # ## Make PAO1, PA14 array compendia
-
-# +
-## TO DO
-# Look into getting samples with strain containing "PAO1" as a substring to expand number of samples
-# Update comments in notebook about where data came from
-# Update comments in notebook about core genes
-# -
 
 # Set "ml_data_source" (which corresponds to the sample ids in our expression matrix) as the index
 array_metadata.set_index("ml_data_source", inplace=True)
@@ -100,6 +90,8 @@ print(pa14_array_compendium.shape)
 pa14_array_compendium.head()
 
 # ## Calculate correlation matrix
+#
+# Here we're following the same processing we performed for the RNA-seq data, to log10 transform the data and then apply SPELL.
 
 num_SVs = 100
 
@@ -167,7 +159,7 @@ h2a.savefig(pa14_log_spell_filename, dpi=300)"""
 
 # ## Calculate transcriptional stability
 #
-# TO DO -- Add mention about how all genes in this dataset are core genes, since they were selected based on mapping so we don't need to map between id types like we did for the rna-seq
+# All genes in this array compendium are core genes, since they were selected based on their hybridization so we don't need to map between PAO1 and PA14 ids types like we did for the RNA-seq analysis.
 
 # +
 rows = []
@@ -180,7 +172,7 @@ for gene_id in array_expression.columns:
     ):
         pass
     else:
-        print("ordering is not the same, going to reorder")
+        print("ordering is not the same, going to reorder...")
         pa14_corr_log_spell = pa14_corr_log_spell.loc[
             pao1_corr_log_spell.index, pao1_corr_log_spell.columns
         ]
@@ -233,7 +225,7 @@ corr_summary_df.loc[array_least_stable.index, "label"] = "least stable"
 # +
 # Plot distribution of correlation scores
 # This scores indicate how transcriptionally similar genes are across PAO1 and PA14 strains
-fig_pao1 = sns.displot(
+fig_array = sns.displot(
     data=corr_summary_df,
     x="Transcriptional similarity across strains",
     hue="label",
@@ -244,14 +236,17 @@ fig_pao1 = sns.displot(
     alpha=0.8,
     bins=np.linspace(0, 1, 50),
 )
-fig_pao1._legend.remove()
+fig_array._legend.remove()
 
-old_legend = fig_pao1._legend
+old_legend = fig_array._legend
 handles = old_legend.legendHandles
 
 legend = plt.legend(
     handles=[handles[0], handles[1]],
-    labels=[fig_pao1._legend.texts[0].get_text(), fig_pao1._legend.texts[1].get_text()],
+    labels=[
+        fig_array._legend.texts[0].get_text(),
+        fig_array._legend.texts[1].get_text(),
+    ],
     bbox_to_anchor=(1.05, 0.6),
     loc="upper left",
     borderaxespad=0,
@@ -276,7 +271,7 @@ pao1_rnaseq_similarity_scores = pd.read_csv(
 )
 
 # +
-# Check overlap of gene ids
+# Check overlap of gene ids using in RNA-seq vs array compendia
 print(len(pao1_rnaseq_similarity_scores.index))
 print(len(corr_summary_df.index))
 
@@ -284,25 +279,32 @@ shared_core_genes = set(pao1_rnaseq_similarity_scores.index).intersection(
     corr_summary_df.index
 )
 print(len(shared_core_genes))
+# -
+
+# Select only those shared genes first
+pao1_rnaseq_similarity_scores_subset = pao1_rnaseq_similarity_scores.loc[
+    shared_core_genes
+]
+corr_summary_subset_df = corr_summary_df.loc[shared_core_genes]
 
 # +
 # Get most and least stable core genes
 rnaseq_most_stable_genes = list(
-    pao1_rnaseq_similarity_scores[
-        pao1_rnaseq_similarity_scores["label"] == "most stable"
+    pao1_rnaseq_similarity_scores_subset[
+        pao1_rnaseq_similarity_scores_subset["label"] == "most stable"
     ].index
 )
 rnaseq_least_stable_genes = list(
-    pao1_rnaseq_similarity_scores[
-        pao1_rnaseq_similarity_scores["label"] == "least stable"
+    pao1_rnaseq_similarity_scores_subset[
+        pao1_rnaseq_similarity_scores_subset["label"] == "least stable"
     ].index
 )
 
 array_most_stable_genes = list(
-    corr_summary_df[corr_summary_df["label"] == "most stable"].index
+    corr_summary_subset_df[corr_summary_subset_df["label"] == "most stable"].index
 )
 array_least_stable_genes = list(
-    corr_summary_df[corr_summary_df["label"] == "least stable"].index
+    corr_summary_subset_df[corr_summary_subset_df["label"] == "least stable"].index
 )
 
 # +
@@ -328,15 +330,15 @@ for text in most_stable_venn.subset_labels:
     text.set_fontsize(12)
     text.set_fontname("Verdana")
 
-"""# Save figure
-matplotlib.pyplot.savefig(
-    "cross_platform_venn.svg",
+# Save figure
+plt.savefig(
+    "most_stable_array_vs_rnaseq_venn.svg",
     format="svg",
     bbox_inches="tight",
     transparent=True,
     pad_inches=0,
     dpi=300,
-)"""
+)
 
 # +
 least_stable_venn = venn2(
@@ -361,27 +363,57 @@ for text in least_stable_venn.subset_labels:
     text.set_fontname("Verdana")
 
 
-"""# Save figure
-matplotlib.pyplot.savefig(
-    "cross_platform_venn.svg",
+# Save figure
+plt.savefig(
+    "least_stable_array_vs_rnaseq_venn",
     format="svg",
     bbox_inches="tight",
     transparent=True,
     pad_inches=0,
     dpi=300,
-)"""
+)
 # -
 
-"""# Save
-fig_pao1.savefig(
-    pao1_similarity_dist_filename,
+# ## Examine genes that differ
+
+# +
+most_rnaseq_only = set(rnaseq_most_stable_genes).difference(array_most_stable_genes)
+most_array_only = set(array_most_stable_genes).difference(rnaseq_most_stable_genes)
+
+least_rnaseq_only = set(rnaseq_least_stable_genes).difference(array_least_stable_genes)
+least_array_only = set(array_least_stable_genes).difference(rnaseq_least_stable_genes)
+# -
+
+pao1_rnaseq_similarity_scores_subset.loc[most_rnaseq_only]
+
+pao1_rnaseq_similarity_scores_subset.loc[most_array_only]
+
+sns.displot(
+    pao1_rnaseq_similarity_scores_subset.loc[
+        most_array_only, "Transcriptional similarity across strains"
+    ]
+)
+
+pao1_rnaseq_similarity_scores_subset.loc[least_rnaseq_only]
+
+pao1_rnaseq_similarity_scores_subset.loc[least_array_only]
+
+# Save
+fig_array.savefig(
+    array_similarity_dist_filename,
     format="svg",
     bbox_inches="tight",
     transparent=True,
     pad_inches=0,
     dpi=300,
-)"""
+)
 
-"""# Save transcriptional similarity df
-pao1_corr_df.to_csv(pao1_similarity_scores_filename, sep="\t")
-pa14_corr_df.to_csv(pa14_similarity_scores_filename, sep="\t")"""
+# **Takeaway:**
+# * Venn diagram comparing the most stable core genes using the array vs RNA-seq compendium, where the most stable genes = top 5% of genes with the highest transcriptional similarity.
+# * There is some consistency of most stable genes using the array and RNA-seq compendia
+# * Looking at the RNA-seq transcriptional similarity of the array only genes (191 genes), most of these genes were just below the threshold for "most stable" (transcriptional similarity = 0.4 - 0.55) according to the distribution plot. However there are some genes that have a lower similarity score (0.2 - 0.3). Why are these stable in microarray but not RNA-seq?
+#
+# * I also plotted the results comparing the least stable genes across the compendium, but its less clear what this is telling us since these genes are those that have unstable profiles across strains.
+
+# Save transcriptional similarity df
+corr_summary_df.to_csv(array_similarity_scores_filename, sep="\t")

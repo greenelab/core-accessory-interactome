@@ -240,6 +240,52 @@ display(SVG(figure_3.to_str()))
 # save generated SVG files
 figure_3.save("output/figure_3.svg")
 
+# ## Supplement 1
+
+# Create panels for figure 1
+panel_S1a = make_figure_panel(
+    "../3_core_core_analysis/pao1_similarity_scores_dist_spell.svg",
+    scale_x_input=1,
+    scale_y_input=1,
+    x_loc=10,
+    y_loc=30,
+)
+panel_S1b = make_figure_panel(
+    "../3_core_core_analysis/array_similarity_scores_dist_spell.svg",
+    scale_x_input=1,
+    scale_y_input=1,
+    x_loc=500,
+    y_loc=30,
+)
+panel_S1c = make_figure_panel(
+    "../3_core_core_analysis/most_stable_array_vs_rnaseq_venn.svg",
+    scale_x_input=1,
+    scale_y_input=1,
+    x_loc=1000,
+    y_loc=30,
+)
+
+panel_S1a_label = sg.TextElement(10, 20, "A", size=18, weight="bold", font="Verdana")
+panel_S1b_label = sg.TextElement(500, 20, "B", size=18, weight="bold", font="Verdana")
+panel_S1c_label = sg.TextElement(1000, 20, "C", size=18, weight="bold", font="Verdana")
+
+figure_S1 = sg.SVGFigure("1450", "400")
+figure_S1.append(
+    [
+        etree.Element("rect", {"width": "100%", "height": "100%", "fill": "white"}),
+        panel_S1a,
+        panel_S1b,
+        panel_S1c,
+        panel_S1a_label,
+        panel_S1b_label,
+        panel_S1c_label,
+    ]
+)
+display(SVG(figure_S1.to_str()))
+
+# save generated SVG files
+figure_S1.save("output/figure_S1.svg")
+
 # ## Output png version
 
 # Exports low resolution png just for easy viewing,
@@ -247,3 +293,4 @@ figure_3.save("output/figure_3.svg")
 # !inkscape --export-png=output/figure_1.png output/figure_1.svg
 # !inkscape --export-png=output/figure_2.png output/figure_2.svg
 # !inkscape --export-png=output/figure_3.png output/figure_3.svg
+# !inkscape --export-png=output/figure_S1.png output/figure_S1.svg
