@@ -24,6 +24,7 @@
 import os
 import random
 import scipy.stats
+from scipy import stats
 import pandas as pd
 import numpy as np
 import seaborn as sns
@@ -50,17 +51,42 @@ array_similarity_scores_filename = "array_similarity_scores_spell.tsv"
 array_expression_filename = paths.ARRAY_COMPENDIUM_GE
 array_metadata_filename = paths.ARRAY_COMPENDIUM_METADATA
 
-array_expression = pd.read_csv(
+array_compendium = pd.read_csv(
     array_expression_filename, sep="\t", index_col=0, header=0
 ).T
 array_metadata = pd.read_csv(array_metadata_filename, sep="\t", index_col=0, header=0)
 # -
 
-print(array_expression.shape)
-array_expression.head()
+print(array_compendium.shape)
+array_compendium.head()
 
 print(array_metadata.shape)
 array_metadata.head()
+
+# ## Select only core genes
+
+# +
+# Read in RNA-seq transcriptional statistics
+pao1_similarity_scores_filename = "pao1_core_similarity_associations_final_spell.tsv"
+
+pao1_rnaseq_similarity_scores = pd.read_csv(
+    pao1_similarity_scores_filename, sep="\t", header=0, index_col=0
+)
+# -
+
+# Get only core gene ids
+rnaseq_core_gene_ids = list(pao1_rnaseq_similarity_scores.index)
+array_gene_ids = array_compendium.columns
+array_core_gene_ids = set(rnaseq_core_gene_ids).intersection(array_gene_ids)
+
+print(len(rnaseq_core_gene_ids))
+print(len(array_gene_ids))
+print(len(array_core_gene_ids))
+
+array_compendium_core = array_compendium[array_core_gene_ids]
+
+print(array_compendium_core.shape)
+array_compendium_core.head()
 
 # ## Make PAO1, PA14 array compendia
 
@@ -76,11 +102,11 @@ print(len(pa14_sample_ids))
 
 # +
 # Make PAO1, PA14 array compendia
-pao1_sample_ids_shared = set(array_expression.index).intersection(pao1_sample_ids)
-pa14_sample_ids_shared = set(array_expression.index).intersection(pa14_sample_ids)
+pao1_sample_ids_shared = set(array_compendium_core.index).intersection(pao1_sample_ids)
+pa14_sample_ids_shared = set(array_compendium_core.index).intersection(pa14_sample_ids)
 
-pao1_array_compendium = array_expression.loc[pao1_sample_ids_shared]
-pa14_array_compendium = array_expression.loc[pa14_sample_ids_shared]
+pao1_array_compendium = array_compendium_core.loc[pao1_sample_ids_shared]
+pa14_array_compendium = array_compendium_core.loc[pa14_sample_ids_shared]
 # -
 
 print(pao1_array_compendium.shape)
@@ -163,7 +189,7 @@ h2a.savefig(pa14_log_spell_filename, dpi=300)"""
 
 # +
 rows = []
-for gene_id in array_expression.columns:
+for gene_id in array_compendium_core.columns:
     # Make sure that the genes in the correlation profile are in the same order
     # in the PAO1 correlation matrix and the PA14 correlation matrix
     # Otherwise reorder
@@ -262,49 +288,31 @@ plt.ylabel("Count", fontsize=12)
 #
 # We want to compare the most stable core genes obtained using the P. aeruginosa RNA-seq compendium vs the array compendium to validate our findings are robust.
 
-# +
-# Read in RNA-seq transcriptional statistics
-pao1_similarity_scores_filename = "pao1_core_similarity_associations_final_spell.tsv"
-
-pao1_rnaseq_similarity_scores = pd.read_csv(
-    pao1_similarity_scores_filename, sep="\t", header=0, index_col=0
-)
-
-# +
-# Check overlap of gene ids using in RNA-seq vs array compendia
-print(len(pao1_rnaseq_similarity_scores.index))
-print(len(corr_summary_df.index))
-
-shared_core_genes = set(pao1_rnaseq_similarity_scores.index).intersection(
-    corr_summary_df.index
-)
-print(len(shared_core_genes))
-# -
-
-# Select only those shared genes first
-pao1_rnaseq_similarity_scores_subset = pao1_rnaseq_similarity_scores.loc[
-    shared_core_genes
+pao1_rnaseq_similarity_scores_subset = pao1_rnaseq_similarity_scores[
+    ["Transcriptional similarity across strains", "P-value", "Name", "label"]
 ]
-corr_summary_subset_df = corr_summary_df.loc[shared_core_genes]
+
+all_similarity_scores = pao1_rnaseq_similarity_scores_subset.merge(
+    corr_summary_df, left_index=True, right_index=True, suffixes=["_rnaseq", "_array"]
+)
+
+print(all_similarity_scores.shape)
+all_similarity_scores.head()
 
 # +
 # Get most and least stable core genes
 rnaseq_most_stable_genes = list(
-    pao1_rnaseq_similarity_scores_subset[
-        pao1_rnaseq_similarity_scores_subset["label"] == "most stable"
-    ].index
+    all_similarity_scores[all_similarity_scores["label_rnaseq"] == "most stable"].index
 )
 rnaseq_least_stable_genes = list(
-    pao1_rnaseq_similarity_scores_subset[
-        pao1_rnaseq_similarity_scores_subset["label"] == "least stable"
-    ].index
+    all_similarity_scores[all_similarity_scores["label_rnaseq"] == "least stable"].index
 )
 
 array_most_stable_genes = list(
-    corr_summary_subset_df[corr_summary_subset_df["label"] == "most stable"].index
+    all_similarity_scores[all_similarity_scores["label_array"] == "most stable"].index
 )
 array_least_stable_genes = list(
-    corr_summary_subset_df[corr_summary_subset_df["label"] == "least stable"].index
+    all_similarity_scores[all_similarity_scores["label_array"] == "least stable"].index
 )
 
 # +
@@ -374,6 +382,51 @@ plt.savefig(
 )
 # -
 
+# ### Plot correlation between transcriptional similarity values
+
+# +
+# Calculate correlation
+r, p = stats.pearsonr(
+    all_similarity_scores["Transcriptional similarity across strains_rnaseq"],
+    all_similarity_scores["Transcriptional similarity across strains_array"],
+)
+
+print(r, p)
+
+# +
+# Plot correlation
+fig = sns.jointplot(
+    data=all_similarity_scores,
+    x="Transcriptional similarity across strains_rnaseq",
+    y="Transcriptional similarity across strains_array",
+    kind="hex",
+    marginal_kws={"color": "white", "edgecolor": "white"},
+)
+
+cbar_ax = fig.fig.add_axes([0.9, 0.25, 0.05, 0.4])  # x, y, width, height
+cb = plt.colorbar(cax=cbar_ax)
+cb.set_label("Number of genes")
+
+fig.set_axis_labels(
+    "Transcriptional similarity (RNA-seq)",
+    "Transcriptional similarity (Array)",
+    fontsize=14,
+    fontname="Verdana",
+)
+fig.fig.suptitle(
+    "Stability RNA-seq vs Array", fontsize=16, fontname="Verdana", y=0.9, x=0.45
+)
+
+fig.savefig(
+    "transcriptional_similarity_array_vs_rnaseq.svg",
+    format="svg",
+    bbox_inches="tight",
+    transparent=True,
+    pad_inches=0,
+    dpi=300,
+)
+# -
+
 # ## Examine genes that differ
 
 # +
@@ -384,19 +437,19 @@ least_rnaseq_only = set(rnaseq_least_stable_genes).difference(array_least_stable
 least_array_only = set(array_least_stable_genes).difference(rnaseq_least_stable_genes)
 # -
 
-pao1_rnaseq_similarity_scores_subset.loc[most_rnaseq_only]
+all_similarity_scores.loc[most_rnaseq_only]
 
-pao1_rnaseq_similarity_scores_subset.loc[most_array_only]
+all_similarity_scores.loc[most_array_only]
 
 sns.displot(
-    pao1_rnaseq_similarity_scores_subset.loc[
-        most_array_only, "Transcriptional similarity across strains"
+    all_similarity_scores.loc[
+        most_array_only, "Transcriptional similarity across strains_rnaseq"
     ]
 )
 
-pao1_rnaseq_similarity_scores_subset.loc[least_rnaseq_only]
+all_similarity_scores.loc[least_rnaseq_only]
 
-pao1_rnaseq_similarity_scores_subset.loc[least_array_only]
+all_similarity_scores.loc[least_array_only]
 
 # Save
 fig_array.savefig(
