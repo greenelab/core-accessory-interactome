@@ -244,32 +244,32 @@ figure_3.save("output/figure_3.svg")
 
 # Create panels for figure 1
 panel_S1a = make_figure_panel(
-    "../3_core_core_analysis/pao1_similarity_scores_dist_spell.svg",
-    scale_x_input=1,
-    scale_y_input=1,
+    "../3_core_core_analysis/array_similarity_scores_dist_spell.svg",
+    scale_x_input=0.95,
+    scale_y_input=0.95,
     x_loc=10,
-    y_loc=30,
+    y_loc=50,
 )
 panel_S1b = make_figure_panel(
-    "../3_core_core_analysis/array_similarity_scores_dist_spell.svg",
-    scale_x_input=1,
-    scale_y_input=1,
+    "../3_core_core_analysis/transcriptional_similarity_array_vs_rnaseq.svg",
+    scale_x_input=0.85,
+    scale_y_input=0.85,
     x_loc=500,
-    y_loc=30,
+    y_loc=20,
 )
 panel_S1c = make_figure_panel(
     "../3_core_core_analysis/most_stable_array_vs_rnaseq_venn.svg",
-    scale_x_input=1,
-    scale_y_input=1,
-    x_loc=1000,
-    y_loc=30,
+    scale_x_input=0.85,
+    scale_y_input=0.85,
+    x_loc=950,
+    y_loc=50,
 )
 
 panel_S1a_label = sg.TextElement(10, 20, "A", size=18, weight="bold", font="Verdana")
 panel_S1b_label = sg.TextElement(500, 20, "B", size=18, weight="bold", font="Verdana")
-panel_S1c_label = sg.TextElement(1000, 20, "C", size=18, weight="bold", font="Verdana")
+panel_S1c_label = sg.TextElement(950, 20, "C", size=18, weight="bold", font="Verdana")
 
-figure_S1 = sg.SVGFigure("1450", "400")
+figure_S1 = sg.SVGFigure("1300", "400")
 figure_S1.append(
     [
         etree.Element("rect", {"width": "100%", "height": "100%", "fill": "white"}),
