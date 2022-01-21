@@ -66,12 +66,6 @@ pao1_expression_filename = (
 pa14_expression_filename = (
     f"MR_median_acc_expression_pa14_compendium_{threshold}threshold.svg"
 )
-pao1_dist_filename = (
-    f"dist_median_acc_expression_pao1_compendium_{threshold}threshold.svg"
-)
-pa14_dist_filename = (
-    f"dist_median_acc_expression_pa14_compendium_{threshold}threshold.svg"
-)
 
 # ## Get core and accessory annotations
 
@@ -196,7 +190,7 @@ fig1 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.2)
 fig1 += pn.labs(
     x="median expression of PAO1-only genes",
     y="median expression of PA14-only genes",
-    title="MR normalized accessory gene expression in PAO1 compendium",
+    title="PAO1 compendium accessory gene expression",
     # title="Accessory gene expression in PAO1 compendium",
 )
 fig1 += pn.theme_bw()
@@ -204,13 +198,17 @@ fig1 += pn.theme(
     legend_title_align="center",
     plot_background=pn.element_rect(fill="white"),
     legend_key=pn.element_rect(fill="white", colour="white"),
-    legend_title=pn.element_text(family="sans-serif", size=12),
-    legend_text=pn.element_text(family="sans-serif", size=10),
-    plot_title=pn.element_text(family="sans-serif", size=14),
-    axis_text=pn.element_text(family="sans-serif", size=10),
-    axis_title=pn.element_text(family="sans-serif", size=12),
+    legend_title=pn.element_text(family="sans-serif", size=14),
+    legend_text=pn.element_text(family="sans-serif", size=12),
+    plot_title=pn.element_text(family="sans-serif", size=16),
+    axis_text=pn.element_text(family="sans-serif", size=12),
+    axis_title=pn.element_text(family="sans-serif", size=14),
 )
-fig1 += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
+fig1 += pn.guides(
+    colour=pn.guide_legend(
+        title="SRA strain type", override_aes={"alpha": 1, "size": 3}
+    )
+)
 
 print(fig1)
 
@@ -227,7 +225,7 @@ fig2 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.4)
 fig2 += pn.labs(
     x="median expression of PAO1-only genes",
     y="median expression of PA14-only genes",
-    title="MR normalized accessory gene expression in PA14 compendium",
+    title="PA14 compendium accessory gene expression",
     # title="Accessory gene expression in PA14 compendium",
 )
 fig2 += pn.theme_bw()
@@ -235,13 +233,17 @@ fig2 += pn.theme(
     legend_title_align="center",
     plot_background=pn.element_rect(fill="white"),
     legend_key=pn.element_rect(fill="white", colour="white"),
-    legend_title=pn.element_text(family="sans-serif", size=12),
-    legend_text=pn.element_text(family="sans-serif", size=10),
-    plot_title=pn.element_text(family="sans-serif", size=14),
-    axis_text=pn.element_text(family="sans-serif", size=10),
-    axis_title=pn.element_text(family="sans-serif", size=12),
+    legend_title=pn.element_text(family="sans-serif", size=14),
+    legend_text=pn.element_text(family="sans-serif", size=12),
+    plot_title=pn.element_text(family="sans-serif", size=16),
+    axis_text=pn.element_text(family="sans-serif", size=12),
+    axis_title=pn.element_text(family="sans-serif", size=14),
 )
-fig2 += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
+fig2 += pn.guides(
+    colour=pn.guide_legend(
+        title="SRA strain type", override_aes={"alpha": 1, "size": 3}
+    )
+)
 
 print(fig2)
 
@@ -272,18 +274,29 @@ pao1_binned_non_pao1_sra = pao1_pa14_acc_pao1_compendium_label.loc[
     pao1_pa14_acc_pao1_compendium_label["Strain type"] != "PAO1",
     "median acc expression_pao1",
 ]
+# -
 
-# +
 f = sns.distplot(
-    pao1_binned_pao1_sra, color="#C6A9B5", kde=False, hist_kws={"alpha": 0.7}
+    pao1_binned_non_pao1_sra,
+    color="#795C34",
+    label="non-PAO1",
+    kde=False,
+    hist_kws={"alpha": 0.7},
 )
 f = sns.distplot(
-    pao1_binned_non_pao1_sra, color="grey", kde=False, hist_kws={"alpha": 0.7}
+    pao1_binned_pao1_sra,
+    color="#C6A9B5",
+    label="PAO1",
+    kde=False,
+    hist_kws={"alpha": 0.9},
 )
 if threshold == 0:
-    plt.axvline(25, 0, 100, color="red")
-
-f.figure.savefig(pao1_dist_filename, format="svg", dpi=300)
+    plt.axvline(25, color="black", linestyle="--")
+f.set_ylabel("Count", fontsize=18)
+f.set_xlabel("PAO1 expression", fontsize=18)
+f.tick_params(labelsize=16)
+plt.legend(fontsize=16)
+# f.figure.savefig(pao1_dist_filename, format="svg", dpi=300)
 
 # +
 # Get PA14 samples that are labeled PA14 and non-PA14
@@ -299,15 +312,27 @@ pa14_binned_non_pa14_sra = pao1_pa14_acc_pa14_compendium_label.loc[
 
 # +
 g = sns.distplot(
-    pa14_binned_pa14_sra, color="#895881", kde=False, hist_kws={"alpha": 0.7}
+    pa14_binned_non_pa14_sra,
+    color="#795C34",
+    label="non-PA14",
+    kde=False,
+    hist_kws={"alpha": 0.7},
 )
 g = sns.distplot(
-    pa14_binned_non_pa14_sra, color="grey", kde=False, hist_kws={"alpha": 0.7}
+    pa14_binned_pa14_sra,
+    color="#895881",
+    label="PA14",
+    kde=False,
+    hist_kws={"alpha": 0.8},
 )
-if threshold == 0:
-    plt.axvline(25, 0, 100, color="red")
 
-g.figure.savefig(pa14_dist_filename, format="svg", dpi=300)
+if threshold == 0:
+    plt.axvline(25, color="black", linestyle="--")
+g.set_ylabel("Count", fontsize=18)
+g.set_xlabel("PA14 expression", fontsize=18)
+g.tick_params(labelsize=16)
+plt.legend(fontsize=16)
+# g.figure.savefig(pa14_dist_filename, format="svg", dpi=300)
 # -
 
 # ## Core plots

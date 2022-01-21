@@ -132,7 +132,7 @@ def percent_matching_homologs(
     max_pa14 = pa14_core_genes_df.shape[0]
 
     # List of percent overlap
-    percent_overlap_lst = []
+    percent_overlap_lst = {}
     for pao1_id in core_genes_to_examine:
         # print(pao1_id)
 
@@ -213,7 +213,7 @@ def percent_matching_homologs(
         # Save percent matched core genes
         percent_overlap = len(overlap_neighborhood_ids) / (2 * window_size)
         # print(len(overlap_neighborhood_ids))
-        percent_overlap_lst.append(percent_overlap)
+        percent_overlap_lst[pao1_id] = percent_overlap
 
     return percent_overlap_lst
 
@@ -336,9 +336,9 @@ pao1_random_dist = dist_pao1_pa14_homolog(
 # Format data for plotting
 homolog_neighborhood_df = pd.DataFrame(
     data={
-        "least stable % matching": least_matched_neighborhood,
-        "most stable % matching": most_matched_neighborhood,
-        "random % matching": random_matched_neighborhood,
+        "least stable % matching": list(least_matched_neighborhood.values()),
+        "most stable % matching": list(most_matched_neighborhood.values()),
+        "random % matching": list(random_matched_neighborhood.values()),
     }
 )
 
@@ -381,6 +381,11 @@ fig_match_homolog.set_xticklabels(["least stable", "most stable", "random"], siz
 plt.title("Stability vs relative genome location", fontsize=18)
 plt.xlabel("")
 plt.ylabel("% neighboring core genes matched", fontsize=16)
+# -
+
+# Get the least stable core genes that have low % homolog core genes matched
+# (i.e. least core genes that are located in different neighborhoods)
+[k for k, v in least_matched_neighborhood.items() if v < 0.2]
 
 # +
 plt.figure(figsize=(10, 8))

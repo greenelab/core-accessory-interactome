@@ -532,7 +532,7 @@ fig3 += pn.scale_color_manual(values=colors)
 fig3 += pn.labs(
     x="median expression of PAO1-only genes",
     y="median expression of PA14-only genes",
-    title="MR normalized estimated counts of accessory genes",
+    title="Accessory gene expression for all samples",
     width=10,
 )
 fig3 += pn.theme_bw()
@@ -540,14 +540,16 @@ fig3 += pn.theme(
     legend_title_align="center",
     plot_background=pn.element_rect(fill="white"),
     legend_key=pn.element_rect(fill="white", colour="white"),
-    legend_title=pn.element_text(family="sans-serif", size=12),
-    legend_text=pn.element_text(family="sans-serif", size=10),
-    plot_title=pn.element_text(family="sans-serif", size=14),
-    axis_text=pn.element_text(family="sans-serif", size=10),
-    axis_title=pn.element_text(family="sans-serif", size=12),
+    legend_title=pn.element_text(family="sans-serif", size=14),
+    legend_text=pn.element_text(family="sans-serif", size=12),
+    plot_title=pn.element_text(family="sans-serif", size=16),
+    axis_text=pn.element_text(family="sans-serif", size=12),
+    axis_title=pn.element_text(family="sans-serif", size=14),
 )
 fig3 += pn.guides(
-    colour=pn.guide_legend(title="Strain type", override_aes={"alpha": 1})
+    colour=pn.guide_legend(
+        title="SRA strain type", override_aes={"alpha": 1, "size": 3}
+    )
 )
 
 print(fig3)

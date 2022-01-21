@@ -1,0 +1,27 @@
+Medium	PA14	PAO1
+ABTGC Medium		1.0
+BM2	4.0
+Blood (Healthy Volunteers), Blood (Severe Burn Victims)	1.0
+Blood (Healthy Volunteers), Blood (Trauma Patients)	1.0
+CAM Medium, LB		1.0
+LB	17.0	49.0
+LB, Blood (Healthy Volunteers)		1.0
+LB, MOPS, Burn Wound Model, Chronic Wound Model		1.0
+M14	1.0
+M9 Media		5.0
+M9 Minimal Media		1.0
+MMP		1.0
+MOPS		2.0
+Medium B		1.0
+Minimal Medium		1.0
+Mouse bladder, LB	1.0
+Mueller-Hinton 	2.0
+Other	12.0	20.0
+PIA	1.0
+Plastic (Polystyrene) Dish	1.0
+Pseudomonas Isolation Agar, Mouse Lung Tissue		1.0
+SCFM	1.0
+SCFM, LB		1.0
+Synthetic Cystic Fibrosis Medium (SCFM) 	1.0
+TSB	1.0
+Tryptic Soy Broth	1.0	4.0

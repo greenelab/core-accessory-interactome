@@ -187,7 +187,7 @@ fig_pao1 = sns.displot(
 # Let's try looking at genes within the same module as lasR
 cluster_method = "affinity"
 gene_subset = "all"
-processed = "raw"
+processed = "spell"
 pa14_membership_filename = os.path.join(
     paths.LOCAL_DATA_DIR, f"pa14_modules_{cluster_method}_{gene_subset}_{processed}.tsv"
 )

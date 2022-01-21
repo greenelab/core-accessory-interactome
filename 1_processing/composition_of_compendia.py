@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.9.1
+#       jupytext_version: 1.9.1+dev
 #   kernelspec:
 #     display_name: Python [conda env:core_acc] *
 #     language: python
@@ -25,10 +25,16 @@ import pandas as pd
 import plotnine as pn
 import seaborn as sns
 import matplotlib.pyplot as plt
+from scripts import paths
 
 # Import metadata files
 pao1_metadata_filename = "PAO1TableVF1.csv"
 pa14_metadata_filename = "PA14TableVF1.csv"
+
+# Import mapping files provided by Georgia to standardize values
+media_mapping_filename = paths.MEDIA_MAP
+pathway_mapping_filename = paths.PATHWAY_MAP
+gene_funt_mapping_filename = paths.GENE_FUNT_MAP
 
 pao1_metadata = pd.read_csv(pao1_metadata_filename, header=0, index_col=0)
 pa14_metadata = pd.read_csv(pa14_metadata_filename, header=0, index_col=0)
@@ -39,13 +45,7 @@ pao1_metadata.head(10)
 print(pa14_metadata.shape)
 pa14_metadata.head(10)
 
-# +
-# TO DO
-# Clean up values?
-# Only plot the top 10?
-# Coloring palette
-# Count NA?
-# -
+# ## Clean up values
 
 # Format dataframe
 # Only keep first row
@@ -55,19 +55,29 @@ pa14_metadata_first = pa14_metadata[~pa14_metadata.index.duplicated(keep="first"
 # Concatenate
 both_metadata_first = pd.concat([pao1_metadata_first, pa14_metadata_first])
 
+# Read in mappers
+media_map = pd.read_csv(media_mapping_filename, sep="\t", header=0, index_col=0)
+pathway_map = pd.read_csv(pathway_mapping_filename, sep="\t", header=0, index_col=0)
+gene_funt_map = pd.read_csv(gene_funt_mapping_filename, sep="\t", header=0, index_col=0)
+
+media_dict = media_map["Medium.Grouped"].to_dict()
+
+pathway_dict = pathway_map["KEGG.Pathway.Grouped"].to_dict()
+
+gene_funt_dict = gene_funt_map["Gene.Function.Group"].to_dict()
+
 # Rename to clean up legend
-media_mapper = {
-    "TSB": "Tryptic Soy Broth",
-}
-# gene_function_mapper = {}
-both_metadata_first.replace({"Medium": media_mapper}, inplace=True)
+both_metadata_tmp = both_metadata_first.replace({"Medium": media_dict})
+both_metadata_final = both_metadata_tmp.replace({"Gene.Function": gene_funt_dict})
+
+both_metadata_final.head()
 
 # ## Plot media distribution in PAO1 and PA14
 #
 # Media will be at the study level
 
 both_metadata_first_media = (
-    both_metadata_first.groupby(["Strain", "Medium"])
+    both_metadata_final.groupby(["Strain", "Medium"])
     .size()
     .reset_index()
     .pivot(columns="Medium", index="Strain", values=0)
@@ -75,23 +85,51 @@ both_metadata_first_media = (
 
 both_metadata_first_media
 
+# +
+# Output media legends for Georgia to review
+# both_metadata_first_media.T.to_csv("media_legend.tsv", sep="\t")
+# -
+
+# Custom palette
+my_cmap = [
+    "#2bad8f",
+    "#a5d1ab",
+    "#f2e380",
+    "#eb9f6a",
+    "#4363d8",
+    "#7d438f",
+    "#e8c5e6",
+    "#79c2d1",
+    "#a8cc3b",
+    "#f5b0b0",
+    "#d0aee6",
+    "#fffac8",
+    "#ffd8b1",
+    "#000075",
+    "#9e9898",
+    "#a32450",
+    "#b9daed",
+]
+
 fig_media = both_metadata_first_media.plot(
-    kind="bar", stacked=True, colormap="Set2", figsize=(12, 8)
+    kind="bar", stacked=True, color=my_cmap, figsize=(12, 8)
 )
-plt.legend(bbox_to_anchor=(1.5, 1), loc="upper right", ncol=1)
-plt.title("Media used in experiments", fontsize=16)
+# fig_media.set_color_cycle([cm(1.*i/num_colors) for i in range(num_colors)])
+plt.legend(bbox_to_anchor=(1.47, 1), loc="upper right", ncol=1, fontsize=14)
+plt.title("Media used in experiments", fontsize=18)
 fig_media.set_xlabel("")
-fig_media.set_ylabel("Count", fontsize=14)
+fig_media.set_ylabel("Count", fontsize=18)
 fig_media.set_xticklabels(
-    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=14
+    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=18
 )
+fig_media.tick_params(labelsize=16)
 
 # ## Plot Gene function distribution in PAO1 and PA14
 # Gene function will be at the study level as well since the gene will be the same
 
 # Format
 both_metadata_first_function = (
-    both_metadata_first.groupby(["Strain", "Gene.Function"])
+    both_metadata_final.groupby(["Strain", "Gene.Function"])
     .size()
     .reset_index()
     .pivot(columns="Gene.Function", index="Strain", values=0)
@@ -99,16 +137,22 @@ both_metadata_first_function = (
 
 both_metadata_first_function
 
+# +
+# Output function metadata for Georgia to review
+# both_metadata_first_function.T.to_csv("gene_function_legend.tsv", sep="\t")
+# -
+
 fig_function = both_metadata_first_function.plot(
     kind="bar", stacked=True, colormap="Set2", figsize=(12, 8)
 )
-plt.legend(bbox_to_anchor=(1.8, 1), loc="upper right", ncol=1)
-plt.title("Gene function studied in experiments", fontsize=16)
+plt.legend(bbox_to_anchor=(1.62, 1), loc="upper right", ncol=1)
+plt.title("Gene function studied in experiments", fontsize=18)
 fig_function.set_xlabel("")
-fig_function.set_ylabel("Count", fontsize=14)
+fig_function.set_ylabel("Count", fontsize=18)
 fig_function.set_xticklabels(
-    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=14
+    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=18
 )
+fig_function.tick_params(labelsize=16)
 
 # ## Plot pathways associated with perturbed gene
 #
@@ -125,8 +169,10 @@ fig_function.set_xticklabels(
 # Concatenate
 both_metadata_all = pd.concat([pao1_metadata, pa14_metadata])
 
+both_metadata_final2 = both_metadata_all.replace({"KEGG.Pathway": pathway_dict})
+
 both_metadata_kegg = (
-    both_metadata_all.groupby(["Strain", "KEGG.Pathway"])
+    both_metadata_final2.groupby(["Strain", "KEGG.Pathway"])
     .size()
     .reset_index()
     .pivot(columns="KEGG.Pathway", index="Strain", values=0)
@@ -134,16 +180,22 @@ both_metadata_kegg = (
 
 both_metadata_kegg
 
+# +
+# Output kegg metadata for Georgia to review
+# both_metadata_kegg.T.to_csv("pathway_legend.tsv", sep="\t")
+# -
+
 fig_kegg = both_metadata_kegg.plot(
-    kind="bar", stacked=True, colormap="Set2", figsize=(12, 8)
+    kind="bar", stacked=True, color=my_cmap, figsize=(12, 8)
 )
-plt.legend(bbox_to_anchor=(1.45, 1), loc="upper right", ncol=1)
-plt.title("KEGG pathway studied in experiments", fontsize=16)
+plt.legend(bbox_to_anchor=(1.55, 1), loc="upper right", ncol=1, fontsize=14)
+plt.title("KEGG pathway studied in experiments", fontsize=18)
 fig_kegg.set_xlabel("")
-fig_kegg.set_ylabel("Count", fontsize=14)
+fig_kegg.set_ylabel("Count", fontsize=18)
 fig_kegg.set_xticklabels(
-    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=14
+    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=18
 )
+fig_kegg.tick_params(labelsize=16)
 
 # Save plots
 fig_media.figure.savefig(

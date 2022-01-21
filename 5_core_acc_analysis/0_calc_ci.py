@@ -47,14 +47,6 @@ sum_increment_to_use = 1
 n_boot = 50
 
 ci = 0.95
-
-# Output filename
-pao1_figure_filename = (
-    "PAO1_stablility_expression_relationships_operon_corrected_spell.svg"
-)
-pa14_figure_filename = (
-    "PA14_stability_expression_relationships_operon_corrected_spell.svg"
-)
 # -
 
 # ### Import gene ids

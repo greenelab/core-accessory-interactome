@@ -44,6 +44,17 @@ pa14_expression = pd.read_csv(pa14_expression_filename, sep="\t", index_col=0, h
 # Set index to experiment id, which is what we will use to map to expression data
 sample_to_strain_table_full = pd.read_csv(sample_to_strain_filename, index_col=2)
 
+# +
+threshold = 25
+
+pao1_dist_filename = (
+    f"dist_median_acc_expression_pao1_compendium_{threshold}threshold.svg"
+)
+pa14_dist_filename = (
+    f"dist_median_acc_expression_pa14_compendium_{threshold}threshold.svg"
+)
+# -
+
 # ## Format SRA annotations
 
 # +
@@ -162,11 +173,26 @@ non_pao1_sra = pao1_pa14_acc_expression.loc[
 ]
 # -
 
-pao1_threshold = 25
-
-f = sns.distplot(pao1_sra, color="#C6A9B5", kde=False)
-f = sns.distplot(non_pao1_sra, color="grey", kde=False)
-plt.axvline(pao1_threshold, 0, 100, color="red")
+f = sns.distplot(
+    non_pao1_sra,
+    color="#795C34",
+    label="non-PAO1",
+    kde=False,
+    hist_kws={"alpha": 0.7},
+)
+f = sns.distplot(
+    pao1_sra,
+    color="#C6A9B5",
+    label="PAO1",
+    kde=False,
+    hist_kws={"alpha": 0.9},
+)
+plt.axvline(threshold, color="black", linestyle="--")
+f.set_ylabel("Count", fontsize=18)
+f.set_xlabel("PAO1 expression", fontsize=18)
+f.tick_params(labelsize=16)
+plt.legend(fontsize=16)
+# f.figure.savefig(pao1_dist_filename, format="svg", dpi=300)
 
 # +
 # Get PA14 samples that are labeled PA14 and non-PA14
@@ -179,13 +205,30 @@ non_pa14_sra = pao1_pa14_acc_expression.loc[
     pao1_pa14_acc_expression["Strain type_pa14"] != "PA14",
     "median_acc_expression_pa14",
 ]
+
+# +
+g = sns.distplot(
+    non_pa14_sra,
+    color="#795C34",
+    label="non-PA14",
+    kde=False,
+    hist_kws={"alpha": 0.7},
+)
+g = sns.distplot(
+    pa14_sra,
+    color="#895881",
+    label="PA14",
+    kde=False,
+    hist_kws={"alpha": 0.8},
+)
+
+plt.axvline(threshold, color="black", linestyle="--")
+g.set_ylabel("Count", fontsize=18)
+g.set_xlabel("PA14 expression", fontsize=18)
+g.tick_params(labelsize=16)
+plt.legend(fontsize=16)
+# g.figure.savefig(pa14_dist_filename, format="svg", dpi=300)
 # -
-
-pa14_threshold = 25
-
-g = sns.distplot(pa14_sra, color="#895881", kde=False)
-g = sns.distplot(non_pa14_sra, color="grey", kde=False)
-plt.axvline(pa14_threshold, 0, 100, color="red")
 
 # **Takeaway:**
 # Looks like using a threshold of 25 normalized counts separates between SRA-annotated PAO1 samples vs non-PAO1 samples. Similarly for PA14. This is the threshold we'll use to bin samples into PAO1 vs PA14 compendia.
