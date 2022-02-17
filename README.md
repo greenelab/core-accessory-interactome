@@ -6,17 +6,11 @@
 
 **University of Pennsylvania**
 
-_Pseudomonas aeruginosa_ (or _P. aeruginosa_) is a gram negative bacteria. _P. aeruginosa_ is the most common gram-negative pathogen causing nosocomial pneumonia in the United States, and it is frequently implicated in other hospital-acquired infections like urinary tract and bloodstream infections
- ([National Nosocomial Infections Surveillance System](https://academic.oup.com/cid/article/41/6/848/2022258)).
- In addition to its prevalence, _P. aeruginosa_ is able to develop resistance to antibiotics, which is the standard of care for these infections.
- These infections are a major concern to hospitalized patients, as they are found to be correlated with poor prognosis. Overall the predilection for _P. aeruginosa_ to cause infections in immunocompromised individuals, its extreme versatility (cause infection across different tissues) and antibiotic resistance make Pa a major health concern.
-
-To combat these _P. aeruginosa_ infections, there have been numerous transcriptomic studies trying to understand how Pseudomonas aeruginosa genes influence traits like virulence and pathogenicity.
-The hope is that these studies will help us to develop better treatment options. These contributing genes can be classified into two groups: core and accessory.
-Core genes are those genes that are present in all strains.
-While accessory genes are those that are present in at least one strain.
-
-Given that different groups of genes both contribute to these traits of interest, it is important to understand how these gene groups are coordinated.
+Clinical and environmental strains of _Pseudomonas aeruginosa_ (or _P. aeruginosa_), an opportunistic pathogen that causes difficult to treat infections, have significant genomic heterogeneity including the presence of diverse accessory genes that are only present in some strains or clades.
+Both core genes, which are conserved across strains, and accessory genes have been associated with traits such as biofilm formation and virulence.
+Much of what we know about core and accessory gene content comes from genome analyses.
+Here, we use a [newly assembled transcriptome compendium](https://www.biorxiv.org/content/10.1101/2022.01.24.477642v1) to analyze the transcriptional patterns of core and accessory gene expression in PAO1 and PA14 strains across thousands of samples from hundreds of distinct experiments.
+We found that a subset of core genes was transcriptionally stable across strain PAO1 and PA14 strain types and that these genes had fewer accessory genes with correlated expression patterns than did less stable core genes.
 
 ## Directory Structure
 | Folder | Description |
@@ -54,3 +48,6 @@ cd core-accessory-interactome
 bash install.sh
 ```
 6. Navigate to any of the analysis directories listed in the table above to see the code for how analyses were performed. To reproduce the results and figures of the paper, run the analysis directories in order.
+
+## Acknowledgements
+We would like to thank Jake Crawford for very insightful discussions about methods and interpretation of gene correlation analyses. We would also like to thank all other members of Greene lab (Natalie Davidson, Ben Heil, Ariel Hippen, David Nicholson,  Milton Pividori,  Halie Rando, Taylor Reiter) for helpful comments and code review.
