@@ -28,6 +28,7 @@ from scipy import stats
 import pandas as pd
 import numpy as np
 import seaborn as sns
+import scipy.stats as ss
 from matplotlib_venn import venn2
 import matplotlib.pyplot as plt
 from scripts import utils, paths
@@ -425,7 +426,96 @@ fig.savefig(
     pad_inches=0,
     dpi=300,
 )
+
+# +
+# Get correlation for only those most stable genes found
+# Select only those genes found to be most stable in either rna-seq or array compendia
+most_stable_similarity_scores = all_similarity_scores[
+    (all_similarity_scores["label_rnaseq"] == "most stable")
+    | (all_similarity_scores["label_array"] == "most stable")
+]
+
+print(most_stable_similarity_scores.shape)
+most_stable_similarity_scores.head()
+
+# +
+# Calculate correlation
+r, p = stats.pearsonr(
+    most_stable_similarity_scores["Transcriptional similarity across strains_rnaseq"],
+    most_stable_similarity_scores["Transcriptional similarity across strains_array"],
+)
+
+print(r, p)
+
+# +
+# Plot correlation
+fig = sns.jointplot(
+    data=most_stable_similarity_scores,
+    x="Transcriptional similarity across strains_rnaseq",
+    y="Transcriptional similarity across strains_array",
+    kind="hex",
+    marginal_kws={"color": "white", "edgecolor": "white"},
+)
+
+cbar_ax = fig.fig.add_axes([0.9, 0.25, 0.05, 0.4])  # x, y, width, height
+cb = plt.colorbar(cax=cbar_ax)
+cb.set_label("Number of genes")
+
+fig.set_axis_labels(
+    "Transcriptional similarity (RNA-seq)",
+    "Transcriptional similarity (Array)",
+    fontsize=14,
+    fontname="Verdana",
+)
+fig.fig.suptitle(
+    "Stability RNA-seq vs Array (most stable only)",
+    fontsize=16,
+    fontname="Verdana",
+    y=0.9,
+    x=0.45,
+)
+
+fig.savefig(
+    "transcriptional_similarity_array_vs_rnaseq_most_stable.svg",
+    format="svg",
+    bbox_inches="tight",
+    transparent=True,
+    pad_inches=0,
+    dpi=300,
+)
 # -
+
+# Hypergeometric test:
+#
+# Given $N$ (`total_num_genes`) number of genes with $K$ (`num_rnaseq_stable`) most stable genes in RNA-seq compendium. Using the array compendium, we identify genes as being most stable. What is the probability that  of the genes identified in the array compendium are also most stable in the RNA-seq compendium? What is the probability of drawing $k$ (`num_concordant_stable_genes`) or more concordant genes?
+#
+# This was a way for us to quantify the correlation between RNA-seq and array most stable findings.
+
+# Try calculating the enrichment of most stable core genes found from rna-seq in array
+total_num_genes = all_similarity_scores.shape[0]
+num_concordant_stable_genes = all_similarity_scores[
+    (all_similarity_scores["label_rnaseq"] == "most stable")
+    & (all_similarity_scores["label_array"] == "most stable")
+].shape[0]
+num_rnaseq_stable_genes = all_similarity_scores[
+    all_similarity_scores["label_rnaseq"] == "most stable"
+].shape[0]
+num_array_stable_genes = all_similarity_scores[
+    all_similarity_scores["label_array"] == "most stable"
+].shape[0]
+
+print(total_num_genes)
+print(num_rnaseq_stable_genes)
+print(num_array_stable_genes)
+print(num_concordant_stable_genes)
+
+p = ss.hypergeom.sf(
+    num_concordant_stable_genes,
+    total_num_genes,
+    num_rnaseq_stable_genes,
+    num_array_stable_genes,
+)
+print(p)
 
 # ## Examine genes that differ
 
