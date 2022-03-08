@@ -1,170 +1,124 @@
 	enriched KEGG pathway	odds ratio	p-value	num shared genes	size gene set	size KEGG pathway	corrected p-value	-log10 adj p-value
-0	KEGG-Pathway-pae00072: Synthesis and degradation of ketone bodies	2.119047619047619	0.4009977702758307	1	267	10	1.0	-0.0
-1	KEGG-Pathway-pae00071: Fatty acid degradation	2.0511363636363638	0.19970009661572646	3	267	32	1.0	-0.0
-2	KEGG-Pathway-pae00903: Limonene and pinene degradation	0.0	1.0	0	267	9	1.0	-0.0
-3	KEGG-Pathway-pae00380: Tryptophan metabolism	0.7604511278195488	0.7367170419332153	1	267	27	1.0	-0.0
-4	KEGG-Pathway-pae00900: Terpenoid backbone biosynthesis	1.2699248120300752	0.5597695219407147	1	267	16	1.0	-0.0
-5	KEGG-Pathway-pae00660: C5-Branched dibasic acid metabolism	3.479245283018868	0.13488404188203673	2	267	14	1.0	-0.0
-6	KEGG-Pathway-pae00260: Glycine, serine and threonine metabolism	0.4027355623100304	0.9153283754291022	1	267	49	1.0	-0.0
-7	KEGG-Pathway-pae00780: Biotin metabolism	2.011122144985104	0.28235982272090276	2	267	21	1.0	-0.0
-8	KEGG-Pathway-pae02060: Phosphotransferase system (PTS)	4.772556390977444	0.2259524636018299	1	267	5	1.0	-0.0
-9	KEGG-Pathway-pae00364: Fluorobenzoate degradation	7.663396226415094	0.044137502923275715	2	267	7	1.0	-0.0
-10	KEGG-Pathway-pae00363: Bisphenol degradation	4.772556390977444	0.2259524636018299	1	267	5	1.0	-0.0
-11	KEGG-Pathway-pae00362: Benzoate degradation	8.023255813953488	1.2854207454436041e-05	9	267	31	0.0010861805298998455	2.9640979863278183
-12	KEGG-Pathway-pae00361: Chlorocyclohexane and chlorobenzene degradation	0.0	1.0	0	267	5	1.0	-0.0
-13	KEGG-Pathway-pae00360: Phenylalanine metabolism	3.665399239543726	0.033547379937120064	4	267	26	0.9449178682288818	0.024605938501448644
-14	KEGG-Pathway-pae00040: Pentose and glucuronate interconversions	3.180451127819549	0.3013739330176047	1	267	7	1.0	-0.0
-15	KEGG-Pathway-pae02040: Flagellar assembly	0.0	1.0	0	267	35	1.0	-0.0
-16	KEGG-Pathway-pae00480: Glutathione metabolism	0.7310584152689416	0.7499232320152807	1	267	27	1.0	-0.0
-17	KEGG-Pathway-pae00670: One carbon pool by folate	0.0	1.0	0	267	18	1.0	-0.0
-18	KEGG-Pathway-pae00440: Phosphonate and phosphinate metabolism	1.906766917293233	0.43095349144312456	1	267	11	1.0	-0.0
-19	KEGG-Pathway-pae00930: Caprolactam degradation	2.725563909774436	0.3362921583834789	1	267	8	1.0	-0.0
-20	KEGG-Pathway-pae00561: Glycerolipid metabolism	0.0	1.0	0	267	13	1.0	-0.0
-21	KEGG-Pathway-pae00562: Inositol phosphate metabolism	0.0	1.0	0	267	7	1.0	-0.0
-22	KEGG-Pathway-pae00564: Glycerophospholipid metabolism	0.7310584152689416	0.7499232320152807	1	267	27	1.0	-0.0
-23	KEGG-Pathway-pae03440: Homologous recombination	0.0	1.0	0	267	23	1.0	-0.0
-24	KEGG-Pathway-pae00270: Cysteine and methionine metabolism	0.0	1.0	0	267	33	1.0	-0.0
-25	KEGG-Pathway-pae00051: Fructose and mannose metabolism	1.1903195488721805	0.5818099377742112	1	267	18	1.0	-0.0
-26	KEGG-Pathway-pae00052: Galactose metabolism	0.0	1.0	0	267	5	1.0	-0.0
-27	KEGG-Pathway-pae00190: Oxidative phosphorylation	0.35004177109440265	0.9410431308650066	1	267	55	1.0	-0.0
-28	KEGG-Pathway-pae00521: Streptomycin biosynthesis	0.0	1.0	0	267	8	1.0	-0.0
-29	KEGG-Pathway-pae02030: Bacterial chemotaxis	0.0	1.0	0	267	45	1.0	-0.0
-30	KEGG-Pathway-pae00590: Arachidonic acid metabolism	0.0	1.0	0	267	6	1.0	-0.0
-31	KEGG-Pathway-pae00920: Sulfur metabolism	0.8262510254306809	0.6998067189407009	2	267	51	1.0	-0.0
-32	KEGG-Pathway-pae03070: Bacterial secretion system	0.9160291355536213	0.6385075400010496	4	267	92	1.0	-0.0
-33	KEGG-Pathway-pae00450: Selenocompound metabolism	0.0	1.0	0	267	10	1.0	-0.0
-34	KEGG-Pathway-pae00280: Valine, leucine and isoleucine degradation	1.3316596194503172	0.40520906640982673	3	267	47	1.0	-0.0
-35	KEGG-Pathway-pae00281: Geraniol degradation	0.8269042170644001	0.708184316590336	1	267	24	1.0	-0.0
-36	KEGG-Pathway-pae00760: Nicotinate and nicotinamide metabolism	0.0	1.0	0	267	19	1.0	-0.0
-37	KEGG-Pathway-pae00020: Citrate cycle (TCA cycle)	0.0	1.0	0	267	34	1.0	-0.0
-38	KEGG-Pathway-pae03060: Protein export	0.0	1.0	0	267	18	1.0	-0.0
-39	KEGG-Pathway-pae00290: Valine, leucine and isoleucine biosynthesis	0.0	1.0	0	267	20	1.0	-0.0
-40	KEGG-Pathway-pae01210: 2-Oxocarboxylic acid metabolism	0.0	1.0	0	267	32	1.0	-0.0
-41	KEGG-Pathway-pae00750: Vitamin B6 metabolism	2.3843984962406015	0.36947133713287666	1	267	9	1.0	-0.0
-42	KEGG-Pathway-pae00500: Starch and sucrose metabolism	0.0	1.0	0	267	18	1.0	-0.0
-43	KEGG-Pathway-pae00770: Pantothenate and CoA biosynthesis	0.0	1.0	0	267	21	1.0	-0.0
-44	KEGG-Pathway-pae00350: Tyrosine metabolism	5.540229885057471	0.0017802778863275108	6	267	27	0.09286915995132787	1.0321284828481427
-45	KEGG-Pathway-pae04122: Sulfur relay system	0.0	1.0	0	267	18	1.0	-0.0
-46	KEGG-Pathway-pae00230: Purine metabolism	0.5107598164201937	0.8997310064929075	2	267	77	1.0	-0.0
-47	KEGG-Pathway-pae00030: Pentose phosphate pathway	0.0	1.0	0	267	25	1.0	-0.0
-48	KEGG-Pathway-pae00330: Arginine and proline metabolism	0.27312847335730633	0.9729011864858831	1	267	71	1.0	-0.0
-49	KEGG-Pathway-pae03018: RNA degradation	0.0	1.0	0	267	15	1.0	-0.0
-50	KEGG-Pathway-pae03010: Ribosome	0.0	1.0	0	267	68	1.0	-0.0
-51	KEGG-Pathway-pae00620: Pyruvate metabolism	1.0017942583732058	0.5826307256784866	3	267	60	1.0	-0.0
-52	KEGG-Pathway-pae00627: Aminobenzoate degradation	1.120079610791685	0.6027508129852461	1	267	19	1.0	-0.0
-53	KEGG-Pathway-pae00625: Chloroalkane and chloroalkene degradation	2.119047619047619	0.4009977702758307	1	267	10	1.0	-0.0
-54	KEGG-Pathway-pae00740: Riboflavin metabolism	0.0	1.0	0	267	9	1.0	-0.0
-55	KEGG-Pathway-pae01053: Biosynthesis of siderophore group nonribosomal peptides	0.0	1.0	0	267	6	1.0	-0.0
-56	KEGG-Pathway-pae03410: Base excision repair	0.0	1.0	0	267	14	1.0	-0.0
-57	KEGG-Pathway-pae00430: Taurine and hypotaurine metabolism	0.0	1.0	0	267	9	1.0	-0.0
-58	KEGG-Pathway-pae00340: Histidine metabolism	0.0	1.0	0	267	24	1.0	-0.0
-59	KEGG-Pathway-pae00240: Pyrimidine metabolism	0.0	1.0	0	267	44	1.0	-0.0
-60	KEGG-Pathway-pae00471: D-Glutamine and D-glutamate metabolism	0.0	1.0	0	267	5	1.0	-0.0
-61	KEGG-Pathway-pae00970: Aminoacyl-tRNA biosynthesis	0.7310584152689416	0.7499232320152807	1	267	90	1.0	-0.0
-62	KEGG-Pathway-pae00630: Glyoxylate and dicarboxylate metabolism	1.2440711462450593	0.44566110967504613	3	267	50	1.0	-0.0
-63	KEGG-Pathway-pae01040: Biosynthesis of unsaturated fatty acids	3.479245283018868	0.13488404188203673	2	267	13	1.0	-0.0
-64	KEGG-Pathway-pae00730: Thiamine metabolism	0.0	1.0	0	267	10	1.0	-0.0
-65	KEGG-Pathway-pae00520: Amino sugar and nucleotide sugar metabolism	0.7604511278195488	0.7367170419332153	1	267	32	1.0	-0.0
-66	KEGG-Pathway-pae00523: Polyketide sugar unit biosynthesis	0.0	1.0	0	267	5	1.0	-0.0
-67	KEGG-Pathway-pae00130: Ubiquinone and other terpenoid-quinone biosynthesis	1.3609022556390977	0.5365720603936259	1	267	16	1.0	-0.0
-68	KEGG-Pathway-pae00400: Phenylalanine, tyrosine and tryptophan biosynthesis	2.298636363636364	0.1616745622264084	3	267	30	1.0	-0.0
-69	KEGG-Pathway-pae00401: Novobiocin biosynthesis	0.0	1.0	0	267	5	1.0	-0.0
-70	KEGG-Pathway-pae00250: Alanine, aspartate and glutamate metabolism	0.0	1.0	0	267	36	1.0	-0.0
-71	KEGG-Pathway-pae00312: beta-Lactam resistance	0.7310584152689416	0.7499232320152807	1	267	27	1.0	-0.0
-72	KEGG-Pathway-pae00310: Lysine degradation	1.120079610791685	0.6027508129852461	1	267	18	1.0	-0.0
-73	KEGG-Pathway-pae03030: DNA replication	0.0	1.0	0	267	15	1.0	-0.0
-74	KEGG-Pathway-pae00680: Methane metabolism	0.0	1.0	0	267	25	1.0	-0.0
-75	KEGG-Pathway-pae01220: Degradation of aromatic compounds	11.593041886015106	3.2237071212594886e-07	10	267	27	5.448065034928536e-05	4.2637577167813925
-76	KEGG-Pathway-pae00640: Propanoate metabolism	1.0578616352201258	0.572761535880756	2	267	39	1.0	-0.0
-77	KEGG-Pathway-pae00410: beta-Alanine metabolism	0.8269042170644001	0.708184316590336	1	267	25	1.0	-0.0
-78	KEGG-Pathway-pae00643: Styrene degradation	4.254088050314466	0.10144055856111364	2	267	12	1.0	-0.0
-79	KEGG-Pathway-pae00550: Peptidoglycan biosynthesis	0.0	1.0	0	267	20	1.0	-0.0
-80	KEGG-Pathway-pae03430: Mismatch repair	0.0	1.0	0	267	18	1.0	-0.0
-81	KEGG-Pathway-pae00300: Lysine biosynthesis	2.549433962264151	0.2071228686071585	2	267	17	1.0	-0.0
-82	KEGG-Pathway-pae01212: Fatty acid metabolism	2.3463973189350216	0.07731348990043088	5	267	47	1.0	-0.0
-83	KEGG-Pathway-pae00061: Fatty acid biosynthesis	1.818867924528302	0.3199334843076163	2	267	23	1.0	-0.0
-84	KEGG-Pathway-pae00860: Porphyrin and chlorophyll metabolism	0.4622226297450944	0.8845711749977393	1	267	42	1.0	-0.0
-85	KEGG-Pathway-pae00910: Nitrogen metabolism	0.0	1.0	0	267	38	1.0	-0.0
-86	KEGG-Pathway-pae03420: Nucleotide excision repair	0.0	1.0	0	267	8	1.0	-0.0
-87	KEGG-Pathway-pae00650: Butanoate metabolism	1.5083732057416268	0.3361852614285296	3	267	42	1.0	-0.0
-88	KEGG-Pathway-pae00460: Cyanoamino acid metabolism	0.0	1.0	0	267	11	1.0	-0.0
-89	KEGG-Pathway-pae00790: Folate biosynthesis	0.0	1.0	0	267	23	1.0	-0.0
-90	KEGG-Pathway-pae00540: Lipopolysaccharide biosynthesis	0.0	1.0	0	267	20	1.0	-0.0
-91	KEGG-Pathway-pae00010: Glycolysis / Gluconeogenesis	0.5269423558897243	0.8506029411157785	1	267	37	1.0	-0.0
-92	KEGG-Module-M00193: Putative spermidine/putrescine transport system	0.0	1.0	0	267	12	1.0	-0.0
-93	KEGG-Module-M00190: Iron(III) transport system	0.0	1.0	0	267	5	1.0	-0.0
-94	KEGG-Module-M00506: CheA-CheYBV (chemotaxis) two-component regulatory system	0.0	1.0	0	267	7	1.0	-0.0
-95	KEGG-Module-M00210: Putative ABC transport system	0.0	1.0	0	267	6	1.0	-0.0
-96	KEGG-Module-M00045: Histidine degradation, histidine => N-formiminoglutamate => glutamate	0.0	1.0	0	267	6	1.0	-0.0
-97	KEGG-Module-M00529: Denitrification, nitrate => nitrogen	0.0	1.0	0	267	10	1.0	-0.0
-98	KEGG-Module-M00048: Inosine monophosphate biosynthesis, PRPP + glutamine => IMP	0.0	1.0	0	267	13	1.0	-0.0
-99	KEGG-Module-M00049: Adenine ribonucleotide biosynthesis, IMP => ADP,ATP	2.725563909774436	0.3362921583834789	1	267	8	1.0	-0.0
-100	KEGG-Module-M00568: Catechol ortho-cleavage, catechol => 3-oxoadipate	4.772556390977444	0.2259524636018299	1	267	5	1.0	-0.0
-101	KEGG-Module-M00185: Sulfate transport system	0.0	1.0	0	267	5	1.0	-0.0
-102	KEGG-Module-M00616: Sulfate-sulfur assimilation	0.0	1.0	0	267	12	1.0	-0.0
-103	KEGG-Module-M00349: Microcin C transport system	2.3843984962406015	0.36947133713287666	1	267	9	1.0	-0.0
-104	KEGG-Module-M00188: NitT/TauT family transport system	0.0	1.0	0	267	13	1.0	-0.0
-105	KEGG-Module-M00307: Pyruvate oxidation, pyruvate => acetyl-CoA	0.0	1.0	0	267	11	1.0	-0.0
-106	KEGG-Module-M00452: CusS-CusR (copper tolerance) two-component regulatory system	0.0	1.0	0	267	8	1.0	-0.0
-107	KEGG-Module-M00299: Spermidine/putrescine transport system	0.0	1.0	0	267	12	1.0	-0.0
-108	KEGG-Module-M00222: Phosphate transport system	4.772556390977444	0.2259524636018299	1	267	5	1.0	-0.0
-109	KEGG-Module-M00053: Pyrimidine deoxyribonuleotide biosynthesis, CDP/CTP => dCDP/dCTP,dTDP/dTTP	0.0	1.0	0	267	9	1.0	-0.0
-110	KEGG-Module-M00050: Guanine ribonucleotide biosynthesis IMP => GDP,GTP	3.8172932330827067	0.26462587157642825	1	267	6	1.0	-0.0
-111	KEGG-Module-M00115: NAD biosynthesis, aspartate => NAD	0.0	1.0	0	267	5	1.0	-0.0
-112	KEGG-Module-M00334: Type VI secretion system	0.47387218045112783	0.8784574086209026	1	267	45	1.0	-0.0
-113	KEGG-Module-M00335: Sec (secretion) system	0.0	1.0	0	267	11	1.0	-0.0
-114	KEGG-Module-M00332: Type III secretion system	0.0	1.0	0	267	18	1.0	-0.0
-115	KEGG-Module-M00331: Type II general secretion pathway	1.9800156739811912	0.21282098936027494	3	267	33	1.0	-0.0
-116	KEGG-Module-M00530: Dissimilatory nitrate reduction, nitrate => ammonia	0.0	1.0	0	267	8	1.0	-0.0
-117	KEGG-Module-M00023: Tryptophan biosynthesis, chorismate => tryptophan	0.0	1.0	0	267	9	1.0	-0.0
-118	KEGG-Module-M00021: Cysteine biosynthesis, serine => cysteine	0.0	1.0	0	267	6	1.0	-0.0
-119	KEGG-Module-M00024: Phenylalanine biosynthesis, chorismate => phenylalanine	4.772556390977444	0.2259524636018299	1	267	5	1.0	-0.0
-120	KEGG-Module-M00028: Ornithine biosynthesis, glutamate => ornithine	0.0	1.0	0	267	8	1.0	-0.0
-121	KEGG-Module-M00223: Phosphonate transport system	0.0	1.0	0	267	7	1.0	-0.0
-122	KEGG-Module-M00240: Iron complex transport system	2.119047619047619	0.4009977702758307	1	267	10	1.0	-0.0
-123	KEGG-Module-M00324: Dipeptide transport system	0.0	1.0	0	267	7	1.0	-0.0
-124	KEGG-Module-M00323: Urea transport system	0.0	1.0	0	267	5	1.0	-0.0
-125	KEGG-Module-M00242: Zinc transport system	0.0	1.0	0	267	6	1.0	-0.0
-126	KEGG-Module-M00087: beta-Oxidation	3.188679245283019	0.15241017196222884	2	267	15	1.0	-0.0
-127	KEGG-Module-M00082: Fatty acid biosynthesis, initiation	0.0	1.0	0	267	8	1.0	-0.0
-128	KEGG-Module-M00083: Fatty acid biosynthesis, elongation	2.549433962264151	0.2071228686071585	2	267	17	1.0	-0.0
-129	KEGG-Module-M00328: Hemophore/metalloprotease transport system	0.0	1.0	0	267	6	1.0	-0.0
-130	KEGG-Module-M00034: Methionine salvage pathway	0.0	1.0	0	267	12	1.0	-0.0
-131	KEGG-Module-M00036: Leucine degradation, leucine => acetoacetate + acetyl-CoA	1.1903195488721805	0.5818099377742112	1	267	18	1.0	-0.0
-132	KEGG-Module-M00237: Branched-chain amino acid transport system	0.0	1.0	0	267	11	1.0	-0.0
-133	KEGG-Module-M00236: Putative polar amino acid transport system	3.3856951871657754	0.07483138457266574	3	267	24	1.0	-0.0
-134	KEGG-Module-M00235: Arginine/ornithine transport system	0.0	1.0	0	267	5	1.0	-0.0
-135	KEGG-Module-M00230: Glutamate/aspartate transport system	0.0	1.0	0	267	5	1.0	-0.0
-136	KEGG-Module-M00258: Putative ABC transport system	0.0	1.0	0	267	8	1.0	-0.0
-137	KEGG-Module-M00254: ABC-2 type transport system	0.0	1.0	0	267	11	1.0	-0.0
-138	KEGG-Module-M00126: Tetrahydrofolate biosynthesis, GTP => THF	0.0	1.0	0	267	12	1.0	-0.0
-139	KEGG-Module-M00125: Riboflavin biosynthesis, GTP => riboflavin/FMN/FAD	0.0	1.0	0	267	6	1.0	-0.0
-140	KEGG-Module-M00124: Pyridoxal biosynthesis, erythrose-4P => pyridoxal-5P	3.180451127819549	0.3013739330176047	1	267	7	1.0	-0.0
-141	KEGG-Module-M00122: Cobalamin biosynthesis, cobinamide => cobalamin	0.0	1.0	0	267	9	1.0	-0.0
-142	KEGG-Module-M00002: Glycolysis, core module involving three-carbon compounds	2.725563909774436	0.3362921583834789	1	267	8	1.0	-0.0
-143	KEGG-Module-M00119: Pantothenate biosynthesis, valine/L-aspartate => pantothenate	0.0	1.0	0	267	7	1.0	-0.0
-144	KEGG-Module-M00008: Entner-Doudoroff pathway, glucose-6P => glyceraldehyde-3P + pyruvate	0.0	1.0	0	267	6	1.0	-0.0
-145	KEGG-Module-M00009: Citrate cycle (TCA cycle, Krebs cycle)	0.0	1.0	0	267	23	1.0	-0.0
-146	KEGG-Module-M00432: Leucine biosynthesis, 2-oxoisovalerate => 2-oxoisocaproate	0.0	1.0	0	267	5	1.0	-0.0
-147	KEGG-Module-M00260: DNA polymerase III complex, bacteria	0.0	1.0	0	267	8	1.0	-0.0
-148	KEGG-Module-M00533: Homoprotocatechuate degradation, homoprotocatechuate => 2-oxohept-3-enedioate	19.238636363636363	0.002198086626066932	3	267	6	0.09286915995132787	1.0321284828481427
-149	KEGG-Module-M00019: Valine/isoleucine biosynthesis, pyruvate => valine / 2-oxobutanoate => isoleucine	0.0	1.0	0	267	9	1.0	-0.0
-150	KEGG-Module-M00018: Threonine biosynthesis, aspartate => homoserine => threonine	0.0	1.0	0	267	6	1.0	-0.0
-151	KEGG-Module-M00011: Citrate cycle, second carbon oxidation, 2-oxoglutarate => oxaloacetate	0.0	1.0	0	267	17	1.0	-0.0
-152	KEGG-Module-M00010: Citrate cycle, first carbon oxidation, oxaloacetate => 2-oxoglutarate	0.0	1.0	0	267	6	1.0	-0.0
-153	KEGG-Module-M00016: Lysine biosynthesis, succinyl-DAP pathway, aspartate => lysine	3.188679245283019	0.15241017196222884	2	267	14	1.0	-0.0
-154	KEGG-Module-M00156: Cytochrome c oxidase, cbb3-type	0.0	1.0	0	267	9	1.0	-0.0
-155	KEGG-Module-M00157: F-type ATPase, prokaryotes and chloroplasts	0.0	1.0	0	267	8	1.0	-0.0
-156	KEGG-Module-M00647: Multidrug resistance, efflux pump MexAB-OprM/SmeDEF/AcrAB-TolC	0.0	1.0	0	267	8	1.0	-0.0
-157	KEGG-Module-M00644: Multidrug resistance, efflux pump MexHI-OprD	0.0	1.0	0	267	5	1.0	-0.0
-158	KEGG-Module-M00144: NADH:quinone oxidoreductase, prokaryotes	0.0	1.0	0	267	14	1.0	-0.0
-159	KEGG-Module-M00436: Sulfonate transport system	0.0	1.0	0	267	12	1.0	-0.0
-160	KEGG-Module-M00300: Putrescine transport system	0.0	1.0	0	267	8	1.0	-0.0
-161	KEGG-Module-M00200: Putative sorbitol/mannitol transport system	12.777358490566037	0.02245631136261896	2	267	5	0.7590233240565208	0.11974487844785829
-162	KEGG-Module-M00360: Aminoacyl-tRNA biosynthesis, prokaryotes	0.9060150375939849	0.6765722409496302	1	267	22	1.0	-0.0
-163	KEGG-Module-M00238: D-Methionine transport system	3.180451127819549	0.3013739330176047	1	267	7	1.0	-0.0
-164	KEGG-Module-M00208: Glycine betaine/proline transport system	2.119047619047619	0.4009977702758307	1	267	10	1.0	-0.0
-165	KEGG-Module-M00176: Assimilatory sulfate reduction, sulfate => H2S	0.0	1.0	0	267	7	1.0	-0.0
-166	KEGG-Module-M00570: Isoleucine biosynthesis, threonine => 2-oxobutanoate => isoleucine	0.0	1.0	0	267	13	1.0	-0.0
-167	KEGG-Module-M00572: Pimeloyl-ACP biosynthesis, BioC-BioH pathway, malonyl-ACP => pimeloyl-ACP	2.732075471698113	0.1886101372491342	2	267	16	1.0	-0.0
-168	KEGG-Module-M00178: Ribosome, bacteria	0.0	1.0	0	267	56	1.0	-0.0
+0	path:pae00010 : Glycolysis / Gluconeogenesis	0.5269423558897243	0.8506029411157785	1	267	37	1.0	-0.0
+1	path:pae00020 : Citrate cycle (TCA cycle)	0.0	1.0	0	267	28	1.0	-0.0
+2	path:pae00030 : Pentose phosphate pathway	0.7038429406850459	0.7624693607356635	1	267	28	1.0	-0.0
+3	path:pae00040 : Pentose and glucuronate interconversions	6.384905660377359	0.05694635548946789	2	267	8	1.0	-0.0
+4	path:pae00051 : Fructose and mannose metabolism	0.0	1.0	0	267	19	1.0	-0.0
+5	path:pae00052 : Galactose metabolism	0.0	1.0	0	267	5	1.0	-0.0
+6	path:pae00053 : Ascorbate and aldarate metabolism	3.180451127819549	0.3013739330176047	1	267	7	1.0	-0.0
+7	path:pae00061 : Fatty acid biosynthesis	1.4676342525399129	0.41117775656528865	2	267	28	1.0	-0.0
+8	path:pae00071 : Fatty acid degradation	2.561216730038023	0.08707976242214797	4	267	34	1.0	-0.0
+9	path:pae00130 : Ubiquinone and other terpenoid-quinone biosynthesis	1.120079610791685	0.6027508129852461	1	267	19	1.0	-0.0
+10	path:pae00190 : Oxidative phosphorylation	0.33142065690542144	0.9495226924579941	1	267	59	1.0	-0.0
+11	path:pae00220 : Arginine biosynthesis	0.0	1.0	0	267	31	1.0	-0.0
+12	path:pae00230 : Purine metabolism	0.5735849056603773	0.8611032219335625	2	267	69	1.0	-0.0
+13	path:pae00240 : Pyrimidine metabolism	0.0	1.0	0	267	34	1.0	-0.0
+14	path:pae00250 : Alanine, aspartate and glutamate metabolism	0.0	1.0	0	267	37	1.0	-0.0
+15	path:pae00260 : Glycine, serine and threonine metabolism	0.3861439312567132	0.9236437905959717	1	267	51	1.0	-0.0
+16	path:pae00261 : Monobactam biosynthesis	2.3843984962406015	0.36947133713287666	1	267	9	1.0	-0.0
+17	path:pae00270 : Cysteine and methionine metabolism	0.0	1.0	0	267	45	1.0	-0.0
+18	path:pae00280 : Valine, leucine and isoleucine degradation	1.62931801634172	0.2491092904046817	4	267	51	1.0	-0.0
+19	path:pae00281 : Geraniol degradation	1.1903195488721805	0.5818099377742112	1	267	17	1.0	-0.0
+20	path:pae00290 : Valine, leucine and isoleucine biosynthesis	0.0	1.0	0	267	19	1.0	-0.0
+21	path:pae00300 : Lysine biosynthesis	1.2699248120300752	0.5597695219407147	1	267	16	1.0	-0.0
+22	path:pae00310 : Lysine degradation	0.9060150375939849	0.6765722409496302	1	267	23	1.0	-0.0
+23	path:pae00330 : Arginine and proline metabolism	0.9056603773584906	0.6531820487567617	2	267	45	1.0	-0.0
+24	path:pae00332 : Carbapenem biosynthesis	0.0	1.0	0	267	2	1.0	-0.0
+25	path:pae00340 : Histidine metabolism	0.0	1.0	0	267	24	1.0	-0.0
+26	path:pae00350 : Tyrosine metabolism	6.4884615384615385	0.000341775591701952	7	267	28	0.01401279925978003	1.8534750994293832
+27	path:pae00360 : Phenylalanine metabolism	2.6136363636363638	0.12621764998697377	3	267	26	1.0	-0.0
+28	path:pae00361 : Chlorocyclohexane and chlorobenzene degradation	0.0	1.0	0	267	6	1.0	-0.0
+29	path:pae00362 : Benzoate degradation	6.5310077519379846	4.814961133861283e-05	9	267	36	0.002961201097324689	2.5285320983544146
+30	path:pae00364 : Fluorobenzoate degradation	7.663396226415094	0.044137502923275715	2	267	7	0.9048188099271521	0.04343837960928657
+31	path:pae00380 : Tryptophan metabolism	0.6550427793621986	0.7857112940768929	1	267	31	1.0	-0.0
+32	path:pae00400 : Phenylalanine, tyrosine and tryptophan biosynthesis	2.298636363636364	0.1616745622264084	3	267	30	1.0	-0.0
+33	path:pae00401 : Novobiocin biosynthesis	0.0	1.0	0	267	5	1.0	-0.0
+34	path:pae00405 : Phenazine biosynthesis	0.0	1.0	0	267	24	1.0	-0.0
+35	path:pae00410 : beta-Alanine metabolism	0.0	1.0	0	267	20	1.0	-0.0
+36	path:pae00430 : Taurine and hypotaurine metabolism	0.0	1.0	0	267	8	1.0	-0.0
+37	path:pae00440 : Phosphonate and phosphinate metabolism	2.3843984962406015	0.36947133713287666	1	267	9	1.0	-0.0
+38	path:pae00450 : Selenocompound metabolism	0.0	1.0	0	267	9	1.0	-0.0
+39	path:pae00460 : Cyanoamino acid metabolism	0.0	1.0	0	267	11	1.0	-0.0
+40	path:pae00470 : D-Amino acid metabolism	6.84922244759973	0.000718495531144705	6	267	23	0.02209373758269968	1.6557308086086202
+41	path:pae00480 : Glutathione metabolism	0.5932800751879699	0.8163942038717384	1	267	33	1.0	-0.0
+42	path:pae00500 : Starch and sucrose metabolism	0.0	1.0	0	267	16	1.0	-0.0
+43	path:pae00520 : Amino sugar and nucleotide sugar metabolism	0.5932800751879699	0.8163942038717384	1	267	39	1.0	-0.0
+44	path:pae00521 : Streptomycin biosynthesis	0.0	1.0	0	267	8	1.0	-0.0
+45	path:pae00523 : Polyketide sugar unit biosynthesis	0.0	1.0	0	267	5	1.0	-0.0
+46	path:pae00525 : Acarbose and validamycin biosynthesis	0.0	1.0	0	267	2	1.0	-0.0
+47	path:pae00540 : Lipopolysaccharide biosynthesis	0.7038429406850459	0.7624693607356635	1	267	28	1.0	-0.0
+48	path:pae00541 : O-Antigen nucleotide sugar biosynthesis	0.0	1.0	0	267	25	1.0	-0.0
+49	path:pae00550 : Peptidoglycan biosynthesis	0.0	1.0	0	267	20	1.0	-0.0
+50	path:pae00561 : Glycerolipid metabolism	1.3609022556390977	0.5365720603936259	1	267	15	1.0	-0.0
+51	path:pae00562 : Inositol phosphate metabolism	0.0	1.0	0	267	7	1.0	-0.0
+52	path:pae00564 : Glycerophospholipid metabolism	0.6785714285714286	0.774388300908611	1	267	29	1.0	-0.0
+53	path:pae00565 : Ether lipid metabolism	0.0	1.0	0	267	3	1.0	-0.0
+54	path:pae00590 : Arachidonic acid metabolism	0.0	1.0	0	267	4	1.0	-0.0
+55	path:pae00592 : alpha-Linolenic acid metabolism	9.548872180451127	0.14242248168039393	1	267	3	1.0	-0.0
+56	path:pae00600 : Sphingolipid metabolism	0.0	1.0	0	267	1	1.0	-0.0
+57	path:pae00620 : Pyruvate metabolism	1.211660329531052	0.43177948059484983	4	267	67	1.0	-0.0
+58	path:pae00622 : Xylene degradation	9.581132075471698	0.03258542373090123	2	267	6	0.8016014237801703	0.09604152009543945
+59	path:pae00623 : Toluene degradation	0.0	1.0	0	267	3	1.0	-0.0
+60	path:pae00625 : Chloroalkane and chloroalkene degradation	0.0	1.0	0	267	8	1.0	-0.0
+61	path:pae00626 : Naphthalene degradation	0.0	1.0	0	267	2	1.0	-0.0
+62	path:pae00627 : Aminobenzoate degradation	1.2699248120300752	0.5597695219407147	1	267	17	1.0	-0.0
+63	path:pae00630 : Glyoxylate and dicarboxylate metabolism	1.0017942583732058	0.5826307256784866	3	267	61	1.0	-0.0
+64	path:pae00633 : Nitrotoluene degradation	19.101503759398497	0.09734901762587178	1	267	2	1.0	-0.0
+65	path:pae00640 : Propanoate metabolism	0.0	1.0	0	267	44	1.0	-0.0
+66	path:pae00643 : Styrene degradation	4.254088050314466	0.10144055856111364	2	267	12	1.0	-0.0
+67	path:pae00650 : Butanoate metabolism	0.9759071117561684	0.6145687240426765	2	267	42	1.0	-0.0
+68	path:pae00660 : C5-Branched dibasic acid metabolism	3.479245283018868	0.13488404188203673	2	267	14	1.0	-0.0
+69	path:pae00670 : One carbon pool by folate	0.0	1.0	0	267	17	1.0	-0.0
+70	path:pae00680 : Methane metabolism	0.7922932330827067	0.7228162015533994	1	267	26	1.0	-0.0
+71	path:pae00730 : Thiamine metabolism	0.0	1.0	0	267	13	1.0	-0.0
+72	path:pae00740 : Riboflavin metabolism	1.4658762290341238	0.5121570525324122	1	267	14	1.0	-0.0
+73	path:pae00750 : Vitamin B6 metabolism	2.3843984962406015	0.36947133713287666	1	267	9	1.0	-0.0
+74	path:pae00760 : Nicotinate and nicotinamide metabolism	0.0	1.0	0	267	24	1.0	-0.0
+75	path:pae00770 : Pantothenate and CoA biosynthesis	0.0	1.0	0	267	26	1.0	-0.0
+76	path:pae00780 : Biotin metabolism	2.011122144985104	0.28235982272090276	2	267	21	1.0	-0.0
+77	path:pae00785 : Lipoic acid metabolism	0.0	1.0	0	267	2	1.0	-0.0
+78	path:pae00790 : Folate biosynthesis	0.0	1.0	0	267	32	1.0	-0.0
+79	path:pae00791 : Atrazine degradation	0.0	1.0	0	267	4	1.0	-0.0
+80	path:pae00860 : Porphyrin metabolism	0.37085360459973465	0.9311453243786474	1	267	52	1.0	-0.0
+81	path:pae00900 : Terpenoid backbone biosynthesis	1.1903195488721805	0.5818099377742112	1	267	17	1.0	-0.0
+82	path:pae00903 : Limonene and pinene degradation	0.0	1.0	0	267	9	1.0	-0.0
+83	path:pae00910 : Nitrogen metabolism	0.0	1.0	0	267	34	1.0	-0.0
+84	path:pae00920 : Sulfur metabolism	0.7915094339622641	0.7211094382296072	2	267	56	1.0	-0.0
+85	path:pae00930 : Caprolactam degradation	0.0	1.0	0	267	10	1.0	-0.0
+86	path:pae00970 : Aminoacyl-tRNA biosynthesis	0.7310584152689416	0.7499232320152807	1	267	90	1.0	-0.0
+87	path:pae00997 : Biosynthesis of various other secondary metabolites	inf	6.076304981119076e-06	4	267	4	0.0007473855126776463	3.1264553247699447
+88	path:pae00999 : Biosynthesis of various plant secondary metabolites	6.364661654135339	0.185253233155183	1	267	4	1.0	-0.0
+89	path:pae01040 : Biosynthesis of unsaturated fatty acids	0.0	1.0	0	267	6	1.0	-0.0
+90	path:pae01053 : Biosynthesis of siderophore group nonribosomal peptides	0.0	1.0	0	267	7	1.0	-0.0
+91	path:pae01100 : Metabolic pathways		1.0	0	267	0	1.0	-0.0
+92	path:pae01110 : Biosynthesis of secondary metabolites		1.0	0	267	0	1.0	-0.0
+93	path:pae01120 : Microbial metabolism in diverse environments		1.0	0	267	0	1.0	-0.0
+94	path:pae01200 : Carbon metabolism		1.0	0	267	0	1.0	-0.0
+95	path:pae01210 : 2-Oxocarboxylic acid metabolism		1.0	0	267	0	1.0	-0.0
+96	path:pae01212 : Fatty acid metabolism		1.0	0	267	0	1.0	-0.0
+97	path:pae01220 : Degradation of aromatic compounds		1.0	0	267	0	1.0	-0.0
+98	path:pae01230 : Biosynthesis of amino acids		1.0	0	267	0	1.0	-0.0
+99	path:pae01240 : Biosynthesis of cofactors		1.0	0	267	0	1.0	-0.0
+100	path:pae01250 : Biosynthesis of nucleotide sugars		1.0	0	267	0	1.0	-0.0
+101	path:pae01501 : beta-Lactam resistance		1.0	0	267	0	1.0	-0.0
+102	path:pae01502 : Vancomycin resistance		1.0	0	267	0	1.0	-0.0
+103	path:pae01503 : Cationic antimicrobial peptide (CAMP) resistance		1.0	0	267	0	1.0	-0.0
+104	path:pae02010 : ABC transporters	1.001843129223838	0.5454213917874378	10	267	208	1.0	-0.0
+105	path:pae02020 : Two-component system	0.8518245872331476	0.7309372825022218	10	267	235	1.0	-0.0
+106	path:pae02024 : Quorum sensing	0.668048128342246	0.823553322837802	3	267	96	1.0	-0.0
+107	path:pae02025 : Biofilm formation	0.0	1.0	0	267	113	1.0	-0.0
+108	path:pae02030 : Bacterial chemotaxis	0.0	1.0	0	267	48	1.0	-0.0
+109	path:pae02040 : Flagellar assembly	0.0	1.0	0	267	46	1.0	-0.0
+110	path:pae02060 : Phosphotransferase system (PTS)	2.725563909774436	0.3362921583834789	1	267	8	1.0	-0.0
+111	path:pae03010 : Ribosome	0.0	1.0	0	267	68	1.0	-0.0
+112	path:pae03018 : RNA degradation	0.0	1.0	0	267	18	1.0	-0.0
+113	path:pae03020 : RNA polymerase	0.0	1.0	0	267	4	1.0	-0.0
+114	path:pae03030 : DNA replication	0.0	1.0	0	267	15	1.0	-0.0
+115	path:pae03060 : Protein export	0.0	1.0	0	267	18	1.0	-0.0
+116	path:pae03070 : Bacterial secretion system	0.8941176470588236	0.6563252862801344	4	267	94	1.0	-0.0
+117	path:pae03410 : Base excision repair	0.0	1.0	0	267	13	1.0	-0.0
+118	path:pae03420 : Nucleotide excision repair	0.0	1.0	0	267	8	1.0	-0.0
+119	path:pae03430 : Mismatch repair	0.0	1.0	0	267	17	1.0	-0.0
+120	path:pae03440 : Homologous recombination	0.0	1.0	0	267	23	1.0	-0.0
+121	path:pae03450 : Non-homologous end-joining	0.0	1.0	0	267	2	1.0	-0.0
+122	path:pae04122 : Sulfur relay system	0.0	1.0	0	267	23	1.0	-0.0
