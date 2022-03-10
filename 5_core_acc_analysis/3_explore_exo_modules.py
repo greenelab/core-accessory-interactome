@@ -161,6 +161,7 @@ exo_core_both = exo_core_corr[
     (exo_core_corr["corr to exoS"] > 0.4) & (exo_core_corr["corr to exoU"] > 0.2)
 ]
 exo_core_both_ids = exo_core_both.index
+print(exo_core_both.shape)
 exo_core_both
 
 # Core genes co-expressed with exoS
@@ -168,6 +169,7 @@ exoS_core_only = exo_core_corr[
     (exo_core_corr["corr to exoS"] > 0.2) & (exo_core_corr["corr to exoU"] < 0)
 ]
 exoS_core_only_ids = exoS_core_only.index
+print(exoS_core_only.shape)
 exoS_core_only
 
 # Core genes co-expressed with exoU
@@ -175,6 +177,7 @@ exoU_core_only = exo_core_corr[
     (exo_core_corr["corr to exoS"] < 0.2) & (exo_core_corr["corr to exoU"] > 0.2)
 ]
 exoU_core_only_ids = exoU_core_only.index
+print(exoU_core_only.shape)
 exoU_core_only
 
 # Add labels
