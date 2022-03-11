@@ -244,47 +244,73 @@ figure_3.save("output/figure_3.svg")
 
 # Create panels for figure 1
 panel_S1a = make_figure_panel(
-    "../3_core_core_analysis/array_similarity_scores_dist_spell.svg",
-    scale_x_input=0.95,
-    scale_y_input=0.95,
+    "../3_core_core_analysis/corr_stability_vs_operon_size_pao1.svg",
+    scale_x_input=1,
+    scale_y_input=1,
     x_loc=10,
-    y_loc=50,
-)
-panel_S1b = make_figure_panel(
-    "../3_core_core_analysis/transcriptional_similarity_array_vs_rnaseq.svg",
-    scale_x_input=0.85,
-    scale_y_input=0.85,
-    x_loc=500,
     y_loc=20,
 )
-panel_S1c = make_figure_panel(
-    "../3_core_core_analysis/most_stable_array_vs_rnaseq_venn.svg",
-    scale_x_input=0.85,
-    scale_y_input=0.85,
-    x_loc=950,
-    y_loc=50,
+panel_S1b = make_figure_panel(
+    "../3_core_core_analysis/corr_stability_vs_operon_size_pa14.svg",
+    scale_x_input=1,
+    scale_y_input=1,
+    x_loc=500,
+    y_loc=20,
 )
 
 panel_S1a_label = sg.TextElement(10, 20, "A", size=18, weight="bold", font="Verdana")
 panel_S1b_label = sg.TextElement(500, 20, "B", size=18, weight="bold", font="Verdana")
-panel_S1c_label = sg.TextElement(950, 20, "C", size=18, weight="bold", font="Verdana")
 
-figure_S1 = sg.SVGFigure("1300", "400")
+figure_S1 = sg.SVGFigure("900", "500")
 figure_S1.append(
     [
         etree.Element("rect", {"width": "100%", "height": "100%", "fill": "white"}),
         panel_S1a,
         panel_S1b,
-        panel_S1c,
         panel_S1a_label,
         panel_S1b_label,
-        panel_S1c_label,
     ]
 )
 display(SVG(figure_S1.to_str()))
 
 # save generated SVG files
 figure_S1.save("output/figure_S1.svg")
+
+# ## Supplement 2
+
+# Create panels for figure 1
+panel_S2a = make_figure_panel(
+    "../3_core_core_analysis/array_similarity_scores_dist_spell.svg",
+    scale_x_input=0.95,
+    scale_y_input=0.95,
+    x_loc=10,
+    y_loc=50,
+)
+panel_S2b = make_figure_panel(
+    "../3_core_core_analysis/transcriptional_similarity_array_vs_rnaseq.svg",
+    scale_x_input=0.85,
+    scale_y_input=0.85,
+    x_loc=500,
+    y_loc=20,
+)
+
+panel_S2a_label = sg.TextElement(10, 20, "A", size=18, weight="bold", font="Verdana")
+panel_S2b_label = sg.TextElement(500, 20, "B", size=18, weight="bold", font="Verdana")
+
+figure_S2 = sg.SVGFigure("900", "400")
+figure_S2.append(
+    [
+        etree.Element("rect", {"width": "100%", "height": "100%", "fill": "white"}),
+        panel_S2a,
+        panel_S2b,
+        panel_S2a_label,
+        panel_S2b_label,
+    ]
+)
+display(SVG(figure_S2.to_str()))
+
+# save generated SVG files
+figure_S2.save("output/figure_S2.svg")
 
 # ## Output png version
 
@@ -294,3 +320,4 @@ figure_S1.save("output/figure_S1.svg")
 # !inkscape --export-png=output/figure_2.png output/figure_2.svg
 # !inkscape --export-png=output/figure_3.png output/figure_3.svg
 # !inkscape --export-png=output/figure_S1.png output/figure_S1.svg
+# !inkscape --export-png=output/figure_S2.png output/figure_S2.svg

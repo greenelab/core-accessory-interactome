@@ -27,13 +27,15 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import scipy.stats
+import json
 import statsmodels.stats.multitest
 from scripts import paths, utils, annotations
 
 # Load KEGG pathway data
-pao1_pathway_filename = "https://raw.githubusercontent.com/greenelab/adage/7a4eda39d360b224268921dc1f2c14b32788ab16/Node_interpretation/pseudomonas_KEGG_terms.txt"
+pao1_pathway_filename = "pao1_kegg_annot.tsv"
 
-pao1_pathways = annotations.load_format_KEGG(pao1_pathway_filename)
+pao1_pathways = pd.read_csv(pao1_pathway_filename, sep="\t", header=0, index_col=0)
+
 print(pao1_pathways.shape)
 pao1_pathways.head()
 
@@ -72,8 +74,10 @@ def KEGG_enrichment_of_stable_genes(similarity_score_df, gene_list, kegg_df):
     rows = []
     # Find the KEGG pathway with significant over-representation
     for kegg_name in kegg_df.index:
-        num_kegg_genes = kegg_df.loc[kegg_name, 1]
-        kegg_genes = set(kegg_df.loc[kegg_name, 2])
+        num_kegg_genes = kegg_df.loc[kegg_name, "num_genes"]
+        kegg_genes = kegg_df.loc[kegg_name, "gene_ids"]
+        kegg_genes = set(json.loads(kegg_genes.replace("'", '"')))
+
         not_kegg_genes = all_genes.difference(kegg_genes)
 
         # Make contingency table
@@ -222,8 +226,6 @@ pao1_least_stable_enrichment.to_csv("pao1_least_stable_enrichment_spell.tsv", se
 
 # **Takeaway:**
 #
-# KEGG enrichment analysis found that stable genes were significantly associated with essential functions: ribosome, lipopolysaccharide biosynthesis, citrate cycle. However, there are also pathways like the secretion systems, which allow for inter-strain warfare, that we’d expect to vary across strains but were found to be conserved (T3SS, T6SS) - looks like most of the genes annotated as T3/6SS are related to the secretion machinery, which is conserved across strains.
-#
-# There does NOT appear to be any significantly enriched KEGG pathways in the least stable core genes. However the least stable genes with the top enrichment score seem to be related to stress response
+# KEGG enrichment analysis found that stable genes were significantly associated with essential functions: ribosome, lipopolysaccharide biosynthesis, citrate cycle. While least stable core genes are enriched in pathways related to degredation of aromatic compounds
 #
 # KEGG enrichment: https://docs.google.com/spreadsheets/d/1lXZZXXjZSOuQ-cMOZ9I5llIJ2OBOQBur0Spso2WN4oY/edit#gid=0

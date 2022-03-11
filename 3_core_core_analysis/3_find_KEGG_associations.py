@@ -52,47 +52,46 @@ pao1_similarity_scores.head()
 print(pa14_similarity_scores.shape)
 pa14_similarity_scores.head()
 
-# Load KEGG pathway data
-pao1_pathway_filename = "https://raw.githubusercontent.com/greenelab/adage/7a4eda39d360b224268921dc1f2c14b32788ab16/Node_interpretation/pseudomonas_KEGG_terms.txt"
+# ## Load KEGG annotations
 
-pao1_pathways = annotations.load_format_KEGG(pao1_pathway_filename)
+pao1_pathway_filename = "pao1_kegg_annot.tsv"
+pa14_pathway_filename = "pa14_kegg_annot.tsv"
+
+pao1_pathways = pd.read_csv(pao1_pathway_filename, sep="\t", header=0, index_col=0)
+pa14_pathways = pd.read_csv(pa14_pathway_filename, sep="\t", header=0, index_col=0)
+
+print(pao1_pathways.shape)
 pao1_pathways.head()
 
-# ## Pathway annotations to PA14
-#
-# The annotations we have are only for PAO1 genes, so we will map PAO1 core genes to PA14 core genes to add annotations to PA14. This is possible since we are focused on only core genes, which have homologs between PAO1 and PA14
-
-pao1_annotation_filename = paths.GENE_PAO1_ANNOT
-gene_mapping_pao1 = utils.get_pao1_pa14_gene_map(pao1_annotation_filename, "pao1")
-
-gene_mapping_pao1 = gene_mapping_pao1["PA14_ID"].to_frame()
+print(pa14_pathways.shape)
+pa14_pathways.head()
 
 
 # ## Get pathway associations for all genes
 
-def get_associated_pathways(genes_):
+def get_associated_pathways(genes_, pathway_df):
     rows = []
     for gene_id in genes_:
         pathway_bool = [
-            gene_id in pao1_pathways.loc[pathway, 2] for pathway in pao1_pathways.index
+            gene_id in pathway_df.loc[pathway, "gene_ids"]
+            for pathway in pathway_df.index
         ]
-        found_pathways = list(pao1_pathways[pathway_bool].index)
+        found_pathways = list(pathway_df[pathway_bool].index)
         rows.append({"gene id": gene_id, "pathways present": found_pathways})
     return pd.DataFrame(rows).set_index("gene id")
 
 
 # Get KEGG associations for all genes in PAO1
 all_pao1_gene_ids = list(pao1_similarity_scores.index)
-pao1_associations = get_associated_pathways(all_pao1_gene_ids)
+pao1_associations = get_associated_pathways(all_pao1_gene_ids, pao1_pathways)
 
 print(pao1_associations.shape)
 pao1_associations.head()
 
-# Map PA14 gene ids
-pa14_associations = pao1_associations.merge(
-    gene_mapping_pao1, left_index=True, right_index=True
-)
-pa14_associations.set_index("PA14_ID", inplace=True)
+# Get KEGG associations for all genes in PA14
+all_pa14_gene_ids = list(pa14_similarity_scores.index)
+pa14_associations = get_associated_pathways(all_pa14_gene_ids, pa14_pathways)
+
 print(pa14_associations.shape)
 pa14_associations.head()
 

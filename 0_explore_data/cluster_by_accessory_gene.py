@@ -511,7 +511,6 @@ print(fig2)
 
 # +
 # Plot
-# Note: commented out code is for plotting figure for Georgia's manuscript
 colors = {
     "Clinical Isolate": "#89A45E",
     "PA14": "#895881",
@@ -558,6 +557,14 @@ fig3.save("Expression_accessory_genes_all_samples.svg", format="svg", dpi=300)
 
 # +
 # Plot log-scaled
+colors = {
+    "Clinical Isolate": "#89A45E",
+    "PA14": "#895881",
+    "PAK": "#EF8B46",
+    "PAO1": "#C6A9B5",
+    "NA": "#D8DAEB",
+}
+
 fig4 = pn.ggplot(
     pao1_pa14_acc_expression_label,
     pn.aes(x="median acc expression_pao1", y="median acc expression_pa14"),
@@ -565,6 +572,7 @@ fig4 = pn.ggplot(
 fig4 += pn.scales.scale_x_log10()
 fig4 += pn.scales.scale_y_log10()
 fig4 += pn.geom_point(pn.aes(color="Strain type_pao1"), alpha=0.4)
+fig4 += pn.scale_color_manual(values=colors)
 fig4 += pn.labs(
     x="median expression of PAO1-only genes",
     y="median expression of PA14-only genes",
