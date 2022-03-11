@@ -116,13 +116,22 @@ cb = plt.colorbar(cax=cbar_ax)
 cb.set_label("Number of genes")
 
 fig.set_axis_labels(
-    "Transcriptional similarity",
+    "Transcriptional stability",
     "Operon sizse",
     fontsize=14,
     fontname="Verdana",
 )
 fig.fig.suptitle(
     "Stability vs operon size (PAO1)", fontsize=16, fontname="Verdana", y=0.9, x=0.45
+)
+
+fig.savefig(
+    "corr_stability_vs_operon_size_pao1.svg",
+    format="svg",
+    bbox_inches="tight",
+    transparent=True,
+    pad_inches=0,
+    dpi=300,
 )
 
 # +
@@ -139,13 +148,22 @@ cb = plt.colorbar(cax=cbar_ax)
 cb.set_label("Number of genes")
 
 fig.set_axis_labels(
-    "Transcriptional similarity",
+    "Transcriptional stability",
     "Operon sizse",
     fontsize=14,
     fontname="Verdana",
 )
 fig.fig.suptitle(
     "Stability vs operon size (PA14)", fontsize=16, fontname="Verdana", y=0.9, x=0.45
+)
+
+fig.savefig(
+    "corr_stability_vs_operon_size_pa14.svg",
+    format="svg",
+    bbox_inches="tight",
+    transparent=True,
+    pad_inches=0,
+    dpi=300,
 )
 
 # +
@@ -195,7 +213,7 @@ pao1_box_fig = sns.boxplot(
     x="label",
     y="Transcriptional similarity across strains",
     notch=True,
-    palette=["#81448e", "lightgrey"],
+    palette=["lightgrey", "#a1dab4"],
 )
 
 pao1_box_fig.set_xlabel(None)
@@ -203,13 +221,22 @@ pao1_box_fig.set_xticklabels(
     ["non-operon genes", "operon genes"], fontsize=14, fontname="Verdana"
 )
 pao1_box_fig.set_ylabel(
-    textwrap.fill("Transcriptional similarity", width=30),
+    textwrap.fill("Transcriptional stability", width=30),
     fontsize=14,
     fontname="Verdana",
 )
 pao1_box_fig.tick_params(labelsize=14)
 pao1_box_fig.set_title(
-    "Transcriptional similarity if in operon (PAO1)", fontsize=16, fontname="Verdana"
+    "Transcriptional stability if in operon (PAO1)", fontsize=16, fontname="Verdana"
+)
+
+pao1_box_fig.figure.savefig(
+    "box_stability_vs_operon_size_pao1.svg",
+    format="svg",
+    bbox_inches="tight",
+    transparent=True,
+    pad_inches=0,
+    dpi=300,
 )
 
 # +
@@ -218,7 +245,7 @@ pa14_box_fig = sns.boxplot(
     x="label",
     y="Transcriptional similarity across strains",
     notch=True,
-    palette=["#81448e", "lightgrey"],
+    palette=["lightgrey", "#a1dab4"],
 )
 
 pa14_box_fig.set_xlabel(None)
@@ -226,11 +253,20 @@ pa14_box_fig.set_xticklabels(
     ["non-operon genes", "operon genes"], fontsize=14, fontname="Verdana"
 )
 pa14_box_fig.set_ylabel(
-    textwrap.fill("Transcriptional similarity", width=30),
+    textwrap.fill("Transcriptional stability", width=30),
     fontsize=14,
     fontname="Verdana",
 )
 pa14_box_fig.tick_params(labelsize=14)
 pa14_box_fig.set_title(
-    "Transcriptional similarity if in operon (PA14)", fontsize=16, fontname="Verdana"
+    "Transcriptional stability if in operon (PA14)", fontsize=16, fontname="Verdana"
+)
+
+pa14_box_fig.figure.savefig(
+    "box_stability_vs_operon_size_pa14.svg",
+    format="svg",
+    bbox_inches="tight",
+    transparent=True,
+    pad_inches=0,
+    dpi=300,
 )

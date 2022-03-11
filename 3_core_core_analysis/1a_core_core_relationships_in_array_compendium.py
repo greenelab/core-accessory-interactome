@@ -409,8 +409,8 @@ cb = plt.colorbar(cax=cbar_ax)
 cb.set_label("Number of genes")
 
 fig.set_axis_labels(
-    "Transcriptional similarity (RNA-seq)",
-    "Transcriptional similarity (Array)",
+    "Transcriptional stability (RNA-seq)",
+    "Transcriptional stability (Array)",
     fontsize=14,
     fontname="Verdana",
 )
