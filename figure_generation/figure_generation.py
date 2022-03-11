@@ -245,23 +245,23 @@ figure_3.save("output/figure_3.svg")
 # Create panels for figure 1
 panel_S1a = make_figure_panel(
     "../3_core_core_analysis/corr_stability_vs_operon_size_pao1.svg",
-    scale_x_input=0.8,
-    scale_y_input=0.8,
+    scale_x_input=1,
+    scale_y_input=1,
     x_loc=10,
     y_loc=20,
 )
 panel_S1b = make_figure_panel(
     "../3_core_core_analysis/corr_stability_vs_operon_size_pa14.svg",
-    scale_x_input=0.8,
-    scale_y_input=0.8,
-    x_loc=400,
+    scale_x_input=1,
+    scale_y_input=1,
+    x_loc=500,
     y_loc=20,
 )
 
 panel_S1a_label = sg.TextElement(10, 20, "A", size=18, weight="bold", font="Verdana")
-panel_S1b_label = sg.TextElement(400, 20, "B", size=18, weight="bold", font="Verdana")
+panel_S1b_label = sg.TextElement(500, 20, "B", size=18, weight="bold", font="Verdana")
 
-figure_S1 = sg.SVGFigure("900", "400")
+figure_S1 = sg.SVGFigure("900", "500")
 figure_S1.append(
     [
         etree.Element("rect", {"width": "100%", "height": "100%", "fill": "white"}),
