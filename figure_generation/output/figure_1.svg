@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='ASCII' standalone='yes'?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1800" viewBox="0 0 1800 800" height="800">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="2700" viewBox="0 0 2700 1800" height="1800">
   <g>
     <rect width="100%" height="100%" fill="white"/>
-    <g transform="translate(10, 30) scale(1)  scale(1.000000 1.000000)"><defs>
+    <g transform="translate(10, 30) scale(1)  scale(1.500000 1.500000)"><defs>
   <style type="text/css">
 *{stroke-linecap:butt;stroke-linejoin:round;}
   </style>
@@ -3291,7 +3291,7 @@
   </clipPath>
  </defs>
 </g>
-    <g transform="translate(600, 30) scale(1)  scale(1.000000 1.000000)"><defs>
+    <g transform="translate(10, 600) scale(1)  scale(1.500000 1.500000)"><defs>
   <style type="text/css">
 *{stroke-linecap:butt;stroke-linejoin:round;}
   </style>
@@ -4375,7 +4375,7 @@
   </clipPath>
  </defs>
 </g>
-    <g transform="translate(1200, 30) scale(1)  scale(1.000000 1.000000)"><defs>
+    <g transform="translate(10, 1200) scale(1)  scale(1.500000 1.500000)"><defs>
   <style type="text/css">
 *{stroke-linecap:butt;stroke-linejoin:round;}
   </style>
@@ -5859,7 +5859,7 @@
   </clipPath>
  </defs>
 </g>
-    <g transform="translate(750, 80) scale(1)  scale(0.600000 0.600000)"><defs>
+    <g transform="translate(250, 700) scale(1)  scale(0.800000 0.800000)"><defs>
   <style type="text/css">
 *{stroke-linecap:butt;stroke-linejoin:round;}
   </style>
@@ -6396,7 +6396,7 @@
   </clipPath>
  </defs>
 </g>
-    <g transform="translate(1340, 80) scale(1)  scale(0.600000 0.600000)"><defs>
+    <g transform="translate(250, 1300) scale(1)  scale(0.800000 0.800000)"><defs>
   <style type="text/css">
 *{stroke-linecap:butt;stroke-linejoin:round;}
   </style>
@@ -6990,7 +6990,7 @@
   </clipPath>
  </defs>
 </g>
-    <g transform="translate(30, 400) scale(1)  scale(0.800000 0.800000)"><defs>
+    <g transform="translate(850, 30) scale(1)  scale(1.600000 1.600000)"><defs>
   <style type="text/css">
 *{stroke-linecap:butt;stroke-linejoin:round;}
   </style>
@@ -7564,7 +7564,7 @@
   </clipPath>
  </defs>
 </g>
-    <g transform="translate(900, 400) scale(1)  scale(0.800000 0.800000)"><defs>
+    <g transform="translate(850, 900) scale(1)  scale(1.600000 1.600000)"><defs>
   <style type="text/css">
 *{stroke-linecap:butt;stroke-linejoin:round;}
   </style>
@@ -8481,9 +8481,9 @@
  </defs>
 </g>
     <text x="10" y="20" font-size="18" font-family="Verdana" font-weight="bold" letter-spacing="0" text-anchor="start" fill="black">A</text>
-    <text x="600" y="20" font-size="18" font-family="Verdana" font-weight="bold" letter-spacing="0" text-anchor="start" fill="black">B</text>
-    <text x="1200" y="20" font-size="18" font-family="Verdana" font-weight="bold" letter-spacing="0" text-anchor="start" fill="black">C</text>
-    <text x="10" y="400" font-size="18" font-family="Verdana" font-weight="bold" letter-spacing="0" text-anchor="start" fill="black">D</text>
-    <text x="900" y="400" font-size="18" font-family="Verdana" font-weight="bold" letter-spacing="0" text-anchor="start" fill="black">E</text>
+    <text x="10" y="600" font-size="18" font-family="Verdana" font-weight="bold" letter-spacing="0" text-anchor="start" fill="black">B</text>
+    <text x="10" y="1200" font-size="18" font-family="Verdana" font-weight="bold" letter-spacing="0" text-anchor="start" fill="black">C</text>
+    <text x="850" y="20" font-size="18" font-family="Verdana" font-weight="bold" letter-spacing="0" text-anchor="start" fill="black">D</text>
+    <text x="850" y="900" font-size="18" font-family="Verdana" font-weight="bold" letter-spacing="0" text-anchor="start" fill="black">E</text>
   </g>
 </svg>
