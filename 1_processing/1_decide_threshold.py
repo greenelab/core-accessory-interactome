@@ -192,7 +192,7 @@ f.set_ylabel("Count", fontsize=18)
 f.set_xlabel("PAO1 expression", fontsize=18)
 f.tick_params(labelsize=16)
 plt.legend(fontsize=16)
-# f.figure.savefig(pao1_dist_filename, format="svg", dpi=300)
+f.figure.savefig(pao1_dist_filename, bbox_inches="tight", format="svg", dpi=300)
 
 # +
 # Get PA14 samples that are labeled PA14 and non-PA14
@@ -227,7 +227,7 @@ g.set_ylabel("Count", fontsize=18)
 g.set_xlabel("PA14 expression", fontsize=18)
 g.tick_params(labelsize=16)
 plt.legend(fontsize=16)
-# g.figure.savefig(pa14_dist_filename, format="svg", dpi=300)
+g.figure.savefig(pa14_dist_filename, bbox_inches="tight", format="svg", dpi=300)
 # -
 
 # **Takeaway:**
