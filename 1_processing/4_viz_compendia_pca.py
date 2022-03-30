@@ -269,26 +269,75 @@ plt.ylabel("Explained variance ratio")
 
 # Looks like 200 PCs explains 90% of the variance. So let's use these top 200 PCs to calculate the difference in centroid
 
-# Get centroid
-pao1_centroid = encoded_pca_pao1.mean(axis=0)
-pa14_centroid = encoded_pca_pa14.mean(axis=0)
+# ### Compare centroids
 
-pao1_centroid = pao1_centroid.reshape(-1, 1)
-pa14_centroid = pa14_centroid.reshape(-1, 1)
+# Get PAO1 and PA14 sample ids
+pao1_sample_ids = strain_labels.query("compendium=='PAO1'").index
+pa14_sample_ids = strain_labels.query("compendium=='PA14'").index
 
-both_centroid = np.vstack((pao1_centroid.T, pa14_centroid.T))
+# +
+# Get separate embedding for PAO1, PA14 samples
+pca_pao1 = PCA(n_components=200)
+model_pca_pao1 = pca_pao1.fit(normalized_pao1_expression_df)
+
+# Using PCA model generated using data aligned to PAO1 reference
+encoded_pao1_pca_pao1_only = model_pca_pao1.transform(
+    normalized_pao1_expression_df.loc[pao1_sample_ids]
+)
+encoded_pao1_pca_pa14_only = model_pca_pao1.transform(
+    normalized_pao1_expression_df.loc[pa14_sample_ids]
+)
+
+# +
+# Get separate embedding for PAO1, PA14 samples
+pca_pa14 = PCA(n_components=200)
+model_pca_pa14 = pca_pa14.fit(normalized_pa14_expression_df)
+
+# Using PCA model generated using data aligned to PA14 reference
+encoded_pa14_pca_pao1_only = model_pca_pa14.transform(
+    normalized_pa14_expression_df.loc[pao1_sample_ids]
+)
+encoded_pa14_pca_pa14_only = model_pca_pa14.transform(
+    normalized_pa14_expression_df.loc[pa14_sample_ids]
+)
+
+# +
+# Get centroid using PAO1 reference
+pao1_centroid_pao1 = encoded_pao1_pca_pao1_only.mean(axis=0)
+pa14_centroid_pao1 = encoded_pao1_pca_pa14_only.mean(axis=0)
+
+# Get centroid using PA14 reference
+pao1_centroid_pa14 = encoded_pa14_pca_pao1_only.mean(axis=0)
+pa14_centroid_pa14 = encoded_pa14_pca_pa14_only.mean(axis=0)
+
+# +
+pao1_centroid_pao1 = pao1_centroid_pao1.reshape(-1, 1)
+pa14_centroid_pao1 = pa14_centroid_pao1.reshape(-1, 1)
+
+pao1_centroid_pa14 = pao1_centroid_pa14.reshape(-1, 1)
+pa14_centroid_pa14 = pa14_centroid_pa14.reshape(-1, 1)
+# -
+
+both_centroid_pao1 = np.vstack((pao1_centroid_pao1.T, pa14_centroid_pao1.T))
+both_centroid_pa14 = np.vstack((pao1_centroid_pa14.T, pa14_centroid_pa14.T))
 
 # +
 # Calculate distance between centroids
-mean_dist = pdist(both_centroid)
+mean_dist_pao1 = pdist(both_centroid_pao1)
+mean_dist_pa14 = pdist(both_centroid_pa14)
 
-mean_dist
+
+print("mean using PAO1 reference:", mean_dist_pao1)
+print("mean using PA14 reference:", mean_dist_pa14)
 # -
 
-# Variance of PAO1 compendium
-pca_pao1.explained_variance_.sum()
+# ### Compare variance
+# Here we are summing the variance along each PCs to represent the overall spread of the data (the spread along each direction)
 
-# Variance of PA14 compendium
-pca_pa14.explained_variance_.sum()
+# Variance of PAO1, PA14 compendium (using PAO1 reference)
+print(encoded_pao1_pca_pao1_only.var(axis=0).sum())
+print(encoded_pao1_pca_pa14_only.var(axis=0).sum())
 
-encoded_pca_pa14.var(axis=0)
+# Variance of PAO1, PA14 compendium (using PA14 reference)
+print(encoded_pa14_pca_pao1_only.var(axis=0).sum())
+print(encoded_pa14_pca_pa14_only.var(axis=0).sum())
