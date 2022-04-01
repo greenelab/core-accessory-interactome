@@ -3,7 +3,7 @@ The Raw data was quantified in Salmon using both PAO1 and PA14 references.
 For more information on the raw data is see this [Doing et al.](https://www.biorxiv.org/content/10.1101/2022.01.24.477642v1) with source code [here](https://github.com/hoganlab-dartmouth/pa-seq-compendia).
 The datasets containing all strains aligned against the PAO1 reference and PA14 reference is [here](https://osf.io/vz42h/).
 
-To determine which strains are PAO1 versus PA14 we will use the median expression of accessory genes to determine if a strain is PAO1 or PA14.
+To determine which samples were more PAO1- versus PA14-like, we will use the median expression of accessory genes.
 In our exploratory analysis we found that strains labeled as PAO1 based on SRA annotations had high PAO1 accessory gene expression.
 Whereas strains labeled as PA14 by SRA had high PA14 accessory gene expression.
 
