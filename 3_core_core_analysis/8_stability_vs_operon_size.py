@@ -117,7 +117,7 @@ cb.set_label("Number of genes")
 
 fig.set_axis_labels(
     "Transcriptional stability",
-    "Operon sizse",
+    "Operon size",
     fontsize=14,
     fontname="Verdana",
 )
@@ -149,7 +149,7 @@ cb.set_label("Number of genes")
 
 fig.set_axis_labels(
     "Transcriptional stability",
-    "Operon sizse",
+    "Operon size",
     fontsize=14,
     fontname="Verdana",
 )

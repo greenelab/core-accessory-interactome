@@ -206,7 +206,11 @@ plt.ylabel(r"Correlation to $exoU$", fontsize=20)
 plt.xlabel(R"Correlation to $exoS$", fontsize=20)
 plt.yticks(fontsize=16)
 plt.xticks(fontsize=16)
-plt.title("Correlation of core genes with T3SS accessory genes", fontsize=24, y=1.05)
+plt.title(
+    r"Expression correlation of core genes with $exoU$ and $exoS$ genes",
+    fontsize=24,
+    y=1.05,
+)
 plt.legend(bbox_to_anchor=(1.3, 0.6), fontsize=16)
 # -
 
