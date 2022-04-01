@@ -16,7 +16,7 @@ Similarlty, a strain is considered PA14 if the median gene expression of PA14 ac
 
 A threshold of 25 MR normalized estimated counts is used based on our analysis in [1_decide_threshold.ipynb](1_decide_threshold.ipynb). The goal of this notebook was to  define a threshold to determine if a strain if PAO1 or not (likewise, if a strain is PA14 or not). We used known labels from SRA to do this. Specifically, we examined the distribution of PAO1 strain vs non-PAO1 strain (see histogram plots). We define the threshold to be one that separated between the two distributions. We use this threshold in [2_create_compendia.ipynb](2_create_compendia.ipynb) to partition gene expression data into PAO1 and PA14 compendia because we found that using a threshold of 0 MR normalized estimated counts included some other SRA-labeled strains.
 
-Using a threshold of 0 MR normalized estimated counts, within the PAO1 binned compendium there are strains that SRA labeled as PAK or Clinical).
+Using a threshold of 0 MR normalized estimated counts, within the PAO1 binned compendium there are strains that SRA labeled as PAK or Clinical.
 ![pao1_compendium_0thresdhold](https://github.com/greenelab/core-accessory-interactome/blob/master/1_processing/MR_median_acc_expression_pao1_compendium_0threshold.svg)
 
 
