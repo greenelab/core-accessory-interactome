@@ -171,27 +171,27 @@ non_pao1_sra = pao1_pa14_acc_expression.loc[
     pao1_pa14_acc_expression["Strain type_pao1"] != "PAO1",
     "median_acc_expression_pao1",
 ]
-# -
 
+# +
 f = sns.distplot(
     non_pao1_sra,
     color="#795C34",
     label="non-PAO1",
     kde=False,
-    hist_kws={"alpha": 0.7},
+    hist_kws={
+        "alpha": 0.6,
+    },
 )
 f = sns.distplot(
-    pao1_sra,
-    color="#C6A9B5",
-    label="PAO1",
-    kde=False,
-    hist_kws={"alpha": 0.9},
+    pao1_sra, color="#C6A9B5", label="PAO1", kde=False, hist_kws={"alpha": 0.8}
 )
 plt.axvline(threshold, color="black", linestyle="--")
+f.set_yscale("log")
 f.set_ylabel("Count", fontsize=18)
 f.set_xlabel("PAO1 expression", fontsize=18)
 f.tick_params(labelsize=16)
 plt.legend(fontsize=16)
+
 f.figure.savefig(pao1_dist_filename, bbox_inches="tight", format="svg", dpi=300)
 
 # +
@@ -212,7 +212,7 @@ g = sns.distplot(
     color="#795C34",
     label="non-PA14",
     kde=False,
-    hist_kws={"alpha": 0.7},
+    hist_kws={"alpha": 0.6},
 )
 g = sns.distplot(
     pa14_sra,
@@ -223,6 +223,7 @@ g = sns.distplot(
 )
 
 plt.axvline(threshold, color="black", linestyle="--")
+g.set_yscale("log")
 g.set_ylabel("Count", fontsize=18)
 g.set_xlabel("PA14 expression", fontsize=18)
 g.tick_params(labelsize=16)

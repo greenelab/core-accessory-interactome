@@ -92,42 +92,42 @@ panel_1c_inset = make_figure_panel(
 )
 panel_1d = make_figure_panel(
     "../1_processing/compendia_media.svg",
-    scale_x_input=1.6,
-    scale_y_input=1.6,
+    scale_x_input=1.35,
+    scale_y_input=1.35,
     x_loc=850,
     y_loc=30,
 )
 panel_1e = make_figure_panel(
     "../1_processing/compendia_kegg.svg",
-    scale_x_input=1.6,
-    scale_y_input=1.6,
+    scale_x_input=1.35,
+    scale_y_input=1.35,
     x_loc=850,
-    y_loc=900,
+    y_loc=600,
 )
 panel_1f = make_figure_panel(
     "../1_processing/pa_pao1_ref_pca.svg",
     scale_x_input=1.5,
     scale_y_input=1.5,
-    x_loc=10,
-    y_loc=1800,
+    x_loc=850,
+    y_loc=1200,
 )
-panel_1g = make_figure_panel(
+"""panel_1g = make_figure_panel(
     "../1_processing/pa_pa14_ref_pca.svg",
     scale_x_input=1.5,
     scale_y_input=1.5,
     x_loc=850,
-    y_loc=1800,
-)
+    y_loc=1200,
+)"""
 
 panel_1a_label = sg.TextElement(10, 20, "A", size=18, weight="bold", font="Verdana")
 panel_1b_label = sg.TextElement(10, 600, "B", size=18, weight="bold", font="Verdana")
 panel_1c_label = sg.TextElement(10, 1200, "C", size=18, weight="bold", font="Verdana")
 panel_1d_label = sg.TextElement(850, 20, "D", size=18, weight="bold", font="Verdana")
-panel_1e_label = sg.TextElement(850, 900, "E", size=18, weight="bold", font="Verdana")
-panel_1f_label = sg.TextElement(10, 1800, "F", size=18, weight="bold", font="Verdana")
-panel_1g_label = sg.TextElement(850, 1800, "G", size=18, weight="bold", font="Verdana")
+panel_1e_label = sg.TextElement(850, 600, "E", size=18, weight="bold", font="Verdana")
+panel_1f_label = sg.TextElement(850, 1200, "F", size=18, weight="bold", font="Verdana")
+# panel_1g_label = sg.TextElement(850, 1200, "G", size=18, weight="bold", font="Verdana")
 
-figure_1 = sg.SVGFigure("2700", "2400")
+figure_1 = sg.SVGFigure("2000", "1700")
 figure_1.append(
     [
         etree.Element("rect", {"width": "100%", "height": "100%", "fill": "white"}),
@@ -139,14 +139,14 @@ figure_1.append(
         panel_1d,
         panel_1e,
         panel_1f,
-        panel_1g,
+        # panel_1g,
         panel_1a_label,
         panel_1b_label,
         panel_1c_label,
         panel_1d_label,
         panel_1e_label,
         panel_1f_label,
-        panel_1g_label,
+        # panel_1g_label,
     ]
 )
 display(SVG(figure_1.to_str()))
