@@ -76,14 +76,78 @@ both_metadata_final.head()
 #
 # Media will be at the study level
 
+# The legend was very large using the Medium annotations above, instead
+# Deb provided some annotations
+metadata_media_revised_filename = "Medium annotations.csv"
+metadata_media_revised = pd.read_csv(
+    metadata_media_revised_filename, index_col=0, header=0
+)
+
+print(metadata_media_revised.shape)
+metadata_media_revised.head()
+
+# ### Format study IDs
+
+# +
+# Remove trailing "/"
+medium_index_processed_tmp = metadata_media_revised.index.str.rstrip("/")
+metadata_media_revised.index = medium_index_processed_tmp
+
+# Split on "=" to get some study ids
+medium_index_processed_tmp = metadata_media_revised.index.str.split("=").str[-1]
+metadata_media_revised.index = medium_index_processed_tmp
+
+# Split on "/" to get some study ids
+medium_index_processed = metadata_media_revised.index.str.split("/").str[-1]
+metadata_media_revised.index = medium_index_processed
+# -
+
+metadata_media_revised.head(10)
+
+# Select only rows with PAO1 and PA14 strains
+metadata_media_revised = metadata_media_revised[
+    (metadata_media_revised["Strain"] == "PAO1")
+    | (metadata_media_revised["Strain"] == "PA14")
+]
+print(metadata_media_revised.shape)
+metadata_media_revised.head(10)
+
+# Select only Medium column
+metadata_media_revised = metadata_media_revised["Medium"].to_frame()
+print(metadata_media_revised.shape)
+metadata_media_revised.head(10)
+
+print(both_metadata_final.shape)
+both_metadata_final.index.intersection(metadata_media_revised.index).shape
+
+# Map revised annotations to provided annotations to make sure we're only including those studies
+# in our PAO1 sample and PA14 sample compendia
+print(both_metadata_final.shape)
+both_metadata_final = both_metadata_final.merge(
+    metadata_media_revised,
+    left_index=True,
+    right_index=True,
+    how="left",
+    suffixes=["", "_revised"],
+)
+
+print(both_metadata_final.shape)
+both_metadata_final.head(10)
+
+# Drop duplicate rows
+both_metadata_final = both_metadata_final.drop_duplicates()
+print(both_metadata_final.shape)
+
 both_metadata_first_media = (
-    both_metadata_final.groupby(["Strain", "Medium"])
+    both_metadata_final.groupby(["Strain", "Medium_revised"])
     .size()
     .reset_index()
-    .pivot(columns="Medium", index="Strain", values=0)
+    .pivot(columns="Medium_revised", index="Strain", values=0)
 )
 
 both_metadata_first_media
+
+both_metadata_first_media.sum(axis=1)
 
 # +
 # Output media legends for Georgia to review
@@ -111,18 +175,31 @@ my_cmap = [
     "#b9daed",
 ]
 
+# +
 fig_media = both_metadata_first_media.plot(
-    kind="bar", stacked=True, color=my_cmap, figsize=(12, 8)
+    kind="bar", stacked=True, color=my_cmap, figsize=(7, 6), width=0.65
 )
-# fig_media.set_color_cycle([cm(1.*i/num_colors) for i in range(num_colors)])
-plt.legend(bbox_to_anchor=(1.47, 1), loc="upper right", ncol=1, fontsize=14)
+# get legend handles and labels
+handles, labels = plt.gca().get_legend_handles_labels()
+
+# specify order of legend labels
+order = list(reversed(range(len(labels))))
+
+plt.legend(
+    [handles[i] for i in order],
+    [labels[i] for i in order],
+    bbox_to_anchor=(1.7, 1),
+    loc="upper right",
+    ncol=1,
+    fontsize=14,
+)
 plt.title("Media used in experiments", fontsize=18)
 fig_media.set_xlabel("")
-fig_media.set_ylabel("Count", fontsize=18)
+fig_media.set_ylabel("Count", fontsize=16)
 fig_media.set_xticklabels(
-    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=18
+    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=16
 )
-fig_media.tick_params(labelsize=16)
+# -
 
 # ## Plot Gene function distribution in PAO1 and PA14
 # Gene function will be at the study level as well since the gene will be the same
@@ -142,17 +219,17 @@ both_metadata_first_function
 # both_metadata_first_function.T.to_csv("gene_function_legend.tsv", sep="\t")
 # -
 
+# Note: this figure is no longer used in the manuscript
 fig_function = both_metadata_first_function.plot(
-    kind="bar", stacked=True, colormap="Set2", figsize=(12, 8)
+    kind="bar", stacked=True, colormap="Set2", figsize=(12, 10), width=0.7
 )
-plt.legend(bbox_to_anchor=(1.62, 1), loc="upper right", ncol=1)
+plt.legend(bbox_to_anchor=(1.9, 1), loc="upper right", ncol=1, fontsize=14)
 plt.title("Gene function studied in experiments", fontsize=18)
 fig_function.set_xlabel("")
-fig_function.set_ylabel("Count", fontsize=18)
+fig_function.set_ylabel("Count", fontsize=16)
 fig_function.set_xticklabels(
-    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=18
+    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=16
 )
-fig_function.tick_params(labelsize=16)
 
 # ## Plot pathways associated with perturbed gene
 #
@@ -183,19 +260,33 @@ both_metadata_kegg
 # +
 # Output kegg metadata for Georgia to review
 # both_metadata_kegg.T.to_csv("pathway_legend.tsv", sep="\t")
-# -
 
+# +
 fig_kegg = both_metadata_kegg.plot(
-    kind="bar", stacked=True, color=my_cmap, figsize=(12, 8)
+    kind="bar", stacked=True, color=my_cmap, figsize=(7, 7), width=0.7
 )
-plt.legend(bbox_to_anchor=(1.55, 1), loc="upper right", ncol=1, fontsize=14)
+
+# get legend handles and labels
+handles, labels = plt.gca().get_legend_handles_labels()
+
+# specify order of legend labels
+order = list(reversed(range(len(labels))))
+
+plt.legend(
+    [handles[i] for i in order],
+    [labels[i] for i in order],
+    bbox_to_anchor=(1.95, 1),
+    loc="upper right",
+    ncol=1,
+    fontsize=14,
+)
 plt.title("KEGG pathway studied in experiments", fontsize=18)
 fig_kegg.set_xlabel("")
-fig_kegg.set_ylabel("Count", fontsize=18)
+fig_kegg.set_ylabel("Count", fontsize=16)
 fig_kegg.set_xticklabels(
-    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=18
+    ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=16
 )
-fig_kegg.tick_params(labelsize=16)
+# -
 
 # Save plots
 fig_media.figure.savefig(

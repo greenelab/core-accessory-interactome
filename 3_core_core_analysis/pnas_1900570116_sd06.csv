@@ -1,0 +1,865 @@
+Cluster_ID,PA14_ID (for reference),Gene description (PATRIC),Turner K.H. et al 2015,Lee S.A. et al 2015,Skurnik D. et al 2013,Liberati N.T. et al 2006,This study
+5262,PA14_00010,Chromosomal replication initiator protein DnaA,E,E,E,E,E
+5558,PA14_00020,DNA polymerase III beta subunit (EC 2.7.7.7),E,E,E,,E
+8557,PA14_00050,DNA gyrase subunit B (EC 5.99.1.3),E,E,E,,E
+3198,PA14_00070,Histidinol-phosphatase (EC 3.1.3.15),,E,,,E
+8031,PA14_00090,Glycyl-tRNA synthetase beta chain (EC 6.1.1.14),E,E,E,E,E
+4113,PA14_00100,Glycyl-tRNA synthetase alpha chain (EC 6.1.1.14),E,E,,E,E
+5889,PA14_00190,Methionyl-tRNA formyltransferase (EC 2.1.2.9),E,E,,E,E
+9159,PA14_00240,Threonylcarbamoyl-AMP synthase (EC 2.7.7.87),E,E,E,E,E
+9213,PA14_04310,Ribose 5-phosphate isomerase A (EC 5.3.1.6),E,E,E,E,E
+5118,PA14_04460,Prolipoprotein diacylglyceryl transferase,E,E,E,,E
+4764,PA14_04480,Thymidylate synthase (EC 2.1.1.45),E,E,,E,E
+4240,PA14_04580,Dihydrofolate reductase (EC 1.5.1.3),E,E,E,E,E
+4913,PA14_04750,Uncharacterized ferredoxin-like protein YfhL,,,,,E
+4912,PA14_04760,Phosphopantetheine adenylyltransferase (EC 2.7.7.3),E,E,,E,E
+6001,PA14_04900,Signal recognition particle receptor FtsY,,E,,,E
+6005,PA14_04930,RNA polymerase sigma factor RpoH,E,E,,,E
+6862,PA14_05280,Putative pre-16S rRNA nuclease Yqg,E,E,E,E,E
+4807,PA14_05620,Adenosylhomocysteinase (EC 3.3.1.1),,,E,,E
+7689,PA14_07090,S-adenosylmethionine synthetase (EC 2.5.1.6),,E,E,,E
+3414,PA14_07130,Transketolase (EC 2.2.1.1),E,E,E,,E
+4316,PA14_07230,Fructose-bisphosphate aldolase class II (EC 4.1.2.13),E,E,E,E,E
+3665,PA14_07520,RNA polymerase sigma factor RpoD,E,E,E,E,E
+7420,PA14_07530,DNA primase (EC 2.7.7.-),,E,,,E
+3661,PA14_07560,SSU ribosomal protein S21p,,E,E,,E
+3658,PA14_07570,N(6)-L-threonylcarbamoyladenine synthase (EC 2.3.1.234),E,E,,E,E
+3659,PA14_07590,Dihydroneopterin aldolase (EC 4.1.2.25),E,,E,E,E
+5748,PA14_07760,Periplasmic chaperone and peptidyl-prolyl cis-trans isomerase of outer membrane proteins SurA (EC 5.2.1.8),E,E,E,,E
+6164,PA14_07770,LPS-assembly protein LptD @ Organic solvent tolerance protein precursor,,E,,,E
+3115,PA14_07910,Ribulose-phosphate 3-epimerase (EC 5.1.3.1),E,E,E,E,E
+4526,PA14_08400,"2-polyprenyl-3-methyl-6-methoxy-1,4-benzoquinol hydroxylase, coq7 type",E,E,,E,E
+4592,PA14_08510,Iron-sulfur cluster insertion protein ErpA,E,E,,E,E
+8162,PA14_08620,Biotin operon repressor / Biotin--protein ligase (EC 6.3.4.9)(EC 6.3.4.10)(EC 6.3.4.11)(EC 6.3.4.15),,E,,,E
+4291,PA14_08630,"Pantothenate kinase type III, CoaX-like (EC 2.7.1.33)",E,E,E,E,E
+4365,PA14_08710,Transcription antitermination protein NusG,E,,E,,E
+6783,PA14_08720,LSU ribosomal protein L11p (L12e),E,E,E,E,E
+7674,PA14_08730,LSU ribosomal protein L1p (L10Ae),E,E,E,E,E
+4696,PA14_08740,LSU ribosomal protein L10p (P0),E,E,E,,E
+4691,PA14_08760,DNA-directed RNA polymerase beta subunit (EC 2.7.7.6),E,E,,E,E
+3901,PA14_08780,DNA-directed RNA polymerase beta' subunit (EC 2.7.7.6),E,E,,,E
+3890,PA14_08790,SSU ribosomal protein S12p (S23e),E,E,E,,E
+7663,PA14_08810,SSU ribosomal protein S7p (S5e),E,E,E,E,E
+9326,PA14_08820,Translation elongation factor G,E,E,E,,E
+6627,PA14_08840,SSU ribosomal protein S10p (S20e),,E,,E,E
+6626,PA14_08850,LSU ribosomal protein L3p (L3e),E,E,E,,E
+6725,PA14_08860,LSU ribosomal protein L4p (L1e),E,E,E,,E
+7509,PA14_08870,LSU ribosomal protein L23p (L23Ae),,E,E,,E
+4765,PA14_08880,LSU ribosomal protein L2p (L8e),E,E,E,,E
+4034,PA14_08890,SSU ribosomal protein S19p (S15e),,E,E,E,E
+7707,PA14_08910,SSU ribosomal protein S3p (S3e),E,E,E,E,E
+4981,PA14_08920,LSU ribosomal protein L16p (L10e),E,E,E,E,E
+8233,PA14_08940,SSU ribosomal protein S17p (S11e),,E,E,E,E
+4957,PA14_08950,LSU ribosomal protein L14p (L23e),,E,E,E,E
+8240,PA14_08960,LSU ribosomal protein L24p (L26e),,E,E,E,E
+8479,PA14_08970,LSU ribosomal protein L5p (L11e),E,E,E,E,E
+7599,PA14_08980,"SSU ribosomal protein S14p (S29e) @ SSU ribosomal protein S14p (S29e), zinc-independent",,E,E,E,E
+7598,PA14_08990,SSU ribosomal protein S8p (S15Ae),E,E,E,,E
+7633,PA14_09000,LSU ribosomal protein L6p (L9e),E,E,E,E,E
+4881,PA14_09010,LSU ribosomal protein L18p (L5e),,E,E,E,E
+7602,PA14_09020,SSU ribosomal protein S5p (S2e),E,E,E,,E
+7601,PA14_09050,Protein translocase subunit SecY,E,E,E,,E
+4611,PA14_09080,SSU ribosomal protein S13p (S18e),E,E,E,E,E
+3789,PA14_09090,SSU ribosomal protein S11p (S14e),E,E,E,E,E
+3670,PA14_09100,"SSU ribosomal protein S4p (S9e) @ SSU ribosomal protein S4p (S9e), zinc-independent",E,E,E,,E
+3573,PA14_09115,DNA-directed RNA polymerase alpha subunit (EC 2.7.7.6),E,E,E,,E
+3574,PA14_09130,LSU ribosomal protein L17p,E,E,,E,E
+4390,PA14_11400,Diaminohydroxyphosphoribosylaminopyrimidine deaminase (EC 3.5.4.26) / 5-amino-6-(5-phosphoribosylamino)uracil reductase (EC 1.1.1.193),,E,,E,E
+8841,PA14_11410,Riboflavin synthase eubacterial/eukaryotic (EC 2.5.1.9),,E,E,E,E
+7526,PA14_11450,Transcription termination protein NusB,E,E,E,E,E
+4391,PA14_11460,Thiamine-monophosphate kinase (EC 2.7.4.16),E,E,,E,E
+6646,PA14_11510,GTP cyclohydrolase II (EC 3.5.4.25),,,,E,E
+4408,PA14_11550,1-deoxy-D-xylulose 5-phosphate synthase (EC 2.2.1.7),E,E,,E,E
+7907,PA14_11690,Inorganic pyrophosphatase (EC 3.6.1.1),E,E,,,E
+9032,PA14_12060,"Peptidoglycan D,D-transpeptidase MrdA (EC 3.4.16.4)",E,E,E,,E
+6281,PA14_12070,Rod shape-determining protein RodA,E,E,,,E
+7000,PA14_12120,Octanoate-[acyl-carrier-protein]-protein-N-octanoyltransferase (EC 2.3.1.181),E,E,E,E,E
+8814,PA14_12130,Lipoyl synthase (EC 2.8.1.8),,E,,E,E
+7004,PA14_12200,DNA polymerase III delta subunit (EC 2.7.7.7),E,E,,E,E
+7003,PA14_12210,LPS-assembly lipoprotein LptE,,E,E,E,E
+9124,PA14_12230,Leucyl-tRNA synthetase (EC 6.1.1.4),E,E,E,,E
+4162,PA14_12280,Apolipoprotein N-acyltransferase / Copper homeostasis protein CutE,E,E,,E,E
+4342,PA14_12310,"Metal-dependent hydrolase YbeY, involved in rRNA and/or ribosome maturation and assembly",E,E,E,E,E
+5838,PA14_14440,Valyl-tRNA synthetase (EC 6.1.1.9),E,E,E,E,E
+5166,PA14_14500,Lipopolysaccharide export system permease protein LptF,E,E,E,,E
+8861,PA14_14510,Lipopolysaccharide export system permease protein LptG,E,E,E,E,E
+5865,PA14_14630,Protein translocase subunit SecD,E,E,E,,E
+5807,PA14_14650,Protein translocase subunit SecF,,E,E,E,E
+8852,PA14_14680,Inositol-1-monophosphatase (EC 3.1.3.25),,,,,E
+4163,PA14_14730,Cysteine desulfurase (EC 2.8.1.7) => IscS,E,E,E,,E
+3964,PA14_14750,Iron-sulfur cluster assembly iron binding protein IscA,,E,,E,E
+4688,PA14_14770,Chaperone protein HscB,,E,E,E,E
+3963,PA14_14780,Chaperone protein HscA,E,E,,,E
+3965,PA14_14800,"Ferredoxin, 2Fe-2S",,E,E,E,E
+9367,PA14_14880,(E)-4-hydroxy-3-methylbut-2-enyl-diphosphate synthase (flavodoxin) (EC 1.17.7.3),E,E,E,E,E
+9368,PA14_14890,Histidyl-tRNA synthetase (EC 6.1.1.21),E,E,E,,E
+5848,PA14_14930,GTP-binding protein EngA,E,E,E,E,E
+7167,PA14_15310,Inosine-5'-monophosphate dehydrogenase (EC 1.1.1.205) / CBS domain,E,E,,E,E
+6714,PA14_15340,"GMP synthase [glutamine-hydrolyzing], amidotransferase subunit (EC 6.3.5.2) / GMP synthase [glutamine-hydrolyzing], ATP pyrophosphatase subunit (EC 6.3.5.2)",E,E,E,,E
+8634,PA14_15680,tRNA-specific adenosine-34 deaminase (EC 3.5.4.33),,,,E,E
+6248,PA14_15960,Signal recognition particle protein Ffh,,E,E,,E
+8463,PA14_15980,16S rRNA processing protein RimM,E,,E,E,E
+7715,PA14_16510,Peptide chain release factor 2 @ programmed frameshift-containing,,E,E,,E
+8083,PA14_16530,Lysyl-tRNA synthetase (class II) (EC 6.1.1.6),E,E,E,E,E
+4728,PA14_16700,Adenylate kinase (EC 2.7.4.3),,E,E,,E
+3503,PA14_16710,tRNA threonylcarbamoyladenosine biosynthesis protein TsaB,E,E,,E,E
+4513,PA14_16950,"2,3,4,5-tetrahydropyridine-2,6-dicarboxylate N-succinyltransferase (EC 2.3.1.117)",E,E,E,E,E
+8884,PA14_17060,SSU ribosomal protein S2p (SAe),,E,E,E,E
+3812,PA14_17070,Translation elongation factor Ts,E,E,E,,E
+5971,PA14_17080,Uridine monophosphate kinase (EC 2.7.4.22),E,E,,E,E
+6254,PA14_17100,Ribosome recycling factor,E,E,E,E,E
+6202,PA14_17110,Undecaprenyl diphosphate synthase (EC 2.5.1.31),,E,E,E,E
+6826,PA14_17120,Phosphatidate cytidylyltransferase (EC 2.7.7.41),E,E,,E,E
+3629,PA14_17130,1-deoxy-D-xylulose 5-phosphate reductoisomerase (EC 1.1.1.267),E,E,E,E,E
+3844,PA14_17150,Outer membrane protein assembly factor YaeT,E,E,E,E,E
+5856,PA14_17180,UDP-3-O-[3-hydroxymyristoyl] glucosamine N-acyltransferase (EC 2.3.1.191),E,E,E,,E
+7219,PA14_17190,"3-hydroxyacyl-[acyl-carrier-protein] dehydratase, FabZ form (EC 4.2.1.59)",E,E,E,E,E
+8209,PA14_17210,Acyl-[acyl-carrier-protein]--UDP-N-acetylglucosamine O-acyltransferase (EC 2.3.1.129),E,E,E,E,E
+8990,PA14_17220,Lipid-A-disaccharide synthase (EC 2.4.1.182),E,E,,E,E
+7510,PA14_17260,DNA polymerase III alpha subunit (EC 2.7.7.7),E,E,E,E,E
+5471,PA14_17270,Acetyl-coenzyme A carboxyl transferase alpha chain (EC 6.4.1.2),E,E,E,E,E
+5754,PA14_17280,tRNA(Ile)-lysidine synthetase (EC 6.3.4.19),E,E,E,E,E
+5755,PA14_17290,CTP synthase (EC 6.3.4.2),E,E,E,E,E
+8571,PA14_17310,2-Keto-3-deoxy-D-manno-octulosonate-8-phosphate synthase (EC 2.5.1.55),E,E,E,,E
+5625,PA14_17340,2-C-methyl-D-erythritol 4-phosphate cytidylyltransferase (EC 2.7.7.60),,E,E,,E
+7783,PA14_17420,"2-C-methyl-D-erythritol 2,4-cyclodiphosphate synthase (EC 4.6.1.12)",E,E,,,E
+6858,PA14_18710,Dihydroorotase (EC 3.5.2.3),,,,,E
+8564,PA14_19050,Methionyl-tRNA synthetase (EC 6.1.1.10),,E,,,E
+6114,PA14_19065,[4Fe-4S] cluster assembly scaffold protein Mrp (=ApbC),E,E,,,E
+3117,PA14_20140,Ferredoxin--NADP(+) reductase (EC 1.18.1.2),E,E,,,E
+8631,PA14_23220,3-demethylubiquinol 3-O-methyltransferase (EC 2.1.1.64) @ 2-polyprenyl-6-hydroxyphenyl methylase (EC 2.1.1.222),,E,E,E,E
+8317,PA14_23260,DNA gyrase subunit A (EC 5.99.1.3),E,E,E,E,E
+8662,PA14_23320,Cytidylate kinase (EC 2.7.4.25),,,E,E,E
+8663,PA14_23330,SSU ribosomal protein S1p,E,E,,,E
+3289,PA14_23560,Glutamyl-tRNA synthetase (EC 6.1.1.17),E,E,E,E,E
+4889,PA14_23800,Aspartate-semialdehyde dehydrogenase (EC 1.2.1.11),E,E,E,E,E
+4884,PA14_23860,Acetyl-coenzyme A carboxyl transferase beta chain (EC 6.4.1.2),E,E,E,E,E
+4287,PA14_23880,Dihydrofolate synthase (EC 6.3.2.12) @ Folylpolyglutamate synthase (EC 6.3.2.17),,E,E,,E
+8736,PA14_24220,NAD kinase (EC 2.7.1.23),E,E,E,,E
+9185,PA14_24640,Dihydroorotate dehydrogenase (quinone) (EC 1.3.5.2),,,E,,E
+8556,PA14_25110,DNA topoisomerase I (EC 5.99.1.2),E,E,,,E
+3821,PA14_25430,Lipoprotein releasing system transmembrane protein LolC/LolE,E,E,E,E,E
+8335,PA14_25440,Lipoprotein-releasing system ATP-binding protein LolD,E,E,E,E,E
+3820,PA14_25450,Lipoprotein releasing system transmembrane protein LolC/LolE,E,E,E,E,E
+8019,PA14_25510,Tetraacyldisaccharide 4'-kinase (EC 2.7.1.130),E,E,E,E,E
+8830,PA14_25530,3-deoxy-manno-octulosonate cytidylyltransferase (EC 2.7.7.38),E,E,E,E,E
+7847,PA14_25550,UDP-N-acetylenolpyruvoylglucosamine reductase (EC 1.3.1.98),E,E,E,E,E
+6391,PA14_25560,Ribonuclease E (EC 3.1.26.12),,E,,,E
+6403,PA14_25650,Malonyl CoA-acyl carrier protein transacylase (EC 2.3.1.39),,E,,,E
+6406,PA14_25660,3-oxoacyl-[acyl-carrier protein] reductase (EC 1.1.1.100),E,E,,E,E
+6134,PA14_25740,Thymidylate kinase (EC 2.7.4.9),E,E,E,E,E
+6703,PA14_25760,DNA polymerase III delta prime subunit (EC 2.7.7.7),,E,E,,E
+4798,PA14_25840,Electron transfer flavoprotein-ubiquinone oxidoreductase (EC 1.5.5.1),E,E,,,E
+7538,PA14_25860,"Electron transfer flavoprotein, beta subunit",E,E,E,E,E
+6111,PA14_25880,"Electron transfer flavoprotein, alpha subunit",E,E,,,E
+3241,PA14_25900,Short-chain alcohol dehydrogenase family,,,,E,E
+8646,PA14_28650,Threonyl-tRNA synthetase (EC 6.1.1.3),E,E,,,E
+4002,PA14_28660,Translation initiation factor 3,E,E,E,,E
+7263,PA14_28680,LSU ribosomal protein L20p,E,E,E,E,E
+5739,PA14_28690,Phenylalanyl-tRNA synthetase alpha chain (EC 6.1.1.20),E,E,E,E,E
+5709,PA14_28710,Phenylalanyl-tRNA synthetase beta chain (EC 6.1.1.20),E,E,E,,E
+6259,PA14_30110,Adenylosuccinate lyase (EC 4.3.2.2) @ SAICAR lyase (EC 4.3.2.2),E,E,,E,E
+3994,PA14_30150,tRNA-specific 2-thiouridylase MnmA (EC 2.8.1.13),E,E,E,E,E
+6906,PA14_30290,DNA translocase FtsK,E,E,,,E
+6060,PA14_30310,Outer membrane lipoprotein carrier protein LolA,E,E,E,E,E
+6223,PA14_30330,Seryl-tRNA synthetase (EC 6.1.1.11),E,E,E,E,E
+6276,PA14_30370,tRNA 2-thiouridine synthesis protein TusE,,E,E,E,E
+7037,PA14_30380,tRNA 5-methylaminomethyl-2-thiouridine synthase subunit TusB,,E,E,E,E
+7038,PA14_30390,tRNA 5-methylaminomethyl-2-thiouridine synthase subunit TusC,,E,E,E,E
+4458,PA14_30400,tRNA 5-methylaminomethyl-2-thiouridine synthase subunit TusD,E,E,,E,E
+5845,PA14_30670,CDP-diacylglycerol--glycerol-3-phosphate 3-phosphatidyltransferase (EC 2.7.8.5),E,E,,E,E
+6999,PA14_33690,"PvdE, pyoverdine ABC export system, fused ATPase and permease components",,,,,E
+3496,PA14_41050,DNA polymerase III epsilon subunit (EC 2.7.7.7),E,E,E,E,E
+6880,PA14_41350,Methenyltetrahydrofolate cyclohydrolase (EC 3.5.4.9) / Methylenetetrahydrofolate dehydrogenase (NADP+) (EC 1.5.1.5),E,E,,E,E
+6879,PA14_41360,Cysteinyl-tRNA synthetase (EC 6.1.1.16),E,E,E,E,E
+6876,PA14_41380,Glutaminyl-tRNA synthetase (EC 6.1.1.18),E,E,,E,E
+3936,PA14_41400,"UDP-2,3-diacylglucosamine diphosphatase (EC 3.6.1.54)",E,E,E,E,E
+6900,PA14_41470,Aconitate hydratase 2 (EC 4.2.1.3) @ 2-methylisocitrate dehydratase (EC 4.2.1.99),E,E,,,E
+9203,PA14_42760,Chorismate synthase (EC 4.2.3.5),,,,,E
+7841,PA14_43690,"3-oxoacyl-[acyl-carrier-protein] synthase, KASI (EC 2.3.1.41)",E,,E,,E
+6814,PA14_43970,Dihydrolipoamide dehydrogenase of 2-oxoglutarate dehydrogenase (EC 1.8.1.4),E,E,E,,E
+6631,PA14_44000,Dihydrolipoamide succinyltransferase component (E2) of 2-oxoglutarate dehydrogenase complex (EC 2.3.1.61),E,E,E,E,E
+5850,PA14_44010,2-oxoglutarate dehydrogenase E1 component (EC 1.2.4.2),E,E,E,E,E
+7055,PA14_44630,DNA polymerase III subunits gamma and tau (EC 2.7.7.7),E,E,,,E
+7054,PA14_44660,DNA ligase (NAD(+)) (EC 6.5.1.2),E,E,,E,E
+8652,PA14_49340,"4'-phosphopantetheinyl transferase entD (EC 2.7.8.-); Holo-[acyl-carrier protein] synthase, alternative (EC 2.7.8.7)",,E,,E,E
+5075,PA14_49380,"N-succinyl-L,L-diaminopimelate desuccinylase (EC 3.5.1.18)",E,E,,,E
+6984,PA14_49460,"Ribonucleotide reductase of class Ia (aerobic), alpha subunit (EC 1.17.4.1)",E,E,E,E,E
+6781,PA14_49470,"Ribonucleotide reductase of class Ia (aerobic), beta subunit (EC 1.17.4.1)",E,E,E,E,E
+8536,PA14_51710,Tol-Pal system peptidoglycan-associated lipoprotein PAL,,E,,,E
+5853,PA14_51720,Tol-Pal system beta propeller repeat protein TolB,E,E,E,E,E
+4770,PA14_51730,TolA protein,E,E,,E,E
+4771,PA14_51740,"Tol biopolymer transport system, TolR protein",E,E,E,E,E
+9271,PA14_51750,Tol-Pal system protein TolQ,E,E,E,,E
+7558,PA14_51820,Aspartyl-tRNA synthetase (EC 6.1.1.12) @ Aspartyl-tRNA(Asn) synthetase (EC 6.1.1.23),E,E,,,E
+3619,PA14_51900,"Prolyl-tRNA synthetase (EC 6.1.1.15), bacterial type",E,E,,E,E
+9329,PA14_52010,DnaA inactivator Hda (shorter homolog of DnaA),E,E,,E,E
+9123,PA14_52580,Aspartokinase (EC 2.7.2.4),E,E,E,,E
+5674,PA14_52600,Alanyl-tRNA synthetase (EC 6.1.1.7),E,E,,,E
+9055,PA14_54320,GTP-binding protein Era,E,E,E,E,E
+9051,PA14_54350,Signal peptidase I (EC 3.4.21.89),E,E,E,,E
+3204,PA14_54480,tRNA-modifying protein YgfZ,E,E,,E,E
+4733,PA14_55660,Exodeoxyribonuclease V alpha chain (EC 3.1.11.5),,,E,,E
+8945,PA14_55670,Exodeoxyribonuclease V beta chain (EC 3.1.11.5),,,E,,E
+7803,PA14_55690,Exodeoxyribonuclease V gamma chain (EC 3.1.11.5),,,,,E
+8418,PA14_56780,Superoxide dismutase [Fe] (EC 1.15.1.1),E,E,E,E,E
+3696,PA14_57010,Heat shock protein 60 family chaperone GroEL,E,E,,,E
+4454,PA14_57020,Heat shock protein 60 family co-chaperone GroES,,E,E,E,E
+4385,PA14_57220,Protein translocase subunit SecA,E,E,E,E,E
+7909,PA14_57250,"Zn-ribbon-containing, possibly RNA-binding protein and truncated derivatives",E,E,,E,E
+3635,PA14_57260,UDP-3-O-[3-hydroxymyristoyl] N-acetylglucosamine deacetylase (EC 3.5.1.108),E,E,,,E
+3339,PA14_57275,Cell division protein FtsZ,E,E,E,,E
+3638,PA14_57290,Cell division protein FtsA,E,E,E,E,E
+3640,PA14_57300,Cell division protein FtsQ,,E,E,,E
+8099,PA14_57330,UDP-N-acetylmuramate--L-alanine ligase (EC 6.3.2.8),E,E,E,E,E
+3636,PA14_57340,UDP-N-acetylglucosamine--N-acetylmuramyl-(pentapeptide) pyrophosphoryl-undecaprenol N-acetylglucosamine transferase (EC 2.4.1.227),,E,E,E,E
+8156,PA14_57360,Cell division protein FtsW,E,E,,E,E
+6040,PA14_57370,UDP-N-acetylmuramoylalanine--D-glutamate ligase (EC 6.3.2.9),E,E,E,,E
+9276,PA14_57380,Phospho-N-acetylmuramoyl-pentapeptide-transferase (EC 2.7.8.13),E,E,E,E,E
+4139,PA14_57390,UDP-N-acetylmuramoyl-tripeptide--D-alanyl-D-alanine ligase (EC 6.3.2.10),E,E,E,E,E
+7204,PA14_57410,"UDP-N-acetylmuramoylalanyl-D-glutamate--2,6-diaminopimelate ligase (EC 6.3.2.13)",E,E,E,E,E
+7202,PA14_57425,Cell division protein FtsI [Peptidoglycan synthetase] (EC 2.4.1.129),E,E,,,E
+7257,PA14_57440,Cell division protein FtsL,,E,E,E,E
+7699,PA14_57450,16S rRNA (cytosine(1402)-N(4))-methyltransferase (EC 2.1.1.199),,,E,,E
+5728,PA14_57500,DnaA initiator-associating protein DiaA,E,E,E,E,E
+4347,PA14_57580,SSU ribosomal protein S9p (S16e),E,E,,,E
+7284,PA14_57590,LSU ribosomal protein L13p (L13Ae),E,E,E,E,E
+6477,PA14_57670,Tryptophanyl-tRNA synthetase (EC 6.1.1.2),E,E,,,E
+7952,PA14_57810,UDP-N-acetylglucosamine 1-carboxyvinyltransferase (EC 2.5.1.7),E,E,E,,E
+3621,PA14_57890,D-arabinose 5-phosphate isomerase (EC 5.3.1.13),E,E,,,E
+8544,PA14_57910,Lipopolysaccharide export system protein LptC,E,E,E,,E
+8004,PA14_57920,Lipopolysaccharide export system protein LptA,E,E,E,E,E
+8266,PA14_57930,"Lipopolysaccharide ABC transporter, ATP-binding protein LptB",E,E,E,,E
+4024,PA14_57940,RNA polymerase sigma-54 factor RpoN,,,,,E
+3129,PA14_58120,Rod shape-determining protein MreD,,E,E,E,E
+5868,PA14_58130,Rod shape-determining protein MreC,,E,E,,E
+8767,PA14_58150,Rod shape-determining protein MreB,E,E,,E,E
+8619,PA14_58180,Aspartyl-tRNA(Asn) amidotransferase subunit A (EC 6.3.5.6) @ Glutamyl-tRNA(Gln) amidotransferase subunit A (EC 6.3.5.7),E,E,E,,E
+8939,PA14_58190,Aspartyl-tRNA(Asn) amidotransferase subunit B (EC 6.3.5.6) @ Glutamyl-tRNA(Gln) amidotransferase subunit B (EC 6.3.5.7),E,E,E,E,E
+7628,PA14_58780,Dephospho-CoA kinase (EC 2.7.1.24),E,,E,E,E
+5929,PA14_60230,Outer membrane beta-barrel assembly protein BamD,,E,,,E
+7165,PA14_60330,4-hydroxy-3-methylbut-2-enyl diphosphate reductase (EC 1.17.7.4),E,E,,E,E
+3556,PA14_60370,Isoleucyl-tRNA synthetase (EC 6.1.1.5),E,E,,E,E
+6651,PA14_60380,FMN adenylyltransferase (EC 2.7.7.2) / Riboflavin kinase (EC 2.7.1.26),E,E,,,E
+8416,PA14_60390,Proposed peptidoglycan lipid II flippase MurJ,E,E,,E,E
+8040,PA14_60400,SSU ribosomal protein S20p,,E,,E,E
+5628,PA14_60445,GTP-binding protein Obg,,E,,,E
+4145,PA14_60470,Nonaprenyl diphosphate synthase (geranyl-diphosphate specific) (EC 2.5.1.84),E,E,,,E
+8991,PA14_61360,Glycerol-3-phosphate O-acyltransferase,E,E,,E,E
+6554,PA14_61660,Glutamate racemase (EC 5.1.1.3),,E,E,E,E
+5967,PA14_61670,Molybdopterin-synthase adenylyltransferase (EC 2.7.7.80),,,,,E
+6923,PA14_61700,Peptide chain release factor 1,E,E,E,E,E
+4054,PA14_61740,Outer membrane lipoprotein component of lipoprotein transport system LolB,E,E,E,E,E
+4818,PA14_61750,4-diphosphocytidyl-2-C-methyl-D-erythritol kinase (EC 2.7.1.148),E,E,E,E,E
+3795,PA14_61790,Peptidyl-tRNA hydrolase (EC 3.1.1.29),E,E,,E,E
+6742,PA14_61890,hypothetical protein,E,E,E,E,E
+4519,PA14_62120,CDP-diacylglycerol--serine O-phosphatidyltransferase (EC 2.7.8.8),,E,E,,E
+7854,PA14_62570,2-amino-4-hydroxy-6-hydroxymethyldihydropteridine pyrophosphokinase (EC 2.7.6.3),E,E,E,,E
+6546,PA14_62710,Polyribonucleotide nucleotidyltransferase (EC 2.7.7.8),E,E,,,E
+3697,PA14_62720,SSU ribosomal protein S15p (S13e),,,E,E,E
+6585,PA14_62760,Translation initiation factor 2,E,E,E,E,E
+5743,PA14_62770,Transcription termination protein NusA,E,E,E,,E
+6428,PA14_62780,Bacterial ribosome SSU maturation protein RimP,E,,E,E,E
+4074,PA14_62840,Phosphoglucosamine mutase (EC 5.4.2.10),E,E,,,E
+9097,PA14_62850,Dihydropteroate synthase (EC 2.5.1.15),E,E,,E,E
+5652,PA14_62940,4-hydroxy-tetrahydrodipicolinate reductase (EC 1.17.1.8),E,E,,E,E
+5930,PA14_62960,Chaperone protein DnaJ,,,E,,E
+7081,PA14_62990,Heat shock protein GrpE,,E,,E,E
+8959,PA14_63020,Ferric uptake regulation protein FUR,,E,,,E
+3867,PA14_63030,Outer membrane beta-barrel assembly protein BamE,E,E,E,E,E
+4579,PA14_64100,Biotin carboxyl carrier protein of acetyl-CoA carboxylase,E,E,E,E,E
+5913,PA14_64110,Biotin carboxylase of acetyl-CoA carboxylase (EC 6.3.4.14),E,E,,E,E
+5648,PA14_64190,DNA-binding protein Fis,,,E,,E
+8443,PA14_64980,NAD synthetase (EC 6.3.1.5),E,E,,,E
+5559,PA14_65130,Replicative DNA helicase (DnaB) (EC 3.6.4.12),E,E,,,E
+5827,PA14_65170,"SSU ribosomal protein S18p @ SSU ribosomal protein S18p, zinc-independent",,E,E,,E
+4744,PA14_65180,SSU ribosomal protein S6p,E,E,E,,E
+6218,PA14_65230,Adenylosuccinate synthetase (EC 6.3.4.4),E,E,,,E
+8721,PA14_65380,tRNA threonylcarbamoyladenosine biosynthesis protein TsaE,,E,E,,E
+7913,PA14_65570,Signal transduction histidine kinase,,,,,E
+8355,PA14_65605,Topoisomerase IV subunit A (EC 5.99.1.-),E,E,E,,E
+6894,PA14_65660,Topoisomerase IV subunit B (EC 5.99.1.-),E,E,E,E,E
+6878,PA14_65960,3-deoxy-D-manno-octulosonic acid transferase (EC 2.4.99.12)(EC 2.4.99.13),E,E,E,E,E
+3367,PA14_66000,Glycerol-3-phosphate dehydrogenase,E,E,E,E,E
+8071,PA14_66010,"Oxidoreductase, aldo/keto reductase family",E,E,E,E,E
+4003,PA14_66060,ADP-heptose synthase (EC 2.7.-.-) / D-glycero-beta-D-manno-heptose 7-phosphate kinase,E,E,,E,E
+8486,PA14_66080,Lipid A export permease/ATP-binding protein MsbA,E,E,,E,E
+7677,PA14_66090,"toluene tolerance protein, putative",E,E,,E,E
+4794,PA14_66190,Serine/threonine protein kinase,E,E,E,E,E
+5700,PA14_66210,"Heptose kinase WapQ, eukaryotic type",E,E,E,,E
+6483,PA14_66220,Lipopolysaccharide core heptose(I) kinase RfaP,E,E,E,,E
+7488,PA14_66230,"UDP-glucose:(heptosyl) LPS alpha1,3-glucosyltransferase WaaG",E,E,E,E,E
+7552,PA14_66240,Lipopolysaccharide core heptosyltransferase I,E,E,E,,E
+7597,PA14_66250,ADP-heptose--lipooligosaccharide heptosyltransferase II,E,E,E,,E
+7540,PA14_66600,3-dehydroquinate synthase (EC 4.2.3.4),,,E,,E
+3398,PA14_66750,Arginyl-tRNA synthetase (EC 6.1.1.19),E,E,E,,E
+7619,PA14_66760,Cell division protein,,,E,,E
+6832,PA14_66900,"2-methoxy-6-polyprenyl-1,4-benzoquinol methylase (EC 2.1.1.201)",E,E,,E,E
+3990,PA14_66910,Ubiquinone biosynthesis protein UbiJ,,,E,,E
+8219,PA14_66920,Ubiquinone biosynthesis regulatory protein kinase UbiB,E,E,E,E,E
+3121,PA14_67490,"Fructose-1,6-bisphosphatase, type I (EC 3.1.3.11)",E,E,E,E,E
+7134,PA14_67600,Glutamine synthetase type I (EC 6.3.1.2),E,E,E,E,E
+6650,PA14_68360,3-oxoacyl-[acyl-carrier-protein] synthase (EC 2.3.1.41),E,,,,E
+9243,PA14_68955,2-polyprenylphenol hydroxylase,E,E,E,,E
+8790,PA14_68980,2-polyprenyl-6-methoxyphenol hydroxylase,E,E,E,,E
+9046,PA14_69150,3-polyprenyl-4-hydroxybenzoate carboxy-lyase (EC 4.1.1.98),E,E,,,E
+7492,PA14_69190,Transcription termination factor Rho,E,E,,,E
+7387,PA14_69690,Diaminopimelate epimerase (EC 5.1.1.7),E,E,,,E
+7071,PA14_70240,Phosphopantothenoylcysteine decarboxylase (EC 4.1.1.36) / Phosphopantothenoylcysteine synthetase (EC 6.3.2.5),E,E,,E,E
+4769,PA14_70440,Guanylate kinase (EC 2.7.4.8),E,E,E,,E
+7621,PA14_70730,4-hydroxybenzoate polyprenyltransferase (EC 2.5.1.39),E,E,,,E
+4204,PA14_72480,GTP-binding protein EngB,E,E,,E,E
+3760,PA14_72970,"TonB-ExbBD energy transducing system, TonB subunit",,,,,E
+5485,PA14_73170,Glutamine--fructose-6-phosphate aminotransferase [isomerizing] (EC 2.6.1.16),E,E,E,E,E
+6351,PA14_73220,N-acetylglucosamine-1-phosphate uridyltransferase (EC 2.7.7.23) / Glucosamine-1-phosphate N-acetyltransferase (EC 2.3.1.157),E,E,,,E
+7592,PA14_73240,ATP synthase beta chain (EC 3.6.3.14),E,E,E,,E
+7694,PA14_73250,ATP synthase gamma chain (EC 3.6.3.14),E,E,E,,E
+3319,PA14_73260,ATP synthase alpha chain (EC 3.6.3.14),E,E,E,E,E
+8691,PA14_73280,ATP synthase delta chain (EC 3.6.3.14),E,E,E,,E
+3566,PA14_73310,ATP synthase F0 sector subunit a (EC 3.6.3.14),E,E,E,,E
+8032,PA14_73370,tRNA-5-carboxymethylaminomethyl-2-thiouridine(34) synthesis protein MnmG,,,,,E
+9173,PA14_73400,tRNA-5-carboxymethylaminomethyl-2-thiouridine(34) synthesis protein MnmE,,,,,E
+4532,PA14_73410,"Inner membrane protein translocase and chaperone YidC, long form",E,E,E,,E
+5886,PA14_00200,Peptide deformylase (EC 3.5.1.88),E,E,E,E,
+5186,PA14_00280,"Coproporphyrinogen III oxidase, aerobic (EC 1.3.3.3)",E,E,E,E,
+9310,PA14_07960,hypothetical protein,E,E,E,,
+1183,PA14_08695,Protein translocase subunit SecE,E,E,,,
+5630,PA14_08750,LSU ribosomal protein L7p/L12p (P1/P2),E,E,E,E,
+7600,PA14_09040,LSU ribosomal protein L15p (L27Ae),E,E,E,E,
+8359,PA14_11260,UDP-glucose 4-epimerase (EC 5.1.3.2),E,E,E,E,
+4481,PA14_11560,"(2E,6E)-farnesyl diphosphate synthase (EC 2.5.1.10)",E,,E,,
+4543,PA14_11860,Flavin prenyltransferase UbiX,E,,E,E,
+6959,PA14_12390,"Glutamate-1-semialdehyde 2,1-aminomutase (EC 5.4.3.8)",E,E,,,
+7080,PA14_14740,Iron-sulfur cluster assembly scaffold protein IscU,E,E,E,E,
+7421,PA14_16480,Chemotaxis response regulator protein-glutamate methylesterase CheB (EC 3.1.1.61),E,,,,
+8191,PA14_41060,Ribonuclease HI (EC 3.1.26.4),E,E,E,E,
+7842,PA14_43680,"3-hydroxyacyl-[acyl-carrier-protein] dehydratase, FabA form (EC 4.2.1.59) @ Trans-2-decenoyl-[acyl-carrier-protein] isomerase (EC 5.3.3.14)",E,,,E,
+8911,PA14_43940,Succinyl-CoA ligase [ADP-forming] alpha chain (EC 6.2.1.5),E,,E,,
+7816,PA14_44020,Succinate dehydrogenase iron-sulfur protein (EC 1.3.5.1),E,E,E,E,
+5633,PA14_44030,Succinate dehydrogenase flavoprotein subunit (EC 1.3.5.1),E,E,E,E,
+3605,PA14_44050,Succinate dehydrogenase hydrophobic membrane anchor protein,E,E,E,E,
+3617,PA14_44060,Succinate dehydrogenase cytochrome b-556 subunit,E,E,E,E,
+7052,PA14_44670,Cell division protein ZipA,E,E,E,,
+6162,PA14_51270,4-hydroxy-tetrahydrodipicolinate synthase (EC 4.3.3.7),E,E,E,E,
+8435,PA14_60360,Lipoprotein signal peptidase (EC 3.4.23.36),E,E,E,E,
+8332,PA14_60890,Serine hydroxymethyltransferase (EC 2.1.2.1),E,,,E,
+6555,PA14_61580,"Ferrochelatase, protoheme ferro-lyase (EC 4.99.1.1)",E,E,E,E,
+8834,PA14_61770,Ribose-phosphate pyrophosphokinase (EC 2.7.6.1),E,E,,,
+7062,PA14_62860,Cell division protein FtsH,E,,E,,
+8354,PA14_65500,Phosphatidylserine decarboxylase (EC 4.1.1.65),E,E,E,E,
+3770,PA14_66550,Uroporphyrinogen III decarboxylase (EC 4.1.1.37),E,E,,E,
+4633,PA14_68170,"dTDP-glucose 4,6-dehydratase (EC 4.2.1.46)",E,,E,,
+4109,PA14_68190,dTDP-4-dehydrorhamnose reductase (EC 1.1.1.133),E,,,,
+4184,PA14_68200,Glucose-1-phosphate thymidylyltransferase (EC 2.7.7.24),E,,E,E,
+3399,PA14_68210,"dTDP-4-dehydrorhamnose 3,5-epimerase (EC 5.1.3.13)",E,,E,,
+5441,PA14_69240,Porphobilinogen synthase (EC 4.2.1.24),E,E,,,
+5761,PA14_69440,Uroporphyrinogen-III synthase (EC 4.2.1.75),E,E,E,E,
+5767,PA14_69450,Porphobilinogen deaminase (EC 2.5.1.61),E,E,,E,
+6192,PA14_69910,ATP-dependent DNA helicase Rep,E,,,,
+8363,PA14_70260,Deoxyuridine 5'-triphosphate nucleotidohydrolase (EC 3.6.1.23),E,,E,E,
+3562,PA14_73290,ATP synthase F0 sector subunit b (EC 3.6.3.14),E,E,E,,
+7685,PA14_01120,Phosphoglycerate dehydrogenase and related dehydrogenases,,E,,,
+1947,PA14_05775,NA,,E,,,
+6597,PA14_06510,8-amino-7-oxononanoate synthase (EC 2.3.1.47),,E,,,
+4016,PA14_07740,4-hydroxythreonine-4-phosphate dehydrogenase (EC 1.1.1.262),,E,,,
+7228,PA14_08470,"Protoporphyrinogen IX oxidase, novel form, HemJ (EC 1.3.-.-)",,E,,E,
+7352,PA14_54420,Sigma factor RpoE negative regulatory protein RseA,,E,E,,
+9057,PA14_54290,Pyridoxine 5'-phosphate synthase (EC 2.6.99.2),,E,,,
+4951,PA14_52530,Transcriptional regulator,,E,,E,
+7133,PA14_50800,Pyridoxamine 5'-phosphate oxidase (EC 1.4.3.5),,E,,E,
+3230,PA14_44270,NA,,E,E,E,
+9306,PA14_30240,Translation initiation factor 1,,E,E,E,
+5711,PA14_28670,LSU ribosomal protein L35p,,E,E,E,
+6409,PA14_25670,NA,,E,,E,
+6912,PA14_23270,Phosphoserine aminotransferase (EC 2.6.1.52),,E,E,,
+6470,PA14_17330,"Cell division protein DivIC (FtsB), stabilizes FtsL against RasP cleavage",,E,,E,
+4237,PA14_16000,LSU ribosomal protein L19p,,E,E,,
+6369,PA14_15970,SSU ribosomal protein S16p,,E,E,E,
+4384,PA14_11430,"6,7-dimethyl-8-ribityllumazine synthase (EC 2.5.1.78)",,E,E,,
+4386,PA14_11420,"3,4-dihydroxy-2-butanone 4-phosphate synthase (EC 4.1.99.12) / GTP cyclohydrolase II (EC 3.5.4.25)",,E,,,
+7224,PA14_09200,Single-stranded DNA-binding protein,,E,,,
+7603,PA14_09030,LSU ribosomal protein L30p (L7e),,E,E,E,
+8234,PA14_08930,LSU ribosomal protein L29p (L35e),,E,E,E,
+4789,PA14_08900,LSU ribosomal protein L22p (L17e),,E,E,E,
+5320,PA14_58170,Aspartyl-tRNA(Asn) amidotransferase subunit C (EC 6.3.5.6) @ Glutamyl-tRNA(Gln) amidotransferase subunit C (EC 6.3.5.7),,E,E,E,
+7868,PA14_60450,LSU ribosomal protein L27p,,E,,E,
+5719,PA14_60460,LSU ribosomal protein L21p,,E,E,,
+6308,PA14_61710,Glutamyl-tRNA reductase (EC 1.2.1.70),,E,,E,
+5904,PA14_61840,Antitoxin HigA,,E,,,
+5753,PA14_61980,hypothetical protein,,E,,,
+4071,PA14_62830,Triosephosphate isomerase (EC 5.3.1.1),,E,E,,
+9245,PA14_62970,Chaperone protein DnaK,,E,,,
+3655,PA14_70190,"LSU ribosomal protein L28p @ LSU ribosomal protein L28p, zinc-independent",,E,E,E,
+7593,PA14_73230,ATP synthase epsilon chain (EC 3.6.3.14),,E,E,,
+4860,PA14_73300,NA,,E,E,E,
+3164,PA14_73320,ATP synthase protein I,,E,E,,
+8853,PA14_73420,Ribonuclease P protein component (EC 3.1.26.5),,E,E,,
+NA,PA14_73425,NA,,E,,,
+7498,PA14_00290,Shikimate 5-dehydrogenase I alpha (EC 1.1.1.25),,,E,,
+6566,PA14_00490,Channel-forming transporter/cytolysins activator of TpsB family,,,E,,
+8309,PA14_00630,NA,,,E,E,
+7288,PA14_00800,hypothetical protein,,,E,,
+9133,PA14_00960,Type VI secretion lipoprotein/VasD,,,E,,
+616,PA14_01130,hypothetical protein,,,E,,
+6278,PA14_02490,putative TonB-dependent receptor,,,E,,
+7620,PA14_02570,Malonate decarboxylase delta subunit,,,E,,
+8860,PA14_02610,NA,,,E,,
+4299,PA14_02830,"3-carboxy-cis,cis-muconate cycloisomerase (EC 5.5.1.2)",,,E,,
+6803,PA14_03240,NA,,,E,,
+5110,PA14_03300,NA,,,E,,
+6003,PA14_04970,NA,,,E,,
+8226,PA14_05120,NA,,,E,,
+8823,PA14_05260,Aspartate carbamoyltransferase (EC 2.1.3.2),,,E,,
+6863,PA14_05290,UPF0301 protein YqgE,,,E,,
+8979,PA14_05540,"Multidrug efflux system, inner membrane proton/drug antiporter (RND type) => MexB of MexAB-OprM",,,E,,
+7774,PA14_05550,"Multidrug efflux system, outer membrane factor lipoprotein => OprM of MexAB-OprM",,,E,,
+4534,PA14_06090,hypothetical protein,,,E,,
+NA,PA14_06110,NA,,,E,,
+5690,PA14_06390,Uncharacterized MFS-type transporter,,,E,,
+4248,PA14_07190,Phosphoglycerate kinase (EC 2.7.2.3),,,E,,
+3208,PA14_07550,NA,,,E,,
+9309,PA14_07970,NA,,,E,E,
+106,PA14_08110,NA,,,E,,
+NA,PA14_08570,NA,,,E,,
+NA,PA14_08580,NA,,,E,,
+NA,PA14_08590,NA,,,E,,
+NA,PA14_08600,NA,,,E,,
+NA,PA14_08610,NA,,,E,,
+NA,PA14_08660,NA,,,E,,
+NA,PA14_08670,NA,,,E,,
+NA,PA14_08690,NA,,,E,,
+3892,PA14_08830,NA,,,E,,
+3327,PA14_09070,NA,,,E,E,
+8447,PA14_09410,NA,,,E,,
+8887,PA14_09420,NA,,,E,,
+8440,PA14_09440,2-Amino-2-deoxy-isochorismate synthase (EC 2.6.1.86) PhzE,,,E,,
+3471,PA14_09450,NA,,,E,,
+3476,PA14_10270,"Acetoin catabolism protein X, possible NAD kinase",,,E,,
+4527,PA14_10490,NA,,,E,,
+7312,PA14_10780,NA,,,E,,
+5597,PA14_11250,dTDP-4-dehydrorhamnose reductase (EC 1.1.1.133),,,E,,
+4389,PA14_11380,Ribonucleotide reductase transcriptional regulator NrdR,,,E,,
+4879,PA14_11570,Exodeoxyribonuclease VII small subunit (EC 3.1.11.6),,,E,,
+7997,PA14_12020,Nicotinate-nucleotide adenylyltransferase (EC 2.7.7.18),,,E,,
+6089,PA14_12030,Ribosomal silencing factor RsfA,,,E,,
+7083,PA14_12050,23S rRNA (pseudouridine(1915)-N(3))-methyltransferase (EC 2.1.1.177),,,E,,
+8967,PA14_12110,NA,,,E,E,
+4469,PA14_12400,Thiamin-phosphate pyrophosphorylase (EC 2.5.1.3),,,E,,
+4980,PA14_12470,NA,,,E,,
+7129,PA14_13320,NA,,,E,,
+8832,PA14_13730,Nitrate/nitrite response regulator protein NarL,,,E,,
+767,PA14_14310,Predicted transcriptional regulators,,,E,,
+3531,PA14_14460,DNA polymerase III chi subunit (EC 2.7.7.7),,,E,,
+5809,PA14_14610,Protein translocase subunit YajC,,,E,,
+5825,PA14_14710,Iron-sulfur cluster regulator IscR,,,E,,
+9371,PA14_14820,Nucleoside diphosphate kinase (EC 2.7.4.6),,,E,E,
+9369,PA14_14850,Type IV pilus biogenesis protein PilF,,,E,,
+6549,PA14_14860,Cytoskeleton protein RodZ,,,E,,
+9365,PA14_14900,FIG00449901: hypothetical protein,,,E,,
+9338,PA14_14975,NA,,,E,,
+5093,PA14_15470,Periplasmic mercury(+2) binding protein,,,E,,
+2892,PA14_15530,NA,,,E,,
+1601,PA14_15590,"FIG006126: DNA helicase, restriction/modification system component YeeB",,,E,,
+7149,PA14_15740,"Phosphoribosylformylglycinamidine synthase, synthetase subunit (EC 6.3.5.3) / Phosphoribosylformylglycinamidine synthase, glutamine amidotransferase subunit (EC 6.3.5.3)",,,E,,
+4600,PA14_15880,NA,,,E,,
+8983,PA14_15990,tRNA (guanine(37)-N(1))-methyltransferase (EC 2.1.1.228),,,E,,
+8476,PA14_16200,Phosphatidylserine/phosphatidylglycerophosphate/cardiolipi n synthases and related enzymes,,,E,,
+8094,PA14_16920,NA,,,E,E,
+6788,PA14_17170,Periplasmic chaperone of outer membrane proteins Skp @ Outer membrane protein H precursor,,,E,,
+4669,PA14_17530,RecA protein,,,E,,
+8756,PA14_17710,"LSU ribosomal protein L36p @ LSU ribosomal protein L36p, zinc-independent",,,E,,
+4704,PA14_17930,Aerobic glycerol-3-phosphate dehydrogenase (EC 1.1.5.3),,,E,,
+9273,PA14_18260,1-phosphofructokinase (EC 2.7.1.56),,,E,,
+3127,PA14_18320,Undecaprenyl phosphate-aminoarabinose flippase subunit ArnE,,,E,,
+7402,PA14_18700,Ribonuclease T,,,E,E,
+5313,PA14_18890,Electron transport complex protein RnfE,,,E,,
+5557,PA14_19090,Deoxycytidine triphosphate deaminase (EC 3.5.4.13),,,E,,
+4732,PA14_19510,Alkanesulfonates transport system permease protein,,,E,,
+3200,PA14_19580,NA,,,E,,
+4599,PA14_20360,Alpha-D-ribose 1-methylphosphonate 5-triphosphate synthase subunit PhnG (EC 2.7.8.37),,,E,,
+5515,PA14_20460,hypothetical protein,,,E,E,
+3153,PA14_20940,NA,,,E,,
+4149,PA14_21450,VgrG protein,,,E,,
+5985,PA14_21560,NA,,,E,,
+NA,PA14_21810,NA,,,E,,
+7775,PA14_22010,Cell division topological specificity factor MinE,,,E,E,
+5882,PA14_22020,Septum site-determining protein MinD,,,E,,
+8054,PA14_22650,Membrane lipoprotein lipid attachment site containing protein USSDB6D,,,E,,
+7079,PA14_22910,Phosphogluconate dehydratase (EC 4.2.1.12),,,E,,
+5733,PA14_23080,"6-phosphogluconolactonase (EC 3.1.1.31), eukaryotic type",,,E,,
+3105,PA14_23090,4-hydroxy-2-oxoglutarate aldolase (EC 4.1.3.16) @ 2-dehydro-3-deoxyphosphogluconate aldolase (EC 4.1.2.14),,,E,,
+8629,PA14_23210,"Similar to phosphoglycolate phosphatase, clustered with ubiquinone biosynthesis SAM-dependent O-methyltransferase",,,E,,
+5569,PA14_23280,Chorismate mutase I (EC 5.4.99.5) / Prephenate dehydratase (EC 4.2.1.51),,,E,,
+7157,PA14_23310,Cyclohexadienyl dehydrogenase (EC 1.3.1.12)(EC 1.3.1.43) / 3-phosphoshikimate 1-carboxyvinyltransferase (EC 2.5.1.19),,,E,,
+6352,PA14_24050,General secretion pathway protein I,,,E,,
+NA,PA14_24120,NA,,,E,,
+NA,PA14_24130,NA,,,E,,
+5960,PA14_24410,FIG00657500: hypothetical protein,,,E,,
+7475,PA14_24630,hypothetical protein,,,E,,
+8205,PA14_24850,Glutaredoxin-like domain-containing protein PA3033,,,E,,
+7717,PA14_25080,Enoyl-CoA hydratase (EC 4.2.1.17) / Delta(3)-cis-delta(2)-trans-enoyl-CoA isomerase (EC 5.3.3.8) / 3-hydroxyacyl-CoA dehydrogenase (EC 1.1.1.35) / 3-hydroxybutyryl-CoA epimerase (EC 5.1.2.3),,,E,,
+8412,PA14_25090,3-ketoacyl-CoA thiolase (EC 2.3.1.16),,,E,,
+6347,PA14_25490,MotA/TolQ/ExbB proton channel family protein,,,E,,
+6346,PA14_25500,Biopolymer transport protein ExbD/TolR,,,E,,
+4545,PA14_25540,Low molecular weight protein tyrosine phosphatase (EC 3.1.3.48),,,E,E,
+7477,PA14_25630,"LSU ribosomal protein L32p @ LSU ribosomal protein L32p, zinc-independent",,,E,,
+9334,PA14_26300,hypothetical protein,,,E,,
+5749,PA14_26340,"Transporter, LysE family",,,E,,
+9210,PA14_26360,"ABC transporter, permease protein (cluster 8, B12/iron complex)",,,E,,
+8771,PA14_26480,"Precorrin-6Y C(5,15)-methyltransferase [decarboxylating] (EC 2.1.1.132)",,,E,,
+4488,PA14_26485,Precorrin-3B synthase,,,E,,
+6741,PA14_26610,hypothetical protein,,,E,,
+5867,PA14_26620,Translation initiation factor 2 (IF-2; GTPase),,,E,,
+5152,PA14_26690,Isohexenylglutaconyl-CoA hydratase (EC 4.2.1.57),,,E,,
+9090,PA14_26890,Orotidine 5'-phosphate decarboxylase (EC 4.1.1.23),,,E,,
+NA,PA14_27190,NA,,,E,,
+5622,PA14_27200,hypothetical protein,,,E,,
+8651,PA14_27210,Translation elongation factor P,,,E,,
+NA,PA14_27600,NA,,,E,,
+NA,PA14_27610,NA,,,E,,
+4663,PA14_27640,probable RebB like protein,,,E,,
+5034,PA14_27940,"Serine phosphatase RsbU, regulator of sigma subunit",,,E,,
+7335,PA14_27950,Serine-protein kinase RsbW (EC 2.7.11.1),,,E,,
+NA,PA14_28190,NA,,,E,,
+4565,PA14_28720,NA,,,E,,
+6206,PA14_28880,hypothetical protein,,,E,,
+5168,PA14_29190,hypothetical protein,,,E,E,
+5751,PA14_29740,Sensor protein PA2656,,,E,,
+6119,PA14_29930,NADH-ubiquinone oxidoreductase chain H (EC 1.6.5.3),,,E,,
+NA,PA14_30720,NA,,,E,,
+3625,PA14_30930,NA,,,E,,
+7896,PA14_31080,"Type IV secretory pathway, protease TraF",,,E,,
+53,PA14_31250,Archaeal/vacuolar-type H+-ATPase subunit A,,,E,,
+8268,PA14_31530,3-ketoacyl-CoA thiolase (EC 2.3.1.16) @ Acetyl-CoA acetyltransferase (EC 2.3.1.9),,,E,,
+6234,PA14_31700,CDP-diacylglycerol--glycerol-3-phosphate 3-phosphatidyltransferase (EC 2.7.8.5),,,E,,
+6156,PA14_31900,"Multidrug efflux system MdtABC-TolC, inner-membrane proton/drug antiporter MdtC (RND type)",,,E,,
+8597,PA14_32220,Muconate cycloisomerase (EC 5.5.1.1),,,E,,
+8178,PA14_32340,Guanine deaminase (EC 3.5.4.3),,,E,,
+8692,PA14_32360,Transcriptional regulator of the MexEF-OprN multidrug efflux system,,,E,,
+3550,PA14_32420,Putative oxidoreductase,,,E,E,
+4275,PA14_32570,NA,,,E,,
+3193,PA14_32600,Thioredoxin,,,E,,
+480,PA14_32810,Putative large exoprotein involved in heme utilization or adhesion of ShlA/HecA/FhaA family,,,E,,
+8331,PA14_33010,Serine hydroxymethyltransferase (EC 2.1.2.1),,,E,,
+3723,PA14_33060,hypothetical protein,,,E,,
+3717,PA14_33130,probable cation-transporting P-type ATPase,,,E,,
+5426,PA14_33160,NA,,,E,,
+9149,PA14_33530,"ABC transporter in pyoverdin gene cluster, periplasmic component",,,E,,
+4167,PA14_33550,"ABC transporter in pyoverdin gene cluster, ATP-binding component",,,E,,
+5067,PA14_33580,FIG137877: Hypothetical protein in pyoverdin gene cluster,,,E,,
+5870,PA14_34000,Uncharacterized protein ImpH/VasB,,,E,,
+6899,PA14_34020,Uncharacterized protein ImpF,,,E,,
+3534,PA14_34070,Uncharacterized protein ImpB,,,E,,
+8608,PA14_34150,sigma-54-dependent transcriptional regulator,,,E,,
+6701,PA14_34300,Acyl-CoA dehydrogenase; probable dibenzothiophene desulfurization enzyme,,,E,,
+3946,PA14_34450,"Transcriptional regulator, AraC family",,,E,,
+3842,PA14_34490,"Acyl-CoA dehydrogenase, short-chain specific (EC 1.3.8.1)",,,E,,
+8210,PA14_34500,"ABC transporter, ATP-binding protein",,,E,E,
+7310,PA14_34640,Gluconokinase (EC 2.7.1.12),,,E,,
+5207,PA14_34780,Taurine transport ATP-binding protein TauB,,,E,,
+9237,PA14_34960,Carbohydrate-selective porin OprB,,,E,,
+6544,PA14_35000,NA,,,E,E,
+4129,PA14_35100,"Arsenate reductase (EC 1.20.4.4) thioredoxin-coupled, LMWP family",,,E,E,
+1673,PA14_35550,NA,,,E,,
+5377,PA14_35620,"Pellicle/biofilm biosynthesis inner membrane protein PslK, MATE transporter family",,,E,,
+658,PA14_35930,NA,,,E,,
+6331,PA14_35970,Acyl-CoA dehydrogenase,,,E,,
+3657,PA14_35980,Putative acyl-CoA dehydrogenase,,,E,,
+6113,PA14_36100,4-hydroxythreonine-4-phosphate dehydrogenase (EC 1.1.1.262),,,E,,
+5474,PA14_36270,3-hydroxyisobutyrate dehydrogenase family protein,,,E,,
+6143,PA14_36460,hypothetical protein,,,E,,
+4942,PA14_36620,NA,,,E,,
+8150,PA14_36660,Threonine dehydrogenase and related Zn-dependent dehydrogenases,,,E,,
+6591,PA14_36770,hypothetical protein,,,E,E,
+979,PA14_36790,NA,,,E,,
+4165,PA14_36860,hypothetical protein,,,E,,
+3146,PA14_36880,Nicotinamide-nucleotide amidase (EC 3.5.1.42),,,E,,
+3145,PA14_36890,Metallothionein,,,E,,
+3601,PA14_36920,FOG: CheY-like receiver,,,E,,
+6717,PA14_36940,hypothetical protein,,,E,,
+5473,PA14_37310,Allophanate hydrolase 2 subunit 2 (EC 3.5.1.54),,,E,,
+7223,PA14_37350,Uncharacterized cysteine-rich DUF326 protein bsYhjQ/STM1261,,,E,,
+6552,PA14_37370,6-hexanolactone hydrolase,,,E,,
+3622,PA14_37420,Putative transmembrane sensor,,,E,E,
+5052,PA14_37470,"Coenzyme F420-dependent N5,N10-methylene tetrahydromethanopterin reductase and related flavin-dependent oxidoreductases",,,E,,
+8708,PA14_37510,SAM-dependent methyltransferase,,,E,,
+7845,PA14_37530,probable epoxide hydrolase,,,E,,
+7086,PA14_37590,"Kynurenine formamidase, bacterial (EC 3.5.1.9)",,,E,,
+7483,PA14_37840,"ABC transporter, ATP-binding protein (cluster 5, nickel/peptides/opines) / ABC transporter, ATP-binding protein (cluster 5, nickel/peptides/opines)",,,E,,
+6669,PA14_38310,hypothetical protein,,,E,,
+8202,PA14_38395,"Multidrug efflux system, membrane fusion component => MexX of of MexXY system",,,E,,
+3112,PA14_38490,Hydroxymethylglutaryl-CoA lyase (EC 4.1.3.4),,,E,,
+6811,PA14_38530,Fumarylacetoacetase (EC 3.7.1.2),,,E,,
+6810,PA14_38550,"Maleylacetoacetate isomerase (EC 5.2.1.2) @ Glutathione S-transferase, zeta (EC 2.5.1.18)",,,E,,
+6479,PA14_38880,Pentapeptide repeat family protein,,,E,E,
+6676,PA14_38910,Putative two-component sensor,,,E,,
+3210,PA14_39090,hypothetical protein,,,E,,
+6036,PA14_39260,Fap system putative outer membrane protein,,,E,,
+3938,PA14_39700,hypothetical protein,,,E,,
+8447,PA14_39880,NA,,,E,,
+8889,PA14_39890,NA,,,E,,
+8441,PA14_39910,2-Amino-2-deoxy-isochorismate synthase (EC 2.6.1.86) PhzE,,,E,,
+3474,PA14_39925,NA,,,E,,
+6955,PA14_40210,hypothetical protein,,,E,E,
+1256,PA14_40260,T1SS secreted agglutinin RTX,,,E,,
+7266,PA14_40610,NA,,,E,,
+8290,PA14_40750,NA,,,E,,
+NA,PA14_41200,NA,,,E,,
+7988,PA14_41210,NA,,,E,,
+3268,PA14_41240,ATP-dependent Clp protease proteolytic subunit (EC 3.4.21.92),,,E,,
+6882,PA14_41290,NA,,,E,,
+NA,PA14_41340,NA,,,E,,
+6789,PA14_41960,NA,,,E,E,
+8242,PA14_42290,"Type III secretion effector protein (YopR, encoded by YscH)",,,E,E,
+7761,PA14_42320,NA,,,E,,
+7238,PA14_42360,"Type III secretion chaperone protein for YopN (SycN,YscB)",,,E,,
+8247,PA14_42380,Type III secretion negative regulator (LscZ),,,E,,
+3171,PA14_42410,NA,,,E,,
+8157,PA14_42450,Type III secretion host injection protein (YopB),,,E,,
+3931,PA14_42490,Type III secretion low calcium response protein (LcrR),,,E,,
+4075,PA14_42510,NA,,,E,,
+4068,PA14_42520,Type III secretion protein SctX,,,E,,
+8693,PA14_42530,Type III secretion chaperone SycN,,,E,,
+8253,PA14_42580,Type III secretion spans bacterial envelope protein (YscO),,,E,E,
+1566,PA14_42600,Type III secretion protein (YscP),,,E,,
+4693,PA14_42610,"Type III secretion inner membrane protein (YscQ,homologous to flagellar export components)",,,E,,
+5538,PA14_42630,"Type III secretion inner membrane protein (YscS,homologous to flagellar export components)",,,E,,
+9270,PA14_42830,hypothetical protein,,,E,,
+5154,PA14_42960,hypothetical protein,,,E,,
+7110,PA14_43040,Uncharacterized protein ImpB,,,E,,
+6799,PA14_43070,secreted protein Hcp,,,E,,
+4150,PA14_43080,VgrG protein,,,E,,
+7428,PA14_43370,Potassium-transporting ATPase C chain (EC 3.6.3.12) (TC 3.A.3.7.1),,,E,,
+9240,PA14_43440,Enoyl-CoA hydratase/isomerase family protein,,,E,,
+4763,PA14_43950,Succinyl-CoA ligase [ADP-forming] beta chain (EC 6.2.1.5),,,E,,
+6405,PA14_44370,Cytochrome c oxidase (cbb3-type) subunit CcoN (EC 1.9.3.1),,,E,,
+6396,PA14_44400,Cytochrome c oxidase (cbb3-type) subunit CcoP (EC 1.9.3.1),,,E,,
+6402,PA14_44430,"Putative analog of CcoH, COG3198",,,E,,
+7016,PA14_44440,Type cbb3 cytochrome oxidase biogenesis protein CcoI; Copper-translocating P-type ATPase (EC 3.6.3.4),,,E,,
+6393,PA14_44450,"Type cbb3 cytochrome oxidase biogenesis protein CcoS, involved in heme b insertion",,,E,,
+8045,PA14_44620,NA,,,E,,
+8572,PA14_44760,"Xanthine and CO dehydrogenases maturation factor, XdhC/CoxF family",,,E,,
+6799,PA14_44890,NA,,,E,,
+7518,PA14_45020,2-hydroxy-3-oxopropionate reductase (EC 1.1.1.60),,,E,,
+4632,PA14_45290,Cytochrome c heme lyase subunit CcmL,,,E,E,
+6757,PA14_45300,"Cytochrome c-type biogenesis protein CcmG/DsbE, thiol:disulfide oxidoreductase",,,E,,
+5682,PA14_45310,Cytochrome c heme lyase subunit CcmF,,,E,,
+6505,PA14_45330,"Cytochrome c-type biogenesis protein CcmE, heme chaperone",,,E,,
+9384,PA14_45340,"Cytochrome c-type biogenesis protein CcmD, interacts with CcmCE",,,E,E,
+7741,PA14_45350,"Cytochrome c-type biogenesis protein CcmC, putative heme lyase for CcmE",,,E,E,
+7742,PA14_45370,"ABC transporter involved in cytochrome c biogenesis, CcmB subunit",,,E,,
+9134,PA14_45380,"ABC transporter involved in cytochrome c biogenesis, ATPase component CcmA",,,E,E,
+5669,PA14_45640,Flagellar synthesis regulator FleN,,,E,,
+4853,PA14_45760,NA,,,E,,
+4148,PA14_45770,Flagellar biosynthesis protein FliP,,,E,,
+3579,PA14_45790,Flagellar motor switch protein FliN,,,E,,
+2447,PA14_46160,NA,,,E,,
+5102,PA14_46950,NA,,,E,,
+3747,PA14_47670,Nicotinate-nucleotide--dimethylbenzimidazole phosphoribosyltransferase (EC 2.4.2.21),,,E,,
+6992,PA14_47730,Adenosylcobinamide-phosphate synthase (EC 6.3.1.10),,,E,,
+5091,PA14_47950,"4-hydroxyproline ABC transporter, permease protein 2",,,E,,
+7583,PA14_48320,hypothetical protein,,,E,,
+3236,PA14_48400,NA,,,E,,
+5235,PA14_48900,NA,,,E,,
+1588,PA14_48980,NA,,,E,,
+3191,PA14_49220,NA,,,E,,
+7176,PA14_49230,Periplasmic nitrate reductase component NapD,,,E,,
+1469,PA14_49510,NA,,,E,,
+NA,PA14_51230,NA,,,E,,
+5110,PA14_51630,NA,,,E,,
+3139,PA14_51780,Holliday junction ATP-dependent DNA helicase RuvB (EC 3.6.4.12),,,E,,
+8894,PA14_51790,Holliday junction ATP-dependent DNA helicase RuvA (EC 3.6.4.12),,,E,,
+NA,PA14_52550,NA,,,E,,
+5673,PA14_52630,Succinylglutamate desuccinylase (EC 3.5.1.96),,,E,,
+7025,PA14_52640,Putative GTPases (G3E family),,,E,,
+9364,PA14_52850,"Similar to citrate lyase beta chain, 3",,,E,,
+6232,PA14_53800,Manganese transport protein MntH,,,E,,
+3841,PA14_53870,FIG016502: iron uptake protein,,,E,,
+8863,PA14_54330,Ribonuclease III (EC 3.1.26.3),,,E,,
+5947,PA14_54370,Translation elongation factor LepA,,,E,,
+6616,PA14_54390,HtrA protease/chaperone protein,,,E,,
+9038,PA14_54660,3-hydroxyisobutyryl-CoA hydrolase (EC 3.1.2.4),,,E,,
+4178,PA14_54730,hypothetical protein,,,E,,
+7667,PA14_54790,NA,,,E,,
+3671,PA14_55290,hypothetical protein,,,E,,
+4041,PA14_55340,Biopolymer transport protein ExbD/TolR,,,E,,
+8549,PA14_55460,General secretion pathway protein M,,,E,,
+4709,PA14_55520,General secretion pathway protein H,,,E,,
+8661,PA14_55530,General secretion pathway protein J,,,E,,
+NA,PA14_55620,NA,,,E,,
+NA,PA14_55631,NA,,,E,,
+NA,PA14_55634,NA,,,E,,
+NA,PA14_55635,NA,,,E,,
+NA,PA14_55637,NA,,,E,,
+6966,PA14_55840,hypothetical protein,,,E,,
+9282,PA14_56910,hypothetical protein,,,E,E,
+3803,PA14_57110,Small-conductance mechanosensitive channel,,,E,,
+5824,PA14_57170,Sensory box histidine kinase,,,E,,
+3641,PA14_57320,D-alanine--D-alanine ligase (EC 6.3.2.4),,,E,,
+6658,PA14_57460,Cell division protein MraZ,,,E,,
+6522,PA14_57540,"Ubiquinol-cytochrome C reductase, cytochrome C1 subunit",,,E,,
+4956,PA14_57560,"Ubiquinol-cytochrome C reductase, cytochrome B subunit (EC 1.10.2.2)",,,E,,
+5952,PA14_57570,Ubiquinol-cytochrome C reductase iron-sulfur subunit (EC 1.10.2.2),,,E,,
+6787,PA14_57820,YrbA protein,,,E,,
+8559,PA14_57830,Phospholipid ABC transporter-binding protein MlaB,,,E,E,
+8135,PA14_57900,3-deoxy-D-manno-octulosonate 8-phosphate phosphatase (EC 3.1.3.45),,,E,,
+3329,PA14_57950,Ribosome hibernation promoting factor Hpf,,,E,,
+4447,PA14_57960,PTS IIA-like nitrogen-regulatory protein PtsN,,,E,,
+7856,PA14_58600,"FOG: TPR repeat, SEL1 subfamily",,,E,,
+7654,PA14_58860,NA,,,E,E,
+1103,PA14_58940,hypothetical protein,,,E,,
+4900,PA14_58980,NA,,,E,,
+3524,PA14_59030,NA,,,E,,
+6637,PA14_59050,Nucleoid-associated protein NdpA,,,E,,
+2842,PA14_59110,NA,,,E,,
+NA,PA14_60160,NA,,,E,,
+4753,PA14_60350,NA,,,E,E,
+8343,PA14_60860,Transcriptional regulator NfxB,,,E,,
+4666,PA14_60960,hypothetical protein,,,E,,
+7490,PA14_61400,Malate:quinone oxidoreductase (EC 1.1.5.4),,,E,,
+NA,PA14_61760,NA,,,E,,
+5386,PA14_61780,LSU ribosomal protein L25p,,,E,,
+NA,PA14_62050,NA,,,E,,
+NA,PA14_62060,NA,,,E,,
+NA,PA14_62070,NA,,,E,,
+NA,PA14_62080,NA,,,E,,
+NA,PA14_62090,NA,,,E,,
+8918,PA14_62490,RNA polymerase-binding transcription factor DksA,,,E,,
+7849,PA14_62560,Poly(A) polymerase (EC 2.7.7.19),,,E,,
+7852,PA14_62590,Pantoate--beta-alanine ligase (EC 6.3.2.1),,,E,,
+4094,PA14_62740,Ribosome-binding factor A,,,E,,
+NA,PA14_62800,NA,,,E,,
+194,PA14_62810,Protein translocase membrane subunit SecG,,,E,,
+6542,PA14_62870,23S rRNA (uridine(2552)-2'-O)-methyltransferase (EC 2.1.1.166),,,E,,
+5880,PA14_62900,Transcription elongation factor GreA,,,E,,
+5881,PA14_62910,Carbamoyl-phosphate synthase large chain (EC 6.3.5.5),,,E,,
+3993,PA14_63050,Ribosome association toxin RatA,,,E,,
+4263,PA14_63300,hypothetical protein,,,E,,
+7776,PA14_63360,NA,,,E,,
+2234,PA14_63420,NA,,,E,,
+7324,PA14_63530,Selenocysteine-specific translation elongation factor,,,E,,
+4080,PA14_63750,Sodium-dependent phosphate transporter,,,E,,
+6436,PA14_63820,hypothetical protein,,,E,E,
+8408,PA14_64000,Translation initiation factor SUI1-related protein,,,E,,
+6238,PA14_64530,NA,,,E,,
+8592,PA14_64930,Nudix-related transcriptional regulator NrtR,,,E,,
+NA,PA14_65210,NA,,,E,,
+NA,PA14_65220,NA,,,E,,
+4575,PA14_65260,NA,,,E,E,
+4581,PA14_65280,HflK protein,,,E,,
+7476,PA14_65310,RNA-binding protein Hfq,,,E,E,
+4795,PA14_66170,Carbamoyltransferase in large core OS assembly cluster,,,E,,
+8899,PA14_66200,hypothetical protein,,,E,,
+4719,PA14_66290,Pyruvate dehydrogenase E1 component (EC 1.2.4.1),,,E,,
+4465,PA14_66710,"LSU ribosomal protein L31p @ LSU ribosomal protein L31p, zinc-dependent",,,E,,
+9103,PA14_66970,Twin-arginine translocation protein TatB,,,E,E,
+8614,PA14_66980,Twin-arginine translocation protein TatC,,,E,,
+3708,PA14_66990,Uncharacterized methyltransferase PA5071,,,E,E,
+9120,PA14_67960,hypothetical protein,,,E,,
+NA,PA14_68010,NA,,,E,,
+6969,PA14_68670,Muramoyltetrapeptide carboxypeptidase (EC 3.4.17.13),,,E,,
+9263,PA14_68680,Osmolarity sensory histidine kinase EnvZ,,,E,,
+6982,PA14_68700,Two-component system response regulator OmpR,,,E,,
+6316,PA14_69000,Xaa-Pro aminopeptidase (EC 3.4.11.9),,,E,,
+6076,PA14_69060,Inner membrane transport permease YhhJ,,,E,,
+9388,PA14_69070,Ribosome-associated ATPase RbbA,,,E,,
+9073,PA14_69090,HlyD-like membrane fusion protein YhiI,,,E,,
+4150,PA14_69550,NA,,,E,,
+7393,PA14_69710,Site-specific tyrosine recombinase XerC,,,E,,
+4358,PA14_69820,NA,,,E,,
+8436,PA14_70450,NA,,,E,,
+8781,PA14_70680,"Glycolate dehydrogenase (EC 1.1.99.14), FAD-binding subunit GlcE",,,E,,
+6726,PA14_70810,Phosphate transport ATP-binding protein PstB (TC 3.A.1.7.1),,,E,,
+5955,PA14_70850,Phosphate transport system permease protein PstC (TC 3.A.1.7.1),,,E,,
+NA,PA14_70870,NA,,,E,,
+NA,PA14_70880,NA,,,E,,
+NA,PA14_70890,NA,,,E,,
+NA,PA14_70900,NA,,,E,,
+NA,PA14_70910,NA,,,E,,
+3168,PA14_71400,NA,,,E,,
+3627,PA14_71600,N5-carboxyaminoimidazole ribonucleotide synthase (EC 6.3.4.18),,,E,,
+7201,PA14_71620,N5-carboxyaminoimidazole ribonucleotide mutase (EC 5.4.99.18),,,E,,
+8838,PA14_72200,Peptide chain release factor homolog,,,E,,
+3285,PA14_01560,Protein PhnA,,,,E,
+5573,PA14_06580,NA,,,,E,
+4440,PA14_06730,NA,,,,E,
+8517,PA14_06860,NA,,,,E,
+4639,PA14_08190,hypothetical protein,,,,E,
+9088,PA14_08250,Phage minor tail protein,,,,E,
+5496,PA14_11010,NA,,,,E,
+4724,PA14_11150,"Transcriptional regulator, Xre family",,,,E,
+7942,PA14_12970,Alpha-ketoglutarate-dependent taurine dioxygenase (EC 1.14.11.17),,,,E,
+4882,PA14_13680,Putative short-chain dehydrogenase,,,,E,
+5281,PA14_14160,Putative transferase,,,,E,
+4842,PA14_14250,hypothetical protein,,,,E,
+4067,PA14_15110,hypothetical protein,,,,E,
+9024,PA14_17490,4Fe-4S dicluster domain / Domain of unknown function DUF3470,,,,E,
+4971,PA14_18800,Copper chaperone,,,,E,
+3165,PA14_18930,Electron transport complex protein RnfB,,,,E,
+5849,PA14_19590,Organosulfonate utilization protein SsuF,,,,E,
+8018,PA14_25520,FIG002473: Protein YcaR in KDO2-Lipid A biosynthesis cluster,,,,E,
+6099,PA14_25930,Cobalamin biosynthesis protein CobE,,,,E,
+6257,PA14_27170,NA,,,,E,
+7978,PA14_28500,hypothetical protein,,,,E,
+7714,PA14_29600,"6-carboxy-5,6,7,8-tetrahydropterin synthase (EC 4.1.2.50)",,,,E,
+4596,PA14_29750,hypothetical protein,,,,E,
+3860,PA14_30270,Leucyl/phenylalanyl-tRNA--protein transferase (EC 2.3.2.6),,,,E,
+3913,PA14_30770,"Transcriptional regulator, AsnC family",,,,E,
+2608,PA14_31360,hypothetical protein,,,,E,
+7124,PA14_31750,Acyl-CoA:1-acyl-sn-glycerol-3-phosphate acyltransferase (EC 2.3.1.51),,,,E,
+5336,PA14_32710,"FIG006045: Sigma factor, ECF subfamily",,,,E,
+7403,PA14_33800,"Sigma-70 factor FpvI (ECF subfamily), controling pyoverdin biosynthesis @ FIG006045: Sigma factor, ECF subfamily",,,,E,
+7631,PA14_33920,"Two-component transcriptional response regulator, LuxR family",,,,E,
+5490,PA14_34030,Putative cytoplasmic protein USSDB7A,,,,E,
+3630,PA14_34370,"Various polyols ABC transporter, ATP-binding protein",,,,E,
+5374,PA14_34580,Acyl-CoA dehydrogenase; probable dibenzothiophene desulfurization enzyme,,,,E,
+4711,PA14_34700,Beta-lactamase class C-like and penicillin binding proteins (PBPs) superfamily,,,,E,
+5795,PA14_34740,hypothetical protein,,,,E,
+8986,PA14_35040,Phosphoenolpyruvate carboxykinase [ATP] (EC 4.1.1.49),,,,E,
+7604,PA14_35170,Redox-sensitive transcriptional activator SoxR,,,,E,
+7337,PA14_35200,Histone acetyltransferase HPA2 and related acetyltransferases,,,,E,
+5636,PA14_36530,NAD-dependent aldehyde dehydrogenases,,,,E,
+4940,PA14_36560,hypothetical protein,,,,E,
+3143,PA14_36850,hypothetical protein,,,,E,
+5447,PA14_37910,"Transcriptional regulator, LysR family",,,,E,
+7380,PA14_38020,hypothetical protein,,,,E,
+4261,PA14_38270,hypothetical protein,,,,E,
+3225,PA14_39100,hypothetical protein,,,,E,
+6721,PA14_39540,"Periplasmic aromatic aldehyde oxidoreductase, iron-sulfur subunit YagT",,,,E,
+6727,PA14_39630,hypothetical transporter PduT for various metalloporphyrins,,,,E,
+6958,PA14_40150,"Transcriptional regulator, Xre-family with cupin domain",,,,E,
+3452,PA14_42180,"Glutamine amidotransferase, class I",,,,E,
+8243,PA14_42300,Type III secretion spans bacterial envelope protein (YscG),,,,E,
+4069,PA14_42540,Type III secretion outermembrane negative regulator of secretion (TyeA),,,,E,
+6303,PA14_43230,hypothetical protein,,,,E,
+8258,PA14_43570,Threonine efflux protein,,,,E,
+8901,PA14_43580,"Transcriptional regulator, AraC family",,,,E,
+6173,PA14_43600,"1,4-dihydroxy-2-naphthoyl-CoA hydrolase (EC 3.1.2.28) in menaquinone biosynthesis",,,,E,
+7885,PA14_44140,hypothetical protein,,,,E,
+8782,PA14_44170,hypothetical protein,,,,E,
+8707,PA14_44780,"Transcriptional regulator, GntR family",,,,E,
+5670,PA14_45620,Chemotaxis regulator - transmits chemoreceptor signals to flagellar motor components CheY,,,,E,
+7709,PA14_46390,NA,,,,E,
+7273,PA14_46740,tRNA proofreading protein STM4549,,,,E,
+4737,PA14_47010,hypothetical protein,,,,E,
+9015,PA14_47420,NA,,,,E,
+4822,PA14_48550,hypothetical protein,,,,E,
+7276,PA14_48620,hypothetical protein,,,,E,
+7831,PA14_48750,hypothetical protein,,,,E,
+5244,PA14_50510,NA,,,,E,
+6338,PA14_52500,hypothetical protein,,,,E,
+5958,PA14_53690,NA,,,,E,
+7030,PA14_56670,NA,,,,E,
+6197,PA14_58210,Rare lipoprotein A,,,,E,
+NA,PA14_65600,NA,,,,E,
+8190,PA14_65690,"3',5'-cyclic-nucleotide phosphodiesterase (EC 3.1.4.17)",,,,E,
+7091,PA14_66610,Shikimate kinase I (EC 2.7.1.71),,,,E,
+6354,PA14_66720,Helicase PriA essential for oriC/DnaA-independent DNA replication,,,,E,
+7595,PA14_66960,NA,,,,E,
+5756,PA14_67700,hypothetical protein,,,,E,
+5382,PA14_69200,Thioredoxin,,,,E,
+4601,PA14_69660,Diaminopimelate decarboxylase and/or diaminopimelate epimerase leader peptide,,,,E,
+4309,PA14_71300,"Electron transfer flavoprotein, alpha subunit",,,,E,
+3120,PA14_71370,hypothetical protein,,,,E,
+162,PA14_71380,hypothetical protein,,,,E,
+3504,PA14_72070,NA,,,,E,

@@ -44,8 +44,11 @@ least_percent = 0.05
 # Output filenames
 array_similarity_dist_filename = "array_similarity_scores_dist_spell.svg"
 
-# Files containing genes with highest and lowest transcriptional similarity scores high and low
+# File containing genes with highest and lowest transcriptional similarity scores labeled
 array_similarity_scores_filename = "array_similarity_scores_spell.tsv"
+
+# File containing genes with transcriptional similarity score using RNA-seq and array compendium
+array_rnaseq_similarity_scores_filename = "array_rnaseq_similarity_scores.tsv"
 
 # +
 # Import correlation matrix
@@ -558,5 +561,6 @@ fig_array.savefig(
 #
 # * I also plotted the results comparing the least stable genes across the compendium, but its less clear what this is telling us since these genes are those that have unstable profiles across strains.
 
-# Save transcriptional similarity df
+# Save data files
 corr_summary_df.to_csv(array_similarity_scores_filename, sep="\t")
+all_similarity_scores.to_csv(array_rnaseq_similarity_scores_filename, sep="\t")
