@@ -183,7 +183,7 @@ f = sns.distplot(
     },
 )
 f = sns.distplot(
-    pao1_sra, color="#C6A9B5", label="PAO1", kde=False, hist_kws={"alpha": 0.8}
+    pao1_sra, color="#C6A9B5", label="PAO1", kde=False, hist_kws={"alpha": 0.7}
 )
 plt.axvline(threshold, color="black", linestyle="--")
 f.set_yscale("log")
@@ -219,7 +219,7 @@ g = sns.distplot(
     color="#895881",
     label="PA14",
     kde=False,
-    hist_kws={"alpha": 0.8},
+    hist_kws={"alpha": 0.7},
 )
 
 plt.axvline(threshold, color="black", linestyle="--")

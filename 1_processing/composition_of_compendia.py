@@ -175,19 +175,31 @@ my_cmap = [
     "#b9daed",
 ]
 
+# +
 fig_media = both_metadata_first_media.plot(
     kind="bar", stacked=True, color=my_cmap, figsize=(7, 6), width=0.65
 )
-# fig_media.set_color_cycle([cm(1.*i/num_colors) for i in range(num_colors)])
-plt.legend(bbox_to_anchor=(1.7, 1), loc="upper right", ncol=1, fontsize=14)
+# get legend handles and labels
+handles, labels = plt.gca().get_legend_handles_labels()
+
+# specify order of legend labels
+order = list(reversed(range(len(labels))))
+
+plt.legend(
+    [handles[i] for i in order],
+    [labels[i] for i in order],
+    bbox_to_anchor=(1.7, 1),
+    loc="upper right",
+    ncol=1,
+    fontsize=14,
+)
 plt.title("Media used in experiments", fontsize=18)
-# x_pos = [0,0.7]
-# fig_media.set_xticks(x_pos, ["PA14 compendium", "PAO1 compendium"])
 fig_media.set_xlabel("")
 fig_media.set_ylabel("Count", fontsize=16)
 fig_media.set_xticklabels(
     ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=16
 )
+# -
 
 # ## Plot Gene function distribution in PAO1 and PA14
 # Gene function will be at the study level as well since the gene will be the same
@@ -207,6 +219,7 @@ both_metadata_first_function
 # both_metadata_first_function.T.to_csv("gene_function_legend.tsv", sep="\t")
 # -
 
+# Note: this figure is no longer used in the manuscript
 fig_function = both_metadata_first_function.plot(
     kind="bar", stacked=True, colormap="Set2", figsize=(12, 10), width=0.7
 )
@@ -247,18 +260,33 @@ both_metadata_kegg
 # +
 # Output kegg metadata for Georgia to review
 # both_metadata_kegg.T.to_csv("pathway_legend.tsv", sep="\t")
-# -
 
+# +
 fig_kegg = both_metadata_kegg.plot(
     kind="bar", stacked=True, color=my_cmap, figsize=(7, 7), width=0.7
 )
-plt.legend(bbox_to_anchor=(1.95, 1), loc="upper right", ncol=1, fontsize=14)
+
+# get legend handles and labels
+handles, labels = plt.gca().get_legend_handles_labels()
+
+# specify order of legend labels
+order = list(reversed(range(len(labels))))
+
+plt.legend(
+    [handles[i] for i in order],
+    [labels[i] for i in order],
+    bbox_to_anchor=(1.95, 1),
+    loc="upper right",
+    ncol=1,
+    fontsize=14,
+)
 plt.title("KEGG pathway studied in experiments", fontsize=18)
 fig_kegg.set_xlabel("")
 fig_kegg.set_ylabel("Count", fontsize=16)
 fig_kegg.set_xticklabels(
     ["PA14 compendium", "PAO1 compendium"], rotation=0, fontsize=16
 )
+# -
 
 # Save plots
 fig_media.figure.savefig(
