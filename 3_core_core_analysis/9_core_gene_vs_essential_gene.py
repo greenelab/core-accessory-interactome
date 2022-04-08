@@ -103,3 +103,26 @@ for text in most_stable_venn.subset_labels:
 
 # % of core essential genes that are most stable
 109 / 267
+
+# ### Explore genes a little
+
+our_similarity = our_similarity.set_index("PA14 homolog id")
+
+# +
+# Genes that are shared
+shared_genes = set(most_stable_core).intersection(set(pub_core_essential))
+
+our_similarity.loc[shared_genes]
+
+# +
+# Genes that are only most stable
+only_stable_genes = set(most_stable_core).difference(set(pub_core_essential))
+
+our_similarity.loc[only_stable_genes]
+
+# +
+# Genes that are only essential
+only_essential_genes = set(pub_core_essential).difference(set(most_stable_core))
+shared_only_essential_genes = only_essential_genes.intersection(our_similarity.index)
+
+our_similarity.loc[shared_only_essential_genes]
