@@ -119,6 +119,10 @@ pao1_array_compendium.head()
 print(pa14_array_compendium.shape)
 pa14_array_compendium.head()
 
+# Save array compendia
+pao1_array_compendium.to_csv(paths.PAO1_COMPENDIUM_ARRAY, sep="\t")
+pa14_array_compendium.to_csv(paths.PA14_COMPENDIUM_ARRAY, sep="\t")
+
 # ## Calculate correlation matrix
 #
 # Here we're following the same processing we performed for the RNA-seq data, to log10 transform the data and then apply SPELL.

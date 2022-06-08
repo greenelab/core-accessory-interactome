@@ -61,11 +61,15 @@ ARRAY_COMPENDIUM_METADATA = LOCAL_DATA_DIR / "sample_annotations.tsv"
 PAO1_PREBIN_COMPENDIUM = LOCAL_DATA_DIR / "pao1_prebin_compendia.tsv"
 PA14_PREBIN_COMPENDIUM = LOCAL_DATA_DIR / "pa14_prebin_compendia.tsv"
 
-# Location for processed/binned compendia files
+# Location for processed/binned RNA-seq compendia files
 PAO1_COMPENDIUM_LABEL = LOCAL_DATA_DIR / "pao1_compendia_labeled.tsv"
 PA14_COMPENDIUM_LABEL = LOCAL_DATA_DIR / "pa14_compendia_labeled.tsv"
 PAO1_COMPENDIUM = LOCAL_DATA_DIR / "pao1_compendia.tsv"
 PA14_COMPENDIUM = LOCAL_DATA_DIR / "pa14_compendia.tsv"
+
+# Location for processed/binned Array compendia files
+PAO1_COMPENDIUM_ARRAY = LOCAL_DATA_DIR / "pao1_compendia_array.tsv"
+PA14_COMPENDIUM_ARRAY = LOCAL_DATA_DIR / "pa14_compendia_array.tsv"
 
 # Location of correlation matrices using MR normalized data
 PAO1_CORR_RAW = LOCAL_DATA_DIR / "pao1_all_raw_mat.tsv"
