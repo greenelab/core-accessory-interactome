@@ -156,6 +156,8 @@ pa14_pca_encoded_label = pa14_pca_encoded_df.merge(
 print(pao1_pca_encoded_label.shape)
 pao1_pca_encoded_label.head()
 
+pao1_pca_encoded_label["Strain type"].value_counts()
+
 # Colors
 edge_colors = {
     "Clinical Isolate": "#89A45E",
@@ -177,12 +179,12 @@ pao1_pca_encoded_label_subset = pao1_pca_encoded_label[
 ]
 
 fig1 = pn.ggplot(pao1_pca_encoded_label_subset, pn.aes(x="1", y="2"))
-fig1 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.3, size=3, stroke=0.8)
+fig1 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.2, size=1, stroke=0.8)
 fig1 += pn.scale_color_manual(values=edge_colors)
 fig1 += pn.labs(
     x="PCA 1",
     y="PCA 2",
-    title="Expression using PAO1 reference",
+    title="Least stable core gene expression using PAO1 reference",
 )
 fig1 += pn.theme_bw()
 fig1 += pn.theme(
@@ -210,12 +212,12 @@ pa14_pca_encoded_label_subset = pao1_pca_encoded_label[
 ]
 
 fig3 = pn.ggplot(pa14_pca_encoded_label_subset, pn.aes(x="1", y="2"))
-fig3 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.3, size=3, stroke=0.8)
+fig3 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.3, size=1, stroke=0.8)
 fig3 += pn.scale_color_manual(values=edge_colors)
 fig3 += pn.labs(
     x="PCA 1",
     y="PCA 2",
-    title="Expression using PA14 reference",
+    title="Least stable core gene expression using PA14 reference",
 )
 fig3 += pn.theme_bw()
 fig3 += pn.theme(

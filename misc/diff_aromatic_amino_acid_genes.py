@@ -23,6 +23,7 @@
 import os
 import json
 import pandas as pd
+import matplotlib.pyplot as plt
 from scripts import paths
 
 # ## Load expression compendia
@@ -148,8 +149,12 @@ diff_array
 # ## Plot
 
 # Plot box plot of rna-seq and array
-rnaseq_pao1_aa_expression_median.plot(kind="density")
-rnaseq_pa14_aa_expression_median.plot(kind="density")
+rnaseq_pao1_aa_expression_median.plot(kind="density", label="PAO1", legend=True)
+rnaseq_pa14_aa_expression_median.plot(kind="density", label="PA14", legend=True)
+plt.title("Median expression of AA genes using RNA-seq")
+plt.xlabel("Median expression")
 
-array_pao1_aa_expression_median.plot(kind="density")
-array_pa14_aa_expression_median.plot(kind="density")
+array_pao1_aa_expression_median.plot(kind="density", label="PAO1", legend=True)
+array_pa14_aa_expression_median.plot(kind="density", label="PA14", legend=True)
+plt.title("Median expression of AA genes using array")
+plt.xlabel("Median expression")
