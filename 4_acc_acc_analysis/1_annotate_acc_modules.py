@@ -64,9 +64,13 @@ pa14_membership = pd.read_csv(pa14_membership_filename, sep="\t", index_col=0, h
 print(pao1_membership.shape)
 print(pa14_membership.shape)
 
-pao1_membership.value_counts().median()
+print("min, ", pao1_membership.value_counts().min())
+print("median, ", pao1_membership.value_counts().median())
+print("max, ", pao1_membership.value_counts().max())
 
-pa14_membership.value_counts().median()
+print("min, ", pa14_membership.value_counts().min())
+print("median, ", pa14_membership.value_counts().median())
+print("max, ", pa14_membership.value_counts().max())
 
 # +
 # Import gene metadata
