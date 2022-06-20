@@ -131,6 +131,10 @@ pca = PCA(n_components=2)
 model_pca_pao1 = pca.fit(normalized_pao1_expression_df)
 
 pao1_pca_encoded = model_pca_pao1.transform(normalized_pao1_expression_df)
+# -
+
+# Get variance explain
+model_pca_pao1.explained_variance_ratio_
 
 # +
 pca = PCA(n_components=2)
@@ -138,6 +142,9 @@ model_pca_pa14 = pca.fit(normalized_pa14_expression_df)
 
 pa14_pca_encoded = model_pca_pa14.transform(normalized_pa14_expression_df)
 # -
+
+# Get variance explain
+model_pca_pa14.explained_variance_ratio_
 
 # Format
 pao1_pca_encoded_df = pd.DataFrame(
@@ -183,8 +190,8 @@ fig1 = pn.ggplot(pao1_pca_encoded_label, pn.aes(x="1", y="2"))
 fig1 += pn.geom_point(pn.aes(color="compendium"), alpha=0.3, size=3, stroke=0.8)
 fig1 += pn.scale_color_manual(values=edge_colors)
 fig1 += pn.labs(
-    x="PCA 1",
-    y="PCA 2",
+    x="PCA 1 (17.1%)",
+    y="PCA 2 (5.9%)",
     title="Expression using PAO1 reference",
 )
 fig1 += pn.theme_bw()
