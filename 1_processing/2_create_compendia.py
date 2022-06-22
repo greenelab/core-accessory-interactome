@@ -79,6 +79,13 @@ core_acc_dict = utils.get_my_core_acc_genes(
 pao1_acc = core_acc_dict["acc_pao1"]
 pa14_acc = core_acc_dict["acc_pa14"]
 
+pao1_acc_df = pd.DataFrame(pao1_acc)
+pa14_acc_df = pd.DataFrame(pa14_acc)
+
+# Save to files (supplementary data tables)
+pao1_acc_df.to_csv("pao1_acc_gene_ids.tsv", sep="\t")
+pa14_acc_df.to_csv("pa14_acc_gene_ids.tsv", sep="\t")
+
 # ## Format expression data
 #
 # Format index to only include experiment id. This will be used to map to expression data and SRA labels later
