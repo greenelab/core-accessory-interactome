@@ -217,8 +217,8 @@ fig3 = pn.ggplot(pa14_pca_encoded_label, pn.aes(x="1", y="2"))
 fig3 += pn.geom_point(pn.aes(color="compendium"), alpha=0.3, size=3, stroke=0.8)
 fig3 += pn.scale_color_manual(values=edge_colors)
 fig3 += pn.labs(
-    x="PCA 1",
-    y="PCA 2",
+    x="PCA 1 (16.2%)",
+    y="PCA 2 (5.7%)",
     title="Expression using PA14 reference",
 )
 fig3 += pn.theme_bw()
