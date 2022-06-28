@@ -187,7 +187,7 @@ fig1 = pn.ggplot(
 )
 fig1 += pn.scales.scale_x_log10()
 fig1 += pn.scales.scale_y_log10()
-fig1 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.3, size=3, stroke=0.8)
+fig1 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.5, size=3, stroke=0.8)
 fig1 += pn.scale_color_manual(values=colors)
 fig1 += pn.labs(
     x="median expression of PAO1-only genes",
@@ -224,7 +224,7 @@ fig2 = pn.ggplot(
 )
 fig2 += pn.scales.scale_x_log10()
 fig2 += pn.scales.scale_y_log10()
-fig2 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.3, size=3, stroke=0.8)
+fig2 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.5, size=3, stroke=0.8)
 fig2 += pn.scale_color_manual(values=colors)
 fig2 += pn.labs(
     x="median expression of PAO1-only genes",
