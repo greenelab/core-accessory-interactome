@@ -56,35 +56,35 @@ def make_figure_panel(filename, scale_x_input, scale_y_input, x_loc, y_loc):
 
 # Create panels for figure 1
 panel_1a = make_figure_panel(
-    "../0_explore_data/Expression_accessory_genes_all_samples.svg",
+    "../0_explore_data/Expression_accessory_genes_all_samples_log10.svg",
     scale_x_input=1.5,
     scale_y_input=1.5,
     x_loc=10,
     y_loc=30,
 )
 panel_1b = make_figure_panel(
-    "../1_processing/MR_median_acc_expression_pa14_compendium_25threshold.svg",
+    "../1_processing/MR_median_acc_expression_pao1_compendium_25threshold.svg",
     scale_x_input=1.5,
     scale_y_input=1.5,
     x_loc=10,
     y_loc=600,
 )
 panel_1c = make_figure_panel(
-    "../1_processing/MR_median_acc_expression_pao1_compendium_25threshold.svg",
+    "../1_processing/MR_median_acc_expression_pa14_compendium_25threshold.svg",
     scale_x_input=1.5,
     scale_y_input=1.5,
     x_loc=10,
     y_loc=1200,
 )
 panel_1b_inset = make_figure_panel(
-    "../1_processing/dist_median_acc_expression_pa14_compendium_25threshold.svg",
+    "../1_processing/dist_median_acc_expression_pao1_compendium_25threshold.svg",
     scale_x_input=0.8,
     scale_y_input=0.8,
     x_loc=250,
     y_loc=700,
 )
 panel_1c_inset = make_figure_panel(
-    "../1_processing/dist_median_acc_expression_pao1_compendium_25threshold.svg",
+    "../1_processing/dist_median_acc_expression_pa14_compendium_25threshold.svg",
     scale_x_input=0.8,
     scale_y_input=0.8,
     x_loc=250,
@@ -111,13 +111,13 @@ panel_1f = make_figure_panel(
     x_loc=850,
     y_loc=1200,
 )
-"""panel_1g = make_figure_panel(
+panel_1g = make_figure_panel(
     "../1_processing/pa_pa14_ref_pca.svg",
     scale_x_input=1.5,
     scale_y_input=1.5,
-    x_loc=850,
+    x_loc=1500,
     y_loc=1200,
-)"""
+)
 
 panel_1a_label = sg.TextElement(10, 20, "A", size=18, weight="bold", font="Verdana")
 panel_1b_label = sg.TextElement(10, 600, "B", size=18, weight="bold", font="Verdana")
@@ -125,9 +125,9 @@ panel_1c_label = sg.TextElement(10, 1200, "C", size=18, weight="bold", font="Ver
 panel_1d_label = sg.TextElement(850, 20, "D", size=18, weight="bold", font="Verdana")
 panel_1e_label = sg.TextElement(850, 600, "E", size=18, weight="bold", font="Verdana")
 panel_1f_label = sg.TextElement(850, 1200, "F", size=18, weight="bold", font="Verdana")
-# panel_1g_label = sg.TextElement(850, 1200, "G", size=18, weight="bold", font="Verdana")
+panel_1g_label = sg.TextElement(1500, 1200, "G", size=18, weight="bold", font="Verdana")
 
-figure_1 = sg.SVGFigure("2000", "1700")
+figure_1 = sg.SVGFigure("2400", "1700")
 figure_1.append(
     [
         etree.Element("rect", {"width": "100%", "height": "100%", "fill": "white"}),
@@ -139,14 +139,14 @@ figure_1.append(
         panel_1d,
         panel_1e,
         panel_1f,
-        # panel_1g,
+        panel_1g,
         panel_1a_label,
         panel_1b_label,
         panel_1c_label,
         panel_1d_label,
         panel_1e_label,
         panel_1f_label,
-        # panel_1g_label,
+        panel_1g_label,
     ]
 )
 display(SVG(figure_1.to_str()))

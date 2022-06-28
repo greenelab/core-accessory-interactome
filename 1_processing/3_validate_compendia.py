@@ -185,12 +185,14 @@ fig1 = pn.ggplot(
     pao1_pa14_acc_pao1_compendium_label,
     pn.aes(x="median acc expression_pao1", y="median acc expression_pa14"),
 )
-fig1 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.3, size=3, stroke=0.8)
+fig1 += pn.scales.scale_x_log10()
+fig1 += pn.scales.scale_y_log10()
+fig1 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.5, size=3, stroke=0.8)
 fig1 += pn.scale_color_manual(values=colors)
 fig1 += pn.labs(
     x="median expression of PAO1-only genes",
     y="median expression of PA14-only genes",
-    title="PAO1 compendium accessory gene expression",
+    title="PAO1 sample compendium accessory gene expression",
     # title="Accessory gene expression in PAO1 compendium",
 )
 fig1 += pn.theme_bw()
@@ -220,12 +222,14 @@ fig2 = pn.ggplot(
     pao1_pa14_acc_pa14_compendium_label,
     pn.aes(x="median acc expression_pao1", y="median acc expression_pa14"),
 )
-fig2 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.3, size=3, stroke=0.8)
+fig2 += pn.scales.scale_x_log10()
+fig2 += pn.scales.scale_y_log10()
+fig2 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.5, size=3, stroke=0.8)
 fig2 += pn.scale_color_manual(values=colors)
 fig2 += pn.labs(
     x="median expression of PAO1-only genes",
     y="median expression of PA14-only genes",
-    title="PA14 compendium accessory gene expression",
+    title="PA14 sample compendium accessory gene expression",
     # title="Accessory gene expression in PA14 compendium",
 )
 fig2 += pn.theme_bw()

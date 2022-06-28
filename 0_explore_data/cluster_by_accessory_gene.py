@@ -523,7 +523,7 @@ fig3 = pn.ggplot(
     pao1_pa14_acc_expression_label,
     pn.aes(x="median acc expression_pao1", y="median acc expression_pa14"),
 )
-fig3 += pn.geom_point(pn.aes(color="Strain type_pao1"), alpha=0.3, size=3, stroke=0.8)
+fig3 += pn.geom_point(pn.aes(color="Strain type_pao1"), alpha=0.5, size=3, stroke=0.8)
 fig3 += pn.scale_color_manual(values=colors)
 fig3 += pn.labs(
     x="median expression of PAO1-only genes",
@@ -568,12 +568,12 @@ fig4 = pn.ggplot(
 )
 fig4 += pn.scales.scale_x_log10()
 fig4 += pn.scales.scale_y_log10()
-fig4 += pn.geom_point(pn.aes(color="Strain type_pao1"), alpha=0.4)
+fig4 += pn.geom_point(pn.aes(color="Strain type_pao1"), alpha=0.5, size=3, stroke=0.8)
 fig4 += pn.scale_color_manual(values=colors)
 fig4 += pn.labs(
     x="median expression of PAO1-only genes",
     y="median expression of PA14-only genes",
-    title="log10 MR normalized estimated counts of accessory genes",
+    title="Accessory gene expression for all samples",
 )
 fig4 += pn.theme_bw()
 fig4 += pn.theme(
@@ -586,10 +586,16 @@ fig4 += pn.theme(
     axis_text=pn.element_text(family="sans-serif", size=10),
     axis_title=pn.element_text(family="sans-serif", size=12),
 )
-fig4 += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
+fig4 += pn.guides(
+    colour=pn.guide_legend(
+        title="SRA strain type", override_aes={"alpha": 1, "size": 3}
+    )
+)
 
 
 print(fig4)
+
+fig4.save("Expression_accessory_genes_all_samples_log10.svg", format="svg", dpi=300)
 # -
 
 # **Note:**
