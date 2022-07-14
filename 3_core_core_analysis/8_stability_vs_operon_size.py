@@ -18,7 +18,7 @@
 #
 # Let's check if co-operonic genes tend to be more stable compared to non co-operonic genes. This will be something we want to note in the manuscript text.
 #
-# Intuitively, it would make sense that _____
+# Since co-operonic genes are co-transcribed, we might expect their "neighbors" (genes with whom they are most highly correlated), we determined if those genes that were the most stable were those in large operons
 
 # +
 # %load_ext autoreload
@@ -29,6 +29,7 @@ import random
 import textwrap
 import pandas as pd
 import numpy as np
+from scipy import stats
 import seaborn as sns
 import matplotlib.pyplot as plt
 from scripts import paths, utils, annotations
@@ -96,6 +97,20 @@ pao1_similarity_operon.head()
 
 print(pa14_similarity_operon.shape)
 pa14_similarity_operon.head()
+
+r, p = stats.spearmanr(
+    pao1_similarity_operon["Transcriptional similarity across strains"],
+    pao1_similarity_operon["operon_size"],
+    nan_policy="omit",
+)
+print(r, p)
+
+r, p = stats.spearmanr(
+    pa14_similarity_operon["Transcriptional similarity across strains"],
+    pa14_similarity_operon["operon_size"],
+    nan_policy="omit",
+)
+print(r, p)
 
 # ## Plot
 
