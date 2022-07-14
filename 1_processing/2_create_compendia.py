@@ -200,7 +200,16 @@ sample_to_strain_table_full_processed["Strain type"] = aggregated_label
 sample_to_strain_table = sample_to_strain_table_full_processed["Strain type"].to_frame()
 
 sample_to_strain_table.head()
+
+# +
+test = pao1_expression.merge(sample_to_strain_table, left_index=True, right_index=True)
+
+print(test.shape)
+test.head()
 # -
+
+# SRA labels for 2,333 compendium
+test["Strain type"].value_counts()
 
 # ## Save pre-binned data with median accessory expression
 # This dataset will be used for Georgia's manuscript, which describes how we generated these compendia
@@ -307,6 +316,11 @@ pao1_expression_label["Strain type"].value_counts()
 
 pa14_expression_label["Strain type"].value_counts()
 
+# Percent of PAO1 SRA labeled samples that are binned into PAO1 compendium based on expression
+# Similarly for PA14
+print(639 / 646)
+print(434 / 441)
+
 # ## Check
 #
 # Manually look up the samples we binned as PAO1 but SRA labeled as PA14. Are these cases of samples being mislabeled?
@@ -334,8 +348,7 @@ pao1_pa14_acc_expression.loc[
     ["median_acc_expression_pao1", "median_acc_expression_pa14"],
 ]
 
-# +
-# Save compendia with SRA label
+"""# Save compendia with SRA label
 pao1_expression_label.to_csv(paths.PAO1_COMPENDIUM_LABEL, sep="\t")
 pa14_expression_label.to_csv(paths.PA14_COMPENDIUM_LABEL, sep="\t")
 
@@ -344,4 +357,4 @@ pao1_expression_binned.to_csv(paths.PAO1_COMPENDIUM, sep="\t")
 pa14_expression_binned.to_csv(paths.PA14_COMPENDIUM, sep="\t")
 
 # Save processed metadata table
-sample_to_strain_table.to_csv(paths.SAMPLE_TO_STRAIN_PROCESSED, sep="\t")
+sample_to_strain_table.to_csv(paths.SAMPLE_TO_STRAIN_PROCESSED, sep="\t")"""
