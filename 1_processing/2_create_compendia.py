@@ -82,9 +82,11 @@ pa14_acc = core_acc_dict["acc_pa14"]
 pao1_acc_df = pd.DataFrame(pao1_acc)
 pa14_acc_df = pd.DataFrame(pa14_acc)
 
+# +
 # Save to files (supplementary data tables)
-pao1_acc_df.to_csv("pao1_acc_gene_ids.tsv", sep="\t")
-pa14_acc_df.to_csv("pa14_acc_gene_ids.tsv", sep="\t")
+# pao1_acc_df.to_csv("pao1_acc_gene_ids.tsv", sep="\t")
+# pa14_acc_df.to_csv("pa14_acc_gene_ids.tsv", sep="\t")
+# -
 
 # ## Format expression data
 #
@@ -109,9 +111,11 @@ pao1_expression.head()
 
 pa14_expression.head()
 
+# +
 # Save pre-binned expression data
-pao1_expression.to_csv(paths.PAO1_PREBIN_COMPENDIUM, sep="\t")
-pa14_expression.to_csv(paths.PA14_PREBIN_COMPENDIUM, sep="\t")
+# pao1_expression.to_csv(paths.PAO1_PREBIN_COMPENDIUM, sep="\t")
+# pa14_expression.to_csv(paths.PA14_PREBIN_COMPENDIUM, sep="\t")
+# -
 
 # ## Bin samples as PAO1 or PA14
 
@@ -265,10 +269,12 @@ assert (
     == pao1_pa14_acc_expression_label.shape[0]
 )
 
+# +
 # Save
-pao1_pa14_acc_expression_label.to_csv(
-    "prebinned_compendia_acc_expression.tsv", sep="\t"
-)
+# pao1_pa14_acc_expression_label.to_csv(
+#    "prebinned_compendia_acc_expression.tsv", sep="\t"
+# )
+# -
 
 # ## Create compendia
 #
@@ -326,6 +332,8 @@ print(434 / 441)
 # Manually look up the samples we binned as PAO1 but SRA labeled as PA14. Are these cases of samples being mislabeled?
 
 pao1_expression_label[pao1_expression_label["Strain type"] == "PA14"]
+
+pa14_expression_label[pa14_expression_label["Strain type"] == "PAO1"]
 
 # Note: These are the 7 PA14 labeled samples using threshold of 0
 #

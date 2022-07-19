@@ -19,6 +19,7 @@
 # %autoreload 2
 # %matplotlib inline
 import os
+import numpy as np
 import pandas as pd
 import plotnine as pn
 import seaborn as sns
@@ -171,6 +172,11 @@ pao1_pa14_acc_pa14_compendium_label[
     "Strain type"
 ] = pao1_pa14_acc_pa14_compendium_label["Strain type"].fillna("NA")
 
+pao1_pa14_acc_pao1_compendium_label.loc[
+    pao1_pa14_acc_pao1_compendium_label["Strain type"] == "PA14",
+    ["median acc expression_pao1", "median acc expression_pa14"],
+]
+
 # +
 # Plot accessory gene expression in PAO1 compendium
 # Note: commented out code is for plotting figure for Georgia's manuscript
@@ -185,9 +191,11 @@ fig1 = pn.ggplot(
     pao1_pa14_acc_pao1_compendium_label,
     pn.aes(x="median acc expression_pao1", y="median acc expression_pa14"),
 )
-fig1 += pn.scales.scale_x_log10()
-fig1 += pn.scales.scale_y_log10()
-fig1 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.5, size=3, stroke=0.8)
+
+fig1 += pn.scales.scale_x_log10(breaks=[0, 1, 10, 100, 1000])
+fig1 += pn.scales.scale_y_log10(breaks=[0, 1, 10, 100, 1000])
+# fig1 += pn.scales.ylim(0,1000)
+fig1 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.7, size=4, stroke=0.7)
 fig1 += pn.scale_color_manual(values=colors)
 fig1 += pn.labs(
     x="median expression of PAO1-only genes",
@@ -208,7 +216,8 @@ fig1 += pn.theme(
 )
 fig1 += pn.guides(
     colour=pn.guide_legend(
-        title="SRA strain type", override_aes={"alpha": 1, "size": 3}
+        title="SRA strain type",
+        # override_aes={"alpha": 1, "size": 3}
     )
 )
 
@@ -222,9 +231,9 @@ fig2 = pn.ggplot(
     pao1_pa14_acc_pa14_compendium_label,
     pn.aes(x="median acc expression_pao1", y="median acc expression_pa14"),
 )
-fig2 += pn.scales.scale_x_log10()
-fig2 += pn.scales.scale_y_log10()
-fig2 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.5, size=3, stroke=0.8)
+fig2 += pn.scales.scale_x_log10(breaks=[0, 1, 10, 100, 1000])
+fig2 += pn.scales.scale_y_log10(breaks=[0, 1, 10, 100, 1000])
+fig2 += pn.geom_point(pn.aes(color="Strain type"), alpha=0.7, size=4, stroke=0.7)
 fig2 += pn.scale_color_manual(values=colors)
 fig2 += pn.labs(
     x="median expression of PAO1-only genes",
@@ -245,7 +254,8 @@ fig2 += pn.theme(
 )
 fig2 += pn.guides(
     colour=pn.guide_legend(
-        title="SRA strain type", override_aes={"alpha": 1, "size": 3}
+        title="SRA strain type",
+        # override_aes={"alpha": 1, "size": 3}
     )
 )
 

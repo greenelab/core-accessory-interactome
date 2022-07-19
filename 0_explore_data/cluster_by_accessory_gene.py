@@ -568,7 +568,7 @@ fig4 = pn.ggplot(
 )
 fig4 += pn.scales.scale_x_log10()
 fig4 += pn.scales.scale_y_log10()
-fig4 += pn.geom_point(pn.aes(color="Strain type_pao1"), alpha=0.5, size=3, stroke=0.8)
+fig4 += pn.geom_point(pn.aes(color="Strain type_pao1"), alpha=0.7, size=4, stroke=0.7)
 fig4 += pn.scale_color_manual(values=colors)
 fig4 += pn.labs(
     x="median expression of PAO1-only genes",
@@ -588,7 +588,8 @@ fig4 += pn.theme(
 )
 fig4 += pn.guides(
     colour=pn.guide_legend(
-        title="SRA strain type", override_aes={"alpha": 1, "size": 3}
+        title="SRA strain type",
+        # override_aes={"alpha": 1, "size": 3}
     )
 )
 

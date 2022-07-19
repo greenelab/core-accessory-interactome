@@ -186,14 +186,20 @@ edge_colors = {
 
 # +
 # Plot gene expression in PAO1 reference
-fig1 = pn.ggplot(pao1_pca_encoded_label, pn.aes(x="1", y="2"))
-fig1 += pn.geom_point(pn.aes(color="compendium"), alpha=0.3, size=3, stroke=0.8)
-fig1 += pn.scale_color_manual(values=edge_colors)
+
+# Plot pao1 and pa14 compendia separately to better visualize the overlap
+fig1 = pn.ggplot(
+    pao1_pca_encoded_label[pao1_pca_encoded_label["compendium"] == "PAO1"],
+    pn.aes(x="1", y="2"),
+)
+fig1 += pn.geom_point(color="#C6A9B5", alpha=0.3, size=4, stroke=0.8)
 fig1 += pn.labs(
     x="PCA 1 (17.1%)",
     y="PCA 2 (5.9%)",
-    title="Expression using PAO1 reference",
+    title="PAO1 samples mapped to PAO1 reference",
 )
+fig1 += pn.scales.xlim(-50, 250)
+fig1 += pn.scales.ylim(-60, 100)
 fig1 += pn.theme_bw()
 fig1 += pn.theme(
     legend_title_align="center",
@@ -205,22 +211,57 @@ fig1 += pn.theme(
     axis_text=pn.element_text(family="sans-serif", size=12),
     axis_title=pn.element_text(family="sans-serif", size=15),
 )
-fig1 += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
 
 print(fig1)
 
-fig1.save("pa_pao1_ref_pca.svg", format="svg", dpi=300)
+fig1.save("pao1_compendium_pao1_ref_pca.svg", format="svg", dpi=300)
+
+# +
+# Plot gene expression in PAO1 reference
+
+# Plot pao1 and pa14 compendia separately to better visualize the overlap
+fig2 = pn.ggplot(
+    pao1_pca_encoded_label[pao1_pca_encoded_label["compendium"] == "PA14"],
+    pn.aes(x="1", y="2"),
+)
+fig2 += pn.geom_point(color="#895881", alpha=0.3, size=4, stroke=0.8)
+fig2 += pn.labs(
+    x="PCA 1 (17.1%)",
+    y="PCA 2 (5.9%)",
+    title="PA14 samples mapped to PAO1 reference",
+)
+fig2 += pn.scales.xlim(-50, 250)
+fig2 += pn.scales.ylim(-60, 100)
+fig2 += pn.theme_bw()
+fig2 += pn.theme(
+    legend_title_align="center",
+    plot_background=pn.element_rect(fill="white"),
+    legend_key=pn.element_rect(fill="white", colour="white"),
+    legend_title=pn.element_text(family="sans-serif", size=15),
+    legend_text=pn.element_text(family="sans-serif", size=12),
+    plot_title=pn.element_text(family="sans-serif", size=15),
+    axis_text=pn.element_text(family="sans-serif", size=12),
+    axis_title=pn.element_text(family="sans-serif", size=15),
+)
+
+print(fig2)
+
+fig2.save("pa14_compendium_pao1_ref_pca.svg", format="svg", dpi=300)
 
 # +
 # Plot gene expression in PA14 reference
-fig3 = pn.ggplot(pa14_pca_encoded_label, pn.aes(x="1", y="2"))
-fig3 += pn.geom_point(pn.aes(color="compendium"), alpha=0.3, size=3, stroke=0.8)
-fig3 += pn.scale_color_manual(values=edge_colors)
+fig3 = pn.ggplot(
+    pa14_pca_encoded_label[pa14_pca_encoded_label["compendium"] == "PAO1"],
+    pn.aes(x="1", y="2"),
+)
+fig3 += pn.geom_point(color="#C6A9B5", alpha=0.3, size=4, stroke=0.8)
 fig3 += pn.labs(
     x="PCA 1 (16.2%)",
     y="PCA 2 (5.7%)",
-    title="Expression using PA14 reference",
+    title="PAO1 samples mapped to PA14 reference",
 )
+fig3 += pn.scales.xlim(-50, 250)
+fig3 += pn.scales.ylim(-60, 150)
 fig3 += pn.theme_bw()
 fig3 += pn.theme(
     legend_title_align="center",
@@ -232,12 +273,40 @@ fig3 += pn.theme(
     axis_text=pn.element_text(family="sans-serif", size=12),
     axis_title=pn.element_text(family="sans-serif", size=15),
 )
-fig3 += pn.guides(colour=pn.guide_legend(override_aes={"alpha": 1}))
-fig3 += pn.guides(fill=pn.guide_legend(override_aes={"alpha": 1}))
 
 print(fig3)
 
-fig3.save("pa_pa14_ref_pca.svg", format="svg", dpi=300)
+fig3.save("pao1_compendium_pa14_ref_pca.svg", format="svg", dpi=300)
+
+# +
+# Plot gene expression in PA14 reference
+fig4 = pn.ggplot(
+    pa14_pca_encoded_label[pa14_pca_encoded_label["compendium"] == "PA14"],
+    pn.aes(x="1", y="2"),
+)
+fig4 += pn.geom_point(color="#895881", alpha=0.3, size=4, stroke=0.8)
+fig4 += pn.labs(
+    x="PCA 1 (16.2%)",
+    y="PCA 2 (5.7%)",
+    title="PA14 samples mapped to PA14 reference",
+)
+fig4 += pn.scales.xlim(-50, 250)
+fig4 += pn.scales.ylim(-60, 150)
+fig4 += pn.theme_bw()
+fig4 += pn.theme(
+    legend_title_align="center",
+    plot_background=pn.element_rect(fill="white"),
+    legend_key=pn.element_rect(fill="white", colour="white"),
+    legend_title=pn.element_text(family="sans-serif", size=15),
+    legend_text=pn.element_text(family="sans-serif", size=12),
+    plot_title=pn.element_text(family="sans-serif", size=15),
+    axis_text=pn.element_text(family="sans-serif", size=12),
+    axis_title=pn.element_text(family="sans-serif", size=15),
+)
+
+print(fig4)
+
+fig4.save("pa14_compendium_pa14_ref_pca.svg", format="svg", dpi=300)
 # -
 
 # ## Calculate similarity between compendium

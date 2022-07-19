@@ -54,88 +54,77 @@ def make_figure_panel(filename, scale_x_input, scale_y_input, x_loc, y_loc):
 
 # ## Figure 1
 
+# +
 # Create panels for figure 1
 panel_1a = make_figure_panel(
     "../0_explore_data/Expression_accessory_genes_all_samples_log10.svg",
-    scale_x_input=1.5,
-    scale_y_input=1.5,
+    scale_x_input=1.8,
+    scale_y_input=1.8,
     x_loc=10,
     y_loc=30,
 )
+
 panel_1b = make_figure_panel(
-    "../1_processing/MR_median_acc_expression_pao1_compendium_25threshold.svg",
-    scale_x_input=1.5,
-    scale_y_input=1.5,
+    "../1_processing/dist_median_acc_expression_pao1_compendium_25threshold.svg",
+    scale_x_input=1,
+    scale_y_input=1,
     x_loc=10,
-    y_loc=600,
+    y_loc=650,
 )
 panel_1c = make_figure_panel(
-    "../1_processing/MR_median_acc_expression_pa14_compendium_25threshold.svg",
-    scale_x_input=1.5,
-    scale_y_input=1.5,
-    x_loc=10,
-    y_loc=1200,
-)
-panel_1b_inset = make_figure_panel(
-    "../1_processing/dist_median_acc_expression_pao1_compendium_25threshold.svg",
-    scale_x_input=0.8,
-    scale_y_input=0.8,
-    x_loc=250,
-    y_loc=700,
-)
-panel_1c_inset = make_figure_panel(
     "../1_processing/dist_median_acc_expression_pa14_compendium_25threshold.svg",
-    scale_x_input=0.8,
-    scale_y_input=0.8,
-    x_loc=250,
-    y_loc=1300,
+    scale_x_input=1,
+    scale_y_input=1,
+    x_loc=10,
+    y_loc=1050,
 )
+
 panel_1d = make_figure_panel(
+    "../1_processing/pao1_compendium_pao1_ref_pca.svg",
+    scale_x_input=1.2,
+    scale_y_input=1.2,
+    x_loc=450,
+    y_loc=650,
+)
+panel_1e = make_figure_panel(
+    "../1_processing/pa14_compendium_pao1_ref_pca.svg",
+    scale_x_input=1.2,
+    scale_y_input=1.2,
+    x_loc=450,
+    y_loc=1050,
+)
+
+panel_1f = make_figure_panel(
     "../1_processing/compendia_media.svg",
     scale_x_input=1.35,
     scale_y_input=1.35,
-    x_loc=850,
+    x_loc=1100,
     y_loc=30,
 )
-panel_1e = make_figure_panel(
+panel_1g = make_figure_panel(
     "../1_processing/compendia_kegg.svg",
     scale_x_input=1.35,
     scale_y_input=1.35,
-    x_loc=850,
-    y_loc=600,
+    x_loc=1100,
+    y_loc=700,
 )
-panel_1f = make_figure_panel(
-    "../1_processing/pa_pao1_ref_pca.svg",
-    scale_x_input=1.5,
-    scale_y_input=1.5,
-    x_loc=850,
-    y_loc=1200,
-)
-panel_1g = make_figure_panel(
-    "../1_processing/pa_pa14_ref_pca.svg",
-    scale_x_input=1.5,
-    scale_y_input=1.5,
-    x_loc=1500,
-    y_loc=1200,
-)
+# -
 
 panel_1a_label = sg.TextElement(10, 20, "A", size=18, weight="bold", font="Verdana")
-panel_1b_label = sg.TextElement(10, 600, "B", size=18, weight="bold", font="Verdana")
-panel_1c_label = sg.TextElement(10, 1200, "C", size=18, weight="bold", font="Verdana")
-panel_1d_label = sg.TextElement(850, 20, "D", size=18, weight="bold", font="Verdana")
-panel_1e_label = sg.TextElement(850, 600, "E", size=18, weight="bold", font="Verdana")
-panel_1f_label = sg.TextElement(850, 1200, "F", size=18, weight="bold", font="Verdana")
-panel_1g_label = sg.TextElement(1500, 1200, "G", size=18, weight="bold", font="Verdana")
+panel_1b_label = sg.TextElement(10, 650, "B", size=18, weight="bold", font="Verdana")
+panel_1c_label = sg.TextElement(10, 1050, "C", size=18, weight="bold", font="Verdana")
+panel_1d_label = sg.TextElement(450, 650, "D", size=18, weight="bold", font="Verdana")
+panel_1e_label = sg.TextElement(450, 1050, "E", size=18, weight="bold", font="Verdana")
+panel_1f_label = sg.TextElement(1100, 30, "F", size=18, weight="bold", font="Verdana")
+panel_1g_label = sg.TextElement(1100, 700, "G", size=18, weight="bold", font="Verdana")
 
-figure_1 = sg.SVGFigure("2400", "1700")
+figure_1 = sg.SVGFigure("2200", "1500")
 figure_1.append(
     [
         etree.Element("rect", {"width": "100%", "height": "100%", "fill": "white"}),
         panel_1a,
         panel_1b,
         panel_1c,
-        panel_1b_inset,
-        panel_1c_inset,
         panel_1d,
         panel_1e,
         panel_1f,
@@ -262,33 +251,55 @@ figure_3.save("output/figure_3.svg")
 
 # ## Supplement 1
 
-# Create panels for figure 1
+# +
 panel_S1a = make_figure_panel(
-    "../3_core_core_analysis/corr_stability_vs_operon_size_pao1.svg",
-    scale_x_input=1,
-    scale_y_input=1,
+    "../1_processing/MR_median_acc_expression_pao1_compendium_25threshold.svg",
+    scale_x_input=1.2,
+    scale_y_input=1.2,
     x_loc=10,
     y_loc=20,
 )
 panel_S1b = make_figure_panel(
-    "../3_core_core_analysis/corr_stability_vs_operon_size_pa14.svg",
-    scale_x_input=1,
-    scale_y_input=1,
-    x_loc=500,
+    "../1_processing/MR_median_acc_expression_pa14_compendium_25threshold.svg",
+    scale_x_input=1.2,
+    scale_y_input=1.2,
+    x_loc=700,
     y_loc=20,
 )
 
-panel_S1a_label = sg.TextElement(10, 20, "A", size=18, weight="bold", font="Verdana")
-panel_S1b_label = sg.TextElement(500, 20, "B", size=18, weight="bold", font="Verdana")
+panel_S1c = make_figure_panel(
+    "../1_processing/pao1_compendium_pa14_ref_pca.svg",
+    scale_x_input=1.2,
+    scale_y_input=1.2,
+    x_loc=10,
+    y_loc=500,
+)
+panel_S1d = make_figure_panel(
+    "../1_processing/pa14_compendium_pa14_ref_pca.svg",
+    scale_x_input=1.2,
+    scale_y_input=1.2,
+    x_loc=700,
+    y_loc=500,
+)
+# -
 
-figure_S1 = sg.SVGFigure("900", "500")
+panel_S1a_label = sg.TextElement(10, 20, "A", size=18, weight="bold", font="Verdana")
+panel_S1b_label = sg.TextElement(700, 20, "B", size=18, weight="bold", font="Verdana")
+panel_S1c_label = sg.TextElement(20, 500, "C", size=18, weight="bold", font="Verdana")
+panel_S1d_label = sg.TextElement(700, 500, "D", size=18, weight="bold", font="Verdana")
+
+figure_S1 = sg.SVGFigure("1400", "1000")
 figure_S1.append(
     [
         etree.Element("rect", {"width": "100%", "height": "100%", "fill": "white"}),
         panel_S1a,
         panel_S1b,
+        panel_S1c,
+        panel_S1d,
         panel_S1a_label,
         panel_S1b_label,
+        panel_S1c_label,
+        panel_S1d_label,
     ]
 )
 display(SVG(figure_S1.to_str()))
@@ -298,18 +309,17 @@ figure_S1.save("output/figure_S1.svg")
 
 # ## Supplement 2
 
-# Create panels for figure 1
 panel_S2a = make_figure_panel(
-    "../3_core_core_analysis/array_similarity_scores_dist_spell.svg",
-    scale_x_input=0.95,
-    scale_y_input=0.95,
+    "../3_core_core_analysis/corr_stability_vs_operon_size_pao1.svg",
+    scale_x_input=1,
+    scale_y_input=1,
     x_loc=10,
-    y_loc=50,
+    y_loc=20,
 )
 panel_S2b = make_figure_panel(
-    "../3_core_core_analysis/transcriptional_similarity_array_vs_rnaseq.svg",
-    scale_x_input=0.85,
-    scale_y_input=0.85,
+    "../3_core_core_analysis/corr_stability_vs_operon_size_pa14.svg",
+    scale_x_input=1,
+    scale_y_input=1,
     x_loc=500,
     y_loc=20,
 )
@@ -317,7 +327,7 @@ panel_S2b = make_figure_panel(
 panel_S2a_label = sg.TextElement(10, 20, "A", size=18, weight="bold", font="Verdana")
 panel_S2b_label = sg.TextElement(500, 20, "B", size=18, weight="bold", font="Verdana")
 
-figure_S2 = sg.SVGFigure("900", "400")
+figure_S2 = sg.SVGFigure("900", "500")
 figure_S2.append(
     [
         etree.Element("rect", {"width": "100%", "height": "100%", "fill": "white"}),
@@ -332,6 +342,41 @@ display(SVG(figure_S2.to_str()))
 # save generated SVG files
 figure_S2.save("output/figure_S2.svg")
 
+# ## Supplement 3
+
+panel_S3a = make_figure_panel(
+    "../3_core_core_analysis/array_similarity_scores_dist_spell.svg",
+    scale_x_input=0.95,
+    scale_y_input=0.95,
+    x_loc=10,
+    y_loc=50,
+)
+panel_S3b = make_figure_panel(
+    "../3_core_core_analysis/transcriptional_similarity_array_vs_rnaseq.svg",
+    scale_x_input=0.85,
+    scale_y_input=0.85,
+    x_loc=500,
+    y_loc=20,
+)
+
+panel_S3a_label = sg.TextElement(10, 20, "A", size=18, weight="bold", font="Verdana")
+panel_S3b_label = sg.TextElement(500, 20, "B", size=18, weight="bold", font="Verdana")
+
+figure_S3 = sg.SVGFigure("900", "400")
+figure_S3.append(
+    [
+        etree.Element("rect", {"width": "100%", "height": "100%", "fill": "white"}),
+        panel_S3a,
+        panel_S3b,
+        panel_S3a_label,
+        panel_S3b_label,
+    ]
+)
+display(SVG(figure_S3.to_str()))
+
+# save generated SVG files
+figure_S3.save("output/figure_S3.svg")
+
 # ## Output png version
 
 # Exports low resolution png just for easy viewing,
@@ -341,3 +386,4 @@ figure_S2.save("output/figure_S2.svg")
 # !inkscape --export-png=output/figure_3.png output/figure_3.svg
 # !inkscape --export-png=output/figure_S1.png output/figure_S1.svg
 # !inkscape --export-png=output/figure_S2.png output/figure_S2.svg
+# !inkscape --export-png=output/figure_S2.png output/figure_S3.svg
