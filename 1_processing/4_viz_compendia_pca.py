@@ -379,23 +379,27 @@ encoded_pa14_pca_pa14_only = model_pca_pa14.transform(
 
 # +
 # Get centroid using PAO1 reference
-pao1_centroid_pao1 = encoded_pao1_pca_pao1_only.mean(axis=0)
-pa14_centroid_pao1 = encoded_pao1_pca_pa14_only.mean(axis=0)
+pao1_centroid_pao1 = np.mean(encoded_pao1_pca_pao1_only, axis=0)
+pa14_centroid_pao1 = np.mean(encoded_pao1_pca_pa14_only, axis=0)
 
-# Get centroid using PA14 reference
-pao1_centroid_pa14 = encoded_pa14_pca_pao1_only.mean(axis=0)
-pa14_centroid_pa14 = encoded_pa14_pca_pa14_only.mean(axis=0)
+# We have a 200 dimensional array that is our centroid
+print(pao1_centroid_pao1.shape)
+print(pao1_centroid_pao1, pa14_centroid_pao1)
 
 # +
-pao1_centroid_pao1 = pao1_centroid_pao1.reshape(-1, 1)
-pa14_centroid_pao1 = pa14_centroid_pao1.reshape(-1, 1)
+# Get centroid using PA14 reference
+pao1_centroid_pa14 = np.mean(encoded_pa14_pca_pao1_only, axis=0)
+pa14_centroid_pa14 = np.mean(encoded_pa14_pca_pa14_only, axis=0)
 
-pao1_centroid_pa14 = pao1_centroid_pa14.reshape(-1, 1)
-pa14_centroid_pa14 = pa14_centroid_pa14.reshape(-1, 1)
-# -
+print(pao1_centroid_pa14.shape)
+print(pao1_centroid_pa14, pa14_centroid_pa14)
 
-both_centroid_pao1 = np.vstack((pao1_centroid_pao1.T, pa14_centroid_pao1.T))
-both_centroid_pa14 = np.vstack((pao1_centroid_pa14.T, pa14_centroid_pa14.T))
+# +
+both_centroid_pao1 = np.vstack((pao1_centroid_pao1, pa14_centroid_pao1))
+both_centroid_pa14 = np.vstack((pao1_centroid_pa14, pa14_centroid_pa14))
+
+print(both_centroid_pao1.shape)
+print(both_centroid_pa14.shape)
 
 # +
 # Calculate distance between centroids
@@ -410,10 +414,40 @@ print("mean using PA14 reference:", mean_dist_pa14)
 # ### Compare variance
 # Here we are summing the variance along each PCs to represent the overall spread of the data (the spread along each direction)
 
-# Variance of PAO1, PA14 compendium (using PAO1 reference)
-print(encoded_pao1_pca_pao1_only.var(axis=0).sum())
-print(encoded_pao1_pca_pa14_only.var(axis=0).sum())
+# +
+# Get variance of all samples using PAO1 reference
+all_sample_ids = pao1_sample_ids.append(pa14_sample_ids)
 
+encoded_pao1_pca = model_pca_pao1.transform(
+    normalized_pao1_expression_df.loc[all_sample_ids]
+)
+
+encoded_pa14_pca = model_pca_pa14.transform(
+    normalized_pa14_expression_df.loc[all_sample_ids]
+)
+
+print(encoded_pao1_pca.shape)
+print(encoded_pa14_pca.shape)
+
+# +
+total_pao1_var = np.var(encoded_pao1_pca)
+total_pa14_var = np.var(encoded_pa14_pca)
+
+print("total PAO1 var: ", total_pao1_var)
+print("total PA14 var: ", total_pa14_var)
+
+# +
+# Variance of PAO1, PA14 compendium (using PAO1 reference)
+print(encoded_pao1_pca_pao1_only.shape)
+print(encoded_pao1_pca_pa14_only.shape)
+
+print(np.var(encoded_pao1_pca_pao1_only))
+print(np.var(encoded_pao1_pca_pa14_only))
+
+# +
 # Variance of PAO1, PA14 compendium (using PA14 reference)
-print(encoded_pa14_pca_pao1_only.var(axis=0).sum())
-print(encoded_pa14_pca_pa14_only.var(axis=0).sum())
+print(encoded_pa14_pca_pao1_only.shape)
+print(encoded_pa14_pca_pa14_only.shape)
+
+print(np.var(encoded_pa14_pca_pao1_only))
+print(np.var(encoded_pa14_pca_pa14_only))

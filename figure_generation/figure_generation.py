@@ -386,4 +386,4 @@ figure_S3.save("output/figure_S3.svg")
 # !inkscape --export-png=output/figure_3.png output/figure_3.svg
 # !inkscape --export-png=output/figure_S1.png output/figure_S1.svg
 # !inkscape --export-png=output/figure_S2.png output/figure_S2.svg
-# !inkscape --export-png=output/figure_S2.png output/figure_S3.svg
+# !inkscape --export-png=output/figure_S3.png output/figure_S3.svg
