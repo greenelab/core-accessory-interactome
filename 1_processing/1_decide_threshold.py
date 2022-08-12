@@ -142,8 +142,10 @@ pa14_acc_expression["median_acc_expression"] = pa14_acc_expression.median(axis=1
 pao1_acc_expression["Strain type"] = pao1_expression_label["Strain type"]
 pa14_acc_expression["Strain type"] = pa14_expression_label["Strain type"]
 
+print(pao1_acc_expression.shape)
 pao1_acc_expression.head()
 
+print(pa14_acc_expression.shape)
 pa14_acc_expression.head()
 
 # +
@@ -155,6 +157,7 @@ pao1_pa14_acc_expression = pao1_acc_expression.merge(
     suffixes=["_pao1", "_pa14"],
 )
 
+print(pao1_pa14_acc_expression.shape)
 pao1_pa14_acc_expression.head()
 # -
 
@@ -171,6 +174,15 @@ non_pao1_sra = pao1_pa14_acc_expression.loc[
     pao1_pa14_acc_expression["Strain type_pao1"] != "PAO1",
     "median_acc_expression_pao1",
 ]
+# -
+
+print(pao1_sra.shape)
+pao1_sra.head()
+
+print(non_pao1_sra.shape)
+non_pao1_sra.head()
+
+646 + 1687
 
 # +
 f = sns.distplot(
@@ -205,6 +217,15 @@ non_pa14_sra = pao1_pa14_acc_expression.loc[
     pao1_pa14_acc_expression["Strain type_pa14"] != "PA14",
     "median_acc_expression_pa14",
 ]
+# -
+
+print(pa14_sra.shape)
+pa14_sra.head()
+
+print(non_pa14_sra.shape)
+non_pa14_sra.head()
+
+441 + 1892
 
 # +
 g = sns.distplot(
@@ -233,3 +254,11 @@ g.figure.savefig(pa14_dist_filename, bbox_inches="tight", format="svg", dpi=300)
 
 # **Takeaway:**
 # Looks like using a threshold of 25 normalized counts separates between SRA-annotated PAO1 samples vs non-PAO1 samples. Similarly for PA14. This is the threshold we'll use to bin samples into PAO1 vs PA14 compendia.
+
+# +
+# Save df with median accessory gene expression for user resource
+pao1_pa14_acc_expression_out = pao1_pa14_acc_expression.drop(
+    columns=["Strain type_pao1", "Strain type_pa14"]
+)
+
+pao1_pa14_acc_expression_out.to_csv("median_acc_expression.tsv", sep="\t")

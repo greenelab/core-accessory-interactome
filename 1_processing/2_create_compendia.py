@@ -82,9 +82,11 @@ pa14_acc = core_acc_dict["acc_pa14"]
 pao1_acc_df = pd.DataFrame(pao1_acc)
 pa14_acc_df = pd.DataFrame(pa14_acc)
 
+# +
 # Save to files (supplementary data tables)
-pao1_acc_df.to_csv("pao1_acc_gene_ids.tsv", sep="\t")
-pa14_acc_df.to_csv("pa14_acc_gene_ids.tsv", sep="\t")
+# pao1_acc_df.to_csv("pao1_acc_gene_ids.tsv", sep="\t")
+# pa14_acc_df.to_csv("pa14_acc_gene_ids.tsv", sep="\t")
+# -
 
 # ## Format expression data
 #
@@ -109,9 +111,11 @@ pao1_expression.head()
 
 pa14_expression.head()
 
+# +
 # Save pre-binned expression data
-pao1_expression.to_csv(paths.PAO1_PREBIN_COMPENDIUM, sep="\t")
-pa14_expression.to_csv(paths.PA14_PREBIN_COMPENDIUM, sep="\t")
+# pao1_expression.to_csv(paths.PAO1_PREBIN_COMPENDIUM, sep="\t")
+# pa14_expression.to_csv(paths.PA14_PREBIN_COMPENDIUM, sep="\t")
+# -
 
 # ## Bin samples as PAO1 or PA14
 
@@ -200,7 +204,16 @@ sample_to_strain_table_full_processed["Strain type"] = aggregated_label
 sample_to_strain_table = sample_to_strain_table_full_processed["Strain type"].to_frame()
 
 sample_to_strain_table.head()
+
+# +
+test = pao1_expression.merge(sample_to_strain_table, left_index=True, right_index=True)
+
+print(test.shape)
+test.head()
 # -
+
+# SRA labels for 2,333 compendium
+test["Strain type"].value_counts()
 
 # ## Save pre-binned data with median accessory expression
 # This dataset will be used for Georgia's manuscript, which describes how we generated these compendia
@@ -256,10 +269,12 @@ assert (
     == pao1_pa14_acc_expression_label.shape[0]
 )
 
+# +
 # Save
-pao1_pa14_acc_expression_label.to_csv(
-    "prebinned_compendia_acc_expression.tsv", sep="\t"
-)
+# pao1_pa14_acc_expression_label.to_csv(
+#    "prebinned_compendia_acc_expression.tsv", sep="\t"
+# )
+# -
 
 # ## Create compendia
 #
@@ -307,11 +322,18 @@ pao1_expression_label["Strain type"].value_counts()
 
 pa14_expression_label["Strain type"].value_counts()
 
+# Percent of PAO1 SRA labeled samples that are binned into PAO1 compendium based on expression
+# Similarly for PA14
+print(639 / 646)
+print(434 / 441)
+
 # ## Check
 #
 # Manually look up the samples we binned as PAO1 but SRA labeled as PA14. Are these cases of samples being mislabeled?
 
 pao1_expression_label[pao1_expression_label["Strain type"] == "PA14"]
+
+pa14_expression_label[pa14_expression_label["Strain type"] == "PAO1"]
 
 # Note: These are the 7 PA14 labeled samples using threshold of 0
 #
@@ -334,8 +356,7 @@ pao1_pa14_acc_expression.loc[
     ["median_acc_expression_pao1", "median_acc_expression_pa14"],
 ]
 
-# +
-# Save compendia with SRA label
+"""# Save compendia with SRA label
 pao1_expression_label.to_csv(paths.PAO1_COMPENDIUM_LABEL, sep="\t")
 pa14_expression_label.to_csv(paths.PA14_COMPENDIUM_LABEL, sep="\t")
 
@@ -344,4 +365,4 @@ pao1_expression_binned.to_csv(paths.PAO1_COMPENDIUM, sep="\t")
 pa14_expression_binned.to_csv(paths.PA14_COMPENDIUM, sep="\t")
 
 # Save processed metadata table
-sample_to_strain_table.to_csv(paths.SAMPLE_TO_STRAIN_PROCESSED, sep="\t")
+sample_to_strain_table.to_csv(paths.SAMPLE_TO_STRAIN_PROCESSED, sep="\t")"""

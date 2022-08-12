@@ -383,6 +383,9 @@ plt.xlabel("")
 plt.ylabel("% neighboring core genes matched", fontsize=16)
 # -
 
+len(least_matched_neighborhood)
+len([k for k, v in least_matched_neighborhood.items() if v > 0.2])
+
 # Get the least stable core genes that have low % homolog core genes matched
 # (i.e. least core genes that are located in different neighborhoods)
 [k for k, v in least_matched_neighborhood.items() if v < 0.2]
