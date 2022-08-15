@@ -362,6 +362,9 @@ figure_S2.append(
 )
 display(SVG(figure_S2.to_str()))
 
+# save generated SVG files
+figure_S2.save("output/figure_S2.svg")
+
 # ## Output png version
 
 # Exports low resolution png just for easy viewing,
